@@ -127,16 +127,18 @@ export function createTasteTools(context) {
     const root = await project(meta, args.workspace);
     const planned = planTaste({ medium: args.medium, references: args.references, segments: args.segments, location: args.location, ages: args.ages, decisions: args.decisions, deepCuts: args.deepCuts ?? true });
     const prediction = await readState(root, 'taste/prediction');
-    if (prediction && prediction.domains.join() !== planned.domains.join()) {
-      refuse('PREDICTION_FROZEN', `Your frozen prediction covers ${prediction.domains.join(', ')}, and this plan needs ${planned.domains.join(', ')}. To start a new design session, call design_validate with stage prediction, your new prediction and restart:true.`);
-    }
+    // A plan for other domains is saved, and the frozen prediction it no longer fits waits for a new session.
+    const differs = Boolean(prediction) && !samePlan(prediction, planned);
     await writeState(root, 'taste/plan', { ...planned, plannedAt: new Date(now()).toISOString() });
     if (!prediction) await session(root, 'planned');
     const next = planned.missing.length ? `Ask the person: ${planned.missing.map(item => item.ask).join(' ')} Then plan again.`
-      : prediction ? 'Your prediction stays frozen. Call taste_profile without dryRun to measure.'
-        : 'Before any Qloo data, write your own prediction for each listed domain and the design you would make from it alone, then save it with design_validate({stage:"prediction", artifact}).';
-    return { status: planned.missing.length ? 'needs-input' : 'planned', plan: planned, next };
+      : differs ? restartFor(prediction, planned)
+        : prediction ? 'Your prediction stays frozen. Call taste_profile without dryRun to measure.'
+          : 'Before any Qloo data, write your own prediction for each listed domain and the design you would make from it alone, then save it with design_validate({stage:"prediction", artifact}).';
+    return { status: planned.missing.length ? 'needs-input' : differs ? 'needs-restart' : 'planned', plan: planned, next };
   }
+  const samePlan = (prediction, planned) => prediction.domains.join() === planned.domains.join();
+  const restartFor = (prediction, planned) => `Your frozen prediction covers ${prediction.domains.join(', ')}, and this plan measures ${planned.domains.join(', ')}. Start a new design session for this plan: write a prediction for its domains and save it with design_validate({stage:"prediction", artifact, restart:true}).`;
 
   async function validatePrediction(args, meta) {
     const root = await project(meta, args.workspace);
@@ -155,14 +157,18 @@ export function createTasteTools(context) {
       ...(archived ? { archived } : {}), next: 'Call taste_profile without dryRun to measure the audience with Qloo.' };
   }
 
-  /** Moves this session's taste records (not the plan, not the cache) to .mousa/history/<time>/. */
+  /**
+   * Moves this session's records to .mousa/history/<time>/, so a new session starts clean: its taste records, its design
+   * stages, its captures and its picture records. The plan stays, because it is the new session's, and so does the cache.
+   */
   async function archiveSession(root) {
     const stamp = new Date(now()).toISOString().replace(/[:.]/gu, '-');
-    const from = path.join(root, STATE_DIR, 'taste'), to = path.join(root, STATE_DIR, 'history', stamp);
-    await fs.mkdir(to, { recursive: true });
-    for (const name of ['prediction', 'profile', 'evidence', 'input', 'brief', 'decisions']) {
-      await fs.rename(path.join(from, `${name}.json`), path.join(to, `${name}.json`)).catch(() => {});
-    }
+    const state = path.join(root, STATE_DIR), to = path.join(state, 'history', stamp);
+    await fs.mkdir(path.join(to, 'design'), { recursive: true });
+    const moves = [...['prediction', 'profile', 'evidence', 'input', 'brief', 'decisions'].map(name => [`taste/${name}.json`, `${name}.json`]),
+      ...['reading', 'dna', 'plan', 'reviews', 'check'].map(name => [`design/${name}.json`, `design/${name}.json`]),
+      ...['captures.json', 'images.json', 'opened.json', 'captures'].map(name => [name, name])];
+    for (const [from, name] of moves) await fs.rename(path.join(state, ...from.split('/')), path.join(to, ...name.split('/'))).catch(() => {});
     return `${STATE_DIR}/history/${stamp}`;
   }
 
@@ -177,6 +183,7 @@ export function createTasteTools(context) {
     if (!planned) refuse('PLAN_MISSING', 'Plan first: call taste_profile with dryRun:true and the brief\'s audience.');
     const prediction = await readState(root, 'taste/prediction');
     if (!prediction) refuse('PREDICTION_MISSING', `Save your own prediction first: design_validate({stage:"prediction", artifact}) for ${planned.domains.join(', ')}.`);
+    if (!samePlan(prediction, planned)) refuse('PREDICTION_FROZEN', restartFor(prediction, planned));
     if ((await readState(root, 'taste/input'))?.source === 'qloo-profile') refuse('SESSION_MEASURED', 'This session already measured the audience with Qloo. Design without Qloo in a workspace of its own, or start a new session: design_validate with stage prediction and restart:true.');
     const input = tasteInputFromAssumption(prediction, { medium: planned.ownMedium || [] });
     await writeState(root, 'taste/input', compactTasteInput(input));
@@ -194,6 +201,7 @@ export function createTasteTools(context) {
     if (planned.missing.some(item => item.field === 'audience')) refuse('AUDIENCE_MISSING', `The plan has no audience yet. ${planned.missing[0].ask}`);
     const prediction = await readState(root, 'taste/prediction');
     if (!prediction) refuse('PREDICTION_MISSING', `Save your own prediction first: design_validate({stage:"prediction", artifact}) for ${planned.domains.join(', ')}.`);
+    if (!samePlan(prediction, planned)) refuse('PREDICTION_FROZEN', restartFor(prediction, planned));
     if (await isBaseline(root)) refuse('BASELINE_SESSION', `${BASELINE} To measure, use a workspace of its own, or start a new session: design_validate with stage prediction and restart:true.`);
     const client = await qlooClient(root, { refresh: args.refresh === true });
     // Audience descriptions become Qloo segments by name; one that matches none is reported, never replaced.

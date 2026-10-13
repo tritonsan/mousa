@@ -201,7 +201,18 @@ test('taste tools say what to do when Qloo is not connected or no audience is na
     assert.equal(offline.error.code, 'QLOO_KEY_MISSING');
     assert.match(offline.error.message, /mousa_connect/u);
     assert.equal((await call('taste_ask', { question: 'world', decision: 'imagery' })).error.code, 'PROFILE_MISSING');
-    assert.equal((await call('taste_profile', { dryRun: true, medium: 'game', references: [{ name: 'Paterson' }] })).error.code, 'PREDICTION_FROZEN');
+    // A plan for other domains is kept, and the prediction that no longer fits it waits for a new session.
+    const replanned = await call('taste_profile', { dryRun: true, medium: 'game', references: [{ name: 'Paterson' }] });
+    assert.equal(replanned.status, 'needs-restart');
+    assert.match(replanned.next, /covers brand, movie.*measures videogame.*restart:true/u);
+    assert.equal((await call('taste_profile', {})).error.code, 'PREDICTION_FROZEN', 'no measurement against a prediction for other domains');
+    assert.equal((await call('design_validate', { stage: 'prediction', artifact: prediction() })).error.code, 'PREDICTION_FROZEN');
+    const game = { ...prediction(), predictions: { videogame: ['Hollow Knight', 'Celeste', 'Journey'], movie: ['Spirited Away', 'Paprika', 'Akira'], tv_show: ['Mushishi', 'Arcane', 'Samurai Champloo'],
+      artist: ['Sigur Rós', 'Nujabes', 'Joe Hisaishi'], book: ['The Little Prince', 'Kitchen', 'Piranesi'], style: ['slow', 'dreamlike', 'quiet'], aesthetic: ['hand-drawn', 'ink wash', 'muted'],
+      tone: ['wistful', 'gentle', 'lonely'], qualities: ['melancholic', 'atmospheric', 'whimsical'], art_style: ['pixel art', 'hand-drawn', 'watercolor'] } };
+    const restarted = await call('design_validate', { stage: 'prediction', artifact: game, restart: true });
+    assert.equal(restarted.status, 'frozen', JSON.stringify(restarted));
+    assert.deepEqual(restarted.domains, replanned.plan.domains);
   } finally {
     await rm(project, { recursive: true, force: true });
     await rm(config, { recursive: true, force: true });

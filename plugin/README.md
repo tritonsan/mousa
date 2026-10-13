@@ -75,13 +75,13 @@ The flow has four steps:
 3. **Measure.** `taste_profile()` makes at most 24 requests and keeps every answer in `.mousa/cache/qloo/` for a week. That folder carries its own `.gitignore`. It writes the profile, the evidence records and the taste input to `.mousa/taste/`, and returns the Taste Brief:
    - qualities by family, with the works that carry them;
    - pacing, surface and tone tags;
-   - works per domain;
+   - works per domain, each with its first three returned tags (look, mood and meaning first), so a device anchored to a work can name the tags it translates;
    - surprises and confirmed guesses;
    - required anchors;
    - cautions;
    - a line per design layer.
 
-   The brief stays under 10 KiB. Five recorded Studio passes replayed through it gave about 5 KB each, against 51–62 KiB for the old taste input. A look quality carried mostly by brands is flagged as such.
+   The brief stays under 10 KiB. Sixteen recorded Studio passes replayed through it, with the tags of each work, gave 5.0–7.2 KB each. The taste input the validators read is 41–77 KB. A look quality carried mostly by brands is flagged as such.
 4. **Ask while designing.** `taste_ask` answers one question at a time. The agent writes its own guess first. `shortlist`, `local` and `overlap` make a few cached requests; the other questions are answered from the saved profile. Each answer is kept in `.mousa/taste/decisions.json`.
 
 `qloo_query` gives direct, cached access to search, tags, audiences and insights for anything else.
@@ -118,9 +118,44 @@ The design tools take the work from the Taste Brief to a checked and captured re
    - `specimen:true` captures the specimen board instead: one page that draws the DNA with its palette, its type in the library fonts, keyframes, SVG drawings, pictures, copy lines and landmark ids. It serves designs a browser cannot open, such as a game or a native app, and judging the system itself.
    - A round holds six captures; a session has two rounds.
 6. **Review.** `design_validate({stage:'review'})` checks the agent's verdict on each planned criterion against the captures of its round. Captures returned in a result count as seen, so the review is marked as audited.
-7. **Compare.** `design_compare` gives a heuristic distance between two designs in folders of the project, such as one made with Qloo and one made without.
+7. **Compare.** `design_compare` gives a heuristic distance between two designs in folders of the project, such as one made with Qloo and one made without. When both folders are design workspaces, it also reports:
+   - where each one's taste came from;
+   - how many of the Qloo design's devices rest on what the prediction did not contain;
+   - whether both started from the same frozen prediction. When they did not, the limitation says that the difference mixes the taste source with two starting points.
 
 `mousa_status` also reports the detected design system and the stage the session has reached (`.mousa/session.json`).
+
+**Names instead of IDs.** The reading and the DNA cite entries by the names the Taste Brief lists, such as "Perfect Days", "Atmospheric" or "Quiet (new)". `design_validate` resolves each name to its ref in the saved taste input before the validators run, preferring a measured entity over the agent's own prediction of the same name. A name that two measured entries share is refused with both refs, and an unknown name is refused with where the names are listed. Refs still work. The agent therefore never has to open `.mousa/taste/input.json`.
+
+**Messages in this surface's terms.** The validators are shared with Studio and name Studio's files, so this surface rewrites those names in its error messages: the Taste Brief, the font library through `materials`, and pictures made with `image`. This surface has no photo library, so a DNA lists only generated pictures.
+
+### Workspaces and designing without Qloo
+
+- **Workspaces.** Every tool that reads or writes one design takes `workspace`: a folder inside the project that holds that design and its own `.mousa/` records, such as `compare/with-qloo` or `apps/shop`. It is created when first named. Two workspaces never share a record, so two designs can run side by side.
+- **Without Qloo.** After the prediction, `taste_profile({baseline:true})` takes the prediction as the taste input and sends no request. The brief lists the predicted qualities and works and the required anchors chosen from them. The reading, DNA, plan, check, capture and review then run as usual. In that workspace, `taste_ask`, `qloo_query` and a measurement are refused, and a baseline is refused in a workspace that was already measured.
+
+### Skills
+
+The skills carry what the agent needs to know, and the server instructions point to them. Their sources are in `skills/`, next to the older `culture-grounded-design` skill that Studio and the Kiro example still use.
+
+| Skill | Loaded | What it covers |
+| --- | --- | --- |
+| `taste-brief` | by the agent, before any design for an audience | The audience signal and its roles, the plan, the frozen prediction, the measurement, how to read the Taste Brief, `taste_ask`, designing without Qloo, and the honesty rules. References: the nine taste questions and the recipes, how to read what Qloo measured, and how qualities become design layers |
+| `design` | by the agent, after the Taste Brief | The reading, the DNA, the plan, materials and pictures, the build, the check, captures and the review, with the schemas. References: the DNA with an example per layer and the common refusals, production methods per medium, the web, app-ui and generic media, design systems and pictures |
+| `compare` | only when the person asks | Both arms in their own workspaces from one frozen prediction, `design_compare`, and the limits to report |
+| `connect` | only when the person asks; Codex's onboarding skill | The Qloo key per host, the local key page, the project folder, pictures, captures and Codex hooks |
+
+Each skill has an `agents/openai.yaml` for Codex with its display name and invocation policy.
+
+For a comparison in Claude Code, `agents/` holds two subagents, `mousa:mousa-designer` and `mousa:mousa-baseline`.
+- **mousa-designer** builds the Qloo arm.
+- **mousa-baseline** builds the arm without Qloo. It denies only `taste_ask` and `qloo_query` and inherits every other tool, so both arms keep the same image and file tools.
+- **Locking the baseline.** The compare skill sets the baseline workspace to design without Qloo before either arm starts. A mistaken measurement is then refused by the server as well.
+
+A test checks the skills and agents against the code they describe:
+- the frontmatter and the size limits of both hosts;
+- that every link resolves, and every tool named and every argument in an example call exists;
+- that the question, recipe and method tables match the planner and the media.
 
 ## Portable configuration
 

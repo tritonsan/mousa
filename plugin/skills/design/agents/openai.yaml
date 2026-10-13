@@ -1,0 +1,6 @@
+interface:
+  display_name: "Moûsa Design"
+  short_description: "Turn a Taste Brief into a checked, captured design"
+  default_prompt: "Use $design to build this design from its Taste Brief, check it and review the captures."
+policy:
+  allow_implicit_invocation: true

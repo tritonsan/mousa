@@ -75,6 +75,14 @@ test('the CSS variable adapter binds palette and type to used custom properties 
   assert.match(report.limitation, /custom propert/u);
 });
 
+test('a theme override keeps the light value bound, and both values of a themed property count', () => {
+  const dna = { devices: [device('dna1', 'palette', { colors: ['#3e5c6b', '#0e1a20'] })] };
+  const files = { 'index.html': '<p>Hi</p>', 'styles.css': ':root{--mist:#3e5c6b;--a:#111;--b:#222}[data-theme="dark"]{--mist:#0e1a20}body{color:var(--mist)}' };
+  const report = checkCssVariables(dna, files, checkDnaConformance(dna, files));
+  assert.equal(report.devices[0].status, 'present');
+  assert.deepEqual(report.system.bindings.map(item => [item.value, item.property]), [['#3e5c6b', '--mist'], ['#0e1a20', '--mist']]);
+});
+
 test('the specimen board draws the DNA with its fonts, keyframes, drawings, pictures and lines', async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'mousa-specimen-'));
   const out = await mkdtemp(path.join(os.tmpdir(), 'mousa-specimen-out-'));
@@ -119,7 +127,7 @@ test('captures for a model are scaled to fit, and colours are compared in CIE La
 test('the design stages run end to end: reading, DNA, plan, fonts, pictures, check, captures and review', async () => {
   const project = await mkdtemp(path.join(os.tmpdir(), 'mousa-design-'));
   const config = await mkdtemp(path.join(os.tmpdir(), 'mousa-design-config-'));
-  const { fetchImpl } = qlooFixture();
+  const { fetchImpl, requests } = qlooFixture();
   const captured = [];
   const fakeCapture = async ({ views, outDir, prefix, full }) => {
     const shots = [];
@@ -167,6 +175,9 @@ test('the design stages run end to end: reading, DNA, plan, fonts, pictures, che
     assert.ok(fetched.fontFace.every(rule => rule.includes("font-family:'Jost'")));
     assert.ok(await exists(path.join(project, fetched.families[0].files[0])));
 
+    const named = await call('image', { action: 'prompt', device: 'dna4', subject: 'A still from Perfect Days on a misty street', aspect: 'landscape' });
+    assert.equal(named.error.code, 'IMAGE_REQUEST_INVALID');
+    assert.match(named.error.message, /without naming taste entities \(Perfect Days\)/u);
     const brief = await call('image', { action: 'prompt', device: 'dna4', subject: 'Stepped stone terraces under low mist at dawn', aspect: 'landscape' });
     assert.equal(brief.status, 'requested');
     assert.equal(brief.saveAs, 'generated/dna4-1.png');
@@ -214,6 +225,18 @@ test('the design stages run end to end: reading, DNA, plan, fonts, pictures, che
     const status = await call('mousa_status', {});
     assert.equal(status.stage, 'reviewed');
     assert.equal(status.designSystem.system, 'css-vars');
+
+    // A new session starts clean: the earlier stages, captures and pictures move to the history.
+    const fresh = await call('design_validate', { stage: 'prediction', artifact: prediction(), restart: true });
+    assert.equal(fresh.status, 'frozen');
+    for (const record of ['design/reading.json', 'design/dna.json', 'design/plan.json', 'design/reviews.json', 'captures.json', 'images.json']) {
+      assert.ok(!(await exists(path.join(project, '.mousa', ...record.split('/')))), `${record} left the session`);
+      assert.ok(await exists(path.join(project, ...fresh.archived.split('/'), ...record.split('/'))), `${record} is kept in the history`);
+    }
+    const sent = requests.length;
+    assert.equal((await call('taste_profile', {})).status, 'ok');
+    assert.equal(requests.length, sent, 'the same audience is measured again from the cache');
+    assert.equal((await call('design_validate', { stage: 'reading', artifact: reading })).status, 'valid', 'the new session reads without revise');
 
     await mkdir(path.join(project, 'a'), { recursive: true });
     await mkdir(path.join(project, 'b'), { recursive: true });

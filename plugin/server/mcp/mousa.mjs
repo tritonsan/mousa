@@ -8,7 +8,7 @@ import { createConnectionStore, ConnectionStoreError } from '../connections/stor
 import { resolveQlooConnection, hostName, testQlooKey } from '../connections/config.mjs';
 import { createConnectionPage } from '../connections/page.mjs';
 import { resolveProjectRoot, checkProjectFolder, readState, workspaceRoot, WORKSPACE_FIELD, ProjectScopeError, CODEX_SANDBOX_META } from '../production/project-files.mjs';
-import { inspectImageProviders } from '../production/images.mjs';
+import { inspectImageProviders, ImageRequestError } from '../production/images.mjs';
 import { inspectBrowser, verifyBrowser } from '../production/capture.mjs';
 import { fontLibraryRoot, loadFontLibrary } from '../production/fonts.mjs';
 import { QlooError } from '../qloo/client.mjs';
@@ -24,7 +24,7 @@ export const MOUSA_INSTRUCTIONS_LIMIT = 2048;
 
 export const MOUSA_INSTRUCTIONS = [
   'Moûsa grounds design work in measured cultural taste from Qloo: what an audience loves, what those works share, and what that means for palette, type, imagery, motion, voice and structure.',
-  'Before you design or restyle anything for a particular audience, load the Moûsa taste-brief skill and follow it.',
+  'Before you design or restyle anything for a particular audience, load the Moûsa taste-brief skill and follow it; once you have the Taste Brief, the Moûsa design skill takes you through the stages.',
   'Start every design session with mousa_status. It reports whether Qloo is connected, which project folder the tools use and what this session can make.',
   'If Qloo is not connected, call mousa_connect and give the person the link it returns: they enter their own Qloo API key on a page on this computer, so the key never passes through the chat.',
   'If no project folder is set, ask the person which folder to design in, then call mousa_open_project.',
@@ -209,7 +209,7 @@ export function createMousaServer({ env = process.env, platform = process.platfo
       return errorResult('TOOL_UNKNOWN', 'This tool is not available in this session.');
     } catch (error) {
       if (error instanceof ArgumentError || error instanceof ProjectScopeError || error instanceof ConnectionStoreError
-        || error instanceof TasteToolError || error instanceof TasteProtocolError) return errorResult(error.code, inHostTerms(error.message));
+        || error instanceof TasteToolError || error instanceof TasteProtocolError || error instanceof ImageRequestError) return errorResult(error.code, inHostTerms(error.message));
       if (error instanceof DesignToolError || error instanceof QlooError) return errorResult(error.code, inHostTerms(error.message), Boolean(error.retryable));
       return errorResult('TOOL_EXECUTION_FAILED', 'The tool could not complete. Call mousa_status to check the setup.');
     }
