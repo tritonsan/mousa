@@ -45,6 +45,11 @@ It offers twelve tools in three groups: setup (below), taste (see [Taste questio
 
 Each key goes with its own source's endpoint. A value the host left unfilled, such as `${user_config.qloo_api_key}`, counts as unset.
 
+**Qloo budget.** `MOUSA_QLOO_BUDGET` caps the requests one project folder or workspace sends to Qloo, across sessions.
+- **What counts.** Each request is counted before it is sent, a failed one too. Cached answers stay free.
+- **Where it is kept.** The count is in `.mousa/usage.json`, and `mousa_status` shows it as `qloo.requests` beside `qloo.budget`.
+- **When it is spent.** A request past the budget is refused with `QLOO_BUDGET`.
+
 **Project folder.** Moûsa takes the first of these that is set:
 1. `MOUSA_PROJECT_DIR` (the Claude Code package fills it from `${CLAUDE_PROJECT_DIR}`).
 2. The folder Codex reports with each call. The server advertises `codex/sandbox-state-meta` and reads only `sandboxCwd` from that state.

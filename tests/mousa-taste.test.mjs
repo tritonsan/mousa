@@ -254,3 +254,52 @@ test('a place Qloo does not recognise stops the measurement after its first empt
     await rm(config, { recursive: true, force: true });
   }
 });
+
+test('a Qloo budget caps the requests a project sends, counts failed ones, and leaves cached answers free', async () => {
+  const { createCachingClient: caching, readQlooUsage } = await import('../plugin/server/taste/cache.mjs');
+  const dir = await mkdtemp(path.join(os.tmpdir(), 'mousa-budget-'));
+  try {
+    let sent = 0;
+    const client = { searchEntities: async args => { sent++; if (args.query === 'broken') throw Object.assign(new Error('down'), { code: 'QLOO_UPSTREAM' }); return { status: 'ok', results: [{ name: args.query }] }; } };
+    const budget = { limit: 3, file: path.join(dir, 'usage.json') };
+    const first = caching({ client, dir: path.join(dir, 'cache'), budget });
+    await first.searchEntities({ query: 'Paterson' });
+    await assert.rejects(first.searchEntities({ query: 'broken' }), { code: 'QLOO_UPSTREAM' });
+    assert.equal(await readQlooUsage(budget.file), 2, 'a failed request was sent, so it counts');
+    // Two at once with one request left: exactly one is sent.
+    const both = await Promise.allSettled([first.searchEntities({ query: 'Nujabes' }), first.searchEntities({ query: 'Khruangbin' })]);
+    assert.deepEqual(both.map(item => item.status).sort(), ['fulfilled', 'rejected']);
+    assert.equal(both.find(item => item.status === 'rejected').reason.code, 'QLOO_BUDGET');
+    assert.equal(sent, 3);
+    assert.equal((await first.searchEntities({ query: 'Paterson' })).cache.hit, true, 'a cached answer is free');
+    // A later session reads the same count from the project.
+    const later = caching({ client, dir: path.join(dir, 'cache'), budget });
+    await assert.rejects(later.searchEntities({ query: 'Tom Misch' }), error => error.code === 'QLOO_BUDGET' && /budget of 3 requests/u.test(error.message));
+    assert.equal(sent, 3);
+    assert.equal(await readQlooUsage(budget.file), 3);
+  } finally { await rm(dir, { recursive: true, force: true }); }
+});
+
+test('the server counts a project\'s Qloo requests, shows them in mousa_status and stops at MOUSA_QLOO_BUDGET', async () => {
+  const project = await mkdtemp(path.join(os.tmpdir(), 'mousa-budget-project-'));
+  const config = await mkdtemp(path.join(os.tmpdir(), 'mousa-budget-config-'));
+  const { fetchImpl, requests } = qlooFixture();
+  const server = createMousaServer({ env: { MOUSA_PROJECT_DIR: project, QLOO_API_KEY: 'fixture-key-123', MOUSA_QLOO_BUDGET: '5' }, fetchImpl,
+    store: createConnectionStore({ env: { MOUSA_CONFIG_DIR: config }, protector: plainProtector }),
+    inspect: { browser: async () => ({ available: false, reason: 'Not in tests.' }), codex: async () => ({ available: false, reason: 'Not in tests.' }), fonts: async () => FONTS } });
+  const call = async (name, args) => parse(await server.callTool(name, args));
+  try {
+    await call('taste_profile', { dryRun: true, medium: 'web', references: [{ name: 'Paterson' }, { name: 'Nujabes' }] });
+    await call('design_validate', { stage: 'prediction', artifact: prediction() });
+    await call('taste_profile', {});
+    assert.equal(requests.length, 5, 'no request beyond the budget left the server');
+    const profile = JSON.parse(await readFile(path.join(project, '.mousa', 'taste', 'profile.json'), 'utf8'));
+    assert.ok(profile.results.some(result => result.error?.code === 'QLOO_BUDGET'), 'the domains past the budget say why they are empty');
+    const status = await call('mousa_status', {});
+    assert.deepEqual([status.qloo.requests, status.qloo.budget], [5, 5]);
+    assert.equal((await call('qloo_query', { kind: 'search', query: 'Khruangbin' })).error.code, 'QLOO_BUDGET');
+  } finally {
+    await rm(project, { recursive: true, force: true });
+    await rm(config, { recursive: true, force: true });
+  }
+});

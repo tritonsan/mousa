@@ -34,6 +34,8 @@ The plugin's own setting comes first, then `QLOO_API_KEY` in the environment, th
 
 Call `mousa_status({ check: true })`. It tests the key with one Qloo request and reports `check.ok`, or the error to fix.
 
+To cap what a project may send to Qloo, the person sets `MOUSA_QLOO_BUDGET`, such as 24. `mousa_status` then shows `qloo.requests` against `qloo.budget`, and a request past it is refused with `QLOO_BUDGET`. Ask the person before you raise it.
+
 ## 4. The project folder
 
 | Host | Folder |

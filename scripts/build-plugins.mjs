@@ -140,7 +140,7 @@ const claudeCodeMcp = () => ({ mcpServers: { mousa: { command: 'node', args: ['$
 // Codex starts a server with an empty environment plus its own short list, so the Qloo key and Moûsa's settings
 // pass by name. The project folder comes from Codex's sandbox state, and the person approves mousa_open_project.
 const codexMcp = () => ({ mcpServers: { mousa: { command: 'node', args: ['./server/mousa.mjs'], cwd: '.', env: { MOUSA_HOST: 'codex' },
-  env_vars: ['QLOO_API_KEY', 'QLOO_BASE_URL', 'MOUSA_IMAGES_PER_RUN', 'MOUSA_BROWSER', 'MOUSA_CAPTURE', 'MOUSA_CAPTURE_NO_SANDBOX', 'CODEX_IMAGES', 'CODEX_CLI_PATH'],
+  env_vars: ['QLOO_API_KEY', 'QLOO_BASE_URL', 'MOUSA_QLOO_BUDGET', 'MOUSA_IMAGES_PER_RUN', 'MOUSA_BROWSER', 'MOUSA_CAPTURE', 'MOUSA_CAPTURE_NO_SANDBOX', 'CODEX_IMAGES', 'CODEX_CLI_PATH'],
   startup_timeout_sec: 20, tool_timeout_sec: 600, tools: { mousa_open_project: { approval_mode: 'prompt' } } } } });
 
 function packageReadme(host, version) {

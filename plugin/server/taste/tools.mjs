@@ -13,6 +13,12 @@ import { readState, writeState, STATE_DIR, WORKSPACE_FIELD } from '../production
 import { fontsForDna } from '../production/fonts.mjs';
 import { planTaste, MEDIA, TASTE_QUESTIONS } from './questions.mjs';
 import { createCachingClient } from './cache.mjs';
+
+/** The Qloo request budget a person set for each project folder (MOUSA_QLOO_BUDGET), or null for none. */
+export function qlooBudget(env) {
+  const limit = Number.parseInt(env?.MOUSA_QLOO_BUDGET, 10);
+  return Number.isInteger(limit) && limit > 0 ? limit : null;
+}
 import { buildTasteBrief, buildBaselineBrief } from './brief.mjs';
 
 const ENTITY_KINDS = Object.freeze(['artist', 'book', 'brand', 'destination', 'movie', 'person', 'place', 'podcast', 'tv_show', 'videogame']);
@@ -119,7 +125,9 @@ export function createTasteTools(context) {
     const connection = await resolveQlooConnection({ env, store: connections });
     if (!connection.apiKey) refuse('QLOO_KEY_MISSING', 'Qloo is not connected. Call mousa_status for the one-line fix, or mousa_connect for the local key page.');
     const client = new QlooClient({ apiKey: connection.apiKey, baseUrl: connection.baseUrl, ...(fetchImpl ? { fetchImpl } : {}) });
-    return root ? createCachingClient({ client, dir: path.join(root, STATE_DIR, 'cache', 'qloo'), baseUrl: connection.baseUrl, refresh, now }) : Object.assign(client, { stats: { hits: 0, misses: 0 } });
+    const limit = qlooBudget(env);
+    return root ? createCachingClient({ client, dir: path.join(root, STATE_DIR, 'cache', 'qloo'), baseUrl: connection.baseUrl, refresh, now,
+      budget: { file: path.join(root, STATE_DIR, 'usage.json'), ...(limit ? { limit } : {}) } }) : Object.assign(client, { stats: { hits: 0, misses: 0 } });
   }
   const session = (root, stage) => writeState(root, 'session', { plugin: 'mousa', stage, updatedAt: new Date(now()).toISOString() });
 
