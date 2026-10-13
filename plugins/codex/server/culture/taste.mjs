@@ -431,7 +431,7 @@ function tasteArtStyles(works) {
  * style domain their art_style tags into art styles; neither costs a request.
  */
 export async function buildTasteProfile({ client, references, domains = DEFAULT_TASTE_DOMAINS, location, age, audiences, audienceWeight, deepCuts = true, perDomain = TASTE_LIMITS.perDomain,
-  maxCalls = TASTE_LIMITS.calls, concurrency = 2, rateLimitRetries = 2, retryDelayMs = 1500, knownNames = [], onEvidence, onCall } = {}) {
+  maxCalls = TASTE_LIMITS.calls, concurrency = 2, rateLimitRetries = 2, retryDelayMs = 1500, knownNames = [], onEvidence, onCall, placeCheck = false } = {}) {
   if (!client || typeof client.searchEntities !== 'function' || typeof client.searchTags !== 'function' || typeof client.getInsights !== 'function') fail('client', 'A Qloo client with entity search, tag search and insights is required.');
   // Audience segments (URNs from an audience search) weight every request, and can stand in for named works: a
   // profile from segments alone is broader, so it is reported as such.
@@ -517,8 +517,13 @@ export async function buildTasteProfile({ client, references, domains = DEFAULT_
   // answered with both. An entity request with both kinds of seed is therefore repeated once as sent after a timeout or
   // server error, then sent with the entity seeds alone.
   const seedFailure = failure => failure.retryable && (failure.code === 'QLOO_TIMEOUT' || failure.code === 'QLOO_UPSTREAM');
+  // With placeCheck, a place Qloo does not recognise stops the pass early. In the first live plugin session,
+  // "Moda, Kadıköy, Istanbul" emptied every one of twelve answers, and "Istanbul" alone filled them. After the first
+  // answers weighted by the place all come back empty, the rest are not requested.
+  const placeAnswers = { answered: 0, empty: 0, stopped: false };
   const responses = await mapLimit(requests, concurrency, async request => {
     const meta = { stage: 'insights', domain: request.domain, band: request.band, ...(request.seeds ? { seeds: request.seeds } : {}) };
+    if (placeAnswers.stopped) return { domain: request.domain, band: request.band, status: 'skipped', error: { code: 'TASTE_PLACE_UNMATCHED', message: 'Not requested: the place matched nothing.', retryable: false }, entities: [] };
     const fallback = mixed && !isTagDomain(request.domain);
     let seedFailures = 0, input = request.input, sent = meta;
     let response = await call('qloo_get_insights', input, meta, fallback ? { retryOn: failure => !seedFailure(failure) || ++seedFailures < 2 } : undefined);
@@ -541,6 +546,15 @@ export async function buildTasteProfile({ client, references, domains = DEFAULT_
     if (!response.ok) return { domain: request.domain, band: request.band, status: response.skipped ? 'skipped' : 'error', error: response.error, entities: [] };
     const entities = (Array.isArray(response.record.results) ? response.record.results : []).slice(0, perDomain)
       .map(entity => profileEntity(entity, { ...request, evidenceId: response.evidenceId, seedNames, typed })).filter(Boolean);
+    if (placeCheck && place && !placeAnswers.stopped) {
+      placeAnswers.answered++;
+      if (!entities.length) placeAnswers.empty++;
+      if (placeAnswers.answered >= 2 && placeAnswers.empty === placeAnswers.answered) {
+        placeAnswers.stopped = true;
+        const parts = place.split(',').map(part => part.trim()).filter(Boolean);
+        limitations.push(`Qloo returned nothing for the first ${placeAnswers.answered} domains weighted by the place "${place}", so it likely did not recognise that place, and the other domains were not requested. Plan again with ${parts.length > 1 ? `the city or the neighbourhood alone, such as "${parts.at(-1)}"` : 'another name for the place, such as its city'}.`);
+      }
+    }
     return { domain: request.domain, band: request.band, status: response.record.status || (entities.length ? 'ok' : 'empty'), evidenceId: response.evidenceId, entities };
   });
   const entities = [], seen = new Set();

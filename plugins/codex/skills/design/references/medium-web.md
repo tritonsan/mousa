@@ -35,6 +35,7 @@ A static website in HTML, CSS and a little JavaScript. `design_check` reads ever
   - **Pausing.** A loop longer than five seconds needs a visible pause control. One way: a button with `data-motion-toggle` and `aria-pressed` that sets `data-motion="paused"` on the html element, and a CSS rule `[data-motion="paused"] * { animation-play-state: paused }`.
 - **Voice.** Write the narrative in the voice device's register around the fixed facts: the headline and introduction, section headings and intros, calls to action, list and form titles, and item descriptions.
   - A description keeps what the item is and does, and adds no feature, award, review, quote or claim.
+  - Invent no fact anywhere on the page: no price or "free", amenity, offer or schedule the brief does not state.
   - Keep a starter line only where it already fits the voice.
 - **Code budget.** Spend it on the design, such as drawings and motion, rather than on repetition.
 - **Visitor pages** never mention Qloo, agents or APIs, and never name the anchor works unless the brief asks.

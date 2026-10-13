@@ -53,6 +53,8 @@ Six entries are required. The design uses each one or rejects it with a specific
   - **The city of the design** belongs in `location`. A venue the audience loves can be a reference.
 - **A segment-only signal** (no named works) is broad. Its brands in particular can drift toward large institutions, so add a few works the audience loves when you can.
 - **A location** weights what Qloo measures toward a place. It does not limit results to that place, and it says nothing about each person who lives there.
+  - **How strong it is.** In the first live plugin session, "Istanbul" moved all 80 measured works away from the prediction for Paterson and Nujabes, and the style ranking came back empty.
+  - **An address Qloo cannot match.** "Moda, Kadıköy, Istanbul" emptied every answer. Moûsa now stops after the first empty answers, and the brief says to try the city or the neighbourhood alone.
 - **Age bands** weight the signal too. A request Qloo refuses with an age band is sent again without it, and the brief says so.
 
 ## What a measurement cannot tell you

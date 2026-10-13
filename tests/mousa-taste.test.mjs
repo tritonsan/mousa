@@ -218,3 +218,39 @@ test('taste tools say what to do when Qloo is not connected or no audience is na
     await rm(config, { recursive: true, force: true });
   }
 });
+
+test('a place Qloo does not recognise stops the measurement after its first empty answers and says what to try', async () => {
+  const project = await mkdtemp(path.join(os.tmpdir(), 'mousa-taste-place-'));
+  const config = await mkdtemp(path.join(os.tmpdir(), 'mousa-taste-place-config-'));
+  const fixture = qlooFixture();
+  // As in the first live plugin session: every answer weighted by the full address came back empty.
+  const sent = [];
+  const fetchImpl = async (url, init) => {
+    const target = new URL(url);
+    sent.push(target.pathname);
+    if (target.pathname === '/v2/insights' && target.searchParams.get('signal.location.query') === 'Moda, Kadıköy, Istanbul') return json({ results: { entities: [] } });
+    return fixture.fetchImpl(url, init);
+  };
+  const server = createMousaServer({ env: { MOUSA_PROJECT_DIR: project, QLOO_API_KEY: 'fixture-key-123' }, fetchImpl, store: createConnectionStore({ env: { MOUSA_CONFIG_DIR: config }, protector: plainProtector }),
+    inspect: { browser: async () => ({ available: false, reason: 'Not in tests.' }), codex: async () => ({ available: false, reason: 'Not in tests.' }), fonts: async () => FONTS } });
+  const call = async (name, args) => parse(await server.callTool(name, args));
+  const references = [{ name: 'Paterson' }, { name: 'Nujabes' }];
+  try {
+    const planned = await call('taste_profile', { dryRun: true, medium: 'web', references, location: 'Moda, Kadıköy, Istanbul' });
+    assert.ok(planned.plan.requests.notes.some(note => /may match nothing.*"Istanbul"/u.test(note)), 'the plan warns about a full address');
+    const guess = prediction();
+    assert.equal((await call('design_validate', { stage: 'prediction', artifact: { ...guess, predictions: { ...guess.predictions, place: ['Moda Sahili', 'Kronotrop', 'Walter\'s Coffee Roastery'] } } })).status, 'frozen');
+    const empty = await call('taste_profile', {});
+    assert.equal(empty.status, 'insufficient');
+    const insights = sent.filter(item => item === '/v2/insights').length;
+    assert.ok(insights <= 3, `${insights} Insights requests, not one per domain`);
+    assert.ok(empty.cautions.some(line => /likely did not recognise that place/u.test(line)));
+    assert.match(empty.next, /^Plan again with the city or the neighbourhood alone, such as "Istanbul"\..*prediction stays frozen/u);
+    // The same frozen prediction measures once the place is the city alone.
+    assert.equal((await call('taste_profile', { dryRun: true, medium: 'web', references, location: 'Istanbul' })).status, 'planned');
+    assert.equal((await call('taste_profile', {})).status, 'ok');
+  } finally {
+    await rm(project, { recursive: true, force: true });
+    await rm(config, { recursive: true, force: true });
+  }
+});

@@ -99,6 +99,7 @@ The methods of each medium and the review rules are in [references/production.md
 - **Every device, with its exact tokens.** Make each one by the method its step names, and do not fall back to a default look where a device says otherwise.
 - **In the project's own design system.** On a site with CSS custom properties, each palette colour and font lives in a custom property that the styles use through `var()`. See [references/design-systems.md](references/design-systems.md).
 - **Keep the product.** Keep its facts, its protected files and its accessibility. Visitor-facing text never mentions Qloo, agents or APIs, and nothing copies a work's logo, artwork, lyrics, characters or trade dress.
+- **Invent no fact.** The copy states only what the brief or the project says. Add no price or "free", no amenity, offer, schedule, award, review or claim that they do not state, however well it fits the voice. A detail the voice wants and the brief lacks is left out, or asked about. In the first live session a voice device added "free, no sign-up" and "two pairs of headphones" that no brief said.
 
 ## 6. Check
 

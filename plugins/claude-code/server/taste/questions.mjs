@@ -79,6 +79,7 @@ export function planTaste({ medium = 'web', references = [], segments = [], loca
   const notes = [];
   if (estimate[1] > TASTE_LIMITS.calls) notes.push(`With ${seeds.length} references the pass may reach its ${TASTE_LIMITS.calls}-request limit; later domains would then stay empty. Fewer references keep every domain.`);
   if (!seeds.length && segmentList.length) notes.push('Audience segments without named works give a broader signal; add a few works the audience loves when you can.');
+  if (location && location.includes(',')) notes.push(`Qloo weights the measurement by one place name, and a full address such as "${location}" may match nothing; the city or the neighbourhood alone is safer, such as "${location.split(',').map(part => part.trim()).filter(Boolean).at(-1)}".`);
   if (named.length > seeds.length) notes.push(`${named.length - seeds.length} reference${named.length - seeds.length === 1 ? ' is' : 's are'} not an audience taste (brand, canon or extra creator inspiration), so ${named.length - seeds.length === 1 ? 'it is' : 'they are'} known names, not seeds.`);
 
   const asked = new Set(['world', 'shared', 'difference', ...TASTE_QUESTIONS.filter(question => question.domain && domains.includes(question.domain)).map(question => question.id)]);

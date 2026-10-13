@@ -2,6 +2,46 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Live Claude Code session with the packaged plugin — October 13, 2026
+
+[`scripts/run-claude-code-live.mjs`](../scripts/run-claude-code-live.mjs) ran one headless Claude Code session (2.1.284, claude-opus-5-5) with `plugins/claude-code` loaded for that session only, through `--plugin-dir`.
+- **Where.** An empty folder outside the repository.
+- **Environment.** The Qloo key from `.env`, and Codex pictures off.
+- **The brief.** A one-page site for Wax & Wane, a record shop in Moda, Istanbul, for people who love Paterson and Nujabes, with six fixed facts.
+- **The run.** It ended normally after 47 turns and 6 minutes, at $1.88.
+- **The record.** The brief, the stream, a summary, the project and its captures are kept outside the repository, in `D:/mousa-live/claude-code-wax-and-wane-1/`.
+
+What happened, in order:
+
+- **Setup and trigger.** The agent loaded `mousa:taste-brief` on reading the brief, and `mousa_status` found Qloo connected from the environment.
+- **Plan and prediction.** It planned the web recipe with a location (10 domains), looked up fonts, and froze its prediction and sketch.
+- **First measurement, empty.** It passed the location as "Moda, Kadıköy, Istanbul", and every one of the 12 Insights answers came back empty. The profile was `insufficient`, after 16 requests. Its attempt to read the evidence through Bash was refused, because the run allowed no shell.
+- **Second measurement.** It planned again with "Istanbul", and its frozen prediction still fitted.
+  - **Requests.** 12 new requests; 2 searches came from the cache.
+  - **What came back.** 80 works in 9 domains, 18 qualities, 8 surface tags and 8 tone tags. The style ranking returned none.
+  - **Against the prediction.** None of the 80 works had been predicted.
+  - **Cautions.** The brief flagged Minimalist and Clean Lines as carried mostly by brands.
+- **Reading and DNA,** each valid at the first save.
+  - **The reading:** 4 clusters, with 4 refs set aside.
+  - **The DNA:** 8 devices across all eight layers, all anchored to surprises and 6 to qualities. The required anchors were Intimate, Emotional, Friendship, Pretty Boys, Leonard Cohen and Fleabag.
+  - **Against the sketch:** 4 new colours, 2 new families (Instrument Serif and Alegreya Sans) and 4 new section ids.
+- **Plan and build.**
+  - **The plan:** 8 steps (css-palette, library-font, css-art, css-layout, inline-svg, css-motion, copy and interaction-script) and 5 review criteria.
+  - **The build:** it fetched the two fonts and wrote `index.html`, `styles.css` and `script.js`.
+  - **The gate:** it held nothing, because every write came after the DNA was valid.
+- **Check.** Score 1.0 at the third check. Every device was present, and each colour and font was held by a custom property in use.
+- **Review.** 11 captures over two rounds, all returned in the tool results, so both reviews were audited.
+  - **Round 1:** 3 criteria met and 2 partly met (a tangled still life, and a two-chairs section that did not read as seats). Both were repaired.
+  - **Round 2:** 4 met and 1 partly met (a capture crop).
+
+Findings, and what changed:
+
+- **An address Qloo cannot match empties the whole pass.** The first measurement's 16 requests went to it, and with them the run made 28 requests, 4 more than the 24 it was approved for. The plan now warns about a full address. A measurement now stops once the first answers weighted by a place all come back empty, and its caution and next step name the city.
+- **The voice invented two facts.** The page kept all six facts, but it added "Free, no sign-up" to the Thursday session and "two pairs of headphones" to the listening corner. The design skill and its references now say: invent no fact.
+- **Not shown:** that Claude Code runs the plugin's PreToolUse gate. The stream records only another plugin's SessionStart hook, and the agent never wrote early.
+
+Limits: one session and one brief, on Windows with Claude Code 2.1.284 and the person's other plugins installed. No Qloo off arm was run.
+
 ## Showcase for reviewers — October 6, 2026
 
 The [showcase](../README.md#showcase) was set with `scripts/build-showcase.mjs --sites=dfc72570-5a8a-4615-9e91-5968da7c8745 --app=2026-10-06T10-20-02-669Z`: the Gather comparison below and the standalone Ramble run. It built `data/showcase/app/ramble-2026-10-06/` from 24 files of the run and the starter and a record of its artifacts. No character pair is showcased yet. No request was made.

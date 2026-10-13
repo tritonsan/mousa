@@ -54,7 +54,7 @@ Tokens are the literal values the check finds. Leave unused kinds out or empty, 
 4. **Qualities first.** When the brief has qualities, the palette device and the typography device each anchor to a quality entry. Pacing, surface and tone tags count too, and so do the qualities. A work may stand beside the quality as evidence, but its own brand or team colours, logo, packaging and trade dress are never the source.
 5. **Motion.** When the brief has pacing tags, a motion device anchors to one and declares `keyframes` or an `animation` or `transition` value in `css`. When no pacing tags came back, it anchors to a mood quality instead.
 6. **Illustration.** When the brief has surface tags, a device anchored to one draws an original illustration and lists its drawing in `svg`. When no surface tags came back, it anchors to a look quality instead. In the generic medium the drawing may instead be a picture in `images` or an asset named in `literals`.
-7. **Voice.** A voice device anchored to a measured entry declares at least two lines you wrote in its register in `copy`, such as the headline.
+7. **Voice.** A voice device anchored to a measured entry declares at least two lines you wrote in its register in `copy`, such as the headline. The voice changes how the facts are said, never which facts there are.
 8. **Departure.** When the brief has surprises, devices anchored to surprises move the design away from your frozen sketch:
    - a palette device with at least two colours at CIE76 ΔE 20 or more from every sketch colour;
    - a typography device whose named families are all outside the sketch's fonts, used for headings or body text;

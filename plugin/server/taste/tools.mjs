@@ -226,7 +226,7 @@ export function createTasteTools(context) {
     const evidence = [];
     const profile = await buildTasteProfile({ client, references: planned.signal.references, domains: planned.domains, deepCuts: planned.signal.deepCuts,
       ...(planned.signal.location ? { location: planned.signal.location } : {}), ...(planned.signal.ages?.length ? { age: planned.signal.ages } : {}),
-      ...(audiences.length ? { audiences } : {}), knownNames: planned.signal.knownNames,
+      ...(audiences.length ? { audiences } : {}), knownNames: planned.signal.knownNames, placeCheck: true,
       onEvidence: async record => {
         if (record.evidence && typeof record.evidence === 'object') record.evidence.id ||= `mousa-source:${randomUUID()}`;
         evidence.push({ tool: record.tool, query: record.query, status: record.status, results: record.results, evidence: record.evidence, tastePass: record.tastePass, ...(record.cache ? { cache: record.cache } : {}) });
@@ -239,9 +239,11 @@ export function createTasteTools(context) {
     const brief = buildTasteBrief({ plan: planned, profile, input, segments, cache: client.stats, files });
     await writeState(root, 'taste/brief', brief);
     await session(root, 'measured');
+    const unmatchedPlace = (profile.limitations || []).find(item => /likely did not recognise that place/u.test(item));
     return { ...brief, next: profile.status === 'ok'
       ? 'Read the brief, then design from it: group the refs that belong together, and anchor palette and type to look qualities, motion to pacing, illustration to surfaces and the copy to tone. Use taste_ask for later choices.'
-      : 'This profile is too thin to govern a design. Add a few named works the audience loves, plan again with taste_profile dryRun, then measure.' };
+      : unmatchedPlace ? `${unmatchedPlace.replace(/^.*?(Plan again)/u, '$1')} Plan with taste_profile dryRun and that location, then measure; your prediction stays frozen.`
+        : 'This profile is too thin to govern a design. Add a few named works the audience loves, plan again with taste_profile dryRun, then measure.' };
   }
 
   /** The audience signal of the measured profile, for further requests. */

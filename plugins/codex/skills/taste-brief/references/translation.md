@@ -38,3 +38,4 @@ Your frozen sketch is what you would have made without the data. Where a measure
 Taste changes how the product looks, moves and speaks, never what it is.
 - Keep every fact, price, name and protected file.
 - A description keeps what an item is and does, and adds no feature, award, review or claim.
+- Invent no fact. No price or "free", amenity, offer or schedule the brief does not state, however well it fits the voice.
