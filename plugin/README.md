@@ -19,7 +19,7 @@ Set `QLOO_API_KEY` in the MCP process environment or the host's secret environme
 
 `server/index.mjs` keeps the standalone surface described below for Studio's `/mcp` endpoint and the Kiro example. The two entries share the same engine.
 
-It offers three setup tools so far.
+It offers twelve tools in three groups: setup (below), taste (see [Taste questions](#taste-questions)) and design (see [Design stages](#design-stages)).
 
 - **`mousa_status`.** Call it first. It reports:
   - whether Qloo is connected, and from where;
@@ -97,6 +97,30 @@ A live probe on 2026-10-13 (`scripts/verify-qloo-audiences-live.mjs`, 8 requests
 - "Parents With Young Children" for the query "parent", and nothing for "remote".
 - Weighting films by that segment with Istanbul and ages 25–34 ranked *The Blue Elephant 2* first.
 - An emotional-tone ranking for Nujabes and Paterson returned Thoughtful, Introspective and Melancholic.
+
+### Design stages
+
+The design tools take the work from the Taste Brief to a checked and captured result. They read the saved taste records, so the agent sends only each stage's own artifact.
+
+1. **Reading, DNA and plan.** `design_validate` checks and saves `reading`, `dna` and `plan` in that order, with the rules of the standalone stages described below. Each stage is frozen once the next one rests on it. `revise:true` replaces it and moves the later stages into `.mousa/history/`.
+   - The DNA is checked against the frozen design sketch, so the surprises must move it away from the design the agent would have made without Qloo.
+   - The DNA result lists the methods this session offers for each layer and how many pictures it can make.
+   - The medium (`web`, `app-ui` or `generic`) is detected from the project. An empty folder takes the medium of the taste recipe.
+2. **Fonts.** `materials` ranks the families of the open-licence library. It copies the ones the plan uses into the project with their licence files and returns their `@font-face` rules. A family the plan does not use is refused.
+3. **Pictures.** `image` makes pictures only for imagery devices that the plan gives a `generated-image` step, up to the step's count and the session limit (`MOUSA_IMAGES_PER_RUN`, 4 by default).
+   - `prompt` returns the brief Moûsa wrote from the device and the file to save (`generated/<device>-<n>.png`). The agent makes the picture with its own image tool.
+   - `register` checks the saved PNG or JPEG and compares its main colours with the device's palette. At least two of them must lie within ΔE 22 of a palette colour; otherwise the result asks for a new picture or a palette treatment where it is shown.
+   - `generate` uses a signed-in Codex CLI, and is offered only outside Codex.
+4. **Check.** `design_check` checks the build against the saved DNA, reading the project's pages, styles and scripts.
+   - A project with three or more CSS custom properties is checked as a design system as well. Each palette colour and font must be held by a custom property that the styles use through `var()`. `var()` chains are followed, `#abc` matches `#aabbcc`, and every page and `<style>` block is read. The result names the property that holds each value and reports a value that is declared but never used.
+   - Other projects, such as Tailwind, component or native code, are checked by finding each token as written, and the result says so.
+5. **Capture.** `design_capture` renders the project in a headless browser that can reach only the project. The pictures come back in the result itself, scaled to at most 1,568 pixels on the longer side. The result has no `structuredContent` copy, so Codex keeps the pictures.
+   - `specimen:true` captures the specimen board instead: one page that draws the DNA with its palette, its type in the library fonts, keyframes, SVG drawings, pictures, copy lines and landmark ids. It serves designs a browser cannot open, such as a game or a native app, and judging the system itself.
+   - A round holds six captures; a session has two rounds.
+6. **Review.** `design_validate({stage:'review'})` checks the agent's verdict on each planned criterion against the captures of its round. Captures returned in a result count as seen, so the review is marked as audited.
+7. **Compare.** `design_compare` gives a heuristic distance between two designs in folders of the project, such as one made with Qloo and one made without.
+
+`mousa_status` also reports the detected design system and the stage the session has reached (`.mousa/session.json`).
 
 ## Portable configuration
 

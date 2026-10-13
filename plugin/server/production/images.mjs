@@ -132,7 +132,7 @@ export async function inspectImageProviders({ host = 'unknown', environment = 'l
   if (host === 'codex') cli = { id: 'codex-cli', status: 'unavailable', reason: 'Inside Codex, use Codex\'s own image tool instead of starting another Codex.' };
   else {
     const found = await (codex ? codex() : inspectCodex({ config: { codexImages: env.CODEX_IMAGES, codexCliPath: env.CODEX_CLI_PATH }, env, platform })).catch(() => ({ available: false, reason: 'Codex could not be checked on this machine.' }));
-    cli = found.available ? { id: 'codex-cli', status: 'available', version: found.version, note: 'A signed-in Codex CLI on this machine makes the picture in a separate turn.' }
+    cli = found.available ? { id: 'codex-cli', status: 'available', version: found.version, ...(found.path ? { path: found.path } : {}), note: 'A signed-in Codex CLI on this machine makes the picture in a separate turn.' }
       : { id: 'codex-cli', status: 'unavailable', reason: found.reason };
   }
   return [hostTool, cli, { id: 'off', status: 'available', note: 'No picture: the plan\'s fallback method, such as an SVG illustration or CSS art.' }];

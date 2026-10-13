@@ -7,13 +7,15 @@
 import { createConnectionStore, ConnectionStoreError } from '../connections/store.mjs';
 import { resolveQlooConnection, hostName, testQlooKey } from '../connections/config.mjs';
 import { createConnectionPage } from '../connections/page.mjs';
-import { resolveProjectRoot, checkProjectFolder, ProjectScopeError, CODEX_SANDBOX_META } from '../production/project-files.mjs';
+import { resolveProjectRoot, checkProjectFolder, readState, ProjectScopeError, CODEX_SANDBOX_META } from '../production/project-files.mjs';
 import { inspectImageProviders } from '../production/images.mjs';
 import { inspectBrowser, verifyBrowser } from '../production/capture.mjs';
 import { fontLibraryRoot, loadFontLibrary } from '../production/fonts.mjs';
 import { QlooError } from '../qloo/client.mjs';
 import { TasteProtocolError } from '../culture/taste.mjs';
 import { createTasteTools, TasteToolError } from '../taste/tools.mjs';
+import { createDesignTools, DesignToolError } from '../design/tools.mjs';
+import { collectProjectFiles, detectDesignSystem } from '../design/systems.mjs';
 
 export const MOUSA_SERVER_NAME = 'mousa';
 export const MOUSA_SERVER_VERSION = '0.5.0';
@@ -27,6 +29,7 @@ export const MOUSA_INSTRUCTIONS = [
   'If Qloo is not connected, call mousa_connect and give the person the link it returns: they enter their own Qloo API key on a page on this computer, so the key never passes through the chat.',
   'If no project folder is set, ask the person which folder to design in, then call mousa_open_project.',
   'To measure an audience: taste_profile with dryRun:true plans the Qloo questions without a request; save your own prediction with design_validate (stage prediction) before any data; then taste_profile measures and returns the Taste Brief. While designing, ask taste_ask, writing your own guess first.',
+  'Then design_validate the reading, the Design DNA and the production plan, build in the project\'s own design system, run design_check, look at design_capture (specimen:true for work a browser cannot open) and design_validate your review.',
   'Never invent Qloo results, entities or affinities. Report missing connections, unresolved names and empty results as they are.',
 ].join(' ');
 
@@ -104,7 +107,7 @@ function setupHints({ host, qloo, project, images, capture }) {
  * The server. `store`, `page` and `inspect` ({browser, codex, fonts}) replace the machine parts in tests and other
  * hosts; `fetchImpl` reaches Qloo for the key test.
  */
-export function createMousaServer({ env = process.env, platform = process.platform, store, page, inspect = {}, fetchImpl } = {}) {
+export function createMousaServer({ env = process.env, platform = process.platform, store, page, inspect = {}, fetchImpl, generate, capture } = {}) {
   const host = hostName(env);
   const environment = env.MOUSA_ENVIRONMENT === 'hosted' ? 'hosted' : 'local';
   const connections = store || createConnectionStore({ env, platform });
@@ -121,8 +124,10 @@ export function createMousaServer({ env = process.env, platform = process.platfo
     try { const { root, source } = await resolveProjectRoot({ env, meta, session }); return { folder: root, source }; }
     catch (error) { return { folder: null, problem: error instanceof ProjectScopeError ? error.message : 'The project folder could not be checked.' }; }
   }
-  const taste = createTasteTools({ env, connections, fetchImpl, fonts: fontStatus, project: async meta => (await resolveProjectRoot({ env, meta, session })).root });
-  const tools = [...MOUSA_SETUP_TOOLS, ...taste.definitions];
+  const projectFolder = async meta => (await resolveProjectRoot({ env, meta, session })).root;
+  const taste = createTasteTools({ env, connections, fetchImpl, fonts: fontStatus, project: projectFolder });
+  const design = createDesignTools({ env, host, project: projectFolder, fonts: fontStatus, images: imageStatus, browser: browserStatus, generate, capture });
+  const tools = [...MOUSA_SETUP_TOOLS, ...taste.definitions, ...design.definitions];
 
   async function status(args, meta) {
     const connection = await resolveQlooConnection({ env, store: connections });
@@ -132,12 +137,18 @@ export function createMousaServer({ env = process.env, platform = process.platfo
       const checked = await testQlooKey({ apiKey: connection.apiKey, baseUrl: connection.baseUrl, ...(fetchImpl ? { fetchImpl } : {}) });
       qloo.check = checked.ok ? { ok: true } : { ok: false, code: checked.code, message: checked.message };
     }
-    const [project, imageProviders, capture, library] = await Promise.all([projectStatus(meta), imageStatus(), browserStatus(), fontStatus()]);
-    const review = capture.available ? { available: true, browser: capture.label || capture.name } : { available: false, reason: capture.reason };
+    const [project, imageProviders, browserCheck, library] = await Promise.all([projectStatus(meta), imageStatus(), browserStatus(), fontStatus()]);
+    const review = browserCheck.available ? { available: true, browser: browserCheck.label || browserCheck.name } : { available: false, reason: browserCheck.reason };
     const setup = setupHints({ host, qloo, project, images: imageProviders, capture: review });
     const ready = qloo.connected && (!qloo.check || qloo.check.ok) && Boolean(project.folder);
-    return { status: ready ? 'ready' : 'needs-setup', version: MOUSA_SERVER_VERSION, host, environment, qloo, project, images: imageProviders, capture: review,
-      materials: { fonts: library?.families?.length ?? 0 }, ...(setup.length ? { setup } : {}) };
+    // Where the project keeps its design values, and how far this design session has come.
+    let designSystem = null, stage = null;
+    if (project.folder) {
+      designSystem = detectDesignSystem(await collectProjectFiles(project.folder));
+      stage = (await readState(project.folder, 'session').catch(() => null))?.stage || null;
+    }
+    return { status: ready ? 'ready' : 'needs-setup', version: MOUSA_SERVER_VERSION, host, environment, qloo, project, ...(designSystem ? { designSystem } : {}), ...(stage ? { stage } : {}),
+      images: imageProviders.map(({ path: file, ...item }) => { void file; return item; }), capture: review, materials: { fonts: library?.families?.length ?? 0 }, ...(setup.length ? { setup } : {}) };
   }
 
   async function connect() {
@@ -166,12 +177,19 @@ export function createMousaServer({ env = process.env, platform = process.platfo
       if (name === 'mousa_status') return textResult(await status(args, meta));
       if (name === 'mousa_connect') return await connect();
       if (name === 'mousa_open_project') return await openProject(args, meta);
-      if (taste.names.includes(name)) return textResult(await taste.handle(name, args, meta));
+      // The prediction stage belongs with the taste plan; every later stage with the design tools.
+      if (name === 'design_validate' && args.stage === 'prediction') return textResult(await taste.handle(name, args, meta));
+      if (taste.names.includes(name) && name !== 'design_validate') return textResult(await taste.handle(name, args, meta));
+      if (design.names.includes(name)) {
+        const value = await design.handle(name, args, meta);
+        // A result that already carries content, such as captures with their pictures, goes out as it is.
+        return Array.isArray(value?.content) ? value : textResult(value);
+      }
       return errorResult('TOOL_UNKNOWN', 'This tool is not available in this session.');
     } catch (error) {
       if (error instanceof ArgumentError || error instanceof ProjectScopeError || error instanceof ConnectionStoreError
         || error instanceof TasteToolError || error instanceof TasteProtocolError) return errorResult(error.code, error.message);
-      if (error instanceof QlooError) return errorResult(error.code, error.message, error.retryable);
+      if (error instanceof DesignToolError || error instanceof QlooError) return errorResult(error.code, error.message, Boolean(error.retryable));
       return errorResult('TOOL_EXECUTION_FAILED', 'The tool could not complete. Call mousa_status to check the setup.');
     }
   }

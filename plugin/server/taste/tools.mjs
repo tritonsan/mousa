@@ -42,16 +42,6 @@ export const TASTE_TOOLS = Object.freeze([
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true },
   },
   {
-    name: 'design_validate',
-    description: 'Validate and freeze a design-stage artifact. Stage prediction: before any Qloo data, your own guess at what this audience loves in each planned domain (3-6 entries each) and the design you would make from that guess alone (designSketch with library fonts). It is frozen once saved: it is the default the measurement is compared with. restart:true archives the current session\'s records and starts a new one.',
-    inputSchema: { type: 'object', properties: {
-      stage: { type: 'string', enum: ['prediction'] },
-      artifact: { type: 'object', description: '{schemaVersion:"1.0", audienceSummary, predictions:{<domain>:[3-6]}, designSketch:{summary, palette:[3-6 hex], fonts:[1-3 library families], sections:[3-8 IDs], motifs:[1-5]}}' },
-      restart: { type: 'boolean' },
-    }, required: ['stage', 'artifact'], additionalProperties: false },
-    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
-  },
-  {
     name: 'taste_ask',
     description: 'Ask one taste question while designing, after the measurement. Write myGuess first: your own answer without data, so the difference is visible. From the saved profile, with no request: world, shared, pacing, surfaces, tone, difference. With a few cached requests: shortlist (rank 2-5 named candidates of one kind, such as artists for a playlist), local (places this audience loves in a location) and overlap (works this audience shares with another named audience). Each answer is recorded in .mousa/taste/decisions.json.',
     inputSchema: { type: 'object', properties: {
@@ -118,7 +108,8 @@ function bestNamed(results, name, threshold = 0.75) {
  */
 export function createTasteTools(context) {
   const { env = process.env, connections, project, fonts = async () => null, fetchImpl, now = Date.now } = context;
-  const names = TASTE_TOOLS.map(tool => tool.name);
+  // design_validate is listed by the design tools; its prediction stage is answered here, where the taste plan lives.
+  const names = [...TASTE_TOOLS.map(tool => tool.name), 'design_validate'];
 
   async function qlooClient(root, { refresh = false } = {}) {
     const connection = await resolveQlooConnection({ env, store: connections });

@@ -94,6 +94,33 @@ function toLab([r, g, b]) {
 }
 const distance = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
 const hex = rgb => `#${rgb.map(value => Math.round(Math.min(255, Math.max(0, value))).toString(16).padStart(2, '0')).join('')}`;
+const rgbOf = value => { const digits = String(value).replace(/^#/u, ''); return [0, 2, 4].map(index => Number.parseInt(digits.slice(index, index + 2), 16)); };
+
+/** CIE76 colour difference between two #rrggbb colours: about 2 is barely visible, 20 or more is clearly another colour. */
+export function colorDistance(a, b) { return distance(toLab(rgbOf(a)), toLab(rgbOf(b))); }
+
+/**
+ * A PNG scaled down so its longer side is at most `maxSide` (box filter, RGBA), or the same bytes when it already fits
+ * or cannot be read. Captures sent to a model are scaled this way: a larger picture costs tokens and is shrunk anyway.
+ */
+export function scalePng(bytes, maxSide) {
+  const image = decodePng(bytes);
+  if (!image || Math.max(image.width, image.height) <= maxSide) return bytes;
+  const ratio = maxSide / Math.max(image.width, image.height);
+  const width = Math.max(1, Math.round(image.width * ratio)), height = Math.max(1, Math.round(image.height * ratio));
+  const out = Buffer.alloc(width * height * 4);
+  for (let y = 0; y < height; y++) {
+    const y0 = Math.floor(y / ratio), y1 = Math.min(image.height, Math.max(y0 + 1, Math.floor((y + 1) / ratio)));
+    for (let x = 0; x < width; x++) {
+      const x0 = Math.floor(x / ratio), x1 = Math.min(image.width, Math.max(x0 + 1, Math.floor((x + 1) / ratio)));
+      const sum = [0, 0, 0, 0];
+      let count = 0;
+      for (let sy = y0; sy < y1; sy++) for (let sx = x0; sx < x1; sx++) { const pixel = image.pixel(sx, sy); for (let c = 0; c < 4; c++) sum[c] += pixel[c]; count++; }
+      for (let c = 0; c < 4; c++) out[(y * width + x) * 4 + c] = Math.round(sum[c] / count);
+    }
+  }
+  return encodePng(width, height, out);
+}
 
 /**
  * Up to `count` main colours of a picture's subject, each with its share of the subject. The background is what fills

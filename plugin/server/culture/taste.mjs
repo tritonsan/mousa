@@ -815,11 +815,18 @@ export function compactTasteInput(input) {
     metrics: input.metrics, seeds: input.seeds || [], signature: (input.signature || []).slice(0, 10).map(tag => tag.name) };
 }
 
-/** A host library photo as a literal site path: `olive-oil-1`, `olive-oil-1.jpg` and `library/olive-oil-1.jpg` are the same photo. */
+// A picture made for a device and registered with the plugin, such as generated/dna5-1.png.
+const GENERATED_PICTURE = /^generated\/[a-z0-9][a-z0-9_-]{0,60}\.(?:jpg|png)$/u;
+
+/**
+ * A host library photo as a literal site path: `olive-oil-1`, `olive-oil-1.jpg` and `library/olive-oil-1.jpg` are the
+ * same photo. A generated picture keeps its own path; its colours are checked when it is registered, not here.
+ */
 function libraryImagePath(value, path) {
   const name = text(value, path, { max: 90 }).toLowerCase();
+  if (GENERATED_PICTURE.test(name)) return name;
   const match = name.match(/^(?:library\/)?([a-z0-9][a-z0-9-]{0,60})(?:\.jpg)?$/u);
-  if (!match) fail(path, 'Use a photo ID or path listed in culture-library.json, such as library/olive-oil-1.jpg.');
+  if (!match) fail(path, 'Use a photo ID or path listed in culture-library.json, such as library/olive-oil-1.jpg, or a picture generated for this device, such as generated/dna5-1.png.');
   return `library/${match[1]}.jpg`;
 }
 /** Host photo library as path -> tags; null when the caller supplied none, so image tokens are checked for form only. */
@@ -878,7 +885,9 @@ const drawsBy = (tokens, rules) => rules.illustration === 'svg' ? tokens.svg.len
  * (returned tags for measured anchors), and the device must treat it with its own palette so it fits the page.
  */
 function checkDeviceImages(device, at, library) {
-  const { images, colors, css } = device.tokens;
+  const { colors, css } = device.tokens;
+  // Library photos must fit the device and take on its palette; generated pictures were made from the device itself.
+  const images = device.tokens.images.filter(image => !GENERATED_PICTURE.test(image));
   if (!images.length) return;
   if (library) {
     if (!library.size) fail(`${at}.tokens.images`, 'This run has no host photo library, so a device cannot list photos. Use original SVG or CSS imagery instead.');
@@ -1072,7 +1081,8 @@ function hslToHex(h, s, l) {
   else { const q = light < 0.5 ? light * (1 + sat) : light + sat - light * sat, p = 2 * light - q; r = convert(p, q, hue + 1 / 3); g = convert(p, q, hue); b = convert(p, q, hue - 1 / 3); }
   return '#' + [r, g, b].map(channel => Math.round(channel * 255).toString(16).padStart(2, '0')).join('');
 }
-function colorsIn(value) {
+/** Every color a CSS value names (hex, rgb() or hsl()) as #rrggbb. */
+export function colorsIn(value) {
   const found = [];
   for (const match of value.matchAll(/#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})(?![0-9a-z_-])/giu)) found.push(expandHex(match[0]));
   for (const match of value.matchAll(/rgba?\(\s*(\d{1,3})(?:\s*,\s*|\s+)(\d{1,3})(?:\s*,\s*|\s+)(\d{1,3})/giu)) found.push('#' + match.slice(1, 4).map(part => Math.min(255, Number(part)).toString(16).padStart(2, '0')).join(''));

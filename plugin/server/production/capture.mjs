@@ -258,11 +258,12 @@ export const captureName = ({ prefix, view, target, full = false }) => [prefix, 
  * Capture each view of a page that `baseUrl` serves, optionally scrolled to an element or route by `target` (the URL
  * fragment) or at its full height. Files are named <prefix>-<view>[-<target>][-full].png in `outDir`.
  */
-export async function captureViews({ browser, baseUrl, entry = 'index.html', views, target, full = false, outDir, prefix, env, spawnImpl, timeoutMs, settleMs }) {
+export async function captureViews({ browser, baseUrl, entry = 'index.html', views, target, full = false, outDir, prefix, env, spawnImpl, timeoutMs, settleMs, ready }) {
   if (target !== undefined && !captureTarget(target)) throw new Error('target: use an element ID or route of letters, digits, hyphens, underscores, colons and equals signs.');
   const page = `${baseUrl.replace(/\/$/u, '')}/${entry.split('/').map(encodeURIComponent).join('/')}${target ? `#${target}` : ''}`;
   const named = views.map(view => ({ view, id: captureName({ prefix, view, target, full }) }));
+  // `ready` is an expression the page resolves to true once it has drawn, for pages that draw after load.
   const shots = await captureShots({ browser, env, spawnImpl, timeoutMs, settleMs,
-    shots: named.map(({ view, id }) => ({ url: page, width: view.width, height: view.height, full, out: path.join(outDir, `${id}.png`) })) });
+    shots: named.map(({ view, id }) => ({ url: page, width: view.width, height: view.height, full, out: path.join(outDir, `${id}.png`), ...(ready ? { ready } : {}) })) });
   return named.map(({ view, id }, index) => ({ id, view: view.id, ...(target ? { target } : {}), ...(full ? { full: true } : {}), width: shots[index].width, height: shots[index].height, bytes: shots[index].bytes, file: shots[index].file }));
 }
