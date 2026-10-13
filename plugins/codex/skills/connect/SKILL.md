@@ -18,7 +18,7 @@ Never ask for the key in the chat, never print it, and never write it into a pro
 
 | Host | How |
 | --- | --- |
-| Claude Code | The person runs `/plugin configure mousa@mousa` and enters the key; Claude Code keeps it as a sensitive setting. Or use the local page below |
+| Claude Code | The person runs `/plugin configure mousa@mousa` and enters the key; Claude Code keeps it as a sensitive setting. Or `QLOO_API_KEY` in the environment Claude Code starts from, or the local page below |
 | Codex | The local page below. Or the person sets `QLOO_API_KEY` in the environment Codex starts from; the plugin passes it to the server |
 | Kiro and other MCP clients | The local page below, or `QLOO_API_KEY` in the server's environment in the client's MCP configuration |
 
@@ -28,7 +28,7 @@ Never ask for the key in the chat, never print it, and never write it into a pro
 - **What it does with it.** Moûsa tests the key with one Qloo search, then saves it for this user. On Windows it is encrypted with DPAPI; elsewhere it goes in a file only the owner can read.
 - **When it closes.** After a save, or after ten minutes.
 
-A key in `QLOO_API_KEY` takes precedence over a saved one.
+The plugin's own setting comes first, then `QLOO_API_KEY` in the environment, then the key saved on the page.
 
 ## 3. Verify
 

@@ -6,8 +6,8 @@
         "${CLAUDE_PLUGIN_ROOT}/server/mousa.mjs"
       ],
       "env": {
-        "QLOO_API_KEY": "${user_config.qloo_api_key}",
-        "QLOO_BASE_URL": "${user_config.qloo_base_url}",
+        "MOUSA_QLOO_API_KEY": "${user_config.qloo_api_key}",
+        "MOUSA_QLOO_BASE_URL": "${user_config.qloo_base_url}",
         "MOUSA_PROJECT_DIR": "${CLAUDE_PROJECT_DIR}",
         "MOUSA_HOST": "claude-code"
       }

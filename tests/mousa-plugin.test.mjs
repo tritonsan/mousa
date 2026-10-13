@@ -98,6 +98,12 @@ test('the environment key wins, an unfilled host field falls through to the save
     assert.equal(fromFile.baseUrl, 'https://api.qloo.com');
     const fromEnv = await resolveQlooConnection({ env: { QLOO_API_KEY: 'env-key-0001', QLOO_BASE_URL: 'http://insecure.example' }, store });
     assert.deepEqual(fromEnv, { apiKey: 'env-key-0001', baseUrl: DEFAULT_QLOO_BASE_URL, source: 'environment' });
+    // Claude Code fills the plugin setting under its own name: an empty one leaves the environment's key in charge.
+    const unset = { MOUSA_QLOO_API_KEY: '${user_config.qloo_api_key}', MOUSA_QLOO_BASE_URL: 'https://hackathon.api.qloo.com' };
+    assert.deepEqual(await resolveQlooConnection({ env: { ...unset, QLOO_API_KEY: 'env-key-0001', QLOO_BASE_URL: 'https://api.qloo.com' }, store }),
+      { apiKey: 'env-key-0001', baseUrl: 'https://api.qloo.com', source: 'environment' }, 'a key keeps its own endpoint');
+    assert.deepEqual(await resolveQlooConnection({ env: { ...unset, MOUSA_QLOO_API_KEY: 'plugin-key-0001', QLOO_API_KEY: 'env-key-0001' }, store }),
+      { apiKey: 'plugin-key-0001', baseUrl: 'https://hackathon.api.qloo.com', source: 'plugin settings' });
   } finally { await rm(dir, { recursive: true, force: true }); }
 });
 

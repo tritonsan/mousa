@@ -40,6 +40,11 @@ function baseUrlOf(value) {
 
 /** The Qloo connection to use now: {apiKey, baseUrl, source: 'environment'|'connections file'|null, savedAt?, problem?}. */
 export async function resolveQlooConnection({ env = process.env, store } = {}) {
+  // A host's plugin setting comes first: Claude Code fills MOUSA_QLOO_API_KEY from the plugin's settings, under a name
+  // of its own, so an empty setting never hides a QLOO_API_KEY the person's environment already holds. Each key
+  // travels with its own source's endpoint.
+  const hostKey = envValue(env.MOUSA_QLOO_API_KEY);
+  if (hostKey) return { apiKey: hostKey, baseUrl: baseUrlOf(env.MOUSA_QLOO_BASE_URL) || DEFAULT_QLOO_BASE_URL, source: 'plugin settings' };
   const envKey = envValue(env.QLOO_API_KEY), envBase = baseUrlOf(env.QLOO_BASE_URL);
   if (envKey) return { apiKey: envKey, baseUrl: envBase || DEFAULT_QLOO_BASE_URL, source: 'environment' };
   const saved = store ? await store.read() : null;

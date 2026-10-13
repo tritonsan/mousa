@@ -133,8 +133,9 @@ function codexManifest(version) {
   };
 }
 
+// The plugin settings pass under Moûsa's own names, so an empty setting never hides a QLOO_API_KEY the environment holds.
 const claudeCodeMcp = () => ({ mcpServers: { mousa: { command: 'node', args: ['${CLAUDE_PLUGIN_ROOT}/server/mousa.mjs'],
-  env: { QLOO_API_KEY: '${user_config.qloo_api_key}', QLOO_BASE_URL: '${user_config.qloo_base_url}', MOUSA_PROJECT_DIR: '${CLAUDE_PROJECT_DIR}', MOUSA_HOST: 'claude-code' } } } });
+  env: { MOUSA_QLOO_API_KEY: '${user_config.qloo_api_key}', MOUSA_QLOO_BASE_URL: '${user_config.qloo_base_url}', MOUSA_PROJECT_DIR: '${CLAUDE_PROJECT_DIR}', MOUSA_HOST: 'claude-code' } } } });
 
 // Codex starts a server with an empty environment plus its own short list, so the Qloo key and Moûsa's settings
 // pass by name. The project folder comes from Codex's sandbox state, and the person approves mousa_open_project.

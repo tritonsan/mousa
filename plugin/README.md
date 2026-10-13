@@ -38,7 +38,12 @@ It offers twelve tools in three groups: setup (below), taste (see [Taste questio
   On Windows the key is encrypted for the current user with DPAPI through Windows PowerShell. Elsewhere the file is readable by its owner only.
 - **`mousa_open_project`.** Sets the project folder from an absolute path the person names. Drive roots and the home folder itself are refused.
 
-**Qloo key.** A key in `QLOO_API_KEY` wins over a saved one. A value the host left unfilled, such as `${user_config.qloo_api_key}`, counts as unset, so a key saved on the page still works.
+**Qloo key.** Moûsa takes the first of these that is set:
+1. The host's plugin setting. The Claude Code package passes it as `MOUSA_QLOO_API_KEY`, so an empty setting never hides a key the environment holds.
+2. `QLOO_API_KEY` in the environment.
+3. The key saved on the page.
+
+Each key goes with its own source's endpoint. A value the host left unfilled, such as `${user_config.qloo_api_key}`, counts as unset.
 
 **Project folder.** Moûsa takes the first of these that is set:
 1. `MOUSA_PROJECT_DIR` (the Claude Code package fills it from `${CLAUDE_PROJECT_DIR}`).

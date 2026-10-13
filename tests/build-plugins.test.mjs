@@ -41,7 +41,7 @@ test('the Claude Code package carries the server, the key setting, the project f
   assert.equal(manifest.userConfig.qloo_api_key.sensitive, true);
   const server = (await read(pkg('claude-code', '.mcp.json'))).mcpServers.mousa;
   assert.deepEqual([server.command, server.args], ['node', ['${CLAUDE_PLUGIN_ROOT}/server/mousa.mjs']]);
-  assert.deepEqual(server.env, { QLOO_API_KEY: '${user_config.qloo_api_key}', QLOO_BASE_URL: '${user_config.qloo_base_url}', MOUSA_PROJECT_DIR: '${CLAUDE_PROJECT_DIR}', MOUSA_HOST: 'claude-code' });
+  assert.deepEqual(server.env, { MOUSA_QLOO_API_KEY: '${user_config.qloo_api_key}', MOUSA_QLOO_BASE_URL: '${user_config.qloo_base_url}', MOUSA_PROJECT_DIR: '${CLAUDE_PROJECT_DIR}', MOUSA_HOST: 'claude-code' });
   const hook = (await read(pkg('claude-code', 'hooks', 'hooks.json'))).hooks.PreToolUse[0];
   assert.equal(hook.matcher, 'Write|Edit|MultiEdit|NotebookEdit');
   assert.equal(hook.hooks[0].command, 'node "${CLAUDE_PLUGIN_ROOT}/hooks/gate.mjs"');

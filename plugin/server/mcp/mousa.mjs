@@ -178,7 +178,8 @@ export function createMousaServer({ env = process.env, platform = process.platfo
     const connection = await resolveQlooConnection({ env, store: connections });
     return textResult({ status: 'open', url: opened.url, expiresAt: opened.expiresAt,
       message: 'Give the person this link. They paste their Qloo API key on that page on this computer; it never passes through the chat. Call mousa_status after they save it.',
-      ...(connection.source === 'environment' ? { note: 'QLOO_API_KEY is already set in the environment and takes precedence over a key saved on this page.' } : {}) });
+      ...(connection.source === 'environment' ? { note: 'QLOO_API_KEY is already set in the environment and takes precedence over a key saved on this page.' }
+        : connection.source === 'plugin settings' ? { note: 'A key is already set in the plugin\'s settings and takes precedence over a key saved on this page.' } : {}) });
   }
 
   async function openProject(args, meta) {
