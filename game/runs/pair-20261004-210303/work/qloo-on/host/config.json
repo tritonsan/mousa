@@ -1,0 +1,33 @@
+{
+  "arm": "qloo-on",
+  "mode": "qloo",
+  "domains": [
+    "brand",
+    "movie",
+    "artist",
+    "book",
+    "tv_show",
+    "videogame",
+    "style",
+    "aesthetic"
+  ],
+  "requiredAnchorCount": 6,
+  "portraits": {
+    "perRun": 1
+  },
+  "codex": {
+    "path": "C:\\Users\\tekes\\AppData\\Local\\OpenAI\\Codex\\bin\\8aaf1547b825b104\\codex.exe",
+    "version": "0.160.0"
+  },
+  "knownNames": [
+    "Hollow Knight",
+    "Spirited Away",
+    "Sigur Rós",
+    "Nujabes",
+    "Paterson"
+  ],
+  "keeper": {
+    "name": "Maren",
+    "figureHeight": 156
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "rounds": [
+    {
+      "round": 1,
+      "criteria": [
+        {"id": "welcome-poster", "capture": "r1-phone-screen-welcome", "verdict": "partly", "observed": "Three-ink harbour print with a striped sun, overprinted hills, town, pier, lighthouse, boat and waves above a Rozha One headline. But the sea was multiplied over the marigold sky, so it read as a dark green field.", "repair": "Removed the multiply blend from the sea so it prints as flat sea teal."},
+        {"id": "ticket-list", "capture": "r1-phone-screen-walks", "verdict": "met", "observed": "Numbered tickets with dashed perforation, notches and marigold minute stubs; facts legible and unchanged."},
+        {"id": "type-and-ink", "capture": "r1-board", "verdict": "met", "observed": "Rozha One headlines and Bricolage Grotesque body text on cream, with indigo headers and terracotta buttons, across all four screens."},
+        {"id": "journey-line", "capture": "r1-phone-screen-walk", "verdict": "partly", "observed": "Dotted line with a ringed current stamp and hollow next stamps, but the phone capture landed about 34px short because smooth scrolling was still running.", "repair": "Smooth scrolling now applies only on wide screens with no reduced-motion preference."},
+        {"id": "voice", "capture": "r1-board", "verdict": "met", "observed": "Warm, passionate copy throughout; walk facts unchanged."}
+      ],
+      "summary": "Tickets, type and voice met; the poster's sea colour and the phone scroll offset were repaired."
+    },
+    {
+      "round": 2,
+      "criteria": [
+        {"id": "welcome-poster", "capture": "r2-phone-screen-welcome", "verdict": "met", "observed": "The sea prints as teal water with cream waves; the hills still overprint the sky."},
+        {"id": "ticket-list", "capture": "r2-phone-screen-walks", "verdict": "met", "observed": "Tickets unchanged and legible."},
+        {"id": "type-and-ink", "capture": "r2-board", "verdict": "met", "observed": "Consistent type and inks on all four screens."},
+        {"id": "journey-line", "capture": "r2-phone-screen-walk", "verdict": "partly", "observed": "The phone lands exactly on the walk screen; current and next stamps are clearly different. The visited state (filled ink stamp) cannot show in a capture taken at stop 1.", "repair": "Nothing to change in the build. The visited state is checked only in code, because the capture tool cannot press 'On to the next stop'."},
+        {"id": "voice", "capture": "r2-board", "verdict": "met", "observed": "Copy warm and encouraging; facts unchanged."}
+      ],
+      "summary": "Four criteria met; the journey line is partly met only because the visited state cannot be captured."
+    }
+  ],
+  "audit": "Every cited capture was opened with the read tool in this session; nothing outside this session confirms that."
+}

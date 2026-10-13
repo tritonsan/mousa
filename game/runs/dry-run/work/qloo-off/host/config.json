@@ -1,0 +1,36 @@
+{
+  "arm": "qloo-off",
+  "mode": "baseline",
+  "domains": [
+    "brand",
+    "movie",
+    "artist",
+    "book",
+    "tv_show",
+    "videogame",
+    "style",
+    "aesthetic",
+    "qualities",
+    "art_style"
+  ],
+  "medium": [
+    "videogame"
+  ],
+  "requiredAnchorCount": 6,
+  "portraits": null,
+  "codex": null,
+  "knownNames": [
+    "Hollow Knight",
+    "Spirited Away",
+    "Sigur Rós",
+    "Nujabes",
+    "Paterson"
+  ],
+  "keeper": {
+    "name": "Maren",
+    "figureHeight": 156
+  },
+  "artDirection": true,
+  "departure": true,
+  "music": true
+}

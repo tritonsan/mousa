@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "1.0",
+  "thesis": "Ilo becomes a tall, black-and-silver folk wanderer in a pointed soft hat, carrying an accordion-pleated paper lantern with a silver-blue flame, who walks the cliff road with a slow, majestic sea-legged roll and kindles the beacon with an operatic, singing gesture.",
+  "devices": [
+    {
+      "id": "dna1",
+      "layer": "palette",
+      "device": "Black-and-silver wanderer's coat with faded rust and moss folk accents",
+      "anchors": ["00000000-0000-4000-8000-00000000000C", "00000000-0000-4000-8000-000000000002", "urn:tag:aesthetic_property:qloo:neutral_color_palettes"],
+      "qualities": ["Black And Silver Palette", "Lo-Fi Psychedelic Folk", "Neutral Color Palettes"],
+      "translation": "My interpretation: the returned black-and-silver palette tag becomes the main masses (near-black coat and hat, silver hair, trim, buttons and pleated collar); the lo-fi folk tag adds two faded, home-dyed accents, a rust sash and lantern ribs and a moss bedroll; the neutral palette tag keeps everything else desaturated. No logo or team mark is used.",
+      "tokens": { "colors": ["#141518", "#c3c7cb", "#9a4630", "#5e6234"] }
+    },
+    {
+      "id": "dna2",
+      "layer": "silhouette",
+      "device": "Tall, narrow figure under a pointed soft folk hat whose tip bends back in the wind, over a long coat whose skirt and tail flow behind",
+      "anchors": ["urn:tag:aesthetic_property:qloo:fluid_silhouettes", "00000000-0000-4000-8000-000000000034"],
+      "qualities": ["Fluid Silhouettes", "Folk fantasy", "Witch"],
+      "translation": "My interpretation: the folk-fantasy and witch tags become an original pointed, wide-brimmed soft hat with a sprung, bent tip (not any film costume); the fluid-silhouettes tag becomes one continuous outline from hat tip to a flared coat skirt with a trailing coat tail. The figure grows tall and slim, so the head and hat take a smaller share than a big-headed design.",
+      "tokens": { "parts": ["folk-hat", "hat-tip", "coat-skirt", "coat-tail"], "proportions": { "height": 180, "headShare": 0.23 } }
+    },
+    {
+      "id": "dna3",
+      "layer": "costume",
+      "device": "Accordion-pleated paper bellows lantern and a matching pleated silver collar",
+      "anchors": ["00000000-0000-4000-8000-000000000002", "urn:tag:aesthetic_property:qloo:sculptural_designs"],
+      "qualities": ["Accordion", "Lo-Fi Psychedelic Folk", "Sculptural Designs"],
+      "translation": "My interpretation: the accordion tag becomes the lantern's construction, a hanging paper lantern folded like bellows with rust ribs and caps; the sculptural-designs tag turns the same zigzag fold into a stiff pleated collar at the neck, so the light and the costume share one folded form.",
+      "tokens": { "parts": ["bellows-lantern", "pleat-collar"], "colors": ["#9a4630"] }
+    },
+    {
+      "id": "dna4",
+      "layer": "costume",
+      "device": "Road kit of a working adventurer: moss bedroll on the back, a rust shoulder strap and a knotted sash",
+      "anchors": ["00000000-0000-4000-8000-00000000004D", "urn:tag:aesthetic_property:qloo:quality_craftsmanship"],
+      "qualities": ["Adventurer", "Adventure", "Quality Craftsmanship"],
+      "translation": "My interpretation: the adventurer tags become plain travelling gear rather than weapons (Ilo has no combat ability): a rolled moss blanket tied to the back, a strap crossing the chest and a sash whose tail blows in the wind; the craftsmanship tag shows in visible ties and stitched cuffs.",
+      "tokens": { "parts": ["bedroll", "pack-strap", "rust-sash", "sash-tail"], "colors": ["#5e6234"] }
+    },
+    {
+      "id": "dna5",
+      "layer": "motion",
+      "device": "Slow, upright, majestic walk with a rolling sea-legged hip sway and a deliberate pivot turn",
+      "anchors": ["urn:tag:style:qloo:majestic", "urn:tag:style:qloo:nautical"],
+      "qualities": ["Majestic", "Nautical"],
+      "translation": "My interpretation: majestic sets a slow cadence, almost no bounce, a chest held slightly back and a level head; nautical adds a sailor's rolling hip sway above the sea of cloud and a full free swing of the empty arm, while the lantern arm is carried out in front; the turn is an unhurried pivot.",
+      "tokens": { "motion": [
+        { "param": "walk.cadence", "value": 1.3 },
+        { "param": "walk.bounciness", "value": 0.1 },
+        { "param": "walk.lean", "value": -2 },
+        { "param": "walk.armSwing", "value": 30 },
+        { "param": "walk.hipSway", "value": 7 },
+        { "param": "walk.headStabilize", "value": 0.9 },
+        { "param": "turn.style", "value": "pivot" }
+      ] }
+    },
+    {
+      "id": "dna6",
+      "layer": "signature",
+      "device": "Operatic kindling: Ilo leans back, lifts the head as if holding a sung note, raises the bellows lantern overhead and opens the other arm before releasing the flame",
+      "anchors": ["urn:tag:style:qloo:operatic", "00000000-0000-4000-8000-000000000034"],
+      "qualities": ["Operatic", "Singer"],
+      "translation": "My interpretation: operatic and singer become a long, swelling gesture with a held peak: a slow rise over 2.3 seconds, the flame leaving at the top like the last note, then a long settle; silver-blue motes burst at the release.",
+      "tokens": {
+        "clips": [{ "name": "signature", "duration": 3.6, "kindleAt": 2.3, "tracks": ["upperArmFront", "upperArmBack", "torso", "head"] }],
+        "effects": ["silver-motes"]
+      }
+    },
+    {
+      "id": "dna7",
+      "layer": "light",
+      "device": "Silver-blue enchanted flame glowing through pale pleated paper, with motes drifting up from it",
+      "anchors": ["urn:tag:style:qloo:enchanting"],
+      "qualities": ["Enchanting"],
+      "translation": "My interpretation: enchanting becomes a cool, moonlit silver-blue flame instead of a plain warm lamp, so the beacon and far towers answer in an uncanny pale light, with a slow flicker and a few motes rising from the lantern.",
+      "tokens": { "light": { "color": "#bfe0ff", "radius": 230 }, "effects": ["lantern-glimmer"] }
+    },
+    {
+      "id": "dna8",
+      "layer": "voice",
+      "device": "Moody, earnest, devoted lines: short plain sentences with a ragged emotional catch",
+      "anchors": ["00000000-0000-4000-8000-00000000002B", "00000000-0000-4000-8000-000000000002"],
+      "qualities": ["Moody", "Character studies", "Emotive", "Devoted"],
+      "translation": "My interpretation: moody and character-study set an inward, observational register; emotive and devoted give each line a plain, unguarded promise to the road and the beacon. The words are my own, quoting nothing.",
+      "tokens": { "lines": [
+        "Cold wind off the cloud sea. I hold the lantern close, like a promise I made to no one in particular.",
+        "I won't turn back, keeper. I didn't walk all this way to stop at a bridge.",
+        "Wake now, Vesper. I carried this light the whole long road for you.",
+        "They are. One by one. Let me sit with you a while before I walk on."
+      ] }
+    },
+    {
+      "id": "dna9",
+      "layer": "imagery",
+      "device": "Austere, somber portrait: a lone tall figure in black and silver on a bare basalt ledge, lit only by a small silver-blue lantern",
+      "anchors": ["urn:tag:style:qloo:visually_austere", "urn:tag:style:qloo:somber"],
+      "qualities": ["Visually Austere", "Somber"],
+      "translation": "My interpretation: visually austere and somber direct a sparse composition with a flat dusk sky, few shapes and one small cold light source.",
+      "tokens": { "colors": ["#141518", "#c3c7cb", "#bfe0ff"] }
+    }
+  ],
+  "rejected": [
+    {
+      "ref": "00000000-0000-4000-8000-000000000080",
+      "reason": "Its returned tags (Adult, Science Fiction Fantasy, Audiobook, Literature, School) are catalogue and format labels with no visual, material, rhythmic or vocal quality to translate; using it would mean importing a dystopian theme from my own knowledge that the fixed lore does not support."
+    }
+  ]
+}

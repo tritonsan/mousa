@@ -1,0 +1,445 @@
+{
+  "schemaVersion": "1.0",
+  "templateId": "local-food",
+  "collected": "2026-10-03",
+  "source": "Openverse (openverse.org), filtered to CC0 1.0 and Public Domain Mark; resized to at most 1280 px and re-encoded as JPEG.",
+  "usage": "Read-only product imagery for both comparison arms. Tags describe what each photograph shows; they are not Qloo data.",
+  "licenses": {
+    "CC0 1.0": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "Public Domain Mark 1.0": "https://creativecommons.org/publicdomain/mark/1.0/"
+  },
+  "images": [
+    {
+      "id": "olive-oil-1",
+      "file": "olive-oil-1.jpg",
+      "subject": "olive-oil",
+      "alt": "Glass bottles of olive oil in soft focus on a white ground",
+      "width": 1024,
+      "height": 683,
+      "tone": "light",
+      "tags": [
+        "Bright",
+        "Minimalist",
+        "Clean",
+        "Soft light",
+        "Understated framing"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/6037430/photo-image-public-domain-free-olive",
+      "openverseId": "f0d0a57a-e0e8-4e7d-9cbf-a23bd1c6e8a2"
+    },
+    {
+      "id": "olive-oil-2",
+      "file": "olive-oil-2.jpg",
+      "subject": "olive-oil",
+      "alt": "A bottle and a small pitcher of olive oil with garlic on black",
+      "width": 683,
+      "height": 1024,
+      "tone": "dark",
+      "tags": [
+        "Moody",
+        "High contrast",
+        "Editorial-Style Photography",
+        "Still life"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/5927777/photo-image-background-public-domain-black",
+      "openverseId": "7a3042cb-e4c5-4980-8241-6e97f60574b5"
+    },
+    {
+      "id": "olive-oil-3",
+      "file": "olive-oil-3.jpg",
+      "subject": "olive-oil",
+      "alt": "A glass jug of olive oil with olives on dark stone in side light",
+      "width": 923,
+      "height": 1280,
+      "tone": "dark",
+      "tags": [
+        "Moody",
+        "Atmospheric",
+        "Rustic",
+        "Natural light",
+        "Still life"
+      ],
+      "license": "CC0 1.0",
+      "creator": "Roberta Sorge",
+      "provider": "stocksnap",
+      "sourceUrl": "https://stocksnap.io/photo/fruit-olive-8Y19AAOHHJ",
+      "openverseId": "7a995124-5ca0-424f-802b-24a35243c315"
+    },
+    {
+      "id": "olive-oil-4",
+      "file": "olive-oil-4.jpg",
+      "subject": "olive-oil",
+      "alt": "An olive oil cruet among olive branches, olives and lavender in sunlight",
+      "width": 1024,
+      "height": 672,
+      "tone": "vivid",
+      "tags": [
+        "Bright",
+        "Vibrant",
+        "Rustic",
+        "Natural light",
+        "Naturalistic"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/5949450/free-public-domain-cc0-photo",
+      "openverseId": "69d0927c-3bdc-4e90-abc5-1d4e05bad5af"
+    },
+    {
+      "id": "tomato-1",
+      "file": "tomato-1.jpg",
+      "subject": "tomato",
+      "alt": "Sun-dried tomato halves on a tray, seen from above",
+      "width": 1024,
+      "height": 683,
+      "tone": "vivid",
+      "tags": [
+        "Vibrant",
+        "Overhead",
+        "Natural light",
+        "Naturalistic",
+        "Rustic"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/6038187/photo-image-public-domain-red-food",
+      "openverseId": "a004f24d-3051-4877-a884-529c2546ebaa"
+    },
+    {
+      "id": "tomato-2",
+      "file": "tomato-2.jpg",
+      "subject": "tomato",
+      "alt": "Dried cherry tomatoes in a white bowl on a grey ground",
+      "width": 1024,
+      "height": 683,
+      "tone": "mid",
+      "tags": [
+        "Minimalist",
+        "Clean",
+        "Understated framing",
+        "Overhead"
+      ],
+      "license": "Public Domain Mark 1.0",
+      "creator": "chooyutshing",
+      "provider": "flickr",
+      "sourceUrl": "https://www.flickr.com/photos/25802865@N08/54864014905",
+      "openverseId": "cc37679e-106b-45ab-bfc0-87ab636c952b"
+    },
+    {
+      "id": "tomato-3",
+      "file": "tomato-3.jpg",
+      "subject": "tomato",
+      "alt": "Close-up of dried tomato slices filling the frame",
+      "width": 683,
+      "height": 1024,
+      "tone": "vivid",
+      "tags": [
+        "Vibrant",
+        "Bold",
+        "Overhead",
+        "Close-up",
+        "Pattern"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/6030678/photo-image-public-domain-red-food",
+      "openverseId": "b73ca8a8-b08d-4136-b310-84fa0b45d068"
+    },
+    {
+      "id": "tahini-1",
+      "file": "tahini-1.jpg",
+      "subject": "tahini",
+      "alt": "Toasted sesame seeds, the ingredient of tahini, in a wooden bowl with a spoon",
+      "width": 1280,
+      "height": 853,
+      "tone": "light",
+      "tags": [
+        "Bright",
+        "Minimalist",
+        "Clean",
+        "Natural"
+      ],
+      "license": "CC0 1.0",
+      "creator": "dabok2014",
+      "provider": "wikimedia",
+      "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=68513143",
+      "openverseId": "e4462b8c-6361-4630-b337-16e5b365c9b9"
+    },
+    {
+      "id": "tahini-2",
+      "file": "tahini-2.jpg",
+      "subject": "tahini",
+      "alt": "Toasted sesame seeds with a wooden scoop on white",
+      "width": 1280,
+      "height": 853,
+      "tone": "light",
+      "tags": [
+        "Bright",
+        "Clean",
+        "Natural",
+        "Close-up"
+      ],
+      "license": "CC0 1.0",
+      "creator": "dabok2014",
+      "provider": "wikimedia",
+      "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=68513145",
+      "openverseId": "94583375-8ee2-48fc-b94e-161579ff6027"
+    },
+    {
+      "id": "tahini-3",
+      "file": "tahini-3.jpg",
+      "subject": "tahini",
+      "alt": "Macro photograph of sesame seeds filling the frame",
+      "width": 1280,
+      "height": 854,
+      "tone": "mid",
+      "tags": [
+        "Close-up",
+        "Pattern",
+        "Warm",
+        "Natural",
+        "Earthy"
+      ],
+      "license": "CC0 1.0",
+      "creator": "U.S. Department of Agriculture",
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/3259338/free-photo-image-sesame-seeds-lentil",
+      "openverseId": "b598c324-bed9-4a04-8f7f-f14fe9f93723"
+    },
+    {
+      "id": "jam-1",
+      "file": "jam-1.jpg",
+      "subject": "jam",
+      "alt": "A jar of plum jam with plums and star anise on deep red cloth",
+      "width": 1024,
+      "height": 672,
+      "tone": "dark",
+      "tags": [
+        "Moody",
+        "Rustic",
+        "Warm",
+        "Still life",
+        "Intimate",
+        "Editorial-Style Photography"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/5923151/photo-image-public-domain-fruit-food",
+      "openverseId": "7ff6fa4c-611e-4e5b-8f41-625e29bbf000"
+    },
+    {
+      "id": "jam-2",
+      "file": "jam-2.jpg",
+      "subject": "jam",
+      "alt": "Whole and halved fresh figs on white",
+      "width": 1024,
+      "height": 768,
+      "tone": "light",
+      "tags": [
+        "Bright",
+        "Minimalist",
+        "Clean",
+        "Still life"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/5918550/image-public-domain-fruit-food",
+      "openverseId": "fd5233f8-9005-4a43-a71a-28bd1dcbe74a"
+    },
+    {
+      "id": "jam-3",
+      "file": "jam-3.jpg",
+      "subject": "jam",
+      "alt": "Close-up of fresh figs, one cut open, on white",
+      "width": 1024,
+      "height": 768,
+      "tone": "light",
+      "tags": [
+        "Close-up",
+        "Bright",
+        "Bold",
+        "Clean"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/5901286/photo-image-background-public-domain-plant",
+      "openverseId": "f2640f57-50f2-4a5e-8e9c-afbb56ac9f83"
+    },
+    {
+      "id": "jam-4",
+      "file": "jam-4.jpg",
+      "subject": "jam",
+      "alt": "A jar of red jam on a glass shelf with soft background blur",
+      "width": 1024,
+      "height": 683,
+      "tone": "light",
+      "tags": [
+        "Bright",
+        "Soft light",
+        "Minimalist",
+        "Mellow"
+      ],
+      "license": "CC0 1.0",
+      "creator": "Nutrition, Food Safety & Health",
+      "provider": "flickr",
+      "sourceUrl": "https://www.flickr.com/photos/93936679@N05/51384250842",
+      "openverseId": "8686d342-cd1a-4f2f-8b09-2031cee720b3"
+    },
+    {
+      "id": "pasta-1",
+      "file": "pasta-1.jpg",
+      "subject": "pasta",
+      "alt": "Black-and-white photograph of fresh pasta strands wound around two hands",
+      "width": 1024,
+      "height": 684,
+      "tone": "mid",
+      "tags": [
+        "Black And White",
+        "Moody",
+        "Atmospheric",
+        "Handmade",
+        "Nostalgic"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/3286719/free-photo-image-spaghetti-pasta-cc0-coil",
+      "openverseId": "22a3b5af-7ec7-45dc-b872-57f13501ba2e"
+    },
+    {
+      "id": "pasta-2",
+      "file": "pasta-2.jpg",
+      "subject": "pasta",
+      "alt": "Fresh pasta strands hanging in soft daylight with blurred greenery",
+      "width": 1024,
+      "height": 588,
+      "tone": "light",
+      "tags": [
+        "Atmospheric",
+        "Soft light",
+        "Natural light",
+        "Mellow"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/5972091/free-public-domain-cc0-photo",
+      "openverseId": "86a64a21-b668-449c-b3ad-a8d1f008be85"
+    },
+    {
+      "id": "pasta-3",
+      "file": "pasta-3.jpg",
+      "subject": "pasta",
+      "alt": "Mounds of handmade noodles on a wooden board in shallow focus",
+      "width": 1024,
+      "height": 683,
+      "tone": "mid",
+      "tags": [
+        "Rustic",
+        "Warm",
+        "Handmade",
+        "Natural light",
+        "Intimate"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/3297503/free-photo-image-pasta-fresh-australia-cc0",
+      "openverseId": "8c72e245-e039-418b-8015-939e17f56e88"
+    },
+    {
+      "id": "pasta-4",
+      "file": "pasta-4.jpg",
+      "subject": "pasta",
+      "alt": "Nests of green, red and yellow tagliatelle on a pale ground",
+      "width": 1024,
+      "height": 667,
+      "tone": "vivid",
+      "tags": [
+        "Vibrant",
+        "Colorful",
+        "Bright",
+        "Playful",
+        "Still life"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/5922403/photo-image-public-domain-green-red",
+      "openverseId": "111d6985-f304-4be9-810d-0e443af9bb8f"
+    },
+    {
+      "id": "lentil-1",
+      "file": "lentil-1.jpg",
+      "subject": "lentil",
+      "alt": "Red, black and brown lentils in wooden spoons on grey",
+      "width": 1024,
+      "height": 652,
+      "tone": "mid",
+      "tags": [
+        "Minimalist",
+        "Soft light",
+        "Understated framing",
+        "Still life",
+        "Natural"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/5928365/photo-image-public-domain-wooden-food",
+      "openverseId": "0c582f95-9692-4e87-8e77-3f4f9bd43201"
+    },
+    {
+      "id": "lentil-2",
+      "file": "lentil-2.jpg",
+      "subject": "lentil",
+      "alt": "Brown lentils in a red bowl on dark wood, seen from above",
+      "width": 1024,
+      "height": 683,
+      "tone": "dark",
+      "tags": [
+        "Moody",
+        "Overhead",
+        "Bold"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/3298043/free-photo-image-bean-bowl-breakfast",
+      "openverseId": "ebdb9752-5eb3-4ef8-bcfd-3294e9cc5c67"
+    },
+    {
+      "id": "lentil-3",
+      "file": "lentil-3.jpg",
+      "subject": "lentil",
+      "alt": "Rows of brown, red and black lentils on grey",
+      "width": 1024,
+      "height": 683,
+      "tone": "mid",
+      "tags": [
+        "Graphic",
+        "Bold",
+        "Minimalist",
+        "Pattern",
+        "Vibrant"
+      ],
+      "license": "CC0 1.0",
+      "creator": null,
+      "provider": "rawpixel",
+      "sourceUrl": "https://www.rawpixel.com/image/5919013/image-public-domain-food-free",
+      "openverseId": "9d589066-128d-45c1-8c9a-e1eccab64ea7"
+    }
+  ]
+}

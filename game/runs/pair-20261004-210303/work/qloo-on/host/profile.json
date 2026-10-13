@@ -1,0 +1,2258 @@
+{
+  "schemaVersion": "1.0",
+  "provider": "Qloo",
+  "createdAt": "2026-10-04T21:03:05.042Z",
+  "domains": [
+    "brand",
+    "movie",
+    "artist",
+    "book",
+    "tv_show",
+    "videogame",
+    "style",
+    "aesthetic"
+  ],
+  "seeds": [
+    {
+      "name": "Hollow Knight",
+      "role": "audience",
+      "origin": "user-provided",
+      "resolution": "entity",
+      "entityId": "00000000-0000-4000-8000-000000000083",
+      "matchedName": "Hollow Knight",
+      "type": "urn:entity:videogame",
+      "evidenceId": "taste-source-2"
+    },
+    {
+      "name": "Spirited Away",
+      "role": "audience",
+      "origin": "user-provided",
+      "resolution": "entity",
+      "entityId": "00000000-0000-4000-8000-000000000053",
+      "matchedName": "Spirited Away",
+      "type": "urn:entity:movie",
+      "evidenceId": "taste-source-1"
+    },
+    {
+      "name": "Sigur Rós",
+      "role": "audience",
+      "origin": "user-provided",
+      "resolution": "entity",
+      "entityId": "00000000-0000-4000-8000-00000000003B",
+      "matchedName": "Sigur Rós",
+      "type": "urn:entity:artist",
+      "evidenceId": "taste-source-4"
+    },
+    {
+      "name": "Nujabes",
+      "role": "audience",
+      "origin": "user-provided",
+      "resolution": "entity",
+      "entityId": "00000000-0000-4000-8000-000000000076",
+      "matchedName": "Nujabes",
+      "type": "urn:entity:artist",
+      "evidenceId": "taste-source-3"
+    },
+    {
+      "name": "Paterson",
+      "role": "audience",
+      "origin": "user-provided",
+      "resolution": "entity",
+      "entityId": "00000000-0000-4000-8000-00000000006A",
+      "matchedName": "Paterson",
+      "type": "urn:entity:movie",
+      "evidenceId": "taste-source-5"
+    }
+  ],
+  "interpretation": "Aggregate Qloo cultural affinity for the resolved seeds. Entities are cultural relationships, not design tokens, individual preferences or quality scores.",
+  "status": "ok",
+  "calls": 17,
+  "results": [
+    {
+      "domain": "brand",
+      "band": "core",
+      "status": "ok",
+      "evidenceId": "taste-source-6",
+      "count": 10
+    },
+    {
+      "domain": "movie",
+      "band": "core",
+      "status": "ok",
+      "evidenceId": "taste-source-7",
+      "count": 10
+    },
+    {
+      "domain": "artist",
+      "band": "core",
+      "status": "ok",
+      "evidenceId": "taste-source-11",
+      "count": 10
+    },
+    {
+      "domain": "book",
+      "band": "core",
+      "status": "ok",
+      "evidenceId": "taste-source-8",
+      "count": 10
+    },
+    {
+      "domain": "tv_show",
+      "band": "core",
+      "status": "ok",
+      "evidenceId": "taste-source-9",
+      "count": 10
+    },
+    {
+      "domain": "videogame",
+      "band": "core",
+      "status": "ok",
+      "evidenceId": "taste-source-10",
+      "count": 10
+    },
+    {
+      "domain": "style",
+      "band": "core",
+      "status": "ok",
+      "evidenceId": "taste-source-12",
+      "count": 8
+    },
+    {
+      "domain": "aesthetic",
+      "band": "core",
+      "status": "ok",
+      "evidenceId": "taste-source-13",
+      "count": 8
+    },
+    {
+      "domain": "brand",
+      "band": "deep-cut",
+      "status": "ok",
+      "evidenceId": "taste-source-14",
+      "count": 10
+    },
+    {
+      "domain": "movie",
+      "band": "deep-cut",
+      "status": "ok",
+      "evidenceId": "taste-source-15",
+      "count": 10
+    }
+  ],
+  "entities": [
+    {
+      "ref": "00000000-0000-4000-8000-00000000000C",
+      "entityId": "00000000-0000-4000-8000-00000000000C",
+      "name": "LA Kings",
+      "domain": "brand",
+      "band": "core",
+      "evidenceId": "taste-source-6",
+      "type": "urn:entity:brand",
+      "tags": [
+        "National Hockey League",
+        "Sports Organization",
+        "Hockey",
+        "Black And Silver Palette",
+        "Minimalist Logo Design",
+        "Iconic Visual Branding",
+        "High-Energy Broadcast Graphics",
+        "Championship Success"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Paterson",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000001A",
+      "entityId": "00000000-0000-4000-8000-00000000001A",
+      "name": "GoPro",
+      "domain": "brand",
+      "band": "core",
+      "evidenceId": "taste-source-6",
+      "type": "urn:entity:brand",
+      "tags": [
+        "American companies established in 2002",
+        "Technology companies based in the San Francisco Bay Area",
+        "2014 initial public offerings",
+        "Action cameras",
+        "Technology companies established in 2002",
+        "2002 establishments in California",
+        "Photography companies of the United States",
+        "Camera & Video"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Sigur Rós",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000013",
+      "entityId": "00000000-0000-4000-8000-000000000013",
+      "name": "Tesla",
+      "domain": "brand",
+      "band": "core",
+      "evidenceId": "taste-source-6",
+      "type": "urn:entity:brand",
+      "tags": [
+        "2003 establishments in California",
+        "Electric motor manufacturers",
+        "Motor vehicle manufacturers based in Texas",
+        "Companies based in Palo Alto",
+        "Companies in the NASDAQ-100",
+        "Automotive",
+        "Car brands",
+        "Manufacturing companies based in California"
+      ],
+      "contributors": [
+        "Paterson",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000070",
+      "entityId": "00000000-0000-4000-8000-000000000070",
+      "name": "Apple Inc",
+      "domain": "brand",
+      "band": "core",
+      "evidenceId": "taste-source-6",
+      "type": "urn:entity:brand",
+      "tags": [
+        "American business executives",
+        "Apple Inc. lists",
+        "Companies in the PRISM network",
+        "Nigerian women business executives",
+        "Headphones",
+        "Phones & Tablets",
+        "American women business executives",
+        "Home computer hardware companies"
+      ],
+      "contributors": [
+        "Paterson",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000073",
+      "entityId": "00000000-0000-4000-8000-000000000073",
+      "name": "The North Face",
+      "domain": "brand",
+      "band": "core",
+      "evidenceId": "taste-source-6",
+      "type": "urn:entity:brand",
+      "tags": [
+        "2010s fashion",
+        "Clothing brands of the United States",
+        "Mountaineering equipment manufacturers",
+        "Sneakers",
+        "Clothing companies established in 1966",
+        "Footwear",
+        "Casual",
+        "Companies based in San Leandro"
+      ],
+      "contributors": [
+        "Sigur Rós",
+        "Spirited Away",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000049",
+      "entityId": "00000000-0000-4000-8000-000000000049",
+      "name": "Subaru",
+      "domain": "brand",
+      "band": "core",
+      "evidenceId": "taste-source-6",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Automotive",
+        "Car & SUV",
+        "Functional Design",
+        "Rugged Minimalism",
+        "Clear Instrumentation",
+        "Ergonomic Layout",
+        "Mountain Excursions",
+        "Active Living"
+      ],
+      "contributors": [
+        "Paterson",
+        "Spirited Away",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000069",
+      "entityId": "00000000-0000-4000-8000-000000000069",
+      "name": "Bose Corporation",
+      "domain": "brand",
+      "band": "core",
+      "evidenceId": "taste-source-6",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Bose Corporation",
+        "Headphones",
+        "In-car entertainment",
+        "Companies based in Framingham",
+        "Manufacturing companies based in Massachusetts",
+        "Electronics companies established in 1964",
+        "Loudspeaker manufacturers",
+        "1964 establishments in Massachusetts"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Paterson",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000059",
+      "entityId": "00000000-0000-4000-8000-000000000059",
+      "name": "Sony",
+      "domain": "brand",
+      "band": "core",
+      "evidenceId": "taste-source-6",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Electronics",
+        "Camera & Video",
+        "Home Theater",
+        "Production Company",
+        "Video Game Developer",
+        "Gaming",
+        "Entertainment",
+        "Minimalist Industrial Design"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Paterson",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000004",
+      "entityId": "00000000-0000-4000-8000-000000000004",
+      "name": "Otterbox",
+      "domain": "brand",
+      "band": "core",
+      "evidenceId": "taste-source-6",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Computer Accessories",
+        "Electronics",
+        "Rugged",
+        "Functional",
+        "Minimalist",
+        "Industrial",
+        "Protective",
+        "Climbing Mountains"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Paterson",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000048",
+      "entityId": "00000000-0000-4000-8000-000000000048",
+      "name": "Unbox Therapy",
+      "domain": "brand",
+      "band": "core",
+      "evidenceId": "taste-source-6",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Website",
+        "Minimalist Studio Setup",
+        "High-Definition Cinematography",
+        "Close-Up Macro Details",
+        "Consistent Branding Elements",
+        "Technology Ownership",
+        "Early Adopter Status",
+        "Creative Production"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Spirited Away",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000002B",
+      "entityId": "00000000-0000-4000-8000-00000000002B",
+      "name": "Anomalisa",
+      "domain": "movie",
+      "band": "core",
+      "evidenceId": "taste-source-7",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Hotel",
+        "Character studies",
+        "Unnamed character",
+        "Marriage",
+        "Moody",
+        "Colleague colleague relationship",
+        "Surrealism",
+        "Boy"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Paterson",
+        "Nujabes"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000041",
+      "entityId": "00000000-0000-4000-8000-000000000041",
+      "name": "Moonrise Kingdom",
+      "domain": "movie",
+      "band": "core",
+      "evidenceId": "taste-source-7",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Boat",
+        "Adultery",
+        "Candy cinema",
+        "Letter",
+        "Woods",
+        "Postmodern",
+        "Lightning",
+        "First love"
+      ],
+      "contributors": [
+        "Sigur Rós",
+        "Nujabes",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000031",
+      "entityId": "00000000-0000-4000-8000-000000000031",
+      "name": "Synecdoche, New York",
+      "domain": "movie",
+      "band": "core",
+      "evidenceId": "taste-source-7",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Electronic translator",
+        "Earpiece",
+        "Bodily fluids",
+        "Atmospheric",
+        "Real estate agent",
+        "Illness",
+        "Existential",
+        "Insanity"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Sigur Rós",
+        "Nujabes"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000005B",
+      "entityId": "00000000-0000-4000-8000-00000000005B",
+      "name": "Melancholia",
+      "domain": "movie",
+      "band": "core",
+      "evidenceId": "taste-source-7",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Part of trilogy",
+        "Castle",
+        "Snow",
+        "Depression",
+        "Sister sister relationship",
+        "Misanthropy",
+        "Sisterhood",
+        "Traumatized"
+      ],
+      "contributors": [
+        "Sigur Rós",
+        "Hollow Knight",
+        "Nujabes"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000037",
+      "entityId": "00000000-0000-4000-8000-000000000037",
+      "name": "The Fall",
+      "domain": "movie",
+      "band": "core",
+      "evidenceId": "taste-source-7",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Production design",
+        "Magical tattoo",
+        "Sword fight",
+        "Death from snake bite",
+        "Poison",
+        "Slow motion scene",
+        "Forced perspective",
+        "Surrealism"
+      ],
+      "contributors": [
+        "Sigur Rós",
+        "Nujabes",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000039",
+      "entityId": "00000000-0000-4000-8000-000000000039",
+      "name": "Mommy",
+      "domain": "movie",
+      "band": "core",
+      "evidenceId": "taste-source-7",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Variable aspect ratio",
+        "Hamburger",
+        "Taser",
+        "Skepticism",
+        "360 camera shot",
+        "Hitting the wall with ones fist",
+        "Singing along to a recording",
+        "Laughing at someone"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Sigur Rós",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000000D",
+      "entityId": "00000000-0000-4000-8000-00000000000D",
+      "name": "Dancer in the Dark",
+      "domain": "movie",
+      "band": "core",
+      "evidenceId": "taste-source-7",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Visually impaired person",
+        "Factory",
+        "Mature",
+        "Psychological drama",
+        "Tense",
+        "Gritty",
+        "Murder",
+        "Handheld"
+      ],
+      "contributors": [
+        "Sigur Rós",
+        "Hollow Knight",
+        "Nujabes"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000047",
+      "entityId": "00000000-0000-4000-8000-000000000047",
+      "name": "It's Such a Beautiful Day",
+      "domain": "movie",
+      "band": "core",
+      "evidenceId": "taste-source-7",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Stick figure minimalism",
+        "Minimalism",
+        "Illness",
+        "Atmospheric",
+        "Intimate",
+        "Flashing colors",
+        "Reflective",
+        "Experimental animation"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Nujabes",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000038",
+      "entityId": "00000000-0000-4000-8000-000000000038",
+      "name": "The Wind Rises",
+      "domain": "movie",
+      "band": "core",
+      "evidenceId": "taste-source-7",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Illness",
+        "Wedding",
+        "Historical drama",
+        "Technology",
+        "Goodbye letter",
+        "Slow burn",
+        "Morality of technology",
+        "Design"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000006E",
+      "entityId": "00000000-0000-4000-8000-00000000006E",
+      "name": "Paprika",
+      "domain": "movie",
+      "band": "core",
+      "evidenceId": "taste-source-7",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Missing person",
+        "Jumping",
+        "City setting",
+        "Surreal",
+        "Centaur",
+        "Conflicted",
+        "Piloted giant robot",
+        "Epic fantasy"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000002",
+      "entityId": "00000000-0000-4000-8000-000000000002",
+      "name": "Neutral Milk Hotel",
+      "domain": "artist",
+      "band": "core",
+      "evidenceId": "taste-source-11",
+      "type": "urn:entity:artist",
+      "tags": [
+        "Accordion",
+        "Guitar",
+        "Emotive",
+        "Devoted",
+        "Lo-Fi Psychedelic Folk",
+        "Experimental",
+        "Emotive",
+        "Passionate"
+      ],
+      "contributors": [
+        "Paterson",
+        "Sigur Rós",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000055",
+      "entityId": "00000000-0000-4000-8000-000000000055",
+      "name": "Nick Drake",
+      "domain": "artist",
+      "band": "core",
+      "evidenceId": "taste-source-11",
+      "type": "urn:entity:artist",
+      "tags": [
+        "Baroque Pop",
+        "Piano",
+        "Loyal",
+        "Devoted",
+        "Singer-Songwriter",
+        "Mellow",
+        "Baroque Pop",
+        "Acoustic"
+      ],
+      "contributors": [
+        "Paterson",
+        "Spirited Away",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000050",
+      "entityId": "00000000-0000-4000-8000-000000000050",
+      "name": "Sufjan Stevens",
+      "domain": "artist",
+      "band": "core",
+      "evidenceId": "taste-source-11",
+      "type": "urn:entity:artist",
+      "tags": [
+        "Melancholic",
+        "Baritone",
+        "Experimental",
+        "Experimental",
+        "Indie Folk",
+        "Accordion",
+        "Paul Simon",
+        "Thoughtful"
+      ],
+      "contributors": [
+        "Paterson",
+        "Sigur Rós",
+        "Spirited Away"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000003D",
+      "entityId": "00000000-0000-4000-8000-00000000003D",
+      "name": "Radiohead",
+      "domain": "artist",
+      "band": "core",
+      "evidenceId": "taste-source-11",
+      "type": "urn:entity:artist",
+      "tags": [
+        "Ambient",
+        "Baritone",
+        "Art Rock",
+        "Experimental",
+        "Experimental",
+        "Technology",
+        "Atmospheric",
+        "Atmospheric"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Sigur Rós",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000078",
+      "entityId": "00000000-0000-4000-8000-000000000078",
+      "name": "the Microphones",
+      "domain": "artist",
+      "band": "core",
+      "evidenceId": "taste-source-11",
+      "type": "urn:entity:artist",
+      "tags": [
+        "Experimental Folk",
+        "Lo-Fi",
+        "Guitar",
+        "Minimalist",
+        "Lo-Fi Indie Rock",
+        "Identity",
+        "5",
+        "Atmospheric"
+      ],
+      "contributors": [
+        "Paterson",
+        "Hollow Knight",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000071",
+      "entityId": "00000000-0000-4000-8000-000000000071",
+      "name": "Sun Kil Moon",
+      "domain": "artist",
+      "band": "core",
+      "evidenceId": "taste-source-11",
+      "type": "urn:entity:artist",
+      "tags": [
+        "Acoustic",
+        "Mortality",
+        "Neil Young",
+        "Melancholic",
+        "Relationships",
+        "Indie Folk",
+        "Slowcore",
+        "Acoustic"
+      ],
+      "contributors": [
+        "Paterson",
+        "Sigur Rós",
+        "Spirited Away"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000001C",
+      "entityId": "00000000-0000-4000-8000-00000000001C",
+      "name": "Beach House",
+      "domain": "artist",
+      "band": "core",
+      "evidenceId": "taste-source-11",
+      "type": "urn:entity:artist",
+      "tags": [
+        "Drums",
+        "Atmospheric",
+        "Dream Pop",
+        "Indie",
+        "Baroque Pop",
+        "Intimate",
+        "Lo - Fi",
+        "Hypnotic"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Paterson",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000001",
+      "entityId": "00000000-0000-4000-8000-000000000001",
+      "name": "Björk",
+      "domain": "artist",
+      "band": "core",
+      "evidenceId": "taste-source-11",
+      "type": "urn:entity:artist",
+      "tags": [
+        "Indie Pop",
+        "Experimental",
+        "Technology",
+        "Innovative",
+        "Experimental",
+        "Enya",
+        "Dedicated",
+        "Orchestral"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Sigur Rós",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000005F",
+      "entityId": "00000000-0000-4000-8000-00000000005F",
+      "name": "Elliott Smith",
+      "domain": "artist",
+      "band": "core",
+      "evidenceId": "taste-source-11",
+      "type": "urn:entity:artist",
+      "tags": [
+        "Love",
+        "Reserved",
+        "Folk Rock",
+        "Soft-Spoken",
+        "Melancholic",
+        "Indie Rock",
+        "Loyal",
+        "Acoustic"
+      ],
+      "contributors": [
+        "Paterson",
+        "Sigur Rós",
+        "Spirited Away"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000079",
+      "entityId": "00000000-0000-4000-8000-000000000079",
+      "name": "Mount Eerie",
+      "domain": "artist",
+      "band": "core",
+      "evidenceId": "taste-source-11",
+      "type": "urn:entity:artist",
+      "tags": [
+        "Nick Drake",
+        "Nature",
+        "Mortality",
+        "Experimental",
+        "Indie Folk",
+        "Thoughtful",
+        "Minimalist Acoustic",
+        "Raw"
+      ],
+      "contributors": [
+        "Paterson",
+        "Hollow Knight",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000080",
+      "entityId": "00000000-0000-4000-8000-000000000080",
+      "name": "Brave New World",
+      "domain": "book",
+      "band": "core",
+      "evidenceId": "taste-source-8",
+      "type": "urn:entity:book",
+      "tags": [
+        "Adult",
+        "Science Fiction Fantasy",
+        "Audiobook",
+        "Literature",
+        "School",
+        "Novels",
+        "Science Fiction",
+        "High School"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000004C",
+      "entityId": "00000000-0000-4000-8000-00000000004C",
+      "name": "Flowers for Algernon",
+      "domain": "book",
+      "band": "core",
+      "evidenceId": "taste-source-8",
+      "type": "urn:entity:book",
+      "tags": [
+        "Psychology",
+        "Young Adult",
+        "Adult",
+        "School",
+        "Literature",
+        "Fiction",
+        "Novels",
+        "Classics"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000060",
+      "entityId": "00000000-0000-4000-8000-000000000060",
+      "name": "1984",
+      "domain": "book",
+      "band": "core",
+      "evidenceId": "taste-source-8",
+      "type": "urn:entity:book",
+      "tags": [
+        "Science Fiction",
+        "Politics",
+        "Dystopia",
+        "School",
+        "Audiobook",
+        "Literature",
+        "Novels",
+        "Fiction"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000068",
+      "entityId": "00000000-0000-4000-8000-000000000068",
+      "name": "Norse Mythology",
+      "domain": "book",
+      "band": "core",
+      "evidenceId": "taste-source-8",
+      "type": "urn:entity:book",
+      "contributors": [
+        "Spirited Away",
+        "Nujabes",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000040",
+      "entityId": "00000000-0000-4000-8000-000000000040",
+      "name": "Fahrenheit 451",
+      "domain": "book",
+      "band": "core",
+      "evidenceId": "taste-source-8",
+      "type": "urn:entity:book",
+      "tags": [
+        "Dystopia",
+        "Fantasy",
+        "Banned Books",
+        "Read For School",
+        "Novels",
+        "School",
+        "Fiction",
+        "Literature"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000002E",
+      "entityId": "00000000-0000-4000-8000-00000000002E",
+      "name": "Island",
+      "domain": "book",
+      "band": "core",
+      "evidenceId": "taste-source-8",
+      "type": "urn:entity:book",
+      "tags": [
+        "Fantasy",
+        "Utopia",
+        "British Literature",
+        "Dystopia",
+        "Classics",
+        "Fiction",
+        "Literature",
+        "Philosophy"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Paterson",
+        "Spirited Away"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000007D",
+      "entityId": "00000000-0000-4000-8000-00000000007D",
+      "name": "Animal Farm",
+      "domain": "book",
+      "band": "core",
+      "evidenceId": "taste-source-8",
+      "type": "urn:entity:book",
+      "tags": [
+        "Philosophy",
+        "Dystopia",
+        "School",
+        "Fiction",
+        "Science Fiction",
+        "Novels",
+        "Read For School",
+        "Literature"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000005D",
+      "entityId": "00000000-0000-4000-8000-00000000005D",
+      "name": "American Gods",
+      "domain": "book",
+      "band": "core",
+      "evidenceId": "taste-source-8",
+      "type": "urn:entity:book",
+      "contributors": [
+        "Spirited Away",
+        "Hollow Knight",
+        "Nujabes"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000064",
+      "entityId": "00000000-0000-4000-8000-000000000064",
+      "name": "One Flew Over the Cuckoo's Nest",
+      "domain": "book",
+      "band": "core",
+      "evidenceId": "taste-source-8",
+      "type": "urn:entity:book",
+      "tags": [
+        "Psychology",
+        "Fiction",
+        "Literary Fiction",
+        "Novels",
+        "Banned Books",
+        "Literature",
+        "School",
+        "American"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000066",
+      "entityId": "00000000-0000-4000-8000-000000000066",
+      "name": "The Tao of Pooh",
+      "domain": "book",
+      "band": "core",
+      "evidenceId": "taste-source-8",
+      "type": "urn:entity:book",
+      "contributors": [
+        "Nujabes",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000004D",
+      "entityId": "00000000-0000-4000-8000-00000000004D",
+      "name": "Grimgar, Ashes and Illusions",
+      "domain": "tv_show",
+      "band": "core",
+      "evidenceId": "taste-source-9",
+      "type": "urn:entity:tv_show",
+      "tags": [
+        "Combat",
+        "Mature",
+        "Adventure",
+        "Adventurer",
+        "Anime animation",
+        "Realistic",
+        "Training",
+        "Watercolor tinted"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Nujabes",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000007",
+      "entityId": "00000000-0000-4000-8000-000000000007",
+      "name": "Are You Human Too?",
+      "domain": "tv_show",
+      "band": "core",
+      "evidenceId": "taste-source-9",
+      "type": "urn:entity:tv_show",
+      "tags": [
+        "Dual performance focus",
+        "Resourceful",
+        "Romantic sci fi",
+        "Character driven",
+        "The heir",
+        "Artificial intelligence",
+        "Grief",
+        "Romance"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Sigur Rós",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000017",
+      "entityId": "00000000-0000-4000-8000-000000000017",
+      "name": "My Mister",
+      "domain": "tv_show",
+      "band": "core",
+      "evidenceId": "taste-source-9",
+      "type": "urn:entity:tv_show",
+      "tags": [
+        "Overcoming adversity",
+        "Corporate culture",
+        "Workplace",
+        "Slice of life",
+        "Healing",
+        "Debt",
+        "Family relationships",
+        "Relationships"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Hollow Knight",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000002C",
+      "entityId": "00000000-0000-4000-8000-00000000002C",
+      "name": "I'm Not a Robot",
+      "domain": "tv_show",
+      "band": "core",
+      "evidenceId": "taste-source-9",
+      "type": "urn:entity:tv_show",
+      "tags": [
+        "The outsider",
+        "Delicate emotional realism",
+        "Romantic comedy",
+        "Acceptance",
+        "Science fiction romance",
+        "Forgiveness",
+        "Reflective",
+        "Korean culture"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Paterson",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000022",
+      "entityId": "00000000-0000-4000-8000-000000000022",
+      "name": "Fruits Basket",
+      "domain": "tv_show",
+      "band": "core",
+      "evidenceId": "taste-source-9",
+      "type": "urn:entity:tv_show",
+      "tags": [
+        "Romance",
+        "Friendship",
+        "Dog",
+        "High school",
+        "Psychological drama",
+        "16 year old girl",
+        "Chinese zodiac",
+        "Cat"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Nujabes",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000056",
+      "entityId": "00000000-0000-4000-8000-000000000056",
+      "name": "Kino's Journey",
+      "domain": "tv_show",
+      "band": "core",
+      "evidenceId": "taste-source-9",
+      "type": "urn:entity:tv_show",
+      "tags": [
+        "Murder",
+        "Talking vehicle",
+        "Steampunk fantasy",
+        "Moe",
+        "Alternate reality",
+        "Science fiction",
+        "Fantasy",
+        "Subtle symbolism"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Spirited Away",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000010",
+      "entityId": "00000000-0000-4000-8000-000000000010",
+      "name": "Yona of the Dawn",
+      "domain": "tv_show",
+      "band": "core",
+      "evidenceId": "taste-source-9",
+      "type": "urn:entity:tv_show",
+      "tags": [
+        "Adventurous",
+        "Character driven novels",
+        "Coming of age drama",
+        "Red hair",
+        "Ancient legend",
+        "Special ability",
+        "Childhood friend",
+        "Action"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Nujabes",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000006",
+      "entityId": "00000000-0000-4000-8000-000000000006",
+      "name": "Beyond the Boundary",
+      "domain": "tv_show",
+      "band": "core",
+      "evidenceId": "taste-source-9",
+      "type": "urn:entity:tv_show",
+      "tags": [
+        "Thriller",
+        "Tragic love",
+        "Literary club",
+        "Emotional storytelling",
+        "Love",
+        "Supernatural fiction",
+        "Sacrifice",
+        "Anime animation"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Nujabes",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000003",
+      "entityId": "00000000-0000-4000-8000-000000000003",
+      "name": "My Happy Marriage",
+      "domain": "tv_show",
+      "band": "core",
+      "evidenceId": "taste-source-9",
+      "type": "urn:entity:tv_show",
+      "tags": [
+        "Military",
+        "Love",
+        "Melancholic color palette",
+        "Elegant",
+        "The protector",
+        "Atmospheric",
+        "Mature",
+        "Supernatural"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Nujabes",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000004A",
+      "entityId": "00000000-0000-4000-8000-00000000004A",
+      "name": "Angel Beats!",
+      "domain": "tv_show",
+      "band": "core",
+      "evidenceId": "taste-source-9",
+      "type": "urn:entity:tv_show",
+      "tags": [
+        "Afterlife",
+        "Sacrifice",
+        "Redemption",
+        "Killer shadow",
+        "Melancholic",
+        "Afterlife high school",
+        "Letting go",
+        "Fantasy"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Nujabes",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000061",
+      "entityId": "00000000-0000-4000-8000-000000000061",
+      "name": "Hades",
+      "domain": "videogame",
+      "band": "core",
+      "evidenceId": "taste-source-10",
+      "type": "urn:entity:videogame",
+      "tags": [
+        "stylized",
+        "2D",
+        "hand-drawn",
+        "challenging",
+        "narrative-driven",
+        "character-driven",
+        "tense",
+        "engaging"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Spirited Away",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000077",
+      "entityId": "00000000-0000-4000-8000-000000000077",
+      "name": "Death's Door",
+      "domain": "videogame",
+      "band": "core",
+      "evidenceId": "taste-source-10",
+      "type": "urn:entity:videogame",
+      "tags": [
+        "3D",
+        "Stylized",
+        "Painterly",
+        "beautiful worldbuilding",
+        "tight combat",
+        "memorable bosses",
+        "polished indie",
+        "moody soundtrack"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Spirited Away",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000029",
+      "entityId": "00000000-0000-4000-8000-000000000029",
+      "name": "Shadow of the Colossus",
+      "domain": "videogame",
+      "band": "core",
+      "evidenceId": "taste-source-10",
+      "type": "urn:entity:videogame",
+      "tags": [
+        "3D",
+        "Realistic",
+        "Cinematic",
+        "story-rich",
+        "minimalist",
+        "cult classic",
+        "emotional",
+        "arthouse"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Nujabes",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000007C",
+      "entityId": "00000000-0000-4000-8000-00000000007C",
+      "name": "Outer Wilds",
+      "domain": "videogame",
+      "band": "core",
+      "evidenceId": "taste-source-10",
+      "type": "urn:entity:videogame",
+      "tags": [
+        "3D",
+        "Stylized",
+        "Low-Poly",
+        "time-loop",
+        "thought-provoking",
+        "beautiful soundtrack",
+        "exploration-focused",
+        "non-linear narrative"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Spirited Away",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000006C",
+      "entityId": "00000000-0000-4000-8000-00000000006C",
+      "name": "INSIDE",
+      "domain": "videogame",
+      "band": "core",
+      "evidenceId": "taste-source-10",
+      "type": "urn:entity:videogame",
+      "tags": [
+        "2.5D",
+        "realistic",
+        "minimalistic",
+        "immersive",
+        "narrative-driven",
+        "challenging",
+        "suspenseful",
+        "tense"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Paterson",
+        "Spirited Away"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000000A",
+      "entityId": "00000000-0000-4000-8000-00000000000A",
+      "name": "Hyper Light Drifter",
+      "domain": "videogame",
+      "band": "core",
+      "evidenceId": "taste-source-10",
+      "type": "urn:entity:videogame",
+      "tags": [
+        "2D",
+        "Pixel Art",
+        "Retro-inspired",
+        "Stylized",
+        "High-detail spritework",
+        "challenging",
+        "beautiful pixel art",
+        "story-light"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Spirited Away",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000015",
+      "entityId": "00000000-0000-4000-8000-000000000015",
+      "name": "Eastward",
+      "domain": "videogame",
+      "band": "core",
+      "evidenceId": "taste-source-10",
+      "type": "urn:entity:videogame",
+      "tags": [
+        "pixel art",
+        "2D",
+        "quirky",
+        "engaging story",
+        "retro aesthetic",
+        "whimsical",
+        "nostalgic",
+        "single-player"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Hollow Knight",
+        "Nujabes"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000000F",
+      "entityId": "00000000-0000-4000-8000-00000000000F",
+      "name": "Owlboy",
+      "domain": "videogame",
+      "band": "core",
+      "evidenceId": "taste-source-10",
+      "type": "urn:entity:videogame",
+      "tags": [
+        "2D",
+        "Pixel Art",
+        "Hand-crafted environments",
+        "beautiful pixel art",
+        "character-driven",
+        "nostalgic",
+        "long development",
+        "memorable soundtrack"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Spirited Away",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000007A",
+      "entityId": "00000000-0000-4000-8000-00000000007A",
+      "name": "GRIS",
+      "domain": "videogame",
+      "band": "core",
+      "evidenceId": "taste-source-10",
+      "type": "urn:entity:videogame",
+      "tags": [
+        "Hand-drawn 2D",
+        "Watercolor",
+        "Minimalist",
+        "Surreal",
+        "artistic",
+        "emotional depth",
+        "short experience",
+        "visually striking"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Spirited Away",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000007B",
+      "entityId": "00000000-0000-4000-8000-00000000007B",
+      "name": "RiME",
+      "domain": "videogame",
+      "band": "core",
+      "evidenceId": "taste-source-10",
+      "type": "urn:entity:videogame",
+      "tags": [
+        "3D",
+        "Stylized",
+        "Cell-shaded",
+        "Atmospheric",
+        "emotional journey",
+        "beautiful visuals",
+        "thought-provoking",
+        "slow-paced"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Paterson",
+        "Spirited Away"
+      ]
+    },
+    {
+      "ref": "urn:tag:style:qloo:enchanting",
+      "entityId": "urn:tag:style:qloo:enchanting",
+      "name": "Enchanting",
+      "domain": "style",
+      "band": "core",
+      "evidenceId": "taste-source-12",
+      "type": "urn:tag:style:qloo",
+      "tags": [
+        "Enchanting"
+      ]
+    },
+    {
+      "ref": "urn:tag:style:qloo:majestic",
+      "entityId": "urn:tag:style:qloo:majestic",
+      "name": "Majestic",
+      "domain": "style",
+      "band": "core",
+      "evidenceId": "taste-source-12",
+      "type": "urn:tag:style:qloo",
+      "tags": [
+        "Majestic"
+      ]
+    },
+    {
+      "ref": "urn:tag:style:qloo:operatic",
+      "entityId": "urn:tag:style:qloo:operatic",
+      "name": "Operatic",
+      "domain": "style",
+      "band": "core",
+      "evidenceId": "taste-source-12",
+      "type": "urn:tag:style:qloo",
+      "tags": [
+        "Operatic"
+      ]
+    },
+    {
+      "ref": "urn:tag:style:qloo:visually_austere",
+      "entityId": "urn:tag:style:qloo:visually_austere",
+      "name": "Visually Austere",
+      "domain": "style",
+      "band": "core",
+      "evidenceId": "taste-source-12",
+      "type": "urn:tag:style:qloo",
+      "tags": [
+        "Visually Austere"
+      ]
+    },
+    {
+      "ref": "urn:tag:style:qloo:folkloric",
+      "entityId": "urn:tag:style:qloo:folkloric",
+      "name": "Folkloric",
+      "domain": "style",
+      "band": "core",
+      "evidenceId": "taste-source-12",
+      "type": "urn:tag:style:qloo",
+      "tags": [
+        "Folkloric"
+      ]
+    },
+    {
+      "ref": "urn:tag:style:qloo:cross_cultural",
+      "entityId": "urn:tag:style:qloo:cross_cultural",
+      "name": "Cross Cultural",
+      "domain": "style",
+      "band": "core",
+      "evidenceId": "taste-source-12",
+      "type": "urn:tag:style:qloo",
+      "tags": [
+        "Cross Cultural"
+      ]
+    },
+    {
+      "ref": "urn:tag:style:qloo:somber",
+      "entityId": "urn:tag:style:qloo:somber",
+      "name": "Somber",
+      "domain": "style",
+      "band": "core",
+      "evidenceId": "taste-source-12",
+      "type": "urn:tag:style:qloo",
+      "tags": [
+        "Somber"
+      ]
+    },
+    {
+      "ref": "urn:tag:style:qloo:nautical",
+      "entityId": "urn:tag:style:qloo:nautical",
+      "name": "Nautical",
+      "domain": "style",
+      "band": "core",
+      "evidenceId": "taste-source-12",
+      "type": "urn:tag:style:qloo",
+      "tags": [
+        "Nautical"
+      ]
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:sculptural_designs",
+      "entityId": "urn:tag:aesthetic_property:qloo:sculptural_designs",
+      "name": "Sculptural Designs",
+      "domain": "aesthetic",
+      "band": "core",
+      "evidenceId": "taste-source-13",
+      "type": "urn:tag:aesthetic_property:qloo",
+      "tags": [
+        "Sculptural Designs"
+      ]
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:luxurious_packaging",
+      "entityId": "urn:tag:aesthetic_property:qloo:luxurious_packaging",
+      "name": "Luxurious Packaging",
+      "domain": "aesthetic",
+      "band": "core",
+      "evidenceId": "taste-source-13",
+      "type": "urn:tag:aesthetic_property:qloo",
+      "tags": [
+        "Luxurious Packaging"
+      ]
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:timeless_elegance",
+      "entityId": "urn:tag:aesthetic_property:qloo:timeless_elegance",
+      "name": "Timeless Elegance",
+      "domain": "aesthetic",
+      "band": "core",
+      "evidenceId": "taste-source-13",
+      "type": "urn:tag:aesthetic_property:qloo",
+      "tags": [
+        "Timeless Elegance"
+      ]
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:fluid_silhouettes",
+      "entityId": "urn:tag:aesthetic_property:qloo:fluid_silhouettes",
+      "name": "Fluid Silhouettes",
+      "domain": "aesthetic",
+      "band": "core",
+      "evidenceId": "taste-source-13",
+      "type": "urn:tag:aesthetic_property:qloo",
+      "tags": [
+        "Fluid Silhouettes"
+      ]
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:quality_craftsmanship",
+      "entityId": "urn:tag:aesthetic_property:qloo:quality_craftsmanship",
+      "name": "Quality Craftsmanship",
+      "domain": "aesthetic",
+      "band": "core",
+      "evidenceId": "taste-source-13",
+      "type": "urn:tag:aesthetic_property:qloo",
+      "tags": [
+        "Quality Craftsmanship"
+      ]
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:romantic",
+      "entityId": "urn:tag:aesthetic_property:qloo:romantic",
+      "name": "Romantic",
+      "domain": "aesthetic",
+      "band": "core",
+      "evidenceId": "taste-source-13",
+      "type": "urn:tag:aesthetic_property:qloo",
+      "tags": [
+        "Romantic"
+      ]
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:artistic_design",
+      "entityId": "urn:tag:aesthetic_property:qloo:artistic_design",
+      "name": "Artistic Design",
+      "domain": "aesthetic",
+      "band": "core",
+      "evidenceId": "taste-source-13",
+      "type": "urn:tag:aesthetic_property:qloo",
+      "tags": [
+        "Artistic Design"
+      ]
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:neutral_color_palettes",
+      "entityId": "urn:tag:aesthetic_property:qloo:neutral_color_palettes",
+      "name": "Neutral Color Palettes",
+      "domain": "aesthetic",
+      "band": "core",
+      "evidenceId": "taste-source-13",
+      "type": "urn:tag:aesthetic_property:qloo",
+      "tags": [
+        "Neutral Color Palettes"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000028",
+      "entityId": "00000000-0000-4000-8000-000000000028",
+      "name": "Cheetos Flamin' Hot",
+      "domain": "brand",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-14",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Food & Beverage",
+        "Neon Orange",
+        "High-Contrast Graphics",
+        "Playful Mascot Imagery",
+        "Bold Typography",
+        "Living Loud",
+        "Breaking Conventions",
+        "Embracing Trends"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Paterson",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000033",
+      "entityId": "00000000-0000-4000-8000-000000000033",
+      "name": "Pepsi Nitro",
+      "domain": "brand",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-14",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Food & Beverage",
+        "Minimalist",
+        "Bold Typography",
+        "Frothy Visuals",
+        "Dynamic Graphics",
+        "Trend-Setting",
+        "Epicurean Discovery",
+        "Modern Leisure"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Paterson",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000004E",
+      "entityId": "00000000-0000-4000-8000-00000000004E",
+      "name": "Temu",
+      "domain": "brand",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-14",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Advertising Enabled",
+        "Retail",
+        "Mobile App",
+        "Vibrant",
+        "Busy",
+        "Utility-Focused",
+        "Informational",
+        "Promotion-Heavy"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Paterson",
+        "Nujabes"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000081",
+      "entityId": "00000000-0000-4000-8000-000000000081",
+      "name": "Diet Pepsi",
+      "domain": "brand",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-14",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Food & Beverage",
+        "Clean Branding",
+        "Modern Minimalist",
+        "Blue Color Palette",
+        "Active Living",
+        "Balanced Lifestyle",
+        "CPG",
+        "Product Brand"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Paterson",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000027",
+      "entityId": "00000000-0000-4000-8000-000000000027",
+      "name": "Xiaohongshu",
+      "domain": "brand",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-14",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Mobile App",
+        "Social Networking App",
+        "Advertising Enabled",
+        "Clean Grid Layout",
+        "Soft Minimalist Palette",
+        "High-Quality Imagery",
+        "Editorial-Style Photography",
+        "Curated Aesthetic"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Nujabes",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000003C",
+      "entityId": "00000000-0000-4000-8000-00000000003C",
+      "name": "New York Yankees",
+      "domain": "brand",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-14",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Baseball",
+        "Sports Organization",
+        "Major League Baseball",
+        "Pinstripe Uniforms",
+        "Interlocking Lettering",
+        "Classic Navy And White Palette",
+        "Professional Athletic Achievement",
+        "Championship Success"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Paterson",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000043",
+      "entityId": "00000000-0000-4000-8000-000000000043",
+      "name": "Maxwell House Coffee",
+      "domain": "brand",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-14",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Coffee & Tea",
+        "Drinks",
+        "Food & Beverage",
+        "Traditional",
+        "Blue And Yellow Branding",
+        "Clear And Functional",
+        "Nostalgic",
+        "Productive Mornings"
+      ],
+      "contributors": [
+        "Sigur Rós",
+        "Nujabes",
+        "Spirited Away"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000016",
+      "entityId": "00000000-0000-4000-8000-000000000016",
+      "name": "World Series of Poker Game",
+      "domain": "brand",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-14",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Games App",
+        "Advertising Enabled",
+        "Games",
+        "Mobile App",
+        "High-Contrast Graphics",
+        "Casino-Inspired Visuals",
+        "Dynamic Animations",
+        "Bold Typography"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Spirited Away",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000002A",
+      "entityId": "00000000-0000-4000-8000-00000000002A",
+      "name": "Antonio Banderas",
+      "domain": "brand",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-14",
+      "type": "urn:entity:brand",
+      "tags": [
+        "Fashion"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Paterson",
+        "Nujabes"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000034",
+      "entityId": "00000000-0000-4000-8000-000000000034",
+      "name": "Kiki's Delivery Service",
+      "domain": "movie",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-15",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Cat",
+        "Singer",
+        "Fantasy",
+        "Folk fantasy",
+        "Witch",
+        "Resourceful",
+        "Intimate",
+        "Voice loss"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Nujabes",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000032",
+      "entityId": "00000000-0000-4000-8000-000000000032",
+      "name": "We Are the Strange",
+      "domain": "movie",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-15",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Visceral",
+        "Outsiderism",
+        "Ice cream",
+        "Experimental art fans",
+        "Cgi",
+        "Surreal",
+        "The color blue",
+        "Doll"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Hollow Knight",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000005E",
+      "entityId": "00000000-0000-4000-8000-00000000005E",
+      "name": "Grave of the Fireflies",
+      "domain": "movie",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-15",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Resourceful",
+        "Intimate",
+        "Based on novel",
+        "Brother sister relationship",
+        "Home drama intimacy",
+        "Drama",
+        "Peace studies",
+        "Humanitarian issues"
+      ],
+      "contributors": [
+        "Spirited Away",
+        "Nujabes",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000005C",
+      "entityId": "00000000-0000-4000-8000-00000000005C",
+      "name": "Invisible Waves",
+      "domain": "movie",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-15",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Identity",
+        "Police",
+        "Friend",
+        "Complex",
+        "Drama",
+        "Guilt",
+        "Stoic",
+        "Aquarium"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Sigur Rós",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000001D",
+      "entityId": "00000000-0000-4000-8000-00000000001D",
+      "name": "Cheatin'",
+      "domain": "movie",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-15",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Forgiveness",
+        "Haunted",
+        "Hand drawn animation",
+        "Gas station",
+        "Vomiting",
+        "Theater",
+        "Pencil sketched",
+        "Drama loving"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Hollow Knight",
+        "Sigur Rós"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000072",
+      "entityId": "00000000-0000-4000-8000-000000000072",
+      "name": "The Happy Film",
+      "domain": "movie",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-15",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Stylized",
+        "Emotional",
+        "Biographical documentary",
+        "Obsessive",
+        "Introspective",
+        "Companionate marriage",
+        "The creator",
+        "Experimental documentary"
+      ],
+      "contributors": [
+        "Paterson",
+        "Sigur Rós",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000075",
+      "entityId": "00000000-0000-4000-8000-000000000075",
+      "name": "Finisterrae",
+      "domain": "movie",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-15",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Atmospheric",
+        "Lyrical",
+        "Dreamlike",
+        "Determined",
+        "Props",
+        "Absurdism",
+        "Puppet driven",
+        "Open minded"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Sigur Rós",
+        "Nujabes"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000058",
+      "entityId": "00000000-0000-4000-8000-000000000058",
+      "name": "Vermilion Souls",
+      "domain": "movie",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-15",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Mansion",
+        "Curious",
+        "Drama",
+        "Postwar",
+        "Postwar trauma",
+        "Dreamlike staging",
+        "Boy",
+        "Thoughtful"
+      ],
+      "contributors": [
+        "Hollow Knight",
+        "Nujabes",
+        "Paterson"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000044",
+      "entityId": "00000000-0000-4000-8000-000000000044",
+      "name": "Strawberry Shortcakes",
+      "domain": "movie",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-15",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Condom",
+        "Tomato",
+        "Hamster",
+        "Art house fans",
+        "Urban studies",
+        "The seeker",
+        "Lesbian",
+        "The caregiver"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Sigur Rós",
+        "Hollow Knight"
+      ]
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000014",
+      "entityId": "00000000-0000-4000-8000-000000000014",
+      "name": "The Prince's Voyage",
+      "domain": "movie",
+      "band": "deep-cut",
+      "evidenceId": "taste-source-15",
+      "type": "urn:entity:movie",
+      "tags": [
+        "Reflective",
+        "Muted",
+        "Tradition versus change",
+        "Muted pastel palette",
+        "Hand drawn animation",
+        "Exploration",
+        "Lyrical",
+        "Shipwreck"
+      ],
+      "contributors": [
+        "Nujabes",
+        "Hollow Knight",
+        "Paterson"
+      ]
+    }
+  ],
+  "signature": [
+    {
+      "name": "Atmospheric",
+      "count": 9,
+      "weight": 8.144
+    },
+    {
+      "name": "Experimental",
+      "count": 8,
+      "weight": 7.4
+    },
+    {
+      "name": "Literature",
+      "count": 7,
+      "weight": 6.177
+    },
+    {
+      "name": "School",
+      "count": 6,
+      "weight": 5.308
+    },
+    {
+      "name": "Novels",
+      "count": 6,
+      "weight": 5.308
+    },
+    {
+      "name": "Fiction",
+      "count": 6,
+      "weight": 5.261
+    },
+    {
+      "name": "stylized",
+      "count": 6,
+      "weight": 5.026
+    },
+    {
+      "name": "Fantasy",
+      "count": 5,
+      "weight": 4.511
+    },
+    {
+      "name": "Minimalist",
+      "count": 5,
+      "weight": 4.34
+    },
+    {
+      "name": "Melancholic",
+      "count": 4,
+      "weight": 3.719
+    },
+    {
+      "name": "Acoustic",
+      "count": 4,
+      "weight": 3.702
+    },
+    {
+      "name": "Science Fiction",
+      "count": 4,
+      "weight": 3.617
+    }
+  ],
+  "limitations": []
+}

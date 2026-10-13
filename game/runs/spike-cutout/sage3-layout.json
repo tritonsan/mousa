@@ -1,0 +1,380 @@
+{
+  "width": 1536,
+  "height": 1024,
+  "scale": 5.364161849701304,
+  "gap": 64,
+  "figure": {
+    "x": 48,
+    "y": 48,
+    "w": 285,
+    "h": 928,
+    "bounds": {
+      "minX": -25,
+      "minY": -171,
+      "maxX": 28,
+      "maxY": 2
+    },
+    "content": {
+      "x": 53,
+      "y": 53,
+      "w": 274,
+      "h": 918
+    }
+  },
+  "pieces": [
+    {
+      "id": "layer-1",
+      "kind": "layer",
+      "bone": "thigh",
+      "side": "both",
+      "z": 0,
+      "row": 0,
+      "bounds": {
+        "minX": -8.969999999999999,
+        "minY": -103.04142966630725,
+        "maxX": 9.5,
+        "maxY": -42.48855370409722
+      },
+      "x": 397,
+      "y": 48,
+      "w": 100,
+      "h": 325,
+      "content": {
+        "x": 402,
+        "y": 53,
+        "w": 89,
+        "h": 314
+      }
+    },
+    {
+      "id": "layer-5",
+      "kind": "layer",
+      "bone": "pelvis",
+      "side": "center",
+      "z": 2,
+      "row": 0,
+      "bounds": {
+        "minX": -25,
+        "minY": -100,
+        "maxX": 21,
+        "maxY": -42.75
+      },
+      "x": 561,
+      "y": 48,
+      "w": 247,
+      "h": 308,
+      "content": {
+        "x": 566,
+        "y": 53,
+        "w": 236,
+        "h": 297
+      }
+    },
+    {
+      "id": "layer-2",
+      "kind": "layer",
+      "bone": "shin",
+      "side": "both",
+      "z": 0,
+      "row": 0,
+      "bounds": {
+        "minX": -6,
+        "minY": -57.43321360691664,
+        "maxX": 9.48,
+        "maxY": -3.0204627115837033
+      },
+      "x": 872,
+      "y": 48,
+      "w": 84,
+      "h": 292,
+      "content": {
+        "x": 877,
+        "y": 53,
+        "w": 73,
+        "h": 281
+      }
+    },
+    {
+      "id": "strip-sash-tail",
+      "kind": "strip",
+      "chain": "sash-tail",
+      "row": 0,
+      "bounds": {
+        "minX": -3.25,
+        "minY": -1,
+        "maxX": 3.25,
+        "maxY": 51
+      },
+      "x": 1020,
+      "y": 48,
+      "w": 35,
+      "h": 279,
+      "content": {
+        "x": 1025,
+        "y": 53,
+        "w": 24,
+        "h": 269
+      }
+    },
+    {
+      "id": "strip-coat-tail",
+      "kind": "strip",
+      "chain": "coat-tail",
+      "row": 0,
+      "bounds": {
+        "minX": -9,
+        "minY": -1,
+        "maxX": 9,
+        "maxY": 49
+      },
+      "x": 1119,
+      "y": 48,
+      "w": 97,
+      "h": 269,
+      "content": {
+        "x": 1124,
+        "y": 53,
+        "w": 86,
+        "h": 258
+      }
+    },
+    {
+      "id": "layer-4",
+      "kind": "layer",
+      "bone": "torso",
+      "side": "center",
+      "z": 2,
+      "row": 0,
+      "bounds": {
+        "minX": -14.989999999999997,
+        "minY": -135.875,
+        "maxX": 15.875,
+        "maxY": -95
+      },
+      "x": 1280,
+      "y": 48,
+      "w": 166,
+      "h": 220,
+      "content": {
+        "x": 1285,
+        "y": 53,
+        "w": 155,
+        "h": 209
+      }
+    },
+    {
+      "id": "layer-7",
+      "kind": "layer",
+      "bone": "upperArm",
+      "side": "both",
+      "z": 5,
+      "row": 1,
+      "bounds": {
+        "minX": -6.46,
+        "minY": -135.34682800510942,
+        "maxX": 9.5,
+        "maxY": -95.51332113639427
+      },
+      "x": 397,
+      "y": 437,
+      "w": 86,
+      "h": 214,
+      "content": {
+        "x": 402,
+        "y": 442,
+        "w": 75,
+        "h": 203
+      }
+    },
+    {
+      "id": "layer-8",
+      "kind": "layer",
+      "bone": "forearm",
+      "side": "both",
+      "z": 5,
+      "row": 1,
+      "bounds": {
+        "minX": -3.59,
+        "minY": -108.44999999999999,
+        "maxX": 10.6,
+        "maxY": -70.9
+      },
+      "x": 547,
+      "y": 437,
+      "w": 77,
+      "h": 202,
+      "content": {
+        "x": 552,
+        "y": 442,
+        "w": 66,
+        "h": 191
+      }
+    },
+    {
+      "id": "layer-11",
+      "kind": "layer",
+      "bone": "torso",
+      "side": "center",
+      "z": 12,
+      "row": 1,
+      "bounds": {
+        "minX": -13,
+        "minY": -154.444,
+        "maxX": 14,
+        "maxY": -126
+      },
+      "x": 688,
+      "y": 437,
+      "w": 145,
+      "h": 153,
+      "content": {
+        "x": 693,
+        "y": 442,
+        "w": 134,
+        "h": 142
+      }
+    },
+    {
+      "id": "layer-10",
+      "kind": "layer",
+      "bone": "head",
+      "side": "center",
+      "z": 9,
+      "row": 1,
+      "bounds": {
+        "minX": -5.528,
+        "minY": -165,
+        "maxX": 20.150000000000002,
+        "maxY": -139.1870188932981
+      },
+      "x": 897,
+      "y": 437,
+      "w": 138,
+      "h": 139,
+      "content": {
+        "x": 902,
+        "y": 442,
+        "w": 127,
+        "h": 128
+      }
+    },
+    {
+      "id": "tip-lantern-chain",
+      "kind": "tip",
+      "chain": "lantern-chain",
+      "row": 1,
+      "bounds": {
+        "minX": -9.95,
+        "minY": -1,
+        "maxX": 9.95,
+        "maxY": 20.5
+      },
+      "x": 1099,
+      "y": 437,
+      "w": 107,
+      "h": 116,
+      "content": {
+        "x": 1104,
+        "y": 442,
+        "w": 96,
+        "h": 105
+      }
+    },
+    {
+      "id": "layer-3",
+      "kind": "layer",
+      "bone": "foot",
+      "side": "both",
+      "z": 1,
+      "row": 1,
+      "bounds": {
+        "minX": -8,
+        "minY": -18.875,
+        "maxX": 17,
+        "maxY": 2
+      },
+      "x": 1270,
+      "y": 437,
+      "w": 135,
+      "h": 112,
+      "content": {
+        "x": 1275,
+        "y": 442,
+        "w": 124,
+        "h": 102
+      }
+    },
+    {
+      "id": "layer-12",
+      "kind": "layer",
+      "bone": "head",
+      "side": "center",
+      "z": 14,
+      "row": 2,
+      "bounds": {
+        "minX": -16,
+        "minY": -171,
+        "maxX": 28,
+        "maxY": -158.7
+      },
+      "x": 397,
+      "y": 715,
+      "w": 237,
+      "h": 66,
+      "content": {
+        "x": 403,
+        "y": 720,
+        "w": 225,
+        "h": 56
+      }
+    },
+    {
+      "id": "layer-6",
+      "kind": "layer",
+      "bone": "pelvis",
+      "side": "center",
+      "z": 5,
+      "row": 2,
+      "bounds": {
+        "minX": -17.9,
+        "minY": -103.4,
+        "maxX": 16,
+        "maxY": -91.6
+      },
+      "x": 698,
+      "y": 715,
+      "w": 182,
+      "h": 64,
+      "content": {
+        "x": 703,
+        "y": 720,
+        "w": 171,
+        "h": 53
+      }
+    },
+    {
+      "id": "layer-9",
+      "kind": "layer",
+      "bone": "hand",
+      "side": "both",
+      "z": 7,
+      "row": 2,
+      "bounds": {
+        "minX": -0.7,
+        "minY": -78.18208362028312,
+        "maxX": 9.7,
+        "maxY": -67.81791637971688
+      },
+      "x": 944,
+      "y": 715,
+      "w": 56,
+      "h": 56,
+      "content": {
+        "x": 949,
+        "y": 720,
+        "w": 45,
+        "h": 45
+      }
+    }
+  ]
+}

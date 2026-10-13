@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "1.0",
+  "id": "ilo-lamplighter",
+  "name": "Ilo",
+  "role": "Lamplighter",
+  "description": "A small lamplighter in an oversized round hood and a bell-shaped cloak of ink-slate wool. A long linen scarf with rust bands streams back in the wind, an ochre satchel hangs at the hip, and Ilo holds a wooden pole up in front with a paper lantern glowing amber at its tip.",
+  "palette": {
+    "ink": "#2b2f3a",
+    "slate": "#4a5161",
+    "slatehi": "#5f6879",
+    "deep": "#1c1f27",
+    "linen": "#e8dcc4",
+    "linenshade": "#bfae90",
+    "ochre": "#c9a46a",
+    "wood": "#7a5a36",
+    "rust": "#8c3b2e",
+    "skin": "#d9c3a3",
+    "glass": "#ffe3a8",
+    "flame": "#ffb347"
+  },
+  "style": { "outline": { "color": "#1c1f27", "width": 1.4 }, "backShade": 0.38, "shadow": 0.6 },
+  "skeleton": {
+    "hip": [0, -50], "chest": [2, -82], "neck": [3, -90], "head": [5, -108], "shoulder": [1, -81],
+    "elbow": [2, -64], "wrist": [3, -48], "knee": [1, -27], "ankle": [0, -7], "toe": [11, 0]
+  },
+  "parts": [
+    { "id": "shin", "bone": "shin", "z": 0, "shape": "capsule", "from": [1, -27], "to": [0, -8], "r1": 5, "r2": 4.2, "fill": "deep" },
+    { "id": "thigh", "bone": "thigh", "z": 1, "shape": "capsule", "from": [0, -50], "to": [1, -24], "r1": 6, "r2": 5.3, "fill": "ink" },
+    { "id": "boot-shaft", "bone": "shin", "z": 2, "shape": "capsule", "from": [0.7, -17], "to": [0, -8], "r1": 5.3, "r2": 5, "fill": "wood" },
+    { "id": "boot-cuff", "bone": "shin", "z": 3, "shape": "capsule", "from": [-4.8, -17], "to": [6, -17], "r1": 1.4, "fill": "ochre", "strokeWidth": 0 },
+    { "id": "boots", "bone": "foot", "z": 1, "shape": "path", "d": "M-5,-12 C-5,-15 5,-15 6,-11 L7,-6 C11,-6 14,-4 14,-1 L14,1 L-6,1 L-6,-6 Z", "fill": "wood" },
+    { "id": "boot-sole", "bone": "foot", "z": 2, "shape": "path", "d": "M-6,-1.5 L14,-1.5 L14,1 L-6,1 Z", "fill": "deep" },
+
+    { "id": "cloak", "bone": "torso", "z": 4, "shape": "path", "d": "M-10,-93 C-4,-96 8,-96 12,-91 C16,-78 19,-56 22,-34 C23,-31 21,-29 18,-29 L-20,-29 C-24,-29 -25,-32 -24,-36 C-21,-58 -17,-80 -10,-93 Z", "fill": "slate" },
+    { "id": "cloak-shade", "bone": "torso", "z": 5, "shape": "path", "d": "M-10,-93 C-17,-80 -21,-58 -24,-36 C-25,-32 -24,-29 -20,-29 L-12,-29 C-14,-50 -13,-75 -6,-94 Z", "fill": "ink", "strokeWidth": 0 },
+    { "id": "cloak-light", "bone": "torso", "z": 5, "shape": "path", "d": "M12,-91 C16,-78 19,-56 22,-34 C23,-31 21,-29 18,-29 L16.5,-29 C16,-50 13,-72 9,-92 Z", "fill": "slatehi", "strokeWidth": 0 },
+    { "id": "cloak-hem", "bone": "torso", "z": 6, "shape": "path", "d": "M-24.6,-35 C-8,-33 8,-33 22.6,-34 L22,-31 C21,-29.5 19,-29 18,-29 L-20,-29 C-23,-29 -24.8,-31 -24.6,-35 Z", "fill": "linenshade", "strokeWidth": 0 },
+    { "id": "satchel-strap", "bone": "torso", "z": 6, "shape": "capsule", "from": [-15, -57], "to": [9, -90], "r1": 1.5, "fill": "wood", "strokeWidth": 0 },
+    { "id": "satchel", "bone": "pelvis", "z": 7, "shape": "path", "d": "M-23,-59 L-10,-59 C-9,-51 -9,-46 -11,-41 L-22,-41 C-24.5,-47 -24.5,-54 -23,-59 Z", "fill": "ochre" },
+    { "id": "satchel-flap", "bone": "pelvis", "z": 8, "shape": "path", "d": "M-23.5,-59 L-9.5,-59 L-10,-51 C-14,-49 -19,-49 -23.8,-51 Z", "fill": "wood", "strokeWidth": 0 },
+    { "id": "satchel-buckle", "bone": "pelvis", "z": 9, "shape": "circle", "center": [-16.5, -50.5], "r": 1.6, "fill": "linen", "strokeWidth": 0 },
+
+    { "id": "scarf-wrap", "bone": "torso", "z": 13, "shape": "ellipse", "center": [4, -90], "rx": 12.5, "ry": 4.8, "fill": "linen" },
+    { "id": "scarf-wrap-band", "bone": "torso", "z": 14, "shape": "capsule", "from": [-6, -89.5], "to": [14, -89.5], "r1": 1.3, "fill": "rust", "strokeWidth": 0 },
+    { "id": "scarf-wrap-shade", "bone": "torso", "z": 14, "shape": "path", "d": "M-8.5,-90 C-8,-87 -3,-85.5 2,-85.4 C-2,-87 -5,-88.5 -8.5,-90 Z", "fill": "linenshade", "strokeWidth": 0 },
+
+    { "id": "hood", "bone": "head", "z": 10, "shape": "path", "d": "M-14,-92 C-21,-100 -22,-117 -14,-125 C-8,-131 6,-132.5 14,-127.5 C22,-122 25,-110 23,-100 C22,-95 19,-92 15,-91 L-14,-91 Z", "fill": "slate" },
+    { "id": "hood-shade", "bone": "head", "z": 11, "shape": "path", "d": "M-14,-92 C-21,-100 -22,-117 -14,-125 C-10,-128.5 -5,-130 0,-130.5 C-8,-125 -11,-112 -8,-91 L-14,-91 Z", "fill": "ink", "strokeWidth": 0 },
+    { "id": "hood-light", "bone": "head", "z": 11, "shape": "path", "d": "M2,-131 C8,-131 12,-129.5 14,-127.5 C19,-124 22,-118 23,-112 C20,-119 14,-126 2,-131 Z", "fill": "slatehi", "strokeWidth": 0 },
+    { "id": "hood-tip", "bone": "head", "z": 9, "shape": "path", "d": "M-12,-125 C-20,-125 -28,-119 -31,-108 C-25,-112 -19,-114 -13,-116 Z", "fill": "ink", "spring": { "pivot": [-12, -121], "stiffness": 0.35, "damping": 0.3, "gain": 1.2 } },
+    { "id": "face", "bone": "head", "z": 12, "shape": "ellipse", "center": [13, -106], "rx": 7.5, "ry": 9.5, "fill": "skin" },
+    { "id": "face-shade", "bone": "head", "z": 13, "shape": "path", "d": "M6,-112 C5,-106 6,-100 9,-97 C7,-102 7,-108 8.5,-114 Z", "fill": "linenshade", "strokeWidth": 0 },
+    { "id": "hood-rim", "bone": "head", "z": 14, "shape": "path", "d": "M5,-117 C12,-120.5 20,-117 21.5,-108 C22.5,-100 19,-94.5 13.5,-93", "fill": "none", "stroke": "linenshade", "strokeWidth": 2.6 },
+    { "id": "eye", "bone": "head", "z": 15, "role": "eye", "shape": "ellipse", "center": [16.5, -107], "rx": 1.6, "ry": 2.1, "fill": "deep" },
+    { "id": "eye-shine", "bone": "head", "z": 16, "role": "eye", "shape": "circle", "center": [17, -107.8], "r": 0.6, "fill": "glass", "strokeWidth": 0 },
+    { "id": "nose", "bone": "head", "z": 15, "shape": "path", "d": "M19.5,-105 L21,-102.5 L19.4,-102", "fill": "none", "stroke": "wood", "strokeWidth": 1.1 },
+    { "id": "blush", "bone": "head", "z": 15, "shape": "ellipse", "center": [15.5, -101.5], "rx": 2.4, "ry": 1.3, "fill": "rust", "opacity": 0.35, "strokeWidth": 0 },
+
+    { "id": "sleeve-upper", "bone": "upperArm", "z": 15, "shape": "capsule", "from": [1, -81], "to": [2, -64], "r1": 6, "r2": 5.2, "fill": "slate" },
+    { "id": "sleeve-upper-shade", "bone": "upperArm", "z": 16, "shape": "capsule", "from": [-2.5, -79], "to": [-1.5, -66], "r1": 2, "r2": 1.6, "fill": "ink", "strokeWidth": 0 },
+    { "id": "sleeve-fore", "bone": "forearm", "z": 15, "shape": "capsule", "from": [2, -64], "to": [3, -50], "r1": 5.2, "r2": 4.6, "fill": "slate" },
+    { "id": "cuff", "bone": "forearm", "z": 16, "shape": "capsule", "from": [2.8, -52.5], "to": [3, -49.5], "r1": 4.8, "fill": "linenshade" },
+    { "id": "lantern-pole", "bone": "hand", "side": "front", "z": 16, "shape": "capsule", "from": [-3, -46], "to": [61, -46], "r1": 1.7, "r2": 1.4, "fill": "wood" },
+    { "id": "pole-hook", "bone": "hand", "side": "front", "z": 16, "shape": "circle", "center": [61, -45], "r": 2.3, "fill": "none", "stroke": "ochre", "strokeWidth": 1.3 },
+    { "id": "pole-grip", "bone": "hand", "side": "front", "z": 17, "shape": "capsule", "from": [6, -46], "to": [12, -46], "r1": 2.1, "fill": "rust", "strokeWidth": 0 },
+    { "id": "hand", "bone": "hand", "z": 18, "shape": "circle", "center": [3, -46], "r": 3.9, "fill": "skin" }
+  ],
+  "cloth": [
+    { "id": "scarf", "bone": "torso", "anchor": [-6, -90], "segments": 8, "length": 58, "width": [8, 5], "fill": "linen", "stripes": ["#e8dcc4", "#e8dcc4", "#8c3b2e"], "rest": 170, "stiffness": 0.15, "damping": 0.3, "gravity": 0.6, "wind": 1.2, "z": 12,
+      "tip": [
+        { "shape": "path", "d": "M-2.5,0 L-3,5 M0,0 L0,6 M2.5,0 L3,5", "fill": "none", "stroke": "linenshade", "strokeWidth": 1.2 }
+      ] },
+    { "id": "cloak-tail", "bone": "torso", "anchor": [-20, -38], "segments": 4, "length": 18, "width": [14, 6], "fill": "ink", "rest": 120, "stiffness": 0.5, "damping": 0.35, "gravity": 0.8, "wind": 0.8, "z": -2 },
+    { "id": "paper-lantern", "bone": "hand", "side": "front", "anchor": [61, -44], "segments": 2, "length": 9, "width": [1.2, 1.2], "fill": "wood", "rest": 90, "stiffness": 0, "damping": 0.25, "gravity": 1, "wind": 0.2, "z": 17,
+      "tip": [
+        { "shape": "path", "d": "M-4,0 L4,0 L5,2.5 L-5,2.5 Z", "fill": "wood" },
+        { "shape": "ellipse", "center": [0, 10], "rx": 6.8, "ry": 7.8, "fill": "glass", "stroke": "ochre", "strokeWidth": 1 },
+        { "shape": "path", "d": "M-6.4,7 C-2,8.2 2,8.2 6.4,7 M-6.4,13 C-2,14.2 2,14.2 6.4,13", "fill": "none", "stroke": "ochre", "strokeWidth": 0.8 },
+        { "shape": "circle", "center": [0, 10], "r": 2.6, "fill": "flame", "strokeWidth": 0 },
+        { "shape": "path", "d": "M-4,17.5 L4,17.5 L3,20 L-3,20 Z", "fill": "wood" }
+      ] }
+  ],
+  "light": { "color": "#ffc46b", "radius": 230, "intensity": 1.05, "flicker": { "speed": 1.6, "amount": 0.14 }, "attach": { "cloth": "paper-lantern", "offset": [0, 10] } },
+  "motion": {
+    "walk": { "speed": 52, "cadence": 1.6, "stepHeight": 0.12, "bob": 0.04, "bounciness": 0.25, "lean": 4, "armSwing": 18, "elbowBend": 20, "hipSway": 3, "headStabilize": 0.8, "squash": 0.02, "accel": 0.5 },
+    "idle": { "breathRate": 10, "breathDepth": 0.55, "sway": 0.35, "weightShift": 0.3, "lookAround": 0.45, "blinkInterval": 5, "stance": 0.12 },
+    "turn": { "style": "pivot", "duration": 0.45 },
+    "carry": { "arm": "front", "upperArm": -25, "forearm": -40, "hand": 0 }
+  },
+  "clips": {
+    "signature": {
+      "duration": 3.4,
+      "kindleAt": 2.1,
+      "tracks": {
+        "upperArmFront": [[0, -25], [0.6, -12, "inOut"], [1.4, -12, "inOut"], [1.9, -90, "in"], [2.1, -130, "outBack"], [2.7, -130, "inOut"], [3.4, -25, "inOut"]],
+        "forearmFront": [[0, -40], [0.6, -30, "inOut"], [1.4, -30, "inOut"], [1.9, 10, "in"], [2.1, 30, "outBack"], [2.7, 30, "inOut"], [3.4, -40, "inOut"]],
+        "handFront": [[0, 0], [1.4, 0, "inOut"], [1.9, 15, "in"], [2.1, 30, "outBack"], [2.7, 30, "inOut"], [3.4, 0, "inOut"]],
+        "torso": [[0, 0], [0.6, 6, "inOut"], [1.4, 6, "inOut"], [2.1, -7, "outBack"], [2.7, -6, "inOut"], [3.4, 0, "inOut"]],
+        "head": [[0, 0], [0.6, 6, "inOut"], [1.4, 6, "inOut"], [2.1, -16, "out"], [2.9, -16, "inOut"], [3.4, 0, "inOut"]],
+        "thighFront": [[0, 0], [0.6, -8, "inOut"], [1.4, -8, "inOut"], [2.1, 0, "out"], [3.4, 0]],
+        "shinFront": [[0, 0], [0.6, 10, "inOut"], [1.4, 10, "inOut"], [2.1, 0, "out"], [3.4, 0]]
+      },
+      "squash": [[0, 1], [0.6, 0.95, "inOut"], [1.4, 0.95, "in"], [2.1, 1.06, "outBack"], [2.7, 1, "inOut"], [3.4, 1]],
+      "events": [{ "t": 2.1, "emit": "kindle-swell" }, { "t": 2.1, "emit": "kindle-ring" }]
+    },
+    "greet": {
+      "duration": 1.8,
+      "tracks": {
+        "torso": [[0, 0], [0.6, 10, "inOut"], [1.1, 10, "inOut"], [1.8, 0, "inOut"]],
+        "head": [[0, 0], [0.6, 12, "inOut"], [1.1, 12, "inOut"], [1.8, 0, "inOut"]],
+        "upperArmBack": [[0, 0], [0.6, -12, "inOut"], [1.1, -12, "inOut"], [1.8, 0, "inOut"]]
+      }
+    },
+    "fidget": {
+      "duration": 2.6,
+      "tracks": {
+        "upperArmFront": [[0, -25], [0.8, -45, "inOut"], [1.8, -45, "inOut"], [2.6, -25, "inOut"]],
+        "forearmFront": [[0, -40], [0.8, -50, "inOut"], [1.8, -50, "inOut"], [2.6, -40, "inOut"]],
+        "head": [[0, 0], [0.8, -12, "inOut"], [1.8, -12, "inOut"], [2.6, 0, "inOut"]]
+      }
+    }
+  },
+  "effects": [
+    { "id": "road-dust", "kind": "footstep", "shape": "circle", "colors": ["#5a5852"], "size": [1, 2.2], "life": [0.3, 0.7], "rate": 2, "speed": [8, 22], "spread": 80, "direction": -90, "gravity": 40, "drag": 0.6, "blend": "normal" },
+    { "id": "ember-motes", "kind": "aura", "shape": "circle", "colors": ["#ffc46b", "#ffe3a8"], "size": [0.8, 1.8], "life": [1.5, 3], "rate": 3, "speed": [4, 12], "spread": 60, "direction": -90, "gravity": -10, "drag": 0.3, "blend": "add" },
+    { "id": "kindle-swell", "kind": "burst", "shape": "circle", "colors": ["#fff1cf", "#ffc46b", "#ffb347"], "size": [1, 2.6], "life": [0.6, 1.4], "rate": 40, "speed": [60, 200], "spread": 70, "direction": -60, "gravity": 60, "drag": 0.45, "blend": "add" },
+    { "id": "kindle-ring", "kind": "burst", "shape": "ring", "colors": ["#ffe3a8", "#ffc46b"], "size": [6, 20], "life": [0.6, 1.2], "rate": 3, "speed": [0, 10], "spread": 360, "direction": -90, "gravity": 0, "drag": 0.8, "blend": "add" }
+  ],
+  "lines": {
+    "arrive": "The cloud is quiet below the road tonight. I like it when it is quiet.",
+    "greet": "I saw the bridge. I crossed it anyway. The beacon is just up the road, then.",
+    "kindle": "Wake up, Vesper. I carried this a long way for you.",
+    "after": "I see them. Sit a while, Maren. The road will keep."
+  }
+}

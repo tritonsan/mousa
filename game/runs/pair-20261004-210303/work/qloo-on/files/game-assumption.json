@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0",
+  "audienceSummary": "An audience drawn to quiet, melancholic, hand-crafted worlds: hand-drawn games and animation, post-rock and lo-fi jazz hip-hop, and slow films about everyday ritual and attention.",
+  "predictions": {
+    "brand": ["Studio Ghibli", "Muji", "Criterion Collection", "Moleskine"],
+    "movie": ["My Neighbor Totoro", "Princess Mononoke", "Howl's Moving Castle", "Lost in Translation", "Your Name", "Perfect Days"],
+    "artist": ["Jónsi", "Explosions in the Sky", "Joe Hisaishi", "Ólafur Arnalds", "Bon Iver", "Fat Jon"],
+    "book": ["Kafka on the Shore", "Norwegian Wood", "The Little Prince", "A Wizard of Earthsea", "Leaves of Grass"],
+    "tv_show": ["Samurai Champloo", "Cowboy Bebop", "Mushishi", "Over the Garden Wall", "Twin Peaks"],
+    "videogame": ["Ori and the Blind Forest", "Journey", "Celeste", "Gris", "Dark Souls", "Hades"],
+    "style": ["contemplative slow pacing", "long static takes", "hand-drawn animation", "melancholic", "dreamlike", "quiet everyday ritual"],
+    "aesthetic": ["muted blue-grey palettes", "hand-drawn ink linework", "warm lantern glow against darkness", "weathered paper and wood textures", "minimal dark silhouettes"]
+  },
+  "characterSketch": {
+    "summary": "A small, big-headed lamplighter in a dark navy hooded cloak with a pale bone-coloured face, carrying an amber lantern on a short pole while a long scarf trails in the cliff wind.",
+    "palette": ["#1e2633", "#3b4a63", "#d8cfc0", "#f2b24c", "#7a8a9a"],
+    "height": 120,
+    "headShare": 0.32,
+    "elements": ["hood", "cloak", "mask-face", "lantern-pole", "lantern", "scarf", "boots"],
+    "gait": { "cadence": 1.8, "bounciness": 0.3, "lean": 4, "armSwing": 12, "turnStyle": "pivot" },
+    "light": "#ffb84a",
+    "voice": "hushed, short plain sentences with pauses",
+    "motifs": ["hooded silhouette", "swinging lantern", "scarf trailing in the wind", "small figure against a vast sky"]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "The Long Dusk: lamplighter taste difference check",
+  "brief": "Design Ilo, the playable lamplighter of The Long Dusk, for one moment on the Vesper Cliffs: walking the cliff road, answering the keeper and waking the cold beacon. My audience loves Hollow Knight, Spirited Away, Sigur Rós, Nujabes and the film Paterson. Make Ilo a character this audience would want to play: their look, the way they move and the way they speak. Keep the world, its lore, the keeper and Ilo's fixed facts. Write the character's description and lines in English.",
+  "references": [
+    { "name": "Hollow Knight", "role": "audience", "origin": "user-provided" },
+    { "name": "Spirited Away", "role": "audience", "origin": "user-provided" },
+    { "name": "Sigur Rós", "role": "audience", "origin": "user-provided" },
+    { "name": "Nujabes", "role": "audience", "origin": "user-provided" },
+    { "name": "Paterson", "role": "audience", "origin": "user-provided" }
+  ]
+}

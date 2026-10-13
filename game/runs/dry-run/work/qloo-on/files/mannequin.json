@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0",
+  "id": "mannequin",
+  "name": "Ilo",
+  "role": "Lamplighter",
+  "description": "A plain grey mannequin used only as a format example. It is deliberately featureless and carries a plain lantern.",
+  "palette": {
+    "body": "#8a8f99",
+    "shade": "#5d626c",
+    "skin": "#b4b8bf",
+    "ink": "#24262b",
+    "shoe": "#46494f",
+    "glass": "#ffe2b0"
+  },
+  "style": { "outline": null, "backShade": 0.32, "shadow": 0.6 },
+  "skeleton": {
+    "hip": [0, -82], "chest": [3, -126], "neck": [4, -134], "head": [6, -150], "shoulder": [2, -122],
+    "elbow": [3, -94], "wrist": [4, -68], "knee": [2, -43], "ankle": [0, -8], "toe": [15, 0]
+  },
+  "parts": [
+    { "id": "thigh", "bone": "thigh", "shape": "capsule", "from": [0, -82], "to": [2, -43], "r1": 8, "r2": 6.5, "fill": "body" },
+    { "id": "shin", "bone": "shin", "shape": "capsule", "from": [2, -43], "to": [0, -10], "r1": 6.5, "r2": 5, "fill": "body" },
+    { "id": "shoe", "bone": "foot", "shape": "path", "d": "M-6,-13 C-6,-17 6,-17 7,-12 L8,-6 C13,-6 17,-4 17,-1 L17,1 L-7,1 L-7,-6 Z", "fill": "shoe" },
+    { "id": "torso", "bone": "torso", "z": 2, "shape": "path", "d": "M-12,-80 C-14,-100 -12,-120 -7,-132 C-2,-137 9,-137 12,-131 C15,-118 14,-98 11,-80 C4,-77 -6,-77 -12,-80 Z", "fill": "body" },
+    { "id": "torso-shade", "bone": "torso", "z": 3, "shape": "path", "d": "M-12,-80 C-14,-100 -12,-120 -7,-132 C-9,-118 -9,-98 -6,-79 C-8,-79 -10,-79 -12,-80 Z", "fill": "shade" },
+    { "id": "belt", "bone": "pelvis", "z": 4, "shape": "path", "d": "M-12,-87 L12,-87 L12,-81 L-12,-81 Z", "fill": "shade" },
+    { "id": "neck", "bone": "torso", "z": 1, "shape": "capsule", "from": [4, -128], "to": [5, -140], "r1": 4.5, "fill": "skin" },
+    { "id": "head", "bone": "head", "z": 10, "shape": "ellipse", "center": [7, -152], "rx": 12, "ry": 14, "fill": "skin" },
+    { "id": "cap", "bone": "head", "z": 11, "shape": "path", "d": "M-5,-152 C-6,-163 0,-169 8,-169 C15,-169 20,-164 20,-157 C14,-160 4,-160 -5,-152 Z", "fill": "shade" },
+    { "id": "eye", "bone": "head", "z": 12, "role": "eye", "shape": "circle", "center": [15, -153], "r": 1.6, "fill": "ink" },
+    { "id": "nose", "bone": "head", "z": 12, "shape": "path", "d": "M18.5,-151 L21,-146.5 L18,-145.5", "fill": "none", "stroke": "shade", "strokeWidth": 1.2 },
+    { "id": "upper-arm", "bone": "upperArm", "z": 5, "shape": "capsule", "from": [2, -122], "to": [3, -94], "r1": 6, "r2": 5, "fill": "body" },
+    { "id": "forearm", "bone": "forearm", "z": 5, "shape": "capsule", "from": [3, -94], "to": [4, -70], "r1": 5, "r2": 4.5, "fill": "body" },
+    { "id": "hand", "bone": "hand", "z": 6, "shape": "circle", "center": [4.5, -66], "r": 4.5, "fill": "skin" }
+  ],
+  "cloth": [
+    { "id": "lantern-rope", "bone": "hand", "side": "front", "anchor": [5, -63], "segments": 2, "length": 10, "width": [1.2, 1.2], "fill": "shade", "rest": 90, "stiffness": 0, "damping": 0.25, "gravity": 1, "wind": 0.2, "z": 7,
+      "tip": [
+        { "shape": "path", "d": "M-5,0 L5,0 L6,3 L-6,3 Z", "fill": "shade" },
+        { "shape": "path", "d": "M-5,3 L5,3 L4.5,14 L-4.5,14 Z", "fill": "glass" },
+        { "shape": "path", "d": "M-5.5,14 L5.5,14 L4,17 L-4,17 Z", "fill": "shade" }
+      ] }
+  ],
+  "light": { "color": "#ffd9a0", "radius": 200, "intensity": 1, "flicker": { "speed": 6, "amount": 0.15 }, "attach": { "cloth": "lantern-rope", "offset": [0, 9] } },
+  "motion": {
+    "walk": { "speed": 100, "cadence": 2, "stepHeight": 0.15, "bob": 0.05, "bounciness": 0.4, "lean": 6, "armSwing": 30, "elbowBend": 30, "hipSway": 4, "headStabilize": 0.6, "squash": 0.03, "accel": 0.35 },
+    "idle": { "breathRate": 14, "breathDepth": 0.5, "sway": 0.4, "weightShift": 0.4, "lookAround": 0.4, "blinkInterval": 4, "stance": 0.15 },
+    "turn": { "style": "squash", "duration": 0.2 }
+  },
+  "clips": {
+    "signature": {
+      "duration": 2.4,
+      "kindleAt": 1.4,
+      "tracks": {
+        "upperArmFront": [[0, 0], [0.8, -100, "inOut"], [1.4, -125, "out"], [2, -125, "inOut"], [2.4, 0]],
+        "forearmFront": [[0, 0], [0.8, -20, "inOut"], [1.4, -10, "out"], [2.4, 0, "inOut"]],
+        "torso": [[0, 0], [0.8, -4, "inOut"], [1.4, -6, "out"], [2.4, 0, "inOut"]]
+      },
+      "events": [{ "t": 1.4, "emit": "kindle-sparks" }]
+    },
+    "greet": {
+      "duration": 1.6,
+      "tracks": { "torso": [[0, 0], [0.6, 12, "inOut"], [1, 12, "inOut"], [1.6, 0]] }
+    },
+    "fidget": {
+      "duration": 2,
+      "tracks": { "head": [[0, 0], [0.7, -10, "inOut"], [1.3, -10, "inOut"], [2, 0]] }
+    }
+  },
+  "effects": [
+    { "id": "dust", "kind": "footstep", "shape": "circle", "colors": ["#7c7a74"], "size": [1, 2.4], "life": [0.3, 0.7], "rate": 3, "speed": [10, 30], "spread": 80, "direction": -90, "gravity": 40, "drag": 0.6, "blend": "normal" },
+    { "id": "kindle-sparks", "kind": "burst", "shape": "circle", "colors": ["#ffe9c4", "#ffd9a0"], "size": [1, 2.2], "life": [0.4, 1], "rate": 30, "speed": [60, 180], "spread": 140, "direction": -70, "gravity": 100, "drag": 0.5, "blend": "add" }
+  ],
+  "lines": {
+    "arrive": "Placeholder arrival line.",
+    "greet": "Placeholder answer to the keeper.",
+    "kindle": "Placeholder.",
+    "after": "Placeholder closing line."
+  }
+}

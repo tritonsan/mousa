@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0",
+  "audienceSummary": "Unhurried visitors who like hand-made wonder, warm retro groove and candid street observation: they want a walk to feel like a quiet adventure where small everyday details are noticed, not a checklist of sights.",
+  "predictions": {
+    "brand": ["Muji", "Patagonia", "Leica", "Moleskine", "Polaroid"],
+    "movie": ["Amélie", "Paterson", "Lost in Translation", "The Grand Budapest Hotel", "Spirited Away"],
+    "artist": ["Bonobo", "Tame Impala", "Leon Bridges", "Mild High Club", "Nujabes"],
+    "book": ["The Little Prince", "Norwegian Wood", "The Flâneur", "Kafka on the Shore"],
+    "tv_show": ["Midnight Diner", "Bob Ross: The Joy of Painting", "Twin Peaks", "Atlanta"],
+    "style": ["slow contemplative pacing", "whimsical", "nostalgic", "dreamlike"],
+    "aesthetic": ["hand-drawn watercolor", "film grain", "vintage", "pastoral"],
+    "qualities": ["warm", "nostalgic", "whimsical", "melancholic", "cozy"]
+  },
+  "designSketch": {
+    "summary": "A soft watercolor storybook: cream paper, sky-blue and meadow-green washes, a rounded hand-lettered serif, cards like sketchbook pages with painted cloud headers and a gentle floating animation.",
+    "palette": ["#f6f1e4", "#8fc3e0", "#7fae6b", "#e9b872", "#3b4a5a"],
+    "fonts": ["Fraunces", "Nunito"],
+    "sections": ["sketchbook-cover", "cloud-header", "meadow-cards", "storybook-route"],
+    "motifs": ["drifting clouds", "watercolor washes", "sketchbook pages", "little soot sprites"]
+  }
+}

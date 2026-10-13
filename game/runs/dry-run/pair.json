@@ -1,0 +1,3102 @@
+{
+  "schemaVersion": "1.0",
+  "pairId": "dry-run",
+  "kind": "dry-run",
+  "createdAt": "2026-10-06T00:43:36.547Z",
+  "brief": {
+    "name": "The Long Dusk: lamplighter taste difference check",
+    "brief": "Design Ilo, the playable lamplighter of The Long Dusk, for one moment on the Vesper Cliffs: walking the cliff road, answering the keeper and waking the cold beacon. My audience loves Hollow Knight, Spirited Away, Sigur Rós, Nujabes and the film Paterson. Make Ilo a character this audience would want to play: their look, the way they move and the way they speak. Keep the world, its lore, the keeper and Ilo's fixed facts. Write the character's description and lines in English.",
+    "references": [
+      {
+        "name": "Hollow Knight",
+        "role": "audience",
+        "origin": "user-provided"
+      },
+      {
+        "name": "Spirited Away",
+        "role": "audience",
+        "origin": "user-provided"
+      },
+      {
+        "name": "Sigur Rós",
+        "role": "audience",
+        "origin": "user-provided"
+      },
+      {
+        "name": "Nujabes",
+        "role": "audience",
+        "origin": "user-provided"
+      },
+      {
+        "name": "Paterson",
+        "role": "audience",
+        "origin": "user-provided"
+      }
+    ]
+  },
+  "model": "scripted fixture (no model)",
+  "effort": null,
+  "protocol": {
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "videogame",
+      "style",
+      "aesthetic",
+      "qualities",
+      "art_style"
+    ],
+    "medium": [
+      "videogame"
+    ],
+    "requiredAnchors": 6,
+    "portraitsPerArm": 0,
+    "paintPerArm": 0,
+    "artDirection": true,
+    "departure": true,
+    "music": {
+      "tracks": 20,
+      "source": "Jamendo tracks found through the Openverse API (https://openverse.org). Genres and tags are each track's own catalogue metadata.",
+      "license": "Each track is CC0 1.0 or CC BY 3.0/4.0 as listed; CC BY tracks are credited wherever they play."
+    }
+  },
+  "arms": [
+    {
+      "key": "qloo-off",
+      "label": "Qloo off",
+      "mode": "baseline",
+      "status": "completed",
+      "durationMs": 282,
+      "calls": 8,
+      "checks": 1,
+      "events": [
+        {
+          "time": "2026-10-06T00:43:36.698Z",
+          "type": "taste",
+          "message": "Prediction frozen: 30 entities and qualities across 10 domains, with a character sketch."
+        },
+        {
+          "time": "2026-10-06T00:43:36.699Z",
+          "type": "taste",
+          "message": "The model's own prediction became its taste input; no measured taste data exists in this run."
+        },
+        {
+          "time": "2026-10-06T00:43:36.730Z",
+          "type": "taste",
+          "message": "Character DNA saved: 10 devices across 10 layers; 0 rest on entities, tags or qualities the model did not predict, and 8 translate qualities."
+        },
+        {
+          "time": "2026-10-06T00:43:36.739Z",
+          "type": "file",
+          "message": "Saved character.json: 20 parts, 3 cloth chains, 3 effects."
+        },
+        {
+          "time": "2026-10-06T00:43:36.806Z",
+          "type": "conformance",
+          "message": "Character check: 10 present, 0 partial, 0 missing; 0 warnings."
+        }
+      ],
+      "audienceSummary": "Fixture prediction for the dry run: players who like slow, wistful exploration and handmade worlds.",
+      "predictions": 30,
+      "sketch": {
+        "summary": "A tall, hooded pilgrim in pale ash cloth who carries a lantern high on a crooked staff and walks slowly.",
+        "palette": [
+          "#d9d2c3",
+          "#c99a3b",
+          "#3b3a46",
+          "#5a4434"
+        ],
+        "height": 183,
+        "headShare": 0.24,
+        "elements": [
+          "hood",
+          "staff",
+          "scarf",
+          "cloak-tail"
+        ],
+        "gait": {
+          "cadence": 1.7,
+          "bounciness": 0.12,
+          "lean": 7,
+          "armSwing": 16,
+          "turnStyle": "pivot"
+        },
+        "light": "#ffb85c",
+        "voice": "quiet, sparse and weathered",
+        "motifs": [
+          "ash cloth",
+          "a lantern held high"
+        ],
+        "scene": {
+          "sky": [
+            "#2b2338",
+            "#c9a98f"
+          ],
+          "palette": [
+            "#f4e6cf",
+            "#b9a593",
+            "#2f2a30",
+            "#6f7a58"
+          ],
+          "weather": "leaves",
+          "towers": "ruin"
+        },
+        "render": "watercolor",
+        "music": "peaceful-night-st-adam"
+      },
+      "taste": {
+        "source": "model-assumption",
+        "metrics": {
+          "predictions": 18,
+          "tagPredictions": 6,
+          "qualityPredictions": 3,
+          "artStylePredictions": 3
+        },
+        "requiredAnchors": [
+          {
+            "ref": "M25",
+            "name": "Solitary",
+            "domain": "qualities",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M26",
+            "name": "Nostalgic",
+            "domain": "qualities",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M27",
+            "name": "Curious",
+            "domain": "qualities",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M16",
+            "name": "Fixture predicted game one",
+            "domain": "videogame",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M01",
+            "name": "Fixture predicted brand one",
+            "domain": "brand",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M04",
+            "name": "Fixture predicted film one",
+            "domain": "movie",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M28",
+            "name": "Watercolor",
+            "domain": "art_style",
+            "source": "model-assumption",
+            "preset": "watercolor"
+          }
+        ],
+        "qualities": [
+          {
+            "ref": "M25",
+            "name": "Solitary",
+            "domain": "qualities",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M26",
+            "name": "Nostalgic",
+            "domain": "qualities",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M27",
+            "name": "Curious",
+            "domain": "qualities",
+            "source": "model-assumption"
+          }
+        ],
+        "tags": [
+          {
+            "ref": "M19",
+            "name": "Contemplative",
+            "domain": "style",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M20",
+            "name": "Slow",
+            "domain": "style",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M21",
+            "name": "Wistful",
+            "domain": "style",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M22",
+            "name": "Weathered",
+            "domain": "aesthetic",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M23",
+            "name": "Hooded Shapes",
+            "domain": "aesthetic",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M24",
+            "name": "Muted Earth",
+            "domain": "aesthetic",
+            "source": "model-assumption"
+          }
+        ],
+        "artStyles": [
+          {
+            "ref": "M28",
+            "name": "Watercolor",
+            "domain": "art_style",
+            "source": "model-assumption",
+            "preset": "watercolor"
+          },
+          {
+            "ref": "M29",
+            "name": "Painterly",
+            "domain": "art_style",
+            "source": "model-assumption",
+            "preset": "watercolor"
+          },
+          {
+            "ref": "M30",
+            "name": "Soft pastel",
+            "domain": "art_style",
+            "source": "model-assumption",
+            "preset": "watercolor"
+          }
+        ],
+        "renderStyles": [
+          {
+            "preset": "watercolor",
+            "ref": "M28",
+            "name": "Watercolor"
+          }
+        ]
+      },
+      "dna": {
+        "thesis": "Fixture thesis for the dry run: A tall pilgrim in an ash-white hooded cloak and an ochre scarf, face lost in the hood's shadow, carrying an amber lantern high on a crooked staff.",
+        "devices": [
+          {
+            "id": "dna1",
+            "layer": "palette",
+            "device": "Fixture palette",
+            "translation": "Fixture translation for the dry run: fixture palette.",
+            "qualities": [
+              "fixture quality"
+            ],
+            "anchors": [
+              {
+                "ref": "M25",
+                "name": "Solitary",
+                "domain": "qualities",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [
+                "#3b3a46",
+                "#2c2420",
+                "#d9d2c3"
+              ],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            }
+          },
+          {
+            "id": "dna2",
+            "layer": "silhouette",
+            "device": "Fixture silhouette",
+            "translation": "Fixture translation for the dry run: fixture silhouette.",
+            "qualities": [
+              "fixture quality"
+            ],
+            "anchors": [
+              {
+                "ref": "M26",
+                "name": "Nostalgic",
+                "domain": "qualities",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [
+                "hood"
+              ],
+              "proportions": {
+                "height": 183.2,
+                "headShare": 0.236
+              },
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            }
+          },
+          {
+            "id": "dna3",
+            "layer": "costume",
+            "device": "Fixture costume",
+            "translation": "Fixture translation for the dry run: fixture costume.",
+            "qualities": [
+              "fixture quality"
+            ],
+            "anchors": [
+              {
+                "ref": "M22",
+                "name": "Weathered",
+                "domain": "aesthetic",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M27",
+                "name": "Curious",
+                "domain": "qualities",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [
+                "cloak-tail",
+                "scarf",
+                "lantern-rope"
+              ],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            }
+          },
+          {
+            "id": "dna4",
+            "layer": "motion",
+            "device": "Fixture gait",
+            "translation": "Fixture translation for the dry run: fixture gait.",
+            "qualities": [
+              "fixture quality"
+            ],
+            "anchors": [
+              {
+                "ref": "M19",
+                "name": "Contemplative",
+                "domain": "style",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M16",
+                "name": "Fixture predicted game one",
+                "domain": "videogame",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [
+                {
+                  "param": "walk.cadence",
+                  "value": 1.7
+                },
+                {
+                  "param": "walk.bounciness",
+                  "value": 0.12
+                },
+                {
+                  "param": "turn.style",
+                  "value": "pivot"
+                }
+              ],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            }
+          },
+          {
+            "id": "dna5",
+            "layer": "signature",
+            "device": "Fixture kindling move",
+            "translation": "Fixture translation for the dry run: fixture kindling move.",
+            "qualities": [
+              "fixture quality"
+            ],
+            "anchors": [
+              {
+                "ref": "M01",
+                "name": "Fixture predicted brand one",
+                "domain": "brand",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [
+                {
+                  "name": "signature",
+                  "duration": 3.4,
+                  "kindleAt": 2.1,
+                  "tracks": [
+                    "upperArmFront",
+                    "forearmFront"
+                  ]
+                }
+              ],
+              "effects": [],
+              "light": null,
+              "lines": []
+            }
+          },
+          {
+            "id": "dna6",
+            "layer": "light",
+            "device": "Fixture carried light",
+            "translation": "Fixture translation for the dry run: fixture carried light.",
+            "qualities": [
+              "fixture quality"
+            ],
+            "anchors": [
+              {
+                "ref": "M04",
+                "name": "Fixture predicted film one",
+                "domain": "movie",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": {
+                "color": "#ffb85c",
+                "radius": 230
+              },
+              "lines": []
+            }
+          },
+          {
+            "id": "dna7",
+            "layer": "voice",
+            "device": "Fixture voice",
+            "translation": "Fixture translation for the dry run: fixture voice.",
+            "qualities": [
+              "fixture quality"
+            ],
+            "anchors": [
+              {
+                "ref": "M25",
+                "name": "Solitary",
+                "domain": "qualities",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": [
+                "The wind smells of cold ash. Close now.",
+                "The road is lit. Someone will walk it after me."
+              ]
+            }
+          },
+          {
+            "id": "scene1",
+            "layer": "scene",
+            "device": "Fixture moment",
+            "translation": "Fixture translation for the dry run: fixture moment.",
+            "qualities": [
+              "fixture quality"
+            ],
+            "anchors": [
+              {
+                "ref": "M25",
+                "name": "Solitary",
+                "domain": "qualities",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": [],
+              "scene": {
+                "sky": [
+                  "#3a2c3c",
+                  "#e8b787"
+                ],
+                "colors": [
+                  "#d8b9a0",
+                  "#3a3036"
+                ],
+                "weather": "leaves",
+                "towers": "ruin"
+              }
+            }
+          },
+          {
+            "id": "render1",
+            "layer": "render",
+            "device": "Fixture render style",
+            "translation": "Fixture translation for the dry run: fixture render style.",
+            "qualities": [
+              "fixture quality"
+            ],
+            "presetFrom": "M28",
+            "anchors": [
+              {
+                "ref": "M28",
+                "name": "Watercolor",
+                "domain": "art_style",
+                "source": "model-assumption",
+                "preset": "watercolor"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": [],
+              "render": "watercolor"
+            }
+          },
+          {
+            "id": "music1",
+            "layer": "music",
+            "device": "Fixture track",
+            "translation": "Fixture translation for the dry run: fixture track.",
+            "qualities": [
+              "peaceful"
+            ],
+            "moods": [
+              "peaceful"
+            ],
+            "anchors": [
+              {
+                "ref": "M25",
+                "name": "Solitary",
+                "domain": "qualities",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": [],
+              "music": "peaceful-night-st-adam"
+            }
+          }
+        ],
+        "rejected": [],
+        "stats": {
+          "devices": 10,
+          "layers": [
+            "palette",
+            "silhouette",
+            "costume",
+            "motion",
+            "signature",
+            "light",
+            "voice",
+            "scene",
+            "render",
+            "music"
+          ],
+          "qlooAnchoredDevices": 0,
+          "surpriseAnchoredDevices": 0,
+          "modelAnchoredDevices": 10,
+          "qualityAnchoredDevices": 8,
+          "surpriseShare": 0,
+          "sketchMoves": {
+            "colors": [],
+            "parts": [
+              "lantern-rope"
+            ],
+            "proportions": false,
+            "gait": [],
+            "world": {
+              "sceneColors": [],
+              "changed": []
+            }
+          }
+        }
+      },
+      "portraits": [],
+      "character": "runs/dry-run/qloo-off.json",
+      "music": {
+        "id": "peaceful-night-st-adam",
+        "title": "peaceful night",
+        "artist": "St Adam",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "source": "Jamendo",
+        "sourceUrl": "https://www.jamendo.com/track/418890",
+        "artistUrl": "https://www.jamendo.com/artist/6038/stadam",
+        "attribution": "\"peaceful night\" by St Adam is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/.",
+        "file": "music/peaceful-night-st-adam.mp3",
+        "genres": [
+          "pop"
+        ],
+        "tags": [
+          "neutral",
+          "peaceful"
+        ],
+        "volume": 0.55
+      },
+      "measures": {
+        "height": 205.1,
+        "figureHeight": 183.2,
+        "headHeight": 43.2,
+        "headShare": 0.236,
+        "hipHeight": 88,
+        "legShare": 0.48,
+        "width": 53.2,
+        "aspect": 0.29,
+        "legLength": 80.2,
+        "armLength": 56.1,
+        "stride": {
+          "length": 108.2,
+          "legs": 1.35,
+          "clamped": false
+        },
+        "light": {
+          "color": "#ffb85c",
+          "radius": 230,
+          "position": [
+            63,
+            -199
+          ]
+        },
+        "visibleColors": [
+          {
+            "hex": "#d9d2c3",
+            "share": 0.5025
+          },
+          {
+            "hex": "#3b3a46",
+            "share": 0.144
+          },
+          {
+            "hex": "#5a4434",
+            "share": 0.0937
+          },
+          {
+            "hex": "#2c2420",
+            "share": 0.0692
+          },
+          {
+            "hex": "#c99a3b",
+            "share": 0.0466
+          },
+          {
+            "hex": "#242123",
+            "share": 0.0281
+          },
+          {
+            "hex": "#2e2f3c",
+            "share": 0.0217
+          },
+          {
+            "hex": "#8d8a80",
+            "share": 0.0208
+          },
+          {
+            "hex": "#ffd58a",
+            "share": 0.0203
+          },
+          {
+            "hex": "#17161d",
+            "share": 0.0198
+          }
+        ],
+        "parts": 20,
+        "cloth": 3,
+        "effects": 3,
+        "warnings": [],
+        "keeper": {
+          "name": "Maren",
+          "figureHeight": 156,
+          "ratio": 1.17
+        }
+      },
+      "conformance": {
+        "score": 1,
+        "present": 10,
+        "partial": 0,
+        "missing": 0,
+        "total": 10,
+        "devices": [
+          {
+            "id": "dna1",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna2",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna3",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna4",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna5",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna6",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna7",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "scene1",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "render1",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "music1",
+            "status": "present",
+            "missing": []
+          }
+        ],
+        "limitation": "Checks that declared colours, part and cloth IDs, proportions, motion values, clip timings and tracks, effects, the light, the lines, the scene, the render style and the track literally occur in the saved character, and that imagery devices produced portraits that share colours with the figure. It does not measure visual quality, motion feel, likeness or player preference."
+      },
+      "divergence": {
+        "palette": 0.125,
+        "proportions": 0.04,
+        "elements": 0,
+        "motion": 0,
+        "score": 0.041,
+        "world": {
+          "palette": 0.333,
+          "weather": false,
+          "towers": false,
+          "render": false,
+          "music": false,
+          "score": 0.067,
+          "sketch": {
+            "scene": {
+              "sky": [
+                "#2b2338",
+                "#c9a98f"
+              ],
+              "palette": [
+                "#f4e6cf",
+                "#b9a593",
+                "#2f2a30",
+                "#6f7a58"
+              ],
+              "weather": "leaves",
+              "towers": "ruin"
+            },
+            "render": "watercolor",
+            "music": "peaceful-night-st-adam"
+          },
+          "character": {
+            "sky": [
+              "#3a2c3c",
+              "#e8b787"
+            ],
+            "weather": "leaves",
+            "towers": "ruin",
+            "render": "watercolor",
+            "music": "peaceful-night-st-adam"
+          }
+        },
+        "combined": 0.05,
+        "colors": {
+          "character": [
+            "#d9d2c3",
+            "#3b3a46",
+            "#5a4434",
+            "#2c2420",
+            "#c99a3b",
+            "#242123",
+            "#2e2f3c",
+            "#8d8a80"
+          ],
+          "new": [
+            "#8d8a80"
+          ]
+        },
+        "figure": {
+          "sketchHeight": 183,
+          "height": 183.2,
+          "sketchHeadShare": 0.24,
+          "headShare": 0.236
+        },
+        "planned": {
+          "elements": [
+            "hood",
+            "staff",
+            "scarf",
+            "cloak-tail"
+          ],
+          "kept": [
+            "hood",
+            "staff",
+            "scarf",
+            "cloak-tail"
+          ],
+          "dropped": []
+        },
+        "gait": {
+          "moved": []
+        },
+        "light": {
+          "sketch": "#ffb85c",
+          "character": "#ffb85c",
+          "moved": false
+        },
+        "method": "Shares of the character's eight most visible colours at least CIE76 20 from every sketch colour, of the sketch's planned elements the character does not draw, and of the sketch's five gait choices that moved past their thresholds, with a proportion score that reaches 1 at twice the departure threshold; the score is their mean."
+      }
+    },
+    {
+      "key": "qloo-on",
+      "label": "Qloo on",
+      "mode": "qloo",
+      "status": "completed",
+      "durationMs": 264,
+      "calls": 8,
+      "checks": 1,
+      "events": [
+        {
+          "time": "2026-10-06T00:43:36.993Z",
+          "type": "taste",
+          "message": "Prediction frozen: 30 entities and qualities across 10 domains, with a character sketch."
+        },
+        {
+          "time": "2026-10-06T00:43:36.995Z",
+          "type": "taste",
+          "message": "Taste profile revealed after the prediction was frozen: 18 of 20 measured entities were neither predicted nor named in the brief. 3 style and aesthetic tags were measured; 2 were not predicted. 9 qualities are shared by two or more measured works; 8 were not predicted. 2 art styles were measured on the works; 2 were not predicted, and the strongest render style is Hand-Drawn (ink)."
+        },
+        {
+          "time": "2026-10-06T00:43:37.019Z",
+          "type": "taste",
+          "message": "Character DNA saved: 10 devices across 10 layers; 10 rest on entities, tags or qualities the model did not predict, and 8 translate qualities."
+        },
+        {
+          "time": "2026-10-06T00:43:37.027Z",
+          "type": "file",
+          "message": "Saved character.json: 29 parts, 1 cloth chains, 4 effects."
+        },
+        {
+          "time": "2026-10-06T00:43:37.094Z",
+          "type": "conformance",
+          "message": "Character check: 10 present, 0 partial, 0 missing; 0 warnings."
+        }
+      ],
+      "audienceSummary": "Fixture prediction for the dry run: players who like slow, wistful exploration and handmade worlds.",
+      "predictions": 30,
+      "sketch": {
+        "summary": "A tall, hooded pilgrim in pale ash cloth who carries a lantern high on a crooked staff and walks slowly.",
+        "palette": [
+          "#d9d2c3",
+          "#c99a3b",
+          "#3b3a46",
+          "#5a4434"
+        ],
+        "height": 183,
+        "headShare": 0.24,
+        "elements": [
+          "hood",
+          "staff",
+          "scarf",
+          "cloak-tail"
+        ],
+        "gait": {
+          "cadence": 1.7,
+          "bounciness": 0.12,
+          "lean": 7,
+          "armSwing": 16,
+          "turnStyle": "pivot"
+        },
+        "light": "#ffb85c",
+        "voice": "quiet, sparse and weathered",
+        "motifs": [
+          "ash cloth",
+          "a lantern held high"
+        ],
+        "scene": {
+          "sky": [
+            "#2b2338",
+            "#c9a98f"
+          ],
+          "palette": [
+            "#f4e6cf",
+            "#b9a593",
+            "#2f2a30",
+            "#6f7a58"
+          ],
+          "weather": "leaves",
+          "towers": "ruin"
+        },
+        "render": "watercolor",
+        "music": "peaceful-night-st-adam"
+      },
+      "taste": {
+        "source": "qloo-profile",
+        "metrics": {
+          "measuredEntities": 20,
+          "predictedByModel": 2,
+          "knownFromBrief": 0,
+          "surprises": 18,
+          "surpriseShare": 0.9,
+          "predictions": 18,
+          "predictionsConfirmed": 2,
+          "measuredTags": 3,
+          "tagsPredicted": 1,
+          "tagSurprises": 2,
+          "tagPredictions": 6,
+          "measuredQualities": 9,
+          "qualitiesPredicted": 1,
+          "qualitySurprises": 8,
+          "qualityPredictions": 3,
+          "measuredArtStyles": 2,
+          "artStylesPredicted": 0,
+          "artStyleSurprises": 2,
+          "artStylePredictions": 3
+        },
+        "requiredAnchors": [
+          {
+            "ref": "quality:look:colorful",
+            "name": "Colorful",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "look",
+            "count": 5,
+            "domains": [
+              "brand",
+              "movie",
+              "tv_show",
+              "videogame"
+            ],
+            "examples": [
+              "Fixture Tinker Works",
+              "Fixture Film: The Chimney Sweep",
+              "Fixture Show: Workshop Days"
+            ],
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "quality:mood:playful",
+            "name": "Playful",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "mood",
+            "count": 3,
+            "domains": [
+              "movie",
+              "artist",
+              "videogame"
+            ],
+            "examples": [
+              "Fixture Film: Lantern Parade",
+              "Fixture Artist: Brass Choir",
+              "Fixture Game: Pocket Quest"
+            ],
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "quality:meaning:craftsmanship",
+            "name": "Craftsmanship",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "meaning",
+            "count": 4,
+            "domains": [
+              "brand",
+              "book",
+              "tv_show"
+            ],
+            "examples": [
+              "Fixture Tinker Works",
+              "Fixture Book: Pocket Engines",
+              "Fixture Show: Workshop Days"
+            ],
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "fixture:videogame:fixture-game-paper-lamps",
+            "name": "Fixture Game: Paper Lamps",
+            "domain": "videogame",
+            "source": "qloo",
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "fixture:movie:fixture-film-the-chimney-sweep",
+            "name": "Fixture Film: The Chimney Sweep",
+            "domain": "movie",
+            "source": "qloo",
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "fixture:brand:fixture-tinker-works",
+            "name": "Fixture Tinker Works",
+            "domain": "brand",
+            "source": "qloo",
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "art-style:hand-drawn",
+            "name": "Hand-Drawn",
+            "domain": "art_style",
+            "source": "qloo",
+            "count": 5,
+            "domains": [
+              "movie",
+              "videogame",
+              "tv_show"
+            ],
+            "examples": [
+              "Fixture Film: Lantern Parade",
+              "Fixture Game: Pocket Quest",
+              "Fixture Game: Cinder Steps"
+            ],
+            "preset": "ink",
+            "surprise": true,
+            "predictedByModel": false
+          }
+        ],
+        "qualities": [
+          {
+            "ref": "quality:look:colorful",
+            "name": "Colorful",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "look",
+            "count": 5,
+            "domains": [
+              "brand",
+              "movie",
+              "tv_show",
+              "videogame"
+            ],
+            "examples": [
+              "Fixture Tinker Works",
+              "Fixture Film: The Chimney Sweep",
+              "Fixture Show: Workshop Days"
+            ],
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "quality:mood:playful",
+            "name": "Playful",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "mood",
+            "count": 3,
+            "domains": [
+              "movie",
+              "artist",
+              "videogame"
+            ],
+            "examples": [
+              "Fixture Film: Lantern Parade",
+              "Fixture Artist: Brass Choir",
+              "Fixture Game: Pocket Quest"
+            ],
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "quality:mood:gentle",
+            "name": "Gentle",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "mood",
+            "count": 3,
+            "domains": [
+              "movie",
+              "videogame",
+              "book"
+            ],
+            "examples": [
+              "Fixture Film: Mint Harbour",
+              "Fixture Game: Paper Lamps",
+              "Fixture Book: Small Roads"
+            ],
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "quality:mood:whimsical",
+            "name": "Whimsical",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "mood",
+            "count": 3,
+            "domains": [
+              "movie",
+              "tv_show"
+            ],
+            "examples": [
+              "Fixture Film: The Chimney Sweep",
+              "Fixture Show: Tin Crown",
+              "Fixture Film: Small Hours"
+            ],
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "quality:mood:energetic",
+            "name": "Energetic",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "mood",
+            "count": 2,
+            "domains": [
+              "artist",
+              "videogame"
+            ],
+            "examples": [
+              "Fixture Artist: Brass Choir",
+              "Fixture Game: Pocket Quest"
+            ],
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "quality:mood:upbeat",
+            "name": "Upbeat",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "mood",
+            "count": 2,
+            "domains": [
+              "artist"
+            ],
+            "examples": [
+              "Fixture Artist: Brass Choir",
+              "Fixture Artist: Teal Hour"
+            ],
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "quality:meaning:craftsmanship",
+            "name": "Craftsmanship",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "meaning",
+            "count": 4,
+            "domains": [
+              "brand",
+              "book",
+              "tv_show"
+            ],
+            "examples": [
+              "Fixture Tinker Works",
+              "Fixture Book: Pocket Engines",
+              "Fixture Show: Workshop Days"
+            ],
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "quality:meaning:belonging",
+            "name": "Belonging",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "meaning",
+            "count": 4,
+            "domains": [
+              "movie",
+              "book",
+              "tv_show"
+            ],
+            "examples": [
+              "Fixture Film: Lantern Parade",
+              "Fixture Film: Mint Harbour",
+              "Fixture Book: Small Roads"
+            ],
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "quality:meaning:curiosity",
+            "name": "Curiosity",
+            "domain": "qualities",
+            "source": "qloo",
+            "family": "meaning",
+            "count": 3,
+            "domains": [
+              "book",
+              "movie",
+              "videogame"
+            ],
+            "examples": [
+              "Fixture Book: Pocket Engines",
+              "Fixture Film: The Chimney Sweep",
+              "Fixture Game: Cinder Steps"
+            ],
+            "surprise": false,
+            "predictedByModel": true
+          }
+        ],
+        "tags": [
+          {
+            "ref": "urn:tag:style:qloo:fixture_bouncy",
+            "name": "Bouncy",
+            "domain": "style",
+            "source": "qloo",
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "urn:tag:style:qloo:fixture_lively",
+            "name": "Lively",
+            "domain": "style",
+            "source": "qloo",
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "urn:tag:style:qloo:fixture_contemplative",
+            "name": "Contemplative",
+            "domain": "style",
+            "source": "qloo",
+            "surprise": false,
+            "predictedByModel": true
+          }
+        ],
+        "artStyles": [
+          {
+            "ref": "art-style:hand-drawn",
+            "name": "Hand-Drawn",
+            "domain": "art_style",
+            "source": "qloo",
+            "count": 5,
+            "domains": [
+              "movie",
+              "videogame",
+              "tv_show"
+            ],
+            "examples": [
+              "Fixture Film: Lantern Parade",
+              "Fixture Game: Pocket Quest",
+              "Fixture Game: Cinder Steps"
+            ],
+            "preset": "ink",
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "art-style:pixel-art",
+            "name": "Pixel Art",
+            "domain": "art_style",
+            "source": "qloo",
+            "count": 1,
+            "domains": [
+              "videogame"
+            ],
+            "examples": [
+              "Fixture Game: Paper Lamps"
+            ],
+            "preset": "pixel",
+            "surprise": true,
+            "predictedByModel": false
+          }
+        ],
+        "renderStyles": [
+          {
+            "preset": "ink",
+            "ref": "art-style:hand-drawn",
+            "name": "Hand-Drawn",
+            "score": 11.31,
+            "works": 5,
+            "examples": [
+              "Fixture Film: Lantern Parade",
+              "Fixture Game: Pocket Quest",
+              "Fixture Game: Cinder Steps"
+            ]
+          },
+          {
+            "preset": "pixel",
+            "ref": "art-style:pixel-art",
+            "name": "Pixel Art",
+            "score": 0.71,
+            "works": 1,
+            "examples": [
+              "Fixture Game: Paper Lamps"
+            ]
+          }
+        ]
+      },
+      "dna": {
+        "thesis": "Fixture thesis for the dry run: A small, round-faced lamplighter in a mustard puffer jacket, teal beanie and brass goggles, with a soot-capped chimney on the backpack and a mint-green lantern swinging from the belt.",
+        "devices": [
+          {
+            "id": "dna1",
+            "layer": "palette",
+            "device": "Fixture palette",
+            "translation": "Fixture translation for the dry run: fixture palette.",
+            "qualities": [
+              "Colorful"
+            ],
+            "anchors": [
+              {
+                "ref": "quality:look:colorful",
+                "name": "Colorful",
+                "domain": "qualities",
+                "source": "qloo",
+                "family": "look",
+                "count": 5,
+                "domains": [
+                  "brand",
+                  "movie",
+                  "tv_show",
+                  "videogame"
+                ],
+                "examples": [
+                  "Fixture Tinker Works",
+                  "Fixture Film: The Chimney Sweep",
+                  "Fixture Show: Workshop Days"
+                ],
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.768
+              }
+            ],
+            "tokens": {
+              "colors": [
+                "#7a2e2c",
+                "#3f8e89",
+                "#2f726e"
+              ],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna2",
+            "layer": "silhouette",
+            "device": "Fixture silhouette",
+            "translation": "Fixture translation for the dry run: fixture silhouette.",
+            "qualities": [
+              "Playful"
+            ],
+            "anchors": [
+              {
+                "ref": "quality:mood:playful",
+                "name": "Playful",
+                "domain": "qualities",
+                "source": "qloo",
+                "family": "mood",
+                "count": 3,
+                "domains": [
+                  "movie",
+                  "artist",
+                  "videogame"
+                ],
+                "examples": [
+                  "Fixture Film: Lantern Parade",
+                  "Fixture Artist: Brass Choir",
+                  "Fixture Game: Pocket Quest"
+                ],
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.89
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [
+                "hair-back"
+              ],
+              "proportions": {
+                "height": 137.5,
+                "headShare": 0.462
+              },
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna3",
+            "layer": "costume",
+            "device": "Fixture costume",
+            "translation": "Fixture translation for the dry run: fixture costume.",
+            "qualities": [
+              "Colorful",
+              "Craftsmanship"
+            ],
+            "anchors": [
+              {
+                "ref": "quality:look:colorful",
+                "name": "Colorful",
+                "domain": "qualities",
+                "source": "qloo",
+                "family": "look",
+                "count": 5,
+                "domains": [
+                  "brand",
+                  "movie",
+                  "tv_show",
+                  "videogame"
+                ],
+                "examples": [
+                  "Fixture Tinker Works",
+                  "Fixture Film: The Chimney Sweep",
+                  "Fixture Show: Workshop Days"
+                ],
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.768
+              },
+              {
+                "ref": "quality:meaning:craftsmanship",
+                "name": "Craftsmanship",
+                "domain": "qualities",
+                "source": "qloo",
+                "family": "meaning",
+                "count": 4,
+                "domains": [
+                  "brand",
+                  "book",
+                  "tv_show"
+                ],
+                "examples": [
+                  "Fixture Tinker Works",
+                  "Fixture Book: Pocket Engines",
+                  "Fixture Show: Workshop Days"
+                ],
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.7875
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [
+                "belt-lantern",
+                "boot",
+                "sole"
+              ],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna4",
+            "layer": "motion",
+            "device": "Fixture gait",
+            "translation": "Fixture translation for the dry run: fixture gait.",
+            "qualities": [
+              "Bouncy",
+              "Colorful"
+            ],
+            "anchors": [
+              {
+                "ref": "urn:tag:style:qloo:fixture_bouncy",
+                "name": "Bouncy",
+                "domain": "style",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.92
+              },
+              {
+                "ref": "fixture:videogame:fixture-game-paper-lamps",
+                "name": "Fixture Game: Paper Lamps",
+                "domain": "videogame",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.71
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [
+                {
+                  "param": "walk.cadence",
+                  "value": 3.3
+                },
+                {
+                  "param": "walk.bounciness",
+                  "value": 0.85
+                },
+                {
+                  "param": "turn.style",
+                  "value": "squash"
+                }
+              ],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna5",
+            "layer": "signature",
+            "device": "Fixture kindling move",
+            "translation": "Fixture translation for the dry run: fixture kindling move.",
+            "qualities": [
+              "Colorful",
+              "Whimsical"
+            ],
+            "anchors": [
+              {
+                "ref": "fixture:movie:fixture-film-the-chimney-sweep",
+                "name": "Fixture Film: The Chimney Sweep",
+                "domain": "movie",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.81
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [
+                {
+                  "name": "signature",
+                  "duration": 2.6,
+                  "kindleAt": 1.35,
+                  "tracks": [
+                    "upperArmFront",
+                    "forearmFront"
+                  ]
+                }
+              ],
+              "effects": [],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna6",
+            "layer": "light",
+            "device": "Fixture carried light",
+            "translation": "Fixture translation for the dry run: fixture carried light.",
+            "qualities": [
+              "Colorful",
+              "Craftsmanship"
+            ],
+            "anchors": [
+              {
+                "ref": "fixture:brand:fixture-tinker-works",
+                "name": "Fixture Tinker Works",
+                "domain": "brand",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.91
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": {
+                "color": "#6ff5cf",
+                "radius": 190
+              },
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna7",
+            "layer": "voice",
+            "device": "Fixture voice",
+            "translation": "Fixture translation for the dry run: fixture voice.",
+            "qualities": [
+              "Colorful"
+            ],
+            "anchors": [
+              {
+                "ref": "quality:look:colorful",
+                "name": "Colorful",
+                "domain": "qualities",
+                "source": "qloo",
+                "family": "look",
+                "count": 5,
+                "domains": [
+                  "brand",
+                  "movie",
+                  "tv_show",
+                  "videogame"
+                ],
+                "examples": [
+                  "Fixture Tinker Works",
+                  "Fixture Film: The Chimney Sweep",
+                  "Fixture Show: Workshop Days"
+                ],
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.768
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": [
+                "Cliffs! Nobody said there would be cliffs.",
+                "Told you it would take. Right, who's next?"
+              ]
+            },
+            "surprise": true
+          },
+          {
+            "id": "scene1",
+            "layer": "scene",
+            "device": "Fixture moment",
+            "translation": "Fixture translation for the dry run: fixture moment.",
+            "qualities": [
+              "Colorful"
+            ],
+            "anchors": [
+              {
+                "ref": "quality:look:colorful",
+                "name": "Colorful",
+                "domain": "qualities",
+                "source": "qloo",
+                "family": "look",
+                "count": 5,
+                "domains": [
+                  "brand",
+                  "movie",
+                  "tv_show",
+                  "videogame"
+                ],
+                "examples": [
+                  "Fixture Tinker Works",
+                  "Fixture Film: The Chimney Sweep",
+                  "Fixture Show: Workshop Days"
+                ],
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.768
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": [],
+              "scene": {
+                "sky": [
+                  "#13253a",
+                  "#e8845a"
+                ],
+                "colors": [
+                  "#5f9c96",
+                  "#1d2630"
+                ],
+                "weather": "embers",
+                "towers": "pagoda"
+              }
+            },
+            "surprise": true
+          },
+          {
+            "id": "render1",
+            "layer": "render",
+            "device": "Fixture render style",
+            "translation": "Fixture translation for the dry run: fixture render style.",
+            "qualities": [
+              "Hand-Drawn"
+            ],
+            "presetFrom": "art-style:hand-drawn",
+            "anchors": [
+              {
+                "ref": "art-style:hand-drawn",
+                "name": "Hand-Drawn",
+                "domain": "art_style",
+                "source": "qloo",
+                "count": 5,
+                "domains": [
+                  "movie",
+                  "videogame",
+                  "tv_show"
+                ],
+                "examples": [
+                  "Fixture Film: Lantern Parade",
+                  "Fixture Game: Pocket Quest",
+                  "Fixture Game: Cinder Steps"
+                ],
+                "preset": "ink",
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.754
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": [],
+              "render": "ink"
+            },
+            "surprise": true
+          },
+          {
+            "id": "music1",
+            "layer": "music",
+            "device": "Fixture track",
+            "translation": "Fixture translation for the dry run: fixture track.",
+            "qualities": [
+              "Energetic"
+            ],
+            "moods": [
+              "energetic"
+            ],
+            "anchors": [
+              {
+                "ref": "quality:mood:energetic",
+                "name": "Energetic",
+                "domain": "qualities",
+                "source": "qloo",
+                "family": "mood",
+                "count": 2,
+                "domains": [
+                  "artist",
+                  "videogame"
+                ],
+                "examples": [
+                  "Fixture Artist: Brass Choir",
+                  "Fixture Game: Pocket Quest"
+                ],
+                "surprise": true,
+                "predictedByModel": false,
+                "affinity": 0.87
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": [],
+              "music": "red-moonlight-extended-mix-pokki-dj"
+            },
+            "surprise": true
+          }
+        ],
+        "rejected": [],
+        "stats": {
+          "devices": 10,
+          "layers": [
+            "palette",
+            "silhouette",
+            "costume",
+            "motion",
+            "signature",
+            "light",
+            "voice",
+            "scene",
+            "render",
+            "music"
+          ],
+          "qlooAnchoredDevices": 10,
+          "surpriseAnchoredDevices": 10,
+          "modelAnchoredDevices": 0,
+          "qualityAnchoredDevices": 8,
+          "surpriseShare": 1,
+          "sketchMoves": {
+            "colors": [
+              "#7a2e2c",
+              "#3f8e89",
+              "#2f726e"
+            ],
+            "parts": [
+              "hair-back",
+              "belt-lantern",
+              "boot",
+              "sole"
+            ],
+            "proportions": true,
+            "gait": [
+              "walk.cadence",
+              "walk.bounciness",
+              "turn.style"
+            ],
+            "world": {
+              "sceneColors": [
+                "#e8845a",
+                "#5f9c96"
+              ],
+              "changed": [
+                "weather",
+                "towers",
+                "render",
+                "music"
+              ]
+            }
+          }
+        }
+      },
+      "portraits": [],
+      "character": "runs/dry-run/qloo-on.json",
+      "music": {
+        "id": "red-moonlight-extended-mix-pokki-dj",
+        "title": "Red Moonlight ( Extended Mix )",
+        "artist": "Pokki DJ",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "source": "Jamendo",
+        "sourceUrl": "https://www.jamendo.com/track/1237336",
+        "artistUrl": "https://www.jamendo.com/artist/428294/Pokki_DJ_(2)",
+        "attribution": "\"Red Moonlight ( Extended Mix )\" by Pokki DJ is licensed under CC BY 3.0. To view a copy of this license, visit https://creativecommons.org/licenses/by/3.0/.",
+        "file": "music/red-moonlight-extended-mix-pokki-dj.mp3",
+        "genres": [
+          "dance",
+          "electronic",
+          "electropop"
+        ],
+        "tags": [
+          "energetic",
+          "guitar",
+          "happy",
+          "party",
+          "summer"
+        ],
+        "volume": 0.5
+      },
+      "measures": {
+        "height": 137.5,
+        "figureHeight": 137.5,
+        "headHeight": 63.5,
+        "headShare": 0.462,
+        "hipHeight": 42,
+        "legShare": 0.305,
+        "width": 60.5,
+        "aspect": 0.44,
+        "legLength": 35.1,
+        "armLength": 28.6,
+        "stride": {
+          "length": 63.6,
+          "legs": 1.81,
+          "clamped": false
+        },
+        "light": {
+          "color": "#6ff5cf",
+          "radius": 190,
+          "position": [
+            15,
+            -23
+          ]
+        },
+        "visibleColors": [
+          {
+            "hex": "#efc6a2",
+            "share": 0.2053
+          },
+          {
+            "hex": "#e2b43c",
+            "share": 0.1899
+          },
+          {
+            "hex": "#3f8e89",
+            "share": 0.1368
+          },
+          {
+            "hex": "#c08f3e",
+            "share": 0.0701
+          },
+          {
+            "hex": "#3a1d1c",
+            "share": 0.0636
+          },
+          {
+            "hex": "#7a2e2c",
+            "share": 0.051
+          },
+          {
+            "hex": "#7b5636",
+            "share": 0.0461
+          },
+          {
+            "hex": "#2c375a",
+            "share": 0.041
+          },
+          {
+            "hex": "#2f726e",
+            "share": 0.0379
+          },
+          {
+            "hex": "#8fe9d2",
+            "share": 0.0294
+          }
+        ],
+        "parts": 29,
+        "cloth": 1,
+        "effects": 4,
+        "warnings": [],
+        "keeper": {
+          "name": "Maren",
+          "figureHeight": 156,
+          "ratio": 0.88
+        }
+      },
+      "conformance": {
+        "score": 1,
+        "present": 10,
+        "partial": 0,
+        "missing": 0,
+        "total": 10,
+        "devices": [
+          {
+            "id": "dna1",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna2",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna3",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna4",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna5",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna6",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna7",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "scene1",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "render1",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "music1",
+            "status": "present",
+            "missing": []
+          }
+        ],
+        "limitation": "Checks that declared colours, part and cloth IDs, proportions, motion values, clip timings and tracks, effects, the light, the lines, the scene, the render style and the track literally occur in the saved character, and that imagery devices produced portraits that share colours with the figure. It does not measure visual quality, motion feel, likeness or player preference."
+      },
+      "divergence": {
+        "palette": 0.25,
+        "proportions": 1,
+        "elements": 1,
+        "motion": 0.8,
+        "score": 0.762,
+        "world": {
+          "palette": 0.583,
+          "weather": true,
+          "towers": true,
+          "render": true,
+          "music": true,
+          "score": 0.917,
+          "sketch": {
+            "scene": {
+              "sky": [
+                "#2b2338",
+                "#c9a98f"
+              ],
+              "palette": [
+                "#f4e6cf",
+                "#b9a593",
+                "#2f2a30",
+                "#6f7a58"
+              ],
+              "weather": "leaves",
+              "towers": "ruin"
+            },
+            "render": "watercolor",
+            "music": "peaceful-night-st-adam"
+          },
+          "character": {
+            "sky": [
+              "#13253a",
+              "#e8845a"
+            ],
+            "weather": "embers",
+            "towers": "pagoda",
+            "render": "ink",
+            "music": "red-moonlight-extended-mix-pokki-dj"
+          }
+        },
+        "combined": 0.816,
+        "colors": {
+          "character": [
+            "#efc6a2",
+            "#e2b43c",
+            "#3f8e89",
+            "#c08f3e",
+            "#3a1d1c",
+            "#7a2e2c",
+            "#7b5636",
+            "#2c375a"
+          ],
+          "new": [
+            "#3f8e89",
+            "#7a2e2c"
+          ]
+        },
+        "figure": {
+          "sketchHeight": 183,
+          "height": 137.5,
+          "sketchHeadShare": 0.24,
+          "headShare": 0.462
+        },
+        "planned": {
+          "elements": [
+            "hood",
+            "staff",
+            "scarf",
+            "cloak-tail"
+          ],
+          "kept": [],
+          "dropped": [
+            "hood",
+            "staff",
+            "scarf",
+            "cloak-tail"
+          ]
+        },
+        "gait": {
+          "moved": [
+            "walk.cadence",
+            "walk.bounciness",
+            "walk.armSwing",
+            "turn.style"
+          ]
+        },
+        "light": {
+          "sketch": "#ffb85c",
+          "character": "#6ff5cf",
+          "moved": true
+        },
+        "method": "Shares of the character's eight most visible colours at least CIE76 20 from every sketch colour, of the sketch's planned elements the character does not draw, and of the sketch's five gait choices that moved past their thresholds, with a proportion score that reaches 1 at twice the departure threshold; the score is their mean."
+      }
+    }
+  ],
+  "taste": {
+    "status": "ok",
+    "calls": 15,
+    "fixture": true,
+    "seeds": [
+      {
+        "name": "Hollow Knight",
+        "role": "audience",
+        "origin": "user-provided",
+        "resolution": "entity",
+        "entityId": "fixture:seed:hollow-knight",
+        "matchedName": "Hollow Knight",
+        "type": "urn:entity:videogame",
+        "score": 1,
+        "evidenceId": "Q001"
+      },
+      {
+        "name": "Spirited Away",
+        "role": "audience",
+        "origin": "user-provided",
+        "resolution": "entity",
+        "entityId": "fixture:seed:spirited-away",
+        "matchedName": "Spirited Away",
+        "type": "urn:entity:videogame",
+        "score": 1,
+        "evidenceId": "Q002"
+      },
+      {
+        "name": "Sigur Rós",
+        "role": "audience",
+        "origin": "user-provided",
+        "resolution": "entity",
+        "entityId": "fixture:seed:sigur-r-s",
+        "matchedName": "Sigur Rós",
+        "type": "urn:entity:videogame",
+        "score": 1,
+        "evidenceId": "Q003"
+      },
+      {
+        "name": "Nujabes",
+        "role": "audience",
+        "origin": "user-provided",
+        "resolution": "entity",
+        "entityId": "fixture:seed:nujabes",
+        "matchedName": "Nujabes",
+        "type": "urn:entity:videogame",
+        "score": 1,
+        "evidenceId": "Q004"
+      },
+      {
+        "name": "Paterson",
+        "role": "audience",
+        "origin": "user-provided",
+        "resolution": "entity",
+        "entityId": "fixture:seed:paterson",
+        "matchedName": "Paterson",
+        "type": "urn:entity:videogame",
+        "score": 1,
+        "evidenceId": "Q005"
+      }
+    ],
+    "results": [
+      {
+        "domain": "brand",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "Q006",
+        "count": 3
+      },
+      {
+        "domain": "movie",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "Q007",
+        "count": 3
+      },
+      {
+        "domain": "artist",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "Q008",
+        "count": 3
+      },
+      {
+        "domain": "book",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "Q009",
+        "count": 3
+      },
+      {
+        "domain": "tv_show",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "Q010",
+        "count": 3
+      },
+      {
+        "domain": "videogame",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "Q011",
+        "count": 3
+      },
+      {
+        "domain": "style",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "Q012",
+        "count": 3
+      },
+      {
+        "domain": "aesthetic",
+        "band": "core",
+        "status": "empty",
+        "evidenceId": "Q013",
+        "count": 0
+      },
+      {
+        "domain": "brand",
+        "band": "deep-cut",
+        "status": "ok",
+        "evidenceId": "Q014",
+        "count": 1
+      },
+      {
+        "domain": "movie",
+        "band": "deep-cut",
+        "status": "ok",
+        "evidenceId": "Q015",
+        "count": 1
+      },
+      {
+        "domain": "qualities",
+        "band": "derived",
+        "status": "ok",
+        "count": 9
+      },
+      {
+        "domain": "art_style",
+        "band": "derived",
+        "status": "ok",
+        "count": 2
+      }
+    ],
+    "limitations": [
+      "Fixture profile: no Qloo request was made.",
+      "aesthetic tags returned no tags."
+    ]
+  },
+  "comparison": {
+    "schemaVersion": "1.0",
+    "computedAt": "2026-10-06T00:43:37.128Z",
+    "distance": {
+      "overall": 0.601,
+      "character": 0.509,
+      "palette": 0.336,
+      "silhouette": 0.545,
+      "motion": 0.442,
+      "signature": 0.335,
+      "voice": 0.943,
+      "light": 1,
+      "world": 0.771,
+      "worldParts": {
+        "palette": 0.355,
+        "render": 1,
+        "weather": 1,
+        "music": 1,
+        "towers": 1,
+        "fog": 0.3
+      },
+      "method": "65% the character and 35% the moment. Character: visible palette CIE76 distance (25%), silhouette outline overlap and proportions (25%), gait, idle and turn parameters by their ranges (25%), signature clip timing and structure (10%), shared content words of the four lines (10%) and light colour (5%). Moment: scene colour CIE76 distance (30%), render style (25%), weather kind and density (15%), the music track (15%), the beacons' form (10%) and the mist (5%)."
+    },
+    "fingerprints": {
+      "baseline": {
+        "palette": [
+          {
+            "hex": "#d9d2c3",
+            "share": 0.5025
+          },
+          {
+            "hex": "#3b3a46",
+            "share": 0.144
+          },
+          {
+            "hex": "#5a4434",
+            "share": 0.0937
+          },
+          {
+            "hex": "#2c2420",
+            "share": 0.0692
+          },
+          {
+            "hex": "#c99a3b",
+            "share": 0.0466
+          },
+          {
+            "hex": "#242123",
+            "share": 0.0281
+          },
+          {
+            "hex": "#2e2f3c",
+            "share": 0.0217
+          },
+          {
+            "hex": "#8d8a80",
+            "share": 0.0208
+          }
+        ],
+        "silhouette": {
+          "figureHeight": 183.2,
+          "headShare": 0.236,
+          "legShare": 0.48,
+          "aspect": 0.29,
+          "mask": [
+            "000000000100010000001000",
+            "000000000011111100001000",
+            "000000000001111110001000",
+            "000000000011111110001000",
+            "000000000011111110001000",
+            "000000000011111110001000",
+            "000000000011111110001000",
+            "000000000011111100001000",
+            "000000000001111000001000",
+            "000000000011111000001000",
+            "000000011111111000001000",
+            "000011111111111000001000",
+            "001110001111111000001000",
+            "000000001111111100001000",
+            "000000001111111100011000",
+            "000000011111111111111000",
+            "000000011111111111111000",
+            "000000011111111000001000",
+            "000000011111111000001000",
+            "000000011111111000001000",
+            "000000011111111100001000",
+            "000000111111111100001000",
+            "000000111111111100001000",
+            "000000111111111000001000",
+            "000001111111111000001000",
+            "000001111111111100001000",
+            "000001111111111100001000",
+            "000001111111111100001000",
+            "000001111111111000000000",
+            "000000000111111000000000",
+            "000000000001111000000000",
+            "000000000001111000000000",
+            "000000000011111000000000",
+            "000000000011110000000000",
+            "000000000011111000000000",
+            "000000000011111110000000"
+          ]
+        },
+        "motion": {
+          "walk": {
+            "speed": 92,
+            "cadence": 1.7,
+            "stepHeight": 0.13,
+            "bob": 0.035,
+            "bounciness": 0.12,
+            "lean": 7,
+            "armSwing": 16,
+            "elbowBend": 22,
+            "hipSway": 3,
+            "headStabilize": 0.85,
+            "squash": 0.015,
+            "accel": 0.65
+          },
+          "idle": {
+            "breathRate": 9,
+            "breathDepth": 0.55,
+            "sway": 0.35,
+            "weightShift": 0.25,
+            "lookAround": 0.3,
+            "blinkInterval": 5.5,
+            "stance": 0.14
+          },
+          "turn": {
+            "style": "pivot",
+            "duration": 0.42
+          },
+          "stride": 1.35
+        },
+        "signature": {
+          "duration": 3.4,
+          "kindleAt": 2.1,
+          "kindleShare": 0.618,
+          "tracks": 6,
+          "root": true,
+          "squash": false,
+          "events": 1
+        },
+        "light": {
+          "color": "#ffb85c",
+          "radius": 230,
+          "intensity": 1,
+          "flicker": {
+            "speed": 6,
+            "amount": 0.18
+          }
+        },
+        "effects": [
+          "aura",
+          "burst",
+          "footstep"
+        ],
+        "lines": {
+          "arrive": "The wind smells of cold ash. Close now.",
+          "greet": "I will not turn back. Rest. I can carry it from here.",
+          "kindle": "Wake.",
+          "after": "The road is lit. Someone will walk it after me."
+        },
+        "world": {
+          "declared": true,
+          "colors": [
+            "#3a2c3c",
+            "#e8b787",
+            "#fff1d6",
+            "#d8b9a0",
+            "#3a3036",
+            "#8a8a52",
+            "#93b9ad",
+            "#6b7fa1",
+            "#cfc7b4",
+            "#79a49a",
+            "#9b6e5f",
+            "#5f6c54"
+          ],
+          "sky": [
+            "#3a2c3c",
+            "#e8b787"
+          ],
+          "weather": {
+            "kind": "leaves",
+            "density": 0.5
+          },
+          "towers": "ruin",
+          "fog": 0.45,
+          "render": "watercolor",
+          "music": "peaceful-night-st-adam"
+        }
+      },
+      "qloo": {
+        "palette": [
+          {
+            "hex": "#efc6a2",
+            "share": 0.2053
+          },
+          {
+            "hex": "#e2b43c",
+            "share": 0.1899
+          },
+          {
+            "hex": "#3f8e89",
+            "share": 0.1368
+          },
+          {
+            "hex": "#c08f3e",
+            "share": 0.0701
+          },
+          {
+            "hex": "#3a1d1c",
+            "share": 0.0636
+          },
+          {
+            "hex": "#7a2e2c",
+            "share": 0.051
+          },
+          {
+            "hex": "#7b5636",
+            "share": 0.0461
+          },
+          {
+            "hex": "#2c375a",
+            "share": 0.041
+          }
+        ],
+        "silhouette": {
+          "figureHeight": 137.5,
+          "headShare": 0.462,
+          "legShare": 0.305,
+          "aspect": 0.44,
+          "mask": [
+            "000000000110000000000000",
+            "000000000111000000000000",
+            "000000000111011110000000",
+            "000000000111111111100000",
+            "000000000111111111110000",
+            "000000000111111111110000",
+            "000000000111111111110000",
+            "000000001111111111111000",
+            "000000001111111111111000",
+            "000000001111111111111000",
+            "000000001111111111111000",
+            "000000001111111111111000",
+            "000000110111111111111000",
+            "000000110111111111110000",
+            "000000110111111111110000",
+            "000000110011111111000000",
+            "000000111101111110000000",
+            "000000111111111110000000",
+            "000000111111111110000000",
+            "000000111111111110000000",
+            "000001111111111111000000",
+            "000001111111111111000000",
+            "000001111111111111000000",
+            "000000111111111110000000",
+            "000000011111111110000000",
+            "000000000111111111000000",
+            "000000000001111111000000",
+            "000000000001111000000000",
+            "000000000001111110000000",
+            "000000000001111110000000",
+            "000000000001111110000000",
+            "000000000001111110000000",
+            "000000000111111000000000",
+            "000000000111111000000000",
+            "000000000111111110000000",
+            "000000000111111111000000"
+          ]
+        },
+        "motion": {
+          "walk": {
+            "speed": 105,
+            "cadence": 3.3,
+            "stepHeight": 0.32,
+            "bob": 0.1,
+            "bounciness": 0.85,
+            "lean": 5,
+            "armSwing": 52,
+            "elbowBend": 70,
+            "hipSway": 8,
+            "headStabilize": 0.3,
+            "squash": 0.12,
+            "accel": 0.18
+          },
+          "idle": {
+            "breathRate": 22,
+            "breathDepth": 0.75,
+            "sway": 0.6,
+            "weightShift": 0.8,
+            "lookAround": 0.9,
+            "blinkInterval": 2.6,
+            "stance": 0.22
+          },
+          "turn": {
+            "style": "squash",
+            "duration": 0.2
+          },
+          "stride": 1.81
+        },
+        "signature": {
+          "duration": 2.6,
+          "kindleAt": 1.35,
+          "kindleShare": 0.519,
+          "tracks": 9,
+          "root": true,
+          "squash": true,
+          "events": 2
+        },
+        "light": {
+          "color": "#6ff5cf",
+          "radius": 190,
+          "intensity": 1.05,
+          "flicker": {
+            "speed": 10,
+            "amount": 0.28
+          }
+        },
+        "effects": [
+          "aura",
+          "burst",
+          "burst",
+          "footstep"
+        ],
+        "lines": {
+          "arrive": "Cliffs! Nobody said there would be cliffs.",
+          "greet": "Turn back? I only just got here. Let's see if your old beacon still likes sparks.",
+          "kindle": "Up you get!",
+          "after": "Told you it would take. Right, who's next?"
+        },
+        "world": {
+          "declared": true,
+          "colors": [
+            "#13253a",
+            "#e8845a",
+            "#ffe2b0",
+            "#5f9c96",
+            "#1d2630",
+            "#3f7a5a",
+            "#f2a774",
+            "#e2b43c",
+            "#3f8e89",
+            "#d9604c",
+            "#7dffd8",
+            "#f2e6c9"
+          ],
+          "sky": [
+            "#13253a",
+            "#e8845a"
+          ],
+          "weather": {
+            "kind": "embers",
+            "density": 0.55
+          },
+          "towers": "pagoda",
+          "fog": 0.15,
+          "render": "ink",
+          "music": "red-moonlight-extended-mix-pokki-dj"
+        }
+      }
+    },
+    "labels": {
+      "baseline": "Qloo off",
+      "qloo": "Qloo on"
+    },
+    "world": {
+      "baseline": {
+        "declared": true,
+        "colors": [
+          "#3a2c3c",
+          "#e8b787",
+          "#fff1d6",
+          "#d8b9a0",
+          "#3a3036",
+          "#8a8a52",
+          "#93b9ad",
+          "#6b7fa1",
+          "#cfc7b4",
+          "#79a49a",
+          "#9b6e5f",
+          "#5f6c54"
+        ],
+        "sky": [
+          "#3a2c3c",
+          "#e8b787"
+        ],
+        "weather": {
+          "kind": "leaves",
+          "density": 0.5
+        },
+        "towers": "ruin",
+        "fog": 0.45,
+        "render": "watercolor",
+        "music": "peaceful-night-st-adam",
+        "renderFrom": {
+          "ref": "M28",
+          "name": "Watercolor",
+          "source": "model-assumption",
+          "domain": "art_style"
+        }
+      },
+      "qloo": {
+        "declared": true,
+        "colors": [
+          "#13253a",
+          "#e8845a",
+          "#ffe2b0",
+          "#5f9c96",
+          "#1d2630",
+          "#3f7a5a",
+          "#f2a774",
+          "#e2b43c",
+          "#3f8e89",
+          "#d9604c",
+          "#7dffd8",
+          "#f2e6c9"
+        ],
+        "sky": [
+          "#13253a",
+          "#e8845a"
+        ],
+        "weather": {
+          "kind": "embers",
+          "density": 0.55
+        },
+        "towers": "pagoda",
+        "fog": 0.15,
+        "render": "ink",
+        "music": "red-moonlight-extended-mix-pokki-dj",
+        "renderFrom": {
+          "ref": "art-style:hand-drawn",
+          "name": "Hand-Drawn",
+          "source": "qloo",
+          "domain": "art_style",
+          "works": 5,
+          "examples": [
+            "Fixture Film: Lantern Parade",
+            "Fixture Game: Pocket Quest",
+            "Fixture Game: Cinder Steps"
+          ],
+          "surprise": true
+        }
+      }
+    },
+    "worldHeadline": "Qloo on sets the moment in the ink and paper style with embers and pagoda beacons; Qloo off in the watercolour style with leaves and ruin beacons. The moment's distance is 0.771.",
+    "renderHeadline": "Qloo on's render style comes from the measured art style Hand-Drawn, which Qloo returned on Fixture Film: Lantern Parade, Fixture Game: Pocket Quest, Fixture Game: Cinder Steps; Qloo off's from its own predicted art style Watercolor.",
+    "qloo": {
+      "devices": 10,
+      "layers": [
+        "palette",
+        "silhouette",
+        "costume",
+        "motion",
+        "signature",
+        "light",
+        "voice",
+        "scene",
+        "render",
+        "music"
+      ],
+      "qlooAnchoredDevices": 10,
+      "surpriseAnchoredDevices": 10,
+      "modelAnchoredDevices": 0,
+      "qualityAnchoredDevices": 8,
+      "surpriseShare": 1,
+      "sketchMoves": {
+        "colors": [
+          "#7a2e2c",
+          "#3f8e89",
+          "#2f726e"
+        ],
+        "parts": [
+          "hair-back",
+          "belt-lantern",
+          "boot",
+          "sole"
+        ],
+        "proportions": true,
+        "gait": [
+          "walk.cadence",
+          "walk.bounciness",
+          "turn.style"
+        ],
+        "world": {
+          "sceneColors": [
+            "#e8845a",
+            "#5f9c96"
+          ],
+          "changed": [
+            "weather",
+            "towers",
+            "render",
+            "music"
+          ]
+        }
+      },
+      "conformance": 1,
+      "prediction": {
+        "measuredEntities": 20,
+        "predictedByModel": 2,
+        "knownFromBrief": 0,
+        "surprises": 18,
+        "surpriseShare": 0.9,
+        "predictions": 18,
+        "predictionsConfirmed": 2,
+        "measuredTags": 3,
+        "tagsPredicted": 1,
+        "tagSurprises": 2,
+        "tagPredictions": 6,
+        "measuredQualities": 9,
+        "qualitiesPredicted": 1,
+        "qualitySurprises": 8,
+        "qualityPredictions": 3,
+        "measuredArtStyles": 2,
+        "artStylesPredicted": 0,
+        "artStyleSurprises": 2,
+        "artStylePredictions": 3
+      },
+      "sketch": {
+        "palette": 0.25,
+        "proportions": 1,
+        "elements": 1,
+        "motion": 0.8,
+        "score": 0.762,
+        "world": {
+          "palette": 0.583,
+          "weather": true,
+          "towers": true,
+          "render": true,
+          "music": true,
+          "score": 0.917,
+          "sketch": {
+            "scene": {
+              "sky": [
+                "#2b2338",
+                "#c9a98f"
+              ],
+              "palette": [
+                "#f4e6cf",
+                "#b9a593",
+                "#2f2a30",
+                "#6f7a58"
+              ],
+              "weather": "leaves",
+              "towers": "ruin"
+            },
+            "render": "watercolor",
+            "music": "peaceful-night-st-adam"
+          },
+          "character": {
+            "sky": [
+              "#13253a",
+              "#e8845a"
+            ],
+            "weather": "embers",
+            "towers": "pagoda",
+            "render": "ink",
+            "music": "red-moonlight-extended-mix-pokki-dj"
+          }
+        },
+        "combined": 0.816,
+        "colors": {
+          "character": [
+            "#efc6a2",
+            "#e2b43c",
+            "#3f8e89",
+            "#c08f3e",
+            "#3a1d1c",
+            "#7a2e2c",
+            "#7b5636",
+            "#2c375a"
+          ],
+          "new": [
+            "#3f8e89",
+            "#7a2e2c"
+          ]
+        },
+        "figure": {
+          "sketchHeight": 183,
+          "height": 137.5,
+          "sketchHeadShare": 0.24,
+          "headShare": 0.462
+        },
+        "planned": {
+          "elements": [
+            "hood",
+            "staff",
+            "scarf",
+            "cloak-tail"
+          ],
+          "kept": [],
+          "dropped": [
+            "hood",
+            "staff",
+            "scarf",
+            "cloak-tail"
+          ]
+        },
+        "gait": {
+          "moved": [
+            "walk.cadence",
+            "walk.bounciness",
+            "walk.armSwing",
+            "turn.style"
+          ]
+        },
+        "light": {
+          "sketch": "#ffb85c",
+          "character": "#6ff5cf",
+          "moved": true
+        },
+        "method": "Shares of the character's eight most visible colours at least CIE76 20 from every sketch colour, of the sketch's planned elements the character does not draw, and of the sketch's five gait choices that moved past their thresholds, with a proportion score that reaches 1 at twice the departure threshold; the score is their mean."
+      }
+    },
+    "baseline": {
+      "devices": 10,
+      "layers": [
+        "palette",
+        "silhouette",
+        "costume",
+        "motion",
+        "signature",
+        "light",
+        "voice",
+        "scene",
+        "render",
+        "music"
+      ],
+      "qlooAnchoredDevices": 0,
+      "surpriseAnchoredDevices": 0,
+      "modelAnchoredDevices": 10,
+      "qualityAnchoredDevices": 8,
+      "surpriseShare": 0,
+      "sketchMoves": {
+        "colors": [],
+        "parts": [
+          "lantern-rope"
+        ],
+        "proportions": false,
+        "gait": [],
+        "world": {
+          "sceneColors": [],
+          "changed": []
+        }
+      },
+      "conformance": 1,
+      "sketch": {
+        "palette": 0.125,
+        "proportions": 0.04,
+        "elements": 0,
+        "motion": 0,
+        "score": 0.041,
+        "world": {
+          "palette": 0.333,
+          "weather": false,
+          "towers": false,
+          "render": false,
+          "music": false,
+          "score": 0.067,
+          "sketch": {
+            "scene": {
+              "sky": [
+                "#2b2338",
+                "#c9a98f"
+              ],
+              "palette": [
+                "#f4e6cf",
+                "#b9a593",
+                "#2f2a30",
+                "#6f7a58"
+              ],
+              "weather": "leaves",
+              "towers": "ruin"
+            },
+            "render": "watercolor",
+            "music": "peaceful-night-st-adam"
+          },
+          "character": {
+            "sky": [
+              "#3a2c3c",
+              "#e8b787"
+            ],
+            "weather": "leaves",
+            "towers": "ruin",
+            "render": "watercolor",
+            "music": "peaceful-night-st-adam"
+          }
+        },
+        "combined": 0.05,
+        "colors": {
+          "character": [
+            "#d9d2c3",
+            "#3b3a46",
+            "#5a4434",
+            "#2c2420",
+            "#c99a3b",
+            "#242123",
+            "#2e2f3c",
+            "#8d8a80"
+          ],
+          "new": [
+            "#8d8a80"
+          ]
+        },
+        "figure": {
+          "sketchHeight": 183,
+          "height": 183.2,
+          "sketchHeadShare": 0.24,
+          "headShare": 0.236
+        },
+        "planned": {
+          "elements": [
+            "hood",
+            "staff",
+            "scarf",
+            "cloak-tail"
+          ],
+          "kept": [
+            "hood",
+            "staff",
+            "scarf",
+            "cloak-tail"
+          ],
+          "dropped": []
+        },
+        "gait": {
+          "moved": []
+        },
+        "light": {
+          "sketch": "#ffb85c",
+          "character": "#ffb85c",
+          "moved": false
+        },
+        "method": "Shares of the character's eight most visible colours at least CIE76 20 from every sketch colour, of the sketch's planned elements the character does not draw, and of the sketch's five gait choices that moved past their thresholds, with a proportion score that reaches 1 at twice the departure threshold; the score is their mean."
+      }
+    },
+    "headline": "10 of 10 character devices in the Qloo on design rest on entities, tags or qualities the model did not predict.",
+    "qualityHeadline": "8 of 10 Qloo on devices translate measured qualities: the 9 look, mood and meaning tags the audience's works share, or its ranked style and aesthetic tags. Qloo off translated its own predicted qualities in 8 of 10.",
+    "detail": "The model predicted 2 of 20 measured entities before seeing them; 18 were new to it. Of 9 shared qualities, 8 were not in its prediction.",
+    "sketchHeadline": "Against each run's own frozen sketch, the Qloo on character moved 76% of its palette, proportions, planned elements and gait; the Qloo off character moved 4%. Its moment moved 92% of the sketched scene colours, weather, beacons, render style and track; Qloo off's moved 7%.",
+    "limitation": "One pair. Character distance is a heuristic over tokens, outline and motion parameters, not a perceptual or quality measure. Compare repeated Qloo-to-baseline distances with baseline-to-baseline distances before claiming the difference exceeds model variance. Departure from the sketch is required of surprise-anchored devices, so it shows what measured data changed under this protocol, not an unprompted effect."
+  },
+  "status": "completed",
+  "finishedAt": "2026-10-06T00:43:37.128Z"
+}

@@ -1,0 +1,1986 @@
+{
+  "schemaVersion": "1.0",
+  "mode": "qloo",
+  "startedAt": "2026-10-06T00:43:36.973Z",
+  "calls": 8,
+  "checks": 1,
+  "pipeline": {
+    "status": "constructed",
+    "predictedAt": "2026-10-06T00:43:36.993Z",
+    "revealedAt": "2026-10-06T00:43:36.995Z",
+    "specifiedAt": "2026-10-06T00:43:37.019Z",
+    "constructionStartedAt": "2026-10-06T00:43:37.027Z"
+  },
+  "assumption": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Fixture prediction for the dry run: players who like slow, wistful exploration and handmade worlds.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "videogame",
+      "style",
+      "aesthetic",
+      "qualities",
+      "art_style"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Fixture predicted brand one"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Fixture predicted brand two"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Fixture predicted brand three"
+      },
+      {
+        "id": "M04",
+        "domain": "movie",
+        "name": "Fixture predicted film one"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "Fixture predicted film two"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Fixture Film: Mint Harbour"
+      },
+      {
+        "id": "M07",
+        "domain": "artist",
+        "name": "Fixture predicted artist one"
+      },
+      {
+        "id": "M08",
+        "domain": "artist",
+        "name": "Fixture predicted artist two"
+      },
+      {
+        "id": "M09",
+        "domain": "artist",
+        "name": "Fixture predicted artist three"
+      },
+      {
+        "id": "M10",
+        "domain": "book",
+        "name": "Fixture predicted book one"
+      },
+      {
+        "id": "M11",
+        "domain": "book",
+        "name": "Fixture predicted book two"
+      },
+      {
+        "id": "M12",
+        "domain": "book",
+        "name": "Fixture Book: The Quiet Mile"
+      },
+      {
+        "id": "M13",
+        "domain": "tv_show",
+        "name": "Fixture predicted show one"
+      },
+      {
+        "id": "M14",
+        "domain": "tv_show",
+        "name": "Fixture predicted show two"
+      },
+      {
+        "id": "M15",
+        "domain": "tv_show",
+        "name": "Fixture predicted show three"
+      },
+      {
+        "id": "M16",
+        "domain": "videogame",
+        "name": "Fixture predicted game one"
+      },
+      {
+        "id": "M17",
+        "domain": "videogame",
+        "name": "Fixture predicted game two"
+      },
+      {
+        "id": "M18",
+        "domain": "videogame",
+        "name": "Fixture predicted game three"
+      },
+      {
+        "id": "M19",
+        "domain": "style",
+        "name": "Contemplative"
+      },
+      {
+        "id": "M20",
+        "domain": "style",
+        "name": "Slow"
+      },
+      {
+        "id": "M21",
+        "domain": "style",
+        "name": "Wistful"
+      },
+      {
+        "id": "M22",
+        "domain": "aesthetic",
+        "name": "Weathered"
+      },
+      {
+        "id": "M23",
+        "domain": "aesthetic",
+        "name": "Hooded Shapes"
+      },
+      {
+        "id": "M24",
+        "domain": "aesthetic",
+        "name": "Muted Earth"
+      },
+      {
+        "id": "M25",
+        "domain": "qualities",
+        "name": "Solitary"
+      },
+      {
+        "id": "M26",
+        "domain": "qualities",
+        "name": "Nostalgic"
+      },
+      {
+        "id": "M27",
+        "domain": "qualities",
+        "name": "Curious"
+      },
+      {
+        "id": "M28",
+        "domain": "art_style",
+        "name": "Watercolor"
+      },
+      {
+        "id": "M29",
+        "domain": "art_style",
+        "name": "Painterly"
+      },
+      {
+        "id": "M30",
+        "domain": "art_style",
+        "name": "Soft pastel"
+      }
+    ],
+    "sourceType": "model-assumption",
+    "characterSketch": {
+      "summary": "A tall, hooded pilgrim in pale ash cloth who carries a lantern high on a crooked staff and walks slowly.",
+      "palette": [
+        "#d9d2c3",
+        "#c99a3b",
+        "#3b3a46",
+        "#5a4434"
+      ],
+      "height": 183,
+      "headShare": 0.24,
+      "elements": [
+        "hood",
+        "staff",
+        "scarf",
+        "cloak-tail"
+      ],
+      "gait": {
+        "cadence": 1.7,
+        "bounciness": 0.12,
+        "lean": 7,
+        "armSwing": 16,
+        "turnStyle": "pivot"
+      },
+      "light": "#ffb85c",
+      "voice": "quiet, sparse and weathered",
+      "motifs": [
+        "ash cloth",
+        "a lantern held high"
+      ],
+      "scene": {
+        "sky": [
+          "#2b2338",
+          "#c9a98f"
+        ],
+        "palette": [
+          "#f4e6cf",
+          "#b9a593",
+          "#2f2a30",
+          "#6f7a58"
+        ],
+        "weather": "leaves",
+        "towers": "ruin"
+      },
+      "render": "watercolor",
+      "music": "peaceful-night-st-adam"
+    }
+  },
+  "input": {
+    "schemaVersion": "1.0",
+    "source": "qloo-profile",
+    "entities": [
+      {
+        "ref": "fixture:brand:fixture-tinker-works",
+        "entityId": "fixture:brand:fixture-tinker-works",
+        "name": "Fixture Tinker Works",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "Q006",
+        "type": "urn:entity:brand",
+        "affinity": 0.91,
+        "popularity": 0.42,
+        "tags": [
+          "Colorful",
+          "Craftsmanship"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:brand:fixture-puffer-company",
+        "entityId": "fixture:brand:fixture-puffer-company",
+        "name": "Fixture Puffer Company",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "Q006",
+        "type": "urn:entity:brand",
+        "affinity": 0.84,
+        "popularity": 0.51,
+        "tags": [
+          "Quilted",
+          "Outdoors"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:brand:fixture-soot-and-brass",
+        "entityId": "fixture:brand:fixture-soot-and-brass",
+        "name": "Fixture Soot and Brass",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "Q006",
+        "type": "urn:entity:brand",
+        "affinity": 0.77,
+        "popularity": 0.3,
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:movie:fixture-film-lantern-parade",
+        "entityId": "fixture:movie:fixture-film-lantern-parade",
+        "name": "Fixture Film: Lantern Parade",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "Q007",
+        "type": "urn:entity:movie",
+        "affinity": 0.93,
+        "popularity": 0.55,
+        "tags": [
+          "Hand-Drawn",
+          "Playful",
+          "Belonging"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:movie:fixture-film-the-chimney-sweep",
+        "entityId": "fixture:movie:fixture-film-the-chimney-sweep",
+        "name": "Fixture Film: The Chimney Sweep",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "Q007",
+        "type": "urn:entity:movie",
+        "affinity": 0.81,
+        "popularity": 0.38,
+        "tags": [
+          "Colorful",
+          "Whimsical",
+          "Curiosity"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:movie:fixture-film-mint-harbour",
+        "entityId": "fixture:movie:fixture-film-mint-harbour",
+        "name": "Fixture Film: Mint Harbour",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "Q007",
+        "type": "urn:entity:movie",
+        "affinity": 0.72,
+        "popularity": 0.33,
+        "tags": [
+          "Gentle",
+          "Belonging"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": true,
+        "matchedPrediction": "M06",
+        "surprise": false
+      },
+      {
+        "ref": "fixture:artist:fixture-artist-brass-choir",
+        "entityId": "fixture:artist:fixture-artist-brass-choir",
+        "name": "Fixture Artist: Brass Choir",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "Q008",
+        "type": "urn:entity:artist",
+        "affinity": 0.88,
+        "popularity": 0.47,
+        "tags": [
+          "Upbeat",
+          "Playful",
+          "Energetic"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:artist:fixture-artist-teal-hour",
+        "entityId": "fixture:artist:fixture-artist-teal-hour",
+        "name": "Fixture Artist: Teal Hour",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "Q008",
+        "type": "urn:entity:artist",
+        "affinity": 0.8,
+        "popularity": 0.44,
+        "tags": [
+          "Upbeat",
+          "Daydreamers"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:artist:fixture-artist-spark-units",
+        "entityId": "fixture:artist:fixture-artist-spark-units",
+        "name": "Fixture Artist: Spark Units",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "Q008",
+        "type": "urn:entity:artist",
+        "affinity": 0.74,
+        "popularity": 0.2,
+        "tags": [
+          "Chiptune"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:book:fixture-book-pocket-engines",
+        "entityId": "fixture:book:fixture-book-pocket-engines",
+        "name": "Fixture Book: Pocket Engines",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "Q009",
+        "type": "urn:entity:book",
+        "affinity": 0.83,
+        "popularity": 0.36,
+        "tags": [
+          "Curiosity",
+          "Craftsmanship"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:book:fixture-book-small-roads",
+        "entityId": "fixture:book:fixture-book-small-roads",
+        "name": "Fixture Book: Small Roads",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "Q009",
+        "type": "urn:entity:book",
+        "affinity": 0.7,
+        "popularity": 0.29,
+        "tags": [
+          "Gentle",
+          "Belonging"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:book:fixture-book-the-quiet-mile",
+        "entityId": "fixture:book:fixture-book-the-quiet-mile",
+        "name": "Fixture Book: The Quiet Mile",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "Q009",
+        "type": "urn:entity:book",
+        "affinity": 0.66,
+        "popularity": 0.31,
+        "tags": [
+          "Melancholic"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": true,
+        "matchedPrediction": "M12",
+        "surprise": false
+      },
+      {
+        "ref": "fixture:tv_show:fixture-show-workshop-days",
+        "entityId": "fixture:tv_show:fixture-show-workshop-days",
+        "name": "Fixture Show: Workshop Days",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "Q010",
+        "type": "urn:entity:tv_show",
+        "affinity": 0.79,
+        "popularity": 0.4,
+        "tags": [
+          "Colorful",
+          "Craftsmanship"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:tv_show:fixture-show-harbour-lights",
+        "entityId": "fixture:tv_show:fixture-show-harbour-lights",
+        "name": "Fixture Show: Harbour Lights",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "Q010",
+        "type": "urn:entity:tv_show",
+        "affinity": 0.68,
+        "popularity": 0.37,
+        "tags": [
+          "Belonging"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:tv_show:fixture-show-tin-crown",
+        "entityId": "fixture:tv_show:fixture-show-tin-crown",
+        "name": "Fixture Show: Tin Crown",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "Q010",
+        "type": "urn:entity:tv_show",
+        "affinity": 0.65,
+        "popularity": 0.35,
+        "tags": [
+          "Hand-Drawn",
+          "Whimsical"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:videogame:fixture-game-pocket-quest",
+        "entityId": "fixture:videogame:fixture-game-pocket-quest",
+        "name": "Fixture Game: Pocket Quest",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "Q011",
+        "type": "urn:entity:videogame",
+        "affinity": 0.86,
+        "popularity": 0.5,
+        "tags": [
+          "Hand-Drawn",
+          "Playful",
+          "Energetic"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:videogame:fixture-game-cinder-steps",
+        "entityId": "fixture:videogame:fixture-game-cinder-steps",
+        "name": "Fixture Game: Cinder Steps",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "Q011",
+        "type": "urn:entity:videogame",
+        "affinity": 0.73,
+        "popularity": 0.32,
+        "tags": [
+          "Hand-Drawn",
+          "Curiosity"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:videogame:fixture-game-paper-lamps",
+        "entityId": "fixture:videogame:fixture-game-paper-lamps",
+        "name": "Fixture Game: Paper Lamps",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "Q011",
+        "type": "urn:entity:videogame",
+        "affinity": 0.71,
+        "popularity": 0.28,
+        "tags": [
+          "Colorful",
+          "Pixel Art",
+          "Gentle"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:style:qloo:fixture_bouncy",
+        "entityId": "urn:tag:style:qloo:fixture_bouncy",
+        "name": "Bouncy",
+        "domain": "style",
+        "band": "core",
+        "evidenceId": "Q012",
+        "type": "urn:tag:style:qloo",
+        "affinity": 0.92,
+        "tags": [
+          "Bouncy"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:style:qloo:fixture_lively",
+        "entityId": "urn:tag:style:qloo:fixture_lively",
+        "name": "Lively",
+        "domain": "style",
+        "band": "core",
+        "evidenceId": "Q012",
+        "type": "urn:tag:style:qloo",
+        "affinity": 0.89,
+        "tags": [
+          "Lively"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:style:qloo:fixture_contemplative",
+        "entityId": "urn:tag:style:qloo:fixture_contemplative",
+        "name": "Contemplative",
+        "domain": "style",
+        "band": "core",
+        "evidenceId": "Q012",
+        "type": "urn:tag:style:qloo",
+        "affinity": 0.7,
+        "tags": [
+          "Contemplative"
+        ],
+        "source": "qloo",
+        "predictedByModel": true,
+        "matchedPrediction": "M19",
+        "surprise": false
+      },
+      {
+        "ref": "fixture:brand:fixture-kite-makers",
+        "entityId": "fixture:brand:fixture-kite-makers",
+        "name": "Fixture Kite Makers",
+        "domain": "brand",
+        "band": "deep-cut",
+        "evidenceId": "Q014",
+        "type": "urn:entity:brand",
+        "affinity": 0.62,
+        "popularity": 0.12,
+        "tags": [
+          "Colorful",
+          "Craftsmanship"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "fixture:movie:fixture-film-small-hours",
+        "entityId": "fixture:movie:fixture-film-small-hours",
+        "name": "Fixture Film: Small Hours",
+        "domain": "movie",
+        "band": "deep-cut",
+        "evidenceId": "Q015",
+        "type": "urn:entity:movie",
+        "affinity": 0.6,
+        "popularity": 0.1,
+        "tags": [
+          "Hand-Drawn",
+          "Whimsical"
+        ],
+        "description": "Fixture entity for the dry run; not a Qloo result.",
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "quality:look:colorful",
+        "name": "Colorful",
+        "domain": "qualities",
+        "band": "derived",
+        "family": "look",
+        "count": 5,
+        "domains": [
+          "brand",
+          "movie",
+          "tv_show",
+          "videogame"
+        ],
+        "score": 15.36,
+        "affinity": 0.768,
+        "examples": [
+          "Fixture Tinker Works",
+          "Fixture Film: The Chimney Sweep",
+          "Fixture Show: Workshop Days"
+        ],
+        "refs": [
+          "fixture:brand:fixture-tinker-works",
+          "fixture:movie:fixture-film-the-chimney-sweep",
+          "fixture:tv_show:fixture-show-workshop-days",
+          "fixture:videogame:fixture-game-paper-lamps",
+          "fixture:brand:fixture-kite-makers"
+        ],
+        "evidenceIds": [
+          "Q006",
+          "Q007",
+          "Q010",
+          "Q011",
+          "Q014"
+        ],
+        "tags": [
+          "Colorful"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "quality:mood:playful",
+        "name": "Playful",
+        "domain": "qualities",
+        "band": "derived",
+        "family": "mood",
+        "count": 3,
+        "domains": [
+          "movie",
+          "artist",
+          "videogame"
+        ],
+        "score": 8.01,
+        "affinity": 0.89,
+        "examples": [
+          "Fixture Film: Lantern Parade",
+          "Fixture Artist: Brass Choir",
+          "Fixture Game: Pocket Quest"
+        ],
+        "refs": [
+          "fixture:movie:fixture-film-lantern-parade",
+          "fixture:artist:fixture-artist-brass-choir",
+          "fixture:videogame:fixture-game-pocket-quest"
+        ],
+        "evidenceIds": [
+          "Q007",
+          "Q008",
+          "Q011"
+        ],
+        "tags": [
+          "Playful"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "quality:mood:gentle",
+        "name": "Gentle",
+        "domain": "qualities",
+        "band": "derived",
+        "family": "mood",
+        "count": 3,
+        "domains": [
+          "movie",
+          "videogame",
+          "book"
+        ],
+        "score": 6.39,
+        "affinity": 0.71,
+        "examples": [
+          "Fixture Film: Mint Harbour",
+          "Fixture Game: Paper Lamps",
+          "Fixture Book: Small Roads"
+        ],
+        "refs": [
+          "fixture:movie:fixture-film-mint-harbour",
+          "fixture:videogame:fixture-game-paper-lamps",
+          "fixture:book:fixture-book-small-roads"
+        ],
+        "evidenceIds": [
+          "Q007",
+          "Q011",
+          "Q009"
+        ],
+        "tags": [
+          "Gentle"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "quality:mood:whimsical",
+        "name": "Whimsical",
+        "domain": "qualities",
+        "band": "derived",
+        "family": "mood",
+        "count": 3,
+        "domains": [
+          "movie",
+          "tv_show"
+        ],
+        "score": 4.12,
+        "affinity": 0.6867,
+        "examples": [
+          "Fixture Film: The Chimney Sweep",
+          "Fixture Show: Tin Crown",
+          "Fixture Film: Small Hours"
+        ],
+        "refs": [
+          "fixture:movie:fixture-film-the-chimney-sweep",
+          "fixture:tv_show:fixture-show-tin-crown",
+          "fixture:movie:fixture-film-small-hours"
+        ],
+        "evidenceIds": [
+          "Q007",
+          "Q010",
+          "Q015"
+        ],
+        "tags": [
+          "Whimsical"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "quality:mood:energetic",
+        "name": "Energetic",
+        "domain": "qualities",
+        "band": "derived",
+        "family": "mood",
+        "count": 2,
+        "domains": [
+          "artist",
+          "videogame"
+        ],
+        "score": 3.48,
+        "affinity": 0.87,
+        "examples": [
+          "Fixture Artist: Brass Choir",
+          "Fixture Game: Pocket Quest"
+        ],
+        "refs": [
+          "fixture:artist:fixture-artist-brass-choir",
+          "fixture:videogame:fixture-game-pocket-quest"
+        ],
+        "evidenceIds": [
+          "Q008",
+          "Q011"
+        ],
+        "tags": [
+          "Energetic"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "quality:mood:upbeat",
+        "name": "Upbeat",
+        "domain": "qualities",
+        "band": "derived",
+        "family": "mood",
+        "count": 2,
+        "domains": [
+          "artist"
+        ],
+        "score": 1.68,
+        "affinity": 0.84,
+        "examples": [
+          "Fixture Artist: Brass Choir",
+          "Fixture Artist: Teal Hour"
+        ],
+        "refs": [
+          "fixture:artist:fixture-artist-brass-choir",
+          "fixture:artist:fixture-artist-teal-hour"
+        ],
+        "evidenceIds": [
+          "Q008"
+        ],
+        "tags": [
+          "Upbeat"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "quality:meaning:craftsmanship",
+        "name": "Craftsmanship",
+        "domain": "qualities",
+        "band": "derived",
+        "family": "meaning",
+        "count": 4,
+        "domains": [
+          "brand",
+          "book",
+          "tv_show"
+        ],
+        "score": 9.45,
+        "affinity": 0.7875,
+        "examples": [
+          "Fixture Tinker Works",
+          "Fixture Book: Pocket Engines",
+          "Fixture Show: Workshop Days"
+        ],
+        "refs": [
+          "fixture:brand:fixture-tinker-works",
+          "fixture:book:fixture-book-pocket-engines",
+          "fixture:tv_show:fixture-show-workshop-days",
+          "fixture:brand:fixture-kite-makers"
+        ],
+        "evidenceIds": [
+          "Q006",
+          "Q009",
+          "Q010",
+          "Q014"
+        ],
+        "tags": [
+          "Craftsmanship"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "quality:meaning:belonging",
+        "name": "Belonging",
+        "domain": "qualities",
+        "band": "derived",
+        "family": "meaning",
+        "count": 4,
+        "domains": [
+          "movie",
+          "book",
+          "tv_show"
+        ],
+        "score": 9.09,
+        "affinity": 0.7575,
+        "examples": [
+          "Fixture Film: Lantern Parade",
+          "Fixture Film: Mint Harbour",
+          "Fixture Book: Small Roads"
+        ],
+        "refs": [
+          "fixture:movie:fixture-film-lantern-parade",
+          "fixture:movie:fixture-film-mint-harbour",
+          "fixture:book:fixture-book-small-roads",
+          "fixture:tv_show:fixture-show-harbour-lights"
+        ],
+        "evidenceIds": [
+          "Q007",
+          "Q009",
+          "Q010"
+        ],
+        "tags": [
+          "Belonging"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "quality:meaning:curiosity",
+        "name": "Curiosity",
+        "domain": "qualities",
+        "band": "derived",
+        "family": "meaning",
+        "count": 3,
+        "domains": [
+          "book",
+          "movie",
+          "videogame"
+        ],
+        "score": 7.11,
+        "affinity": 0.79,
+        "examples": [
+          "Fixture Book: Pocket Engines",
+          "Fixture Film: The Chimney Sweep",
+          "Fixture Game: Cinder Steps"
+        ],
+        "refs": [
+          "fixture:book:fixture-book-pocket-engines",
+          "fixture:movie:fixture-film-the-chimney-sweep",
+          "fixture:videogame:fixture-game-cinder-steps"
+        ],
+        "evidenceIds": [
+          "Q009",
+          "Q007",
+          "Q011"
+        ],
+        "tags": [
+          "Curiosity"
+        ],
+        "source": "qloo",
+        "predictedByModel": true,
+        "matchedPrediction": "M27",
+        "surprise": false
+      },
+      {
+        "ref": "art-style:hand-drawn",
+        "name": "Hand-Drawn",
+        "domain": "art_style",
+        "band": "derived",
+        "count": 5,
+        "domains": [
+          "movie",
+          "videogame",
+          "tv_show"
+        ],
+        "score": 11.31,
+        "affinity": 0.754,
+        "examples": [
+          "Fixture Film: Lantern Parade",
+          "Fixture Game: Pocket Quest",
+          "Fixture Game: Cinder Steps"
+        ],
+        "refs": [
+          "fixture:movie:fixture-film-lantern-parade",
+          "fixture:videogame:fixture-game-pocket-quest",
+          "fixture:videogame:fixture-game-cinder-steps",
+          "fixture:tv_show:fixture-show-tin-crown",
+          "fixture:movie:fixture-film-small-hours"
+        ],
+        "evidenceIds": [
+          "Q007",
+          "Q011",
+          "Q010",
+          "Q015"
+        ],
+        "tags": [
+          "Hand-Drawn"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true,
+        "preset": "ink"
+      },
+      {
+        "ref": "art-style:pixel-art",
+        "name": "Pixel Art",
+        "domain": "art_style",
+        "band": "derived",
+        "count": 1,
+        "domains": [
+          "videogame"
+        ],
+        "score": 0.71,
+        "affinity": 0.71,
+        "examples": [
+          "Fixture Game: Paper Lamps"
+        ],
+        "refs": [
+          "fixture:videogame:fixture-game-paper-lamps"
+        ],
+        "evidenceIds": [
+          "Q011"
+        ],
+        "tags": [
+          "Pixel Art"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true,
+        "preset": "pixel"
+      },
+      {
+        "ref": "M01",
+        "name": "Fixture predicted brand one",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M02",
+        "name": "Fixture predicted brand two",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M03",
+        "name": "Fixture predicted brand three",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M04",
+        "name": "Fixture predicted film one",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M05",
+        "name": "Fixture predicted film two",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M06",
+        "name": "Fixture Film: Mint Harbour",
+        "domain": "movie",
+        "source": "model-assumption",
+        "confirmedBy": "fixture:movie:fixture-film-mint-harbour",
+        "confirmedAffinity": 0.72
+      },
+      {
+        "ref": "M07",
+        "name": "Fixture predicted artist one",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M08",
+        "name": "Fixture predicted artist two",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M09",
+        "name": "Fixture predicted artist three",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M10",
+        "name": "Fixture predicted book one",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M11",
+        "name": "Fixture predicted book two",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M12",
+        "name": "Fixture Book: The Quiet Mile",
+        "domain": "book",
+        "source": "model-assumption",
+        "confirmedBy": "fixture:book:fixture-book-the-quiet-mile",
+        "confirmedAffinity": 0.66
+      },
+      {
+        "ref": "M13",
+        "name": "Fixture predicted show one",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M14",
+        "name": "Fixture predicted show two",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M15",
+        "name": "Fixture predicted show three",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M16",
+        "name": "Fixture predicted game one",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M17",
+        "name": "Fixture predicted game two",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M18",
+        "name": "Fixture predicted game three",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M19",
+        "name": "Contemplative",
+        "domain": "style",
+        "source": "model-assumption",
+        "confirmedBy": "urn:tag:style:qloo:fixture_contemplative",
+        "confirmedAffinity": 0.7
+      },
+      {
+        "ref": "M20",
+        "name": "Slow",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M21",
+        "name": "Wistful",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M22",
+        "name": "Weathered",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M23",
+        "name": "Hooded Shapes",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M24",
+        "name": "Muted Earth",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M25",
+        "name": "Solitary",
+        "domain": "qualities",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M26",
+        "name": "Nostalgic",
+        "domain": "qualities",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M27",
+        "name": "Curious",
+        "domain": "qualities",
+        "source": "model-assumption",
+        "confirmedBy": "quality:meaning:curiosity",
+        "confirmedAffinity": 0.79
+      },
+      {
+        "ref": "M28",
+        "name": "Watercolor",
+        "domain": "art_style",
+        "source": "model-assumption",
+        "preset": "watercolor"
+      },
+      {
+        "ref": "M29",
+        "name": "Painterly",
+        "domain": "art_style",
+        "source": "model-assumption",
+        "preset": "watercolor"
+      },
+      {
+        "ref": "M30",
+        "name": "Soft pastel",
+        "domain": "art_style",
+        "source": "model-assumption",
+        "preset": "watercolor"
+      }
+    ],
+    "requiredAnchors": [
+      "quality:look:colorful",
+      "quality:mood:playful",
+      "quality:meaning:craftsmanship",
+      "fixture:videogame:fixture-game-paper-lamps",
+      "fixture:movie:fixture-film-the-chimney-sweep",
+      "fixture:brand:fixture-tinker-works",
+      "art-style:hand-drawn"
+    ],
+    "metrics": {
+      "measuredEntities": 20,
+      "predictedByModel": 2,
+      "knownFromBrief": 0,
+      "surprises": 18,
+      "surpriseShare": 0.9,
+      "predictions": 18,
+      "predictionsConfirmed": 2,
+      "measuredTags": 3,
+      "tagsPredicted": 1,
+      "tagSurprises": 2,
+      "tagPredictions": 6,
+      "measuredQualities": 9,
+      "qualitiesPredicted": 1,
+      "qualitySurprises": 8,
+      "qualityPredictions": 3,
+      "measuredArtStyles": 2,
+      "artStylesPredicted": 0,
+      "artStyleSurprises": 2,
+      "artStylePredictions": 3
+    },
+    "seeds": [
+      {
+        "name": "Hollow Knight",
+        "role": "audience",
+        "resolution": "entity",
+        "matchedName": "Hollow Knight"
+      },
+      {
+        "name": "Spirited Away",
+        "role": "audience",
+        "resolution": "entity",
+        "matchedName": "Spirited Away"
+      },
+      {
+        "name": "Sigur Rós",
+        "role": "audience",
+        "resolution": "entity",
+        "matchedName": "Sigur Rós"
+      },
+      {
+        "name": "Nujabes",
+        "role": "audience",
+        "resolution": "entity",
+        "matchedName": "Nujabes"
+      },
+      {
+        "name": "Paterson",
+        "role": "audience",
+        "resolution": "entity",
+        "matchedName": "Paterson"
+      }
+    ],
+    "signature": [
+      {
+        "name": "Colorful",
+        "count": 5,
+        "weight": 3.84
+      },
+      {
+        "name": "Hand-Drawn",
+        "count": 5,
+        "weight": 3.77
+      },
+      {
+        "name": "Craftsmanship",
+        "count": 4,
+        "weight": 3.15
+      },
+      {
+        "name": "Belonging",
+        "count": 4,
+        "weight": 3.03
+      },
+      {
+        "name": "Playful",
+        "count": 3,
+        "weight": 2.67
+      },
+      {
+        "name": "Curiosity",
+        "count": 3,
+        "weight": 2.37
+      },
+      {
+        "name": "Gentle",
+        "count": 3,
+        "weight": 2.13
+      },
+      {
+        "name": "Whimsical",
+        "count": 3,
+        "weight": 2.06
+      },
+      {
+        "name": "Energetic",
+        "count": 2,
+        "weight": 1.74
+      },
+      {
+        "name": "Upbeat",
+        "count": 2,
+        "weight": 1.68
+      }
+    ],
+    "limitations": [
+      "Fixture profile: no Qloo request was made.",
+      "aesthetic tags returned no tags."
+    ],
+    "renderStyles": [
+      {
+        "preset": "ink",
+        "ref": "art-style:hand-drawn",
+        "name": "Hand-Drawn",
+        "score": 11.31,
+        "works": 5,
+        "examples": [
+          "Fixture Film: Lantern Parade",
+          "Fixture Game: Pocket Quest",
+          "Fixture Game: Cinder Steps"
+        ]
+      },
+      {
+        "preset": "pixel",
+        "ref": "art-style:pixel-art",
+        "name": "Pixel Art",
+        "score": 0.71,
+        "works": 1,
+        "examples": [
+          "Fixture Game: Paper Lamps"
+        ]
+      }
+    ]
+  },
+  "dna": {
+    "schemaVersion": "1.0",
+    "thesis": "Fixture thesis for the dry run: A small, round-faced lamplighter in a mustard puffer jacket, teal beanie and brass goggles, with a soot-capped chimney on the backpack and a mint-green lantern swinging from the belt.",
+    "devices": [
+      {
+        "id": "dna1",
+        "layer": "palette",
+        "device": "Fixture palette",
+        "anchors": [
+          "quality:look:colorful"
+        ],
+        "qualities": [
+          "Colorful"
+        ],
+        "translation": "Fixture translation for the dry run: fixture palette.",
+        "tokens": {
+          "colors": [
+            "#7a2e2c",
+            "#3f8e89",
+            "#2f726e"
+          ],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [
+            "#7a2e2c",
+            "#3f8e89",
+            "#2f726e"
+          ],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna2",
+        "layer": "silhouette",
+        "device": "Fixture silhouette",
+        "anchors": [
+          "quality:mood:playful"
+        ],
+        "qualities": [
+          "Playful"
+        ],
+        "translation": "Fixture translation for the dry run: fixture silhouette.",
+        "tokens": {
+          "colors": [],
+          "parts": [
+            "hair-back"
+          ],
+          "proportions": {
+            "height": 137.5,
+            "headShare": 0.462
+          },
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [
+            "hair-back"
+          ],
+          "proportions": {
+            "height": 0.249,
+            "headShare": 0.222
+          },
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna3",
+        "layer": "costume",
+        "device": "Fixture costume",
+        "anchors": [
+          "quality:look:colorful",
+          "quality:meaning:craftsmanship"
+        ],
+        "qualities": [
+          "Colorful",
+          "Craftsmanship"
+        ],
+        "translation": "Fixture translation for the dry run: fixture costume.",
+        "tokens": {
+          "colors": [],
+          "parts": [
+            "belt-lantern",
+            "boot",
+            "sole"
+          ],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [
+            "belt-lantern",
+            "boot",
+            "sole"
+          ],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna4",
+        "layer": "motion",
+        "device": "Fixture gait",
+        "anchors": [
+          "urn:tag:style:qloo:fixture_bouncy",
+          "fixture:videogame:fixture-game-paper-lamps"
+        ],
+        "qualities": [
+          "Bouncy",
+          "Colorful"
+        ],
+        "translation": "Fixture translation for the dry run: fixture gait.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [
+            {
+              "param": "walk.cadence",
+              "value": 3.3
+            },
+            {
+              "param": "walk.bounciness",
+              "value": 0.85
+            },
+            {
+              "param": "turn.style",
+              "value": "squash"
+            }
+          ],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [
+            {
+              "param": "walk.cadence",
+              "from": 1.7,
+              "to": 3.3
+            },
+            {
+              "param": "walk.bounciness",
+              "from": 0.12,
+              "to": 0.85
+            },
+            {
+              "param": "turn.style",
+              "from": "pivot",
+              "to": "squash"
+            }
+          ],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna5",
+        "layer": "signature",
+        "device": "Fixture kindling move",
+        "anchors": [
+          "fixture:movie:fixture-film-the-chimney-sweep"
+        ],
+        "qualities": [
+          "Colorful",
+          "Whimsical"
+        ],
+        "translation": "Fixture translation for the dry run: fixture kindling move.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [
+            {
+              "name": "signature",
+              "duration": 2.6,
+              "kindleAt": 1.35,
+              "tracks": [
+                "upperArmFront",
+                "forearmFront"
+              ]
+            }
+          ],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna6",
+        "layer": "light",
+        "device": "Fixture carried light",
+        "anchors": [
+          "fixture:brand:fixture-tinker-works"
+        ],
+        "qualities": [
+          "Colorful",
+          "Craftsmanship"
+        ],
+        "translation": "Fixture translation for the dry run: fixture carried light.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": {
+            "color": "#6ff5cf",
+            "radius": 190
+          },
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna7",
+        "layer": "voice",
+        "device": "Fixture voice",
+        "anchors": [
+          "quality:look:colorful"
+        ],
+        "qualities": [
+          "Colorful"
+        ],
+        "translation": "Fixture translation for the dry run: fixture voice.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": [
+            "Cliffs! Nobody said there would be cliffs.",
+            "Told you it would take. Right, who's next?"
+          ]
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "scene1",
+        "layer": "scene",
+        "device": "Fixture moment",
+        "anchors": [
+          "quality:look:colorful"
+        ],
+        "qualities": [
+          "Colorful"
+        ],
+        "translation": "Fixture translation for the dry run: fixture moment.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": [],
+          "scene": {
+            "sky": [
+              "#13253a",
+              "#e8845a"
+            ],
+            "colors": [
+              "#5f9c96",
+              "#1d2630"
+            ],
+            "weather": "embers",
+            "towers": "pagoda"
+          }
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [
+              "#e8845a",
+              "#5f9c96"
+            ],
+            "weather": true,
+            "towers": true,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "render1",
+        "layer": "render",
+        "device": "Fixture render style",
+        "anchors": [
+          "art-style:hand-drawn"
+        ],
+        "qualities": [
+          "Hand-Drawn"
+        ],
+        "translation": "Fixture translation for the dry run: fixture render style.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": [],
+          "render": "ink"
+        },
+        "surprise": true,
+        "presetFrom": "art-style:hand-drawn",
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": true,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "music1",
+        "layer": "music",
+        "device": "Fixture track",
+        "anchors": [
+          "quality:mood:energetic"
+        ],
+        "qualities": [
+          "Energetic"
+        ],
+        "translation": "Fixture translation for the dry run: fixture track.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": [],
+          "music": "red-moonlight-extended-mix-pokki-dj"
+        },
+        "surprise": true,
+        "moods": [
+          "energetic"
+        ],
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": true
+          }
+        }
+      }
+    ],
+    "rejected": [],
+    "coverage": {
+      "required": [
+        "quality:look:colorful",
+        "quality:mood:playful",
+        "quality:meaning:craftsmanship",
+        "fixture:videogame:fixture-game-paper-lamps",
+        "fixture:movie:fixture-film-the-chimney-sweep",
+        "fixture:brand:fixture-tinker-works",
+        "art-style:hand-drawn"
+      ],
+      "used": [
+        "quality:look:colorful",
+        "quality:mood:playful",
+        "quality:meaning:craftsmanship",
+        "fixture:videogame:fixture-game-paper-lamps",
+        "fixture:movie:fixture-film-the-chimney-sweep",
+        "fixture:brand:fixture-tinker-works",
+        "art-style:hand-drawn"
+      ],
+      "rejected": []
+    },
+    "sourceType": "model-interpretation",
+    "rules": {
+      "artDirection": true,
+      "music": true,
+      "departure": true
+    },
+    "stats": {
+      "devices": 10,
+      "layers": [
+        "palette",
+        "silhouette",
+        "costume",
+        "motion",
+        "signature",
+        "light",
+        "voice",
+        "scene",
+        "render",
+        "music"
+      ],
+      "qlooAnchoredDevices": 10,
+      "surpriseAnchoredDevices": 10,
+      "modelAnchoredDevices": 0,
+      "qualityAnchoredDevices": 8,
+      "surpriseShare": 1,
+      "sketchMoves": {
+        "colors": [
+          "#7a2e2c",
+          "#3f8e89",
+          "#2f726e"
+        ],
+        "parts": [
+          "hair-back",
+          "belt-lantern",
+          "boot",
+          "sole"
+        ],
+        "proportions": true,
+        "gait": [
+          "walk.cadence",
+          "walk.bounciness",
+          "turn.style"
+        ],
+        "world": {
+          "sceneColors": [
+            "#e8845a",
+            "#5f9c96"
+          ],
+          "changed": [
+            "weather",
+            "towers",
+            "render",
+            "music"
+          ]
+        }
+      }
+    }
+  },
+  "character": {
+    "savedAt": "2026-10-06T00:43:37.027Z",
+    "bytes": 10656,
+    "parts": 29,
+    "cloth": 1,
+    "effects": 4
+  },
+  "measures": {
+    "figureHeight": 137.5,
+    "headShare": 0.462,
+    "legShare": 0.305,
+    "height": 137.5,
+    "width": 60.5,
+    "stride": {
+      "length": 63.6,
+      "legs": 1.81,
+      "clamped": false
+    },
+    "warnings": []
+  },
+  "conformance": {
+    "score": 1,
+    "present": 10,
+    "partial": 0,
+    "missing": 0,
+    "total": 10
+  },
+  "portraits": [],
+  "paint": [],
+  "events": [
+    {
+      "time": "2026-10-06T00:43:36.993Z",
+      "type": "taste",
+      "message": "Prediction frozen: 30 entities and qualities across 10 domains, with a character sketch."
+    },
+    {
+      "time": "2026-10-06T00:43:36.995Z",
+      "type": "taste",
+      "message": "Taste profile revealed after the prediction was frozen: 18 of 20 measured entities were neither predicted nor named in the brief. 3 style and aesthetic tags were measured; 2 were not predicted. 9 qualities are shared by two or more measured works; 8 were not predicted. 2 art styles were measured on the works; 2 were not predicted, and the strongest render style is Hand-Drawn (ink)."
+    },
+    {
+      "time": "2026-10-06T00:43:37.019Z",
+      "type": "taste",
+      "message": "Character DNA saved: 10 devices across 10 layers; 10 rest on entities, tags or qualities the model did not predict, and 8 translate qualities."
+    },
+    {
+      "time": "2026-10-06T00:43:37.027Z",
+      "type": "file",
+      "message": "Saved character.json: 29 parts, 1 cloth chains, 4 effects."
+    },
+    {
+      "time": "2026-10-06T00:43:37.094Z",
+      "type": "conformance",
+      "message": "Character check: 10 present, 0 partial, 0 missing; 0 warnings."
+    }
+  ],
+  "checkedSave": "2026-10-06T00:43:37.027Z"
+}

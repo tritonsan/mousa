@@ -1,0 +1,3586 @@
+{
+  "schemaVersion": "1.0",
+  "mode": "qloo",
+  "startedAt": "2026-10-04T21:11:19.372Z",
+  "calls": 16,
+  "checks": 2,
+  "pipeline": {
+    "status": "constructed",
+    "predictedAt": "2026-10-04T21:11:49.031Z",
+    "revealedAt": "2026-10-04T21:11:49.039Z",
+    "specifiedAt": "2026-10-04T21:14:32.723Z",
+    "constructionStartedAt": "2026-10-04T21:14:36.521Z"
+  },
+  "assumption": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "An audience drawn to quiet, melancholic, hand-crafted worlds: hand-drawn games and animation, post-rock and lo-fi jazz hip-hop, and slow films about everyday ritual and attention.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "videogame",
+      "style",
+      "aesthetic"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Studio Ghibli"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Muji"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Criterion Collection"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Moleskine"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "My Neighbor Totoro"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Princess Mononoke"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Howl's Moving Castle"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Lost in Translation"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Your Name"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Perfect Days"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Jónsi"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Explosions in the Sky"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Joe Hisaishi"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Ólafur Arnalds"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Bon Iver"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Fat Jon"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "Kafka on the Shore"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "Norwegian Wood"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "The Little Prince"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "A Wizard of Earthsea"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "Leaves of Grass"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Samurai Champloo"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Cowboy Bebop"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Mushishi"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Over the Garden Wall"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Twin Peaks"
+      },
+      {
+        "id": "M27",
+        "domain": "videogame",
+        "name": "Ori and the Blind Forest"
+      },
+      {
+        "id": "M28",
+        "domain": "videogame",
+        "name": "Journey"
+      },
+      {
+        "id": "M29",
+        "domain": "videogame",
+        "name": "Celeste"
+      },
+      {
+        "id": "M30",
+        "domain": "videogame",
+        "name": "Gris"
+      },
+      {
+        "id": "M31",
+        "domain": "videogame",
+        "name": "Dark Souls"
+      },
+      {
+        "id": "M32",
+        "domain": "videogame",
+        "name": "Hades"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "contemplative slow pacing"
+      },
+      {
+        "id": "M34",
+        "domain": "style",
+        "name": "long static takes"
+      },
+      {
+        "id": "M35",
+        "domain": "style",
+        "name": "hand-drawn animation"
+      },
+      {
+        "id": "M36",
+        "domain": "style",
+        "name": "melancholic"
+      },
+      {
+        "id": "M37",
+        "domain": "style",
+        "name": "dreamlike"
+      },
+      {
+        "id": "M38",
+        "domain": "style",
+        "name": "quiet everyday ritual"
+      },
+      {
+        "id": "M39",
+        "domain": "aesthetic",
+        "name": "muted blue-grey palettes"
+      },
+      {
+        "id": "M40",
+        "domain": "aesthetic",
+        "name": "hand-drawn ink linework"
+      },
+      {
+        "id": "M41",
+        "domain": "aesthetic",
+        "name": "warm lantern glow against darkness"
+      },
+      {
+        "id": "M42",
+        "domain": "aesthetic",
+        "name": "weathered paper and wood textures"
+      },
+      {
+        "id": "M43",
+        "domain": "aesthetic",
+        "name": "minimal dark silhouettes"
+      }
+    ],
+    "sourceType": "model-assumption",
+    "characterSketch": {
+      "summary": "A small, big-headed lamplighter in a dark navy hooded cloak with a pale bone-coloured face, carrying an amber lantern on a short pole while a long scarf trails in the cliff wind.",
+      "palette": [
+        "#1e2633",
+        "#3b4a63",
+        "#d8cfc0",
+        "#f2b24c",
+        "#7a8a9a"
+      ],
+      "height": 120,
+      "headShare": 0.32,
+      "elements": [
+        "hood",
+        "cloak",
+        "mask-face",
+        "lantern-pole",
+        "lantern",
+        "scarf",
+        "boots"
+      ],
+      "gait": {
+        "cadence": 1.8,
+        "bounciness": 0.3,
+        "lean": 4,
+        "armSwing": 12,
+        "turnStyle": "pivot"
+      },
+      "light": "#ffb84a",
+      "voice": "hushed, short plain sentences with pauses",
+      "motifs": [
+        "hooded silhouette",
+        "swinging lantern",
+        "scarf trailing in the wind",
+        "small figure against a vast sky"
+      ]
+    }
+  },
+  "input": {
+    "schemaVersion": "1.0",
+    "source": "qloo-profile",
+    "entities": [
+      {
+        "ref": "00000000-0000-4000-8000-00000000000C",
+        "entityId": "00000000-0000-4000-8000-00000000000C",
+        "name": "LA Kings",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "taste-source-6",
+        "type": "urn:entity:brand",
+        "tags": [
+          "National Hockey League",
+          "Sports Organization",
+          "Hockey",
+          "Black And Silver Palette",
+          "Minimalist Logo Design",
+          "Iconic Visual Branding",
+          "High-Energy Broadcast Graphics",
+          "Championship Success"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Paterson",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000001A",
+        "entityId": "00000000-0000-4000-8000-00000000001A",
+        "name": "GoPro",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "taste-source-6",
+        "type": "urn:entity:brand",
+        "tags": [
+          "American companies established in 2002",
+          "Technology companies based in the San Francisco Bay Area",
+          "2014 initial public offerings",
+          "Action cameras",
+          "Technology companies established in 2002",
+          "2002 establishments in California",
+          "Photography companies of the United States",
+          "Camera & Video"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Sigur Rós",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000013",
+        "entityId": "00000000-0000-4000-8000-000000000013",
+        "name": "Tesla",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "taste-source-6",
+        "type": "urn:entity:brand",
+        "tags": [
+          "2003 establishments in California",
+          "Electric motor manufacturers",
+          "Motor vehicle manufacturers based in Texas",
+          "Companies based in Palo Alto",
+          "Companies in the NASDAQ-100",
+          "Automotive",
+          "Car brands",
+          "Manufacturing companies based in California"
+        ],
+        "contributors": [
+          "Paterson",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000070",
+        "entityId": "00000000-0000-4000-8000-000000000070",
+        "name": "Apple Inc",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "taste-source-6",
+        "type": "urn:entity:brand",
+        "tags": [
+          "American business executives",
+          "Apple Inc. lists",
+          "Companies in the PRISM network",
+          "Nigerian women business executives",
+          "Headphones",
+          "Phones & Tablets",
+          "American women business executives",
+          "Home computer hardware companies"
+        ],
+        "contributors": [
+          "Paterson",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000073",
+        "entityId": "00000000-0000-4000-8000-000000000073",
+        "name": "The North Face",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "taste-source-6",
+        "type": "urn:entity:brand",
+        "tags": [
+          "2010s fashion",
+          "Clothing brands of the United States",
+          "Mountaineering equipment manufacturers",
+          "Sneakers",
+          "Clothing companies established in 1966",
+          "Footwear",
+          "Casual",
+          "Companies based in San Leandro"
+        ],
+        "contributors": [
+          "Sigur Rós",
+          "Spirited Away",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000049",
+        "entityId": "00000000-0000-4000-8000-000000000049",
+        "name": "Subaru",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "taste-source-6",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Automotive",
+          "Car & SUV",
+          "Functional Design",
+          "Rugged Minimalism",
+          "Clear Instrumentation",
+          "Ergonomic Layout",
+          "Mountain Excursions",
+          "Active Living"
+        ],
+        "contributors": [
+          "Paterson",
+          "Spirited Away",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000069",
+        "entityId": "00000000-0000-4000-8000-000000000069",
+        "name": "Bose Corporation",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "taste-source-6",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Bose Corporation",
+          "Headphones",
+          "In-car entertainment",
+          "Companies based in Framingham",
+          "Manufacturing companies based in Massachusetts",
+          "Electronics companies established in 1964",
+          "Loudspeaker manufacturers",
+          "1964 establishments in Massachusetts"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Paterson",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000059",
+        "entityId": "00000000-0000-4000-8000-000000000059",
+        "name": "Sony",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "taste-source-6",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Electronics",
+          "Camera & Video",
+          "Home Theater",
+          "Production Company",
+          "Video Game Developer",
+          "Gaming",
+          "Entertainment",
+          "Minimalist Industrial Design"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Paterson",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000004",
+        "entityId": "00000000-0000-4000-8000-000000000004",
+        "name": "Otterbox",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "taste-source-6",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Computer Accessories",
+          "Electronics",
+          "Rugged",
+          "Functional",
+          "Minimalist",
+          "Industrial",
+          "Protective",
+          "Climbing Mountains"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Paterson",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000048",
+        "entityId": "00000000-0000-4000-8000-000000000048",
+        "name": "Unbox Therapy",
+        "domain": "brand",
+        "band": "core",
+        "evidenceId": "taste-source-6",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Website",
+          "Minimalist Studio Setup",
+          "High-Definition Cinematography",
+          "Close-Up Macro Details",
+          "Consistent Branding Elements",
+          "Technology Ownership",
+          "Early Adopter Status",
+          "Creative Production"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Spirited Away",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000002B",
+        "entityId": "00000000-0000-4000-8000-00000000002B",
+        "name": "Anomalisa",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "taste-source-7",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Hotel",
+          "Character studies",
+          "Unnamed character",
+          "Marriage",
+          "Moody",
+          "Colleague colleague relationship",
+          "Surrealism",
+          "Boy"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Paterson",
+          "Nujabes"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000041",
+        "entityId": "00000000-0000-4000-8000-000000000041",
+        "name": "Moonrise Kingdom",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "taste-source-7",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Boat",
+          "Adultery",
+          "Candy cinema",
+          "Letter",
+          "Woods",
+          "Postmodern",
+          "Lightning",
+          "First love"
+        ],
+        "contributors": [
+          "Sigur Rós",
+          "Nujabes",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000031",
+        "entityId": "00000000-0000-4000-8000-000000000031",
+        "name": "Synecdoche, New York",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "taste-source-7",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Electronic translator",
+          "Earpiece",
+          "Bodily fluids",
+          "Atmospheric",
+          "Real estate agent",
+          "Illness",
+          "Existential",
+          "Insanity"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Sigur Rós",
+          "Nujabes"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000005B",
+        "entityId": "00000000-0000-4000-8000-00000000005B",
+        "name": "Melancholia",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "taste-source-7",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Part of trilogy",
+          "Castle",
+          "Snow",
+          "Depression",
+          "Sister sister relationship",
+          "Misanthropy",
+          "Sisterhood",
+          "Traumatized"
+        ],
+        "contributors": [
+          "Sigur Rós",
+          "Hollow Knight",
+          "Nujabes"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000037",
+        "entityId": "00000000-0000-4000-8000-000000000037",
+        "name": "The Fall",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "taste-source-7",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Production design",
+          "Magical tattoo",
+          "Sword fight",
+          "Death from snake bite",
+          "Poison",
+          "Slow motion scene",
+          "Forced perspective",
+          "Surrealism"
+        ],
+        "contributors": [
+          "Sigur Rós",
+          "Nujabes",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000039",
+        "entityId": "00000000-0000-4000-8000-000000000039",
+        "name": "Mommy",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "taste-source-7",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Variable aspect ratio",
+          "Hamburger",
+          "Taser",
+          "Skepticism",
+          "360 camera shot",
+          "Hitting the wall with ones fist",
+          "Singing along to a recording",
+          "Laughing at someone"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Sigur Rós",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000000D",
+        "entityId": "00000000-0000-4000-8000-00000000000D",
+        "name": "Dancer in the Dark",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "taste-source-7",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Visually impaired person",
+          "Factory",
+          "Mature",
+          "Psychological drama",
+          "Tense",
+          "Gritty",
+          "Murder",
+          "Handheld"
+        ],
+        "contributors": [
+          "Sigur Rós",
+          "Hollow Knight",
+          "Nujabes"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000047",
+        "entityId": "00000000-0000-4000-8000-000000000047",
+        "name": "It's Such a Beautiful Day",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "taste-source-7",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Stick figure minimalism",
+          "Minimalism",
+          "Illness",
+          "Atmospheric",
+          "Intimate",
+          "Flashing colors",
+          "Reflective",
+          "Experimental animation"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Nujabes",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000038",
+        "entityId": "00000000-0000-4000-8000-000000000038",
+        "name": "The Wind Rises",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "taste-source-7",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Illness",
+          "Wedding",
+          "Historical drama",
+          "Technology",
+          "Goodbye letter",
+          "Slow burn",
+          "Morality of technology",
+          "Design"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000006E",
+        "entityId": "00000000-0000-4000-8000-00000000006E",
+        "name": "Paprika",
+        "domain": "movie",
+        "band": "core",
+        "evidenceId": "taste-source-7",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Missing person",
+          "Jumping",
+          "City setting",
+          "Surreal",
+          "Centaur",
+          "Conflicted",
+          "Piloted giant robot",
+          "Epic fantasy"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000002",
+        "entityId": "00000000-0000-4000-8000-000000000002",
+        "name": "Neutral Milk Hotel",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "taste-source-11",
+        "type": "urn:entity:artist",
+        "tags": [
+          "Accordion",
+          "Guitar",
+          "Emotive",
+          "Devoted",
+          "Lo-Fi Psychedelic Folk",
+          "Experimental",
+          "Emotive",
+          "Passionate"
+        ],
+        "contributors": [
+          "Paterson",
+          "Sigur Rós",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000055",
+        "entityId": "00000000-0000-4000-8000-000000000055",
+        "name": "Nick Drake",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "taste-source-11",
+        "type": "urn:entity:artist",
+        "tags": [
+          "Baroque Pop",
+          "Piano",
+          "Loyal",
+          "Devoted",
+          "Singer-Songwriter",
+          "Mellow",
+          "Baroque Pop",
+          "Acoustic"
+        ],
+        "contributors": [
+          "Paterson",
+          "Spirited Away",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000050",
+        "entityId": "00000000-0000-4000-8000-000000000050",
+        "name": "Sufjan Stevens",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "taste-source-11",
+        "type": "urn:entity:artist",
+        "tags": [
+          "Melancholic",
+          "Baritone",
+          "Experimental",
+          "Experimental",
+          "Indie Folk",
+          "Accordion",
+          "Paul Simon",
+          "Thoughtful"
+        ],
+        "contributors": [
+          "Paterson",
+          "Sigur Rós",
+          "Spirited Away"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000003D",
+        "entityId": "00000000-0000-4000-8000-00000000003D",
+        "name": "Radiohead",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "taste-source-11",
+        "type": "urn:entity:artist",
+        "tags": [
+          "Ambient",
+          "Baritone",
+          "Art Rock",
+          "Experimental",
+          "Experimental",
+          "Technology",
+          "Atmospheric",
+          "Atmospheric"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Sigur Rós",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000078",
+        "entityId": "00000000-0000-4000-8000-000000000078",
+        "name": "the Microphones",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "taste-source-11",
+        "type": "urn:entity:artist",
+        "tags": [
+          "Experimental Folk",
+          "Lo-Fi",
+          "Guitar",
+          "Minimalist",
+          "Lo-Fi Indie Rock",
+          "Identity",
+          "5",
+          "Atmospheric"
+        ],
+        "contributors": [
+          "Paterson",
+          "Hollow Knight",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000071",
+        "entityId": "00000000-0000-4000-8000-000000000071",
+        "name": "Sun Kil Moon",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "taste-source-11",
+        "type": "urn:entity:artist",
+        "tags": [
+          "Acoustic",
+          "Mortality",
+          "Neil Young",
+          "Melancholic",
+          "Relationships",
+          "Indie Folk",
+          "Slowcore",
+          "Acoustic"
+        ],
+        "contributors": [
+          "Paterson",
+          "Sigur Rós",
+          "Spirited Away"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000001C",
+        "entityId": "00000000-0000-4000-8000-00000000001C",
+        "name": "Beach House",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "taste-source-11",
+        "type": "urn:entity:artist",
+        "tags": [
+          "Drums",
+          "Atmospheric",
+          "Dream Pop",
+          "Indie",
+          "Baroque Pop",
+          "Intimate",
+          "Lo - Fi",
+          "Hypnotic"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Paterson",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000001",
+        "entityId": "00000000-0000-4000-8000-000000000001",
+        "name": "Björk",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "taste-source-11",
+        "type": "urn:entity:artist",
+        "tags": [
+          "Indie Pop",
+          "Experimental",
+          "Technology",
+          "Innovative",
+          "Experimental",
+          "Enya",
+          "Dedicated",
+          "Orchestral"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Sigur Rós",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000005F",
+        "entityId": "00000000-0000-4000-8000-00000000005F",
+        "name": "Elliott Smith",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "taste-source-11",
+        "type": "urn:entity:artist",
+        "tags": [
+          "Love",
+          "Reserved",
+          "Folk Rock",
+          "Soft-Spoken",
+          "Melancholic",
+          "Indie Rock",
+          "Loyal",
+          "Acoustic"
+        ],
+        "contributors": [
+          "Paterson",
+          "Sigur Rós",
+          "Spirited Away"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000079",
+        "entityId": "00000000-0000-4000-8000-000000000079",
+        "name": "Mount Eerie",
+        "domain": "artist",
+        "band": "core",
+        "evidenceId": "taste-source-11",
+        "type": "urn:entity:artist",
+        "tags": [
+          "Nick Drake",
+          "Nature",
+          "Mortality",
+          "Experimental",
+          "Indie Folk",
+          "Thoughtful",
+          "Minimalist Acoustic",
+          "Raw"
+        ],
+        "contributors": [
+          "Paterson",
+          "Hollow Knight",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000080",
+        "entityId": "00000000-0000-4000-8000-000000000080",
+        "name": "Brave New World",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "taste-source-8",
+        "type": "urn:entity:book",
+        "tags": [
+          "Adult",
+          "Science Fiction Fantasy",
+          "Audiobook",
+          "Literature",
+          "School",
+          "Novels",
+          "Science Fiction",
+          "High School"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000004C",
+        "entityId": "00000000-0000-4000-8000-00000000004C",
+        "name": "Flowers for Algernon",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "taste-source-8",
+        "type": "urn:entity:book",
+        "tags": [
+          "Psychology",
+          "Young Adult",
+          "Adult",
+          "School",
+          "Literature",
+          "Fiction",
+          "Novels",
+          "Classics"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000060",
+        "entityId": "00000000-0000-4000-8000-000000000060",
+        "name": "1984",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "taste-source-8",
+        "type": "urn:entity:book",
+        "tags": [
+          "Science Fiction",
+          "Politics",
+          "Dystopia",
+          "School",
+          "Audiobook",
+          "Literature",
+          "Novels",
+          "Fiction"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000068",
+        "entityId": "00000000-0000-4000-8000-000000000068",
+        "name": "Norse Mythology",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "taste-source-8",
+        "type": "urn:entity:book",
+        "contributors": [
+          "Spirited Away",
+          "Nujabes",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000040",
+        "entityId": "00000000-0000-4000-8000-000000000040",
+        "name": "Fahrenheit 451",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "taste-source-8",
+        "type": "urn:entity:book",
+        "tags": [
+          "Dystopia",
+          "Fantasy",
+          "Banned Books",
+          "Read For School",
+          "Novels",
+          "School",
+          "Fiction",
+          "Literature"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000002E",
+        "entityId": "00000000-0000-4000-8000-00000000002E",
+        "name": "Island",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "taste-source-8",
+        "type": "urn:entity:book",
+        "tags": [
+          "Fantasy",
+          "Utopia",
+          "British Literature",
+          "Dystopia",
+          "Classics",
+          "Fiction",
+          "Literature",
+          "Philosophy"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Paterson",
+          "Spirited Away"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000007D",
+        "entityId": "00000000-0000-4000-8000-00000000007D",
+        "name": "Animal Farm",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "taste-source-8",
+        "type": "urn:entity:book",
+        "tags": [
+          "Philosophy",
+          "Dystopia",
+          "School",
+          "Fiction",
+          "Science Fiction",
+          "Novels",
+          "Read For School",
+          "Literature"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000005D",
+        "entityId": "00000000-0000-4000-8000-00000000005D",
+        "name": "American Gods",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "taste-source-8",
+        "type": "urn:entity:book",
+        "contributors": [
+          "Spirited Away",
+          "Hollow Knight",
+          "Nujabes"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000064",
+        "entityId": "00000000-0000-4000-8000-000000000064",
+        "name": "One Flew Over the Cuckoo's Nest",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "taste-source-8",
+        "type": "urn:entity:book",
+        "tags": [
+          "Psychology",
+          "Fiction",
+          "Literary Fiction",
+          "Novels",
+          "Banned Books",
+          "Literature",
+          "School",
+          "American"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000066",
+        "entityId": "00000000-0000-4000-8000-000000000066",
+        "name": "The Tao of Pooh",
+        "domain": "book",
+        "band": "core",
+        "evidenceId": "taste-source-8",
+        "type": "urn:entity:book",
+        "contributors": [
+          "Nujabes",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000004D",
+        "entityId": "00000000-0000-4000-8000-00000000004D",
+        "name": "Grimgar, Ashes and Illusions",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "taste-source-9",
+        "type": "urn:entity:tv_show",
+        "tags": [
+          "Combat",
+          "Mature",
+          "Adventure",
+          "Adventurer",
+          "Anime animation",
+          "Realistic",
+          "Training",
+          "Watercolor tinted"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Nujabes",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000007",
+        "entityId": "00000000-0000-4000-8000-000000000007",
+        "name": "Are You Human Too?",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "taste-source-9",
+        "type": "urn:entity:tv_show",
+        "tags": [
+          "Dual performance focus",
+          "Resourceful",
+          "Romantic sci fi",
+          "Character driven",
+          "The heir",
+          "Artificial intelligence",
+          "Grief",
+          "Romance"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Sigur Rós",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000017",
+        "entityId": "00000000-0000-4000-8000-000000000017",
+        "name": "My Mister",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "taste-source-9",
+        "type": "urn:entity:tv_show",
+        "tags": [
+          "Overcoming adversity",
+          "Corporate culture",
+          "Workplace",
+          "Slice of life",
+          "Healing",
+          "Debt",
+          "Family relationships",
+          "Relationships"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Hollow Knight",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000002C",
+        "entityId": "00000000-0000-4000-8000-00000000002C",
+        "name": "I'm Not a Robot",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "taste-source-9",
+        "type": "urn:entity:tv_show",
+        "tags": [
+          "The outsider",
+          "Delicate emotional realism",
+          "Romantic comedy",
+          "Acceptance",
+          "Science fiction romance",
+          "Forgiveness",
+          "Reflective",
+          "Korean culture"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Paterson",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000022",
+        "entityId": "00000000-0000-4000-8000-000000000022",
+        "name": "Fruits Basket",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "taste-source-9",
+        "type": "urn:entity:tv_show",
+        "tags": [
+          "Romance",
+          "Friendship",
+          "Dog",
+          "High school",
+          "Psychological drama",
+          "16 year old girl",
+          "Chinese zodiac",
+          "Cat"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Nujabes",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000056",
+        "entityId": "00000000-0000-4000-8000-000000000056",
+        "name": "Kino's Journey",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "taste-source-9",
+        "type": "urn:entity:tv_show",
+        "tags": [
+          "Murder",
+          "Talking vehicle",
+          "Steampunk fantasy",
+          "Moe",
+          "Alternate reality",
+          "Science fiction",
+          "Fantasy",
+          "Subtle symbolism"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Spirited Away",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": true,
+        "matchedPrediction": "M28",
+        "surprise": false
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000010",
+        "entityId": "00000000-0000-4000-8000-000000000010",
+        "name": "Yona of the Dawn",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "taste-source-9",
+        "type": "urn:entity:tv_show",
+        "tags": [
+          "Adventurous",
+          "Character driven novels",
+          "Coming of age drama",
+          "Red hair",
+          "Ancient legend",
+          "Special ability",
+          "Childhood friend",
+          "Action"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Nujabes",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000006",
+        "entityId": "00000000-0000-4000-8000-000000000006",
+        "name": "Beyond the Boundary",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "taste-source-9",
+        "type": "urn:entity:tv_show",
+        "tags": [
+          "Thriller",
+          "Tragic love",
+          "Literary club",
+          "Emotional storytelling",
+          "Love",
+          "Supernatural fiction",
+          "Sacrifice",
+          "Anime animation"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Nujabes",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000003",
+        "entityId": "00000000-0000-4000-8000-000000000003",
+        "name": "My Happy Marriage",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "taste-source-9",
+        "type": "urn:entity:tv_show",
+        "tags": [
+          "Military",
+          "Love",
+          "Melancholic color palette",
+          "Elegant",
+          "The protector",
+          "Atmospheric",
+          "Mature",
+          "Supernatural"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Nujabes",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000004A",
+        "entityId": "00000000-0000-4000-8000-00000000004A",
+        "name": "Angel Beats!",
+        "domain": "tv_show",
+        "band": "core",
+        "evidenceId": "taste-source-9",
+        "type": "urn:entity:tv_show",
+        "tags": [
+          "Afterlife",
+          "Sacrifice",
+          "Redemption",
+          "Killer shadow",
+          "Melancholic",
+          "Afterlife high school",
+          "Letting go",
+          "Fantasy"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Nujabes",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000061",
+        "entityId": "00000000-0000-4000-8000-000000000061",
+        "name": "Hades",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "taste-source-10",
+        "type": "urn:entity:videogame",
+        "tags": [
+          "stylized",
+          "2D",
+          "hand-drawn",
+          "challenging",
+          "narrative-driven",
+          "character-driven",
+          "tense",
+          "engaging"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Spirited Away",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": true,
+        "matchedPrediction": "M32",
+        "surprise": false
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000077",
+        "entityId": "00000000-0000-4000-8000-000000000077",
+        "name": "Death's Door",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "taste-source-10",
+        "type": "urn:entity:videogame",
+        "tags": [
+          "3D",
+          "Stylized",
+          "Painterly",
+          "beautiful worldbuilding",
+          "tight combat",
+          "memorable bosses",
+          "polished indie",
+          "moody soundtrack"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Spirited Away",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000029",
+        "entityId": "00000000-0000-4000-8000-000000000029",
+        "name": "Shadow of the Colossus",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "taste-source-10",
+        "type": "urn:entity:videogame",
+        "tags": [
+          "3D",
+          "Realistic",
+          "Cinematic",
+          "story-rich",
+          "minimalist",
+          "cult classic",
+          "emotional",
+          "arthouse"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Nujabes",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000007C",
+        "entityId": "00000000-0000-4000-8000-00000000007C",
+        "name": "Outer Wilds",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "taste-source-10",
+        "type": "urn:entity:videogame",
+        "tags": [
+          "3D",
+          "Stylized",
+          "Low-Poly",
+          "time-loop",
+          "thought-provoking",
+          "beautiful soundtrack",
+          "exploration-focused",
+          "non-linear narrative"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Spirited Away",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000006C",
+        "entityId": "00000000-0000-4000-8000-00000000006C",
+        "name": "INSIDE",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "taste-source-10",
+        "type": "urn:entity:videogame",
+        "tags": [
+          "2.5D",
+          "realistic",
+          "minimalistic",
+          "immersive",
+          "narrative-driven",
+          "challenging",
+          "suspenseful",
+          "tense"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Paterson",
+          "Spirited Away"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000000A",
+        "entityId": "00000000-0000-4000-8000-00000000000A",
+        "name": "Hyper Light Drifter",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "taste-source-10",
+        "type": "urn:entity:videogame",
+        "tags": [
+          "2D",
+          "Pixel Art",
+          "Retro-inspired",
+          "Stylized",
+          "High-detail spritework",
+          "challenging",
+          "beautiful pixel art",
+          "story-light"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Spirited Away",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000015",
+        "entityId": "00000000-0000-4000-8000-000000000015",
+        "name": "Eastward",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "taste-source-10",
+        "type": "urn:entity:videogame",
+        "tags": [
+          "pixel art",
+          "2D",
+          "quirky",
+          "engaging story",
+          "retro aesthetic",
+          "whimsical",
+          "nostalgic",
+          "single-player"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Hollow Knight",
+          "Nujabes"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000000F",
+        "entityId": "00000000-0000-4000-8000-00000000000F",
+        "name": "Owlboy",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "taste-source-10",
+        "type": "urn:entity:videogame",
+        "tags": [
+          "2D",
+          "Pixel Art",
+          "Hand-crafted environments",
+          "beautiful pixel art",
+          "character-driven",
+          "nostalgic",
+          "long development",
+          "memorable soundtrack"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Spirited Away",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000007A",
+        "entityId": "00000000-0000-4000-8000-00000000007A",
+        "name": "GRIS",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "taste-source-10",
+        "type": "urn:entity:videogame",
+        "tags": [
+          "Hand-drawn 2D",
+          "Watercolor",
+          "Minimalist",
+          "Surreal",
+          "artistic",
+          "emotional depth",
+          "short experience",
+          "visually striking"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Spirited Away",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": true,
+        "matchedPrediction": "M30",
+        "surprise": false
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000007B",
+        "entityId": "00000000-0000-4000-8000-00000000007B",
+        "name": "RiME",
+        "domain": "videogame",
+        "band": "core",
+        "evidenceId": "taste-source-10",
+        "type": "urn:entity:videogame",
+        "tags": [
+          "3D",
+          "Stylized",
+          "Cell-shaded",
+          "Atmospheric",
+          "emotional journey",
+          "beautiful visuals",
+          "thought-provoking",
+          "slow-paced"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Paterson",
+          "Spirited Away"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:style:qloo:enchanting",
+        "entityId": "urn:tag:style:qloo:enchanting",
+        "name": "Enchanting",
+        "domain": "style",
+        "band": "core",
+        "evidenceId": "taste-source-12",
+        "type": "urn:tag:style:qloo",
+        "tags": [
+          "Enchanting"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:style:qloo:majestic",
+        "entityId": "urn:tag:style:qloo:majestic",
+        "name": "Majestic",
+        "domain": "style",
+        "band": "core",
+        "evidenceId": "taste-source-12",
+        "type": "urn:tag:style:qloo",
+        "tags": [
+          "Majestic"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:style:qloo:operatic",
+        "entityId": "urn:tag:style:qloo:operatic",
+        "name": "Operatic",
+        "domain": "style",
+        "band": "core",
+        "evidenceId": "taste-source-12",
+        "type": "urn:tag:style:qloo",
+        "tags": [
+          "Operatic"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:style:qloo:visually_austere",
+        "entityId": "urn:tag:style:qloo:visually_austere",
+        "name": "Visually Austere",
+        "domain": "style",
+        "band": "core",
+        "evidenceId": "taste-source-12",
+        "type": "urn:tag:style:qloo",
+        "tags": [
+          "Visually Austere"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:style:qloo:folkloric",
+        "entityId": "urn:tag:style:qloo:folkloric",
+        "name": "Folkloric",
+        "domain": "style",
+        "band": "core",
+        "evidenceId": "taste-source-12",
+        "type": "urn:tag:style:qloo",
+        "tags": [
+          "Folkloric"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:style:qloo:cross_cultural",
+        "entityId": "urn:tag:style:qloo:cross_cultural",
+        "name": "Cross Cultural",
+        "domain": "style",
+        "band": "core",
+        "evidenceId": "taste-source-12",
+        "type": "urn:tag:style:qloo",
+        "tags": [
+          "Cross Cultural"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:style:qloo:somber",
+        "entityId": "urn:tag:style:qloo:somber",
+        "name": "Somber",
+        "domain": "style",
+        "band": "core",
+        "evidenceId": "taste-source-12",
+        "type": "urn:tag:style:qloo",
+        "tags": [
+          "Somber"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:style:qloo:nautical",
+        "entityId": "urn:tag:style:qloo:nautical",
+        "name": "Nautical",
+        "domain": "style",
+        "band": "core",
+        "evidenceId": "taste-source-12",
+        "type": "urn:tag:style:qloo",
+        "tags": [
+          "Nautical"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:aesthetic_property:qloo:sculptural_designs",
+        "entityId": "urn:tag:aesthetic_property:qloo:sculptural_designs",
+        "name": "Sculptural Designs",
+        "domain": "aesthetic",
+        "band": "core",
+        "evidenceId": "taste-source-13",
+        "type": "urn:tag:aesthetic_property:qloo",
+        "tags": [
+          "Sculptural Designs"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:aesthetic_property:qloo:luxurious_packaging",
+        "entityId": "urn:tag:aesthetic_property:qloo:luxurious_packaging",
+        "name": "Luxurious Packaging",
+        "domain": "aesthetic",
+        "band": "core",
+        "evidenceId": "taste-source-13",
+        "type": "urn:tag:aesthetic_property:qloo",
+        "tags": [
+          "Luxurious Packaging"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:aesthetic_property:qloo:timeless_elegance",
+        "entityId": "urn:tag:aesthetic_property:qloo:timeless_elegance",
+        "name": "Timeless Elegance",
+        "domain": "aesthetic",
+        "band": "core",
+        "evidenceId": "taste-source-13",
+        "type": "urn:tag:aesthetic_property:qloo",
+        "tags": [
+          "Timeless Elegance"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:aesthetic_property:qloo:fluid_silhouettes",
+        "entityId": "urn:tag:aesthetic_property:qloo:fluid_silhouettes",
+        "name": "Fluid Silhouettes",
+        "domain": "aesthetic",
+        "band": "core",
+        "evidenceId": "taste-source-13",
+        "type": "urn:tag:aesthetic_property:qloo",
+        "tags": [
+          "Fluid Silhouettes"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:aesthetic_property:qloo:quality_craftsmanship",
+        "entityId": "urn:tag:aesthetic_property:qloo:quality_craftsmanship",
+        "name": "Quality Craftsmanship",
+        "domain": "aesthetic",
+        "band": "core",
+        "evidenceId": "taste-source-13",
+        "type": "urn:tag:aesthetic_property:qloo",
+        "tags": [
+          "Quality Craftsmanship"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:aesthetic_property:qloo:romantic",
+        "entityId": "urn:tag:aesthetic_property:qloo:romantic",
+        "name": "Romantic",
+        "domain": "aesthetic",
+        "band": "core",
+        "evidenceId": "taste-source-13",
+        "type": "urn:tag:aesthetic_property:qloo",
+        "tags": [
+          "Romantic"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:aesthetic_property:qloo:artistic_design",
+        "entityId": "urn:tag:aesthetic_property:qloo:artistic_design",
+        "name": "Artistic Design",
+        "domain": "aesthetic",
+        "band": "core",
+        "evidenceId": "taste-source-13",
+        "type": "urn:tag:aesthetic_property:qloo",
+        "tags": [
+          "Artistic Design"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "urn:tag:aesthetic_property:qloo:neutral_color_palettes",
+        "entityId": "urn:tag:aesthetic_property:qloo:neutral_color_palettes",
+        "name": "Neutral Color Palettes",
+        "domain": "aesthetic",
+        "band": "core",
+        "evidenceId": "taste-source-13",
+        "type": "urn:tag:aesthetic_property:qloo",
+        "tags": [
+          "Neutral Color Palettes"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000028",
+        "entityId": "00000000-0000-4000-8000-000000000028",
+        "name": "Cheetos Flamin' Hot",
+        "domain": "brand",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-14",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Food & Beverage",
+          "Neon Orange",
+          "High-Contrast Graphics",
+          "Playful Mascot Imagery",
+          "Bold Typography",
+          "Living Loud",
+          "Breaking Conventions",
+          "Embracing Trends"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Paterson",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000033",
+        "entityId": "00000000-0000-4000-8000-000000000033",
+        "name": "Pepsi Nitro",
+        "domain": "brand",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-14",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Food & Beverage",
+          "Minimalist",
+          "Bold Typography",
+          "Frothy Visuals",
+          "Dynamic Graphics",
+          "Trend-Setting",
+          "Epicurean Discovery",
+          "Modern Leisure"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Paterson",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000004E",
+        "entityId": "00000000-0000-4000-8000-00000000004E",
+        "name": "Temu",
+        "domain": "brand",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-14",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Advertising Enabled",
+          "Retail",
+          "Mobile App",
+          "Vibrant",
+          "Busy",
+          "Utility-Focused",
+          "Informational",
+          "Promotion-Heavy"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Paterson",
+          "Nujabes"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000081",
+        "entityId": "00000000-0000-4000-8000-000000000081",
+        "name": "Diet Pepsi",
+        "domain": "brand",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-14",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Food & Beverage",
+          "Clean Branding",
+          "Modern Minimalist",
+          "Blue Color Palette",
+          "Active Living",
+          "Balanced Lifestyle",
+          "CPG",
+          "Product Brand"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Paterson",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000027",
+        "entityId": "00000000-0000-4000-8000-000000000027",
+        "name": "Xiaohongshu",
+        "domain": "brand",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-14",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Mobile App",
+          "Social Networking App",
+          "Advertising Enabled",
+          "Clean Grid Layout",
+          "Soft Minimalist Palette",
+          "High-Quality Imagery",
+          "Editorial-Style Photography",
+          "Curated Aesthetic"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Nujabes",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000003C",
+        "entityId": "00000000-0000-4000-8000-00000000003C",
+        "name": "New York Yankees",
+        "domain": "brand",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-14",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Baseball",
+          "Sports Organization",
+          "Major League Baseball",
+          "Pinstripe Uniforms",
+          "Interlocking Lettering",
+          "Classic Navy And White Palette",
+          "Professional Athletic Achievement",
+          "Championship Success"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Paterson",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000043",
+        "entityId": "00000000-0000-4000-8000-000000000043",
+        "name": "Maxwell House Coffee",
+        "domain": "brand",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-14",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Coffee & Tea",
+          "Drinks",
+          "Food & Beverage",
+          "Traditional",
+          "Blue And Yellow Branding",
+          "Clear And Functional",
+          "Nostalgic",
+          "Productive Mornings"
+        ],
+        "contributors": [
+          "Sigur Rós",
+          "Nujabes",
+          "Spirited Away"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000016",
+        "entityId": "00000000-0000-4000-8000-000000000016",
+        "name": "World Series of Poker Game",
+        "domain": "brand",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-14",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Games App",
+          "Advertising Enabled",
+          "Games",
+          "Mobile App",
+          "High-Contrast Graphics",
+          "Casino-Inspired Visuals",
+          "Dynamic Animations",
+          "Bold Typography"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Spirited Away",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000002A",
+        "entityId": "00000000-0000-4000-8000-00000000002A",
+        "name": "Antonio Banderas",
+        "domain": "brand",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-14",
+        "type": "urn:entity:brand",
+        "tags": [
+          "Fashion"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Paterson",
+          "Nujabes"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000034",
+        "entityId": "00000000-0000-4000-8000-000000000034",
+        "name": "Kiki's Delivery Service",
+        "domain": "movie",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-15",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Cat",
+          "Singer",
+          "Fantasy",
+          "Folk fantasy",
+          "Witch",
+          "Resourceful",
+          "Intimate",
+          "Voice loss"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Nujabes",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000032",
+        "entityId": "00000000-0000-4000-8000-000000000032",
+        "name": "We Are the Strange",
+        "domain": "movie",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-15",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Visceral",
+          "Outsiderism",
+          "Ice cream",
+          "Experimental art fans",
+          "Cgi",
+          "Surreal",
+          "The color blue",
+          "Doll"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Hollow Knight",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000005E",
+        "entityId": "00000000-0000-4000-8000-00000000005E",
+        "name": "Grave of the Fireflies",
+        "domain": "movie",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-15",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Resourceful",
+          "Intimate",
+          "Based on novel",
+          "Brother sister relationship",
+          "Home drama intimacy",
+          "Drama",
+          "Peace studies",
+          "Humanitarian issues"
+        ],
+        "contributors": [
+          "Spirited Away",
+          "Nujabes",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000005C",
+        "entityId": "00000000-0000-4000-8000-00000000005C",
+        "name": "Invisible Waves",
+        "domain": "movie",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-15",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Identity",
+          "Police",
+          "Friend",
+          "Complex",
+          "Drama",
+          "Guilt",
+          "Stoic",
+          "Aquarium"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Sigur Rós",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-00000000001D",
+        "entityId": "00000000-0000-4000-8000-00000000001D",
+        "name": "Cheatin'",
+        "domain": "movie",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-15",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Forgiveness",
+          "Haunted",
+          "Hand drawn animation",
+          "Gas station",
+          "Vomiting",
+          "Theater",
+          "Pencil sketched",
+          "Drama loving"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Hollow Knight",
+          "Sigur Rós"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000072",
+        "entityId": "00000000-0000-4000-8000-000000000072",
+        "name": "The Happy Film",
+        "domain": "movie",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-15",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Stylized",
+          "Emotional",
+          "Biographical documentary",
+          "Obsessive",
+          "Introspective",
+          "Companionate marriage",
+          "The creator",
+          "Experimental documentary"
+        ],
+        "contributors": [
+          "Paterson",
+          "Sigur Rós",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000075",
+        "entityId": "00000000-0000-4000-8000-000000000075",
+        "name": "Finisterrae",
+        "domain": "movie",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-15",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Atmospheric",
+          "Lyrical",
+          "Dreamlike",
+          "Determined",
+          "Props",
+          "Absurdism",
+          "Puppet driven",
+          "Open minded"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Sigur Rós",
+          "Nujabes"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000058",
+        "entityId": "00000000-0000-4000-8000-000000000058",
+        "name": "Vermilion Souls",
+        "domain": "movie",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-15",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Mansion",
+          "Curious",
+          "Drama",
+          "Postwar",
+          "Postwar trauma",
+          "Dreamlike staging",
+          "Boy",
+          "Thoughtful"
+        ],
+        "contributors": [
+          "Hollow Knight",
+          "Nujabes",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000044",
+        "entityId": "00000000-0000-4000-8000-000000000044",
+        "name": "Strawberry Shortcakes",
+        "domain": "movie",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-15",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Condom",
+          "Tomato",
+          "Hamster",
+          "Art house fans",
+          "Urban studies",
+          "The seeker",
+          "Lesbian",
+          "The caregiver"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Sigur Rós",
+          "Hollow Knight"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "00000000-0000-4000-8000-000000000014",
+        "entityId": "00000000-0000-4000-8000-000000000014",
+        "name": "The Prince's Voyage",
+        "domain": "movie",
+        "band": "deep-cut",
+        "evidenceId": "taste-source-15",
+        "type": "urn:entity:movie",
+        "tags": [
+          "Reflective",
+          "Muted",
+          "Tradition versus change",
+          "Muted pastel palette",
+          "Hand drawn animation",
+          "Exploration",
+          "Lyrical",
+          "Shipwreck"
+        ],
+        "contributors": [
+          "Nujabes",
+          "Hollow Knight",
+          "Paterson"
+        ],
+        "source": "qloo",
+        "predictedByModel": false,
+        "surprise": true
+      },
+      {
+        "ref": "M01",
+        "name": "Studio Ghibli",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M02",
+        "name": "Muji",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M03",
+        "name": "Criterion Collection",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M04",
+        "name": "Moleskine",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M05",
+        "name": "My Neighbor Totoro",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M06",
+        "name": "Princess Mononoke",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M07",
+        "name": "Howl's Moving Castle",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M08",
+        "name": "Lost in Translation",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M09",
+        "name": "Your Name",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M10",
+        "name": "Perfect Days",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M11",
+        "name": "Jónsi",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M12",
+        "name": "Explosions in the Sky",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M13",
+        "name": "Joe Hisaishi",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M14",
+        "name": "Ólafur Arnalds",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M15",
+        "name": "Bon Iver",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M16",
+        "name": "Fat Jon",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M17",
+        "name": "Kafka on the Shore",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M18",
+        "name": "Norwegian Wood",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M19",
+        "name": "The Little Prince",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M20",
+        "name": "A Wizard of Earthsea",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M21",
+        "name": "Leaves of Grass",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M22",
+        "name": "Samurai Champloo",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M23",
+        "name": "Cowboy Bebop",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M24",
+        "name": "Mushishi",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M25",
+        "name": "Over the Garden Wall",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M26",
+        "name": "Twin Peaks",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M27",
+        "name": "Ori and the Blind Forest",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M28",
+        "name": "Journey",
+        "domain": "videogame",
+        "source": "model-assumption",
+        "confirmedBy": "00000000-0000-4000-8000-000000000056"
+      },
+      {
+        "ref": "M29",
+        "name": "Celeste",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M30",
+        "name": "Gris",
+        "domain": "videogame",
+        "source": "model-assumption",
+        "confirmedBy": "00000000-0000-4000-8000-00000000007A"
+      },
+      {
+        "ref": "M31",
+        "name": "Dark Souls",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M32",
+        "name": "Hades",
+        "domain": "videogame",
+        "source": "model-assumption",
+        "confirmedBy": "00000000-0000-4000-8000-000000000061"
+      },
+      {
+        "ref": "M33",
+        "name": "contemplative slow pacing",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M34",
+        "name": "long static takes",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M35",
+        "name": "hand-drawn animation",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M36",
+        "name": "melancholic",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M37",
+        "name": "dreamlike",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M38",
+        "name": "quiet everyday ritual",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M39",
+        "name": "muted blue-grey palettes",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M40",
+        "name": "hand-drawn ink linework",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M41",
+        "name": "warm lantern glow against darkness",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M42",
+        "name": "weathered paper and wood textures",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M43",
+        "name": "minimal dark silhouettes",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      }
+    ],
+    "requiredAnchors": [
+      "00000000-0000-4000-8000-00000000004D",
+      "00000000-0000-4000-8000-000000000002",
+      "00000000-0000-4000-8000-00000000002B",
+      "00000000-0000-4000-8000-000000000080",
+      "00000000-0000-4000-8000-00000000000C",
+      "00000000-0000-4000-8000-000000000034"
+    ],
+    "metrics": {
+      "measuredEntities": 79,
+      "predictedByModel": 3,
+      "knownFromBrief": 0,
+      "surprises": 76,
+      "surpriseShare": 0.962,
+      "predictions": 32,
+      "predictionsConfirmed": 3,
+      "measuredTags": 16,
+      "tagsPredicted": 0,
+      "tagSurprises": 16,
+      "tagPredictions": 11
+    },
+    "seeds": [
+      {
+        "name": "Hollow Knight",
+        "role": "audience",
+        "resolution": "entity",
+        "matchedName": "Hollow Knight"
+      },
+      {
+        "name": "Spirited Away",
+        "role": "audience",
+        "resolution": "entity",
+        "matchedName": "Spirited Away"
+      },
+      {
+        "name": "Sigur Rós",
+        "role": "audience",
+        "resolution": "entity",
+        "matchedName": "Sigur Rós"
+      },
+      {
+        "name": "Nujabes",
+        "role": "audience",
+        "resolution": "entity",
+        "matchedName": "Nujabes"
+      },
+      {
+        "name": "Paterson",
+        "role": "audience",
+        "resolution": "entity",
+        "matchedName": "Paterson"
+      }
+    ],
+    "signature": [
+      {
+        "name": "Atmospheric",
+        "count": 9,
+        "weight": 8.144
+      },
+      {
+        "name": "Experimental",
+        "count": 8,
+        "weight": 7.4
+      },
+      {
+        "name": "Literature",
+        "count": 7,
+        "weight": 6.177
+      },
+      {
+        "name": "School",
+        "count": 6,
+        "weight": 5.308
+      },
+      {
+        "name": "Novels",
+        "count": 6,
+        "weight": 5.308
+      },
+      {
+        "name": "Fiction",
+        "count": 6,
+        "weight": 5.261
+      },
+      {
+        "name": "stylized",
+        "count": 6,
+        "weight": 5.026
+      },
+      {
+        "name": "Fantasy",
+        "count": 5,
+        "weight": 4.511
+      },
+      {
+        "name": "Minimalist",
+        "count": 5,
+        "weight": 4.34
+      },
+      {
+        "name": "Melancholic",
+        "count": 4,
+        "weight": 3.719
+      },
+      {
+        "name": "Acoustic",
+        "count": 4,
+        "weight": 3.702
+      },
+      {
+        "name": "Science Fiction",
+        "count": 4,
+        "weight": 3.617
+      }
+    ],
+    "limitations": []
+  },
+  "dna": {
+    "schemaVersion": "1.0",
+    "thesis": "Ilo becomes a tall, black-and-silver folk wanderer in a pointed soft hat, carrying an accordion-pleated paper lantern with a silver-blue flame, who walks the cliff road with a slow, majestic sea-legged roll and kindles the beacon with an operatic, singing gesture.",
+    "devices": [
+      {
+        "id": "dna1",
+        "layer": "palette",
+        "device": "Black-and-silver wanderer's coat with faded rust and moss folk accents",
+        "anchors": [
+          "00000000-0000-4000-8000-00000000000C",
+          "00000000-0000-4000-8000-000000000002",
+          "urn:tag:aesthetic_property:qloo:neutral_color_palettes"
+        ],
+        "qualities": [
+          "Black And Silver Palette",
+          "Lo-Fi Psychedelic Folk",
+          "Neutral Color Palettes"
+        ],
+        "translation": "My interpretation: the returned black-and-silver palette tag becomes the main masses (near-black coat and hat, silver hair, trim, buttons and pleated collar); the lo-fi folk tag adds two faded, home-dyed accents, a rust sash and lantern ribs and a moss bedroll; the neutral palette tag keeps everything else desaturated. No logo or team mark is used.",
+        "tokens": {
+          "colors": [
+            "#141518",
+            "#c3c7cb",
+            "#9a4630",
+            "#5e6234"
+          ],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [
+            "#9a4630",
+            "#5e6234"
+          ],
+          "parts": [],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna2",
+        "layer": "silhouette",
+        "device": "Tall, narrow figure under a pointed soft folk hat whose tip bends back in the wind, over a long coat whose skirt and tail flow behind",
+        "anchors": [
+          "urn:tag:aesthetic_property:qloo:fluid_silhouettes",
+          "00000000-0000-4000-8000-000000000034"
+        ],
+        "qualities": [
+          "Fluid Silhouettes",
+          "Folk fantasy",
+          "Witch"
+        ],
+        "translation": "My interpretation: the folk-fantasy and witch tags become an original pointed, wide-brimmed soft hat with a sprung, bent tip (not any film costume); the fluid-silhouettes tag becomes one continuous outline from hat tip to a flared coat skirt with a trailing coat tail. The figure grows tall and slim, so the head and hat take a smaller share than a big-headed design.",
+        "tokens": {
+          "colors": [],
+          "parts": [
+            "folk-hat",
+            "hat-tip",
+            "coat-skirt",
+            "coat-tail"
+          ],
+          "proportions": {
+            "height": 180,
+            "headShare": 0.23
+          },
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [
+            "folk-hat",
+            "hat-tip",
+            "coat-skirt",
+            "coat-tail"
+          ],
+          "proportions": {
+            "height": 0.5,
+            "headShare": 0.09
+          },
+          "gait": []
+        }
+      },
+      {
+        "id": "dna3",
+        "layer": "costume",
+        "device": "Accordion-pleated paper bellows lantern and a matching pleated silver collar",
+        "anchors": [
+          "00000000-0000-4000-8000-000000000002",
+          "urn:tag:aesthetic_property:qloo:sculptural_designs"
+        ],
+        "qualities": [
+          "Accordion",
+          "Lo-Fi Psychedelic Folk",
+          "Sculptural Designs"
+        ],
+        "translation": "My interpretation: the accordion tag becomes the lantern's construction, a hanging paper lantern folded like bellows with rust ribs and caps; the sculptural-designs tag turns the same zigzag fold into a stiff pleated collar at the neck, so the light and the costume share one folded form.",
+        "tokens": {
+          "colors": [
+            "#9a4630"
+          ],
+          "parts": [
+            "bellows-lantern",
+            "pleat-collar"
+          ],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [
+            "#9a4630"
+          ],
+          "parts": [
+            "bellows-lantern",
+            "pleat-collar"
+          ],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna4",
+        "layer": "costume",
+        "device": "Road kit of a working adventurer: moss bedroll on the back, a rust shoulder strap and a knotted sash",
+        "anchors": [
+          "00000000-0000-4000-8000-00000000004D",
+          "urn:tag:aesthetic_property:qloo:quality_craftsmanship"
+        ],
+        "qualities": [
+          "Adventurer",
+          "Adventure",
+          "Quality Craftsmanship"
+        ],
+        "translation": "My interpretation: the adventurer tags become plain travelling gear rather than weapons (Ilo has no combat ability): a rolled moss blanket tied to the back, a strap crossing the chest and a sash whose tail blows in the wind; the craftsmanship tag shows in visible ties and stitched cuffs.",
+        "tokens": {
+          "colors": [
+            "#5e6234"
+          ],
+          "parts": [
+            "bedroll",
+            "pack-strap",
+            "rust-sash",
+            "sash-tail"
+          ],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [
+            "#5e6234"
+          ],
+          "parts": [
+            "bedroll",
+            "pack-strap",
+            "rust-sash",
+            "sash-tail"
+          ],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna5",
+        "layer": "motion",
+        "device": "Slow, upright, majestic walk with a rolling sea-legged hip sway and a deliberate pivot turn",
+        "anchors": [
+          "urn:tag:style:qloo:majestic",
+          "urn:tag:style:qloo:nautical"
+        ],
+        "qualities": [
+          "Majestic",
+          "Nautical"
+        ],
+        "translation": "My interpretation: majestic sets a slow cadence, almost no bounce, a chest held slightly back and a level head; nautical adds a sailor's rolling hip sway above the sea of cloud and a full free swing of the empty arm, while the lantern arm is carried out in front; the turn is an unhurried pivot.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [
+            {
+              "param": "walk.cadence",
+              "value": 1.3
+            },
+            {
+              "param": "walk.bounciness",
+              "value": 0.1
+            },
+            {
+              "param": "walk.lean",
+              "value": -2
+            },
+            {
+              "param": "walk.armSwing",
+              "value": 30
+            },
+            {
+              "param": "walk.hipSway",
+              "value": 7
+            },
+            {
+              "param": "walk.headStabilize",
+              "value": 0.9
+            },
+            {
+              "param": "turn.style",
+              "value": "pivot"
+            }
+          ],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [
+            {
+              "param": "walk.cadence",
+              "from": 1.8,
+              "to": 1.3
+            },
+            {
+              "param": "walk.lean",
+              "from": 4,
+              "to": -2
+            },
+            {
+              "param": "walk.armSwing",
+              "from": 12,
+              "to": 30
+            }
+          ]
+        }
+      },
+      {
+        "id": "dna6",
+        "layer": "signature",
+        "device": "Operatic kindling: Ilo leans back, lifts the head as if holding a sung note, raises the bellows lantern overhead and opens the other arm before releasing the flame",
+        "anchors": [
+          "urn:tag:style:qloo:operatic",
+          "00000000-0000-4000-8000-000000000034"
+        ],
+        "qualities": [
+          "Operatic",
+          "Singer"
+        ],
+        "translation": "My interpretation: operatic and singer become a long, swelling gesture with a held peak: a slow rise over 2.3 seconds, the flame leaving at the top like the last note, then a long settle; silver-blue motes burst at the release.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [
+            {
+              "name": "signature",
+              "duration": 3.6,
+              "kindleAt": 2.3,
+              "tracks": [
+                "upperArmFront",
+                "upperArmBack",
+                "torso",
+                "head"
+              ]
+            }
+          ],
+          "effects": [
+            "silver-motes"
+          ],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna7",
+        "layer": "light",
+        "device": "Silver-blue enchanted flame glowing through pale pleated paper, with motes drifting up from it",
+        "anchors": [
+          "urn:tag:style:qloo:enchanting"
+        ],
+        "qualities": [
+          "Enchanting"
+        ],
+        "translation": "My interpretation: enchanting becomes a cool, moonlit silver-blue flame instead of a plain warm lamp, so the beacon and far towers answer in an uncanny pale light, with a slow flicker and a few motes rising from the lantern.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [
+            "lantern-glimmer"
+          ],
+          "light": {
+            "color": "#bfe0ff",
+            "radius": 230
+          },
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna8",
+        "layer": "voice",
+        "device": "Moody, earnest, devoted lines: short plain sentences with a ragged emotional catch",
+        "anchors": [
+          "00000000-0000-4000-8000-00000000002B",
+          "00000000-0000-4000-8000-000000000002"
+        ],
+        "qualities": [
+          "Moody",
+          "Character studies",
+          "Emotive",
+          "Devoted"
+        ],
+        "translation": "My interpretation: moody and character-study set an inward, observational register; emotive and devoted give each line a plain, unguarded promise to the road and the beacon. The words are my own, quoting nothing.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": [
+            "Cold wind off the cloud sea. I hold the lantern close, like a promise I made to no one in particular.",
+            "I won't turn back, keeper. I didn't walk all this way to stop at a bridge.",
+            "Wake now, Vesper. I carried this light the whole long road for you.",
+            "They are. One by one. Let me sit with you a while before I walk on."
+          ]
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna9",
+        "layer": "imagery",
+        "device": "Austere, somber portrait: a lone tall figure in black and silver on a bare basalt ledge, lit only by a small silver-blue lantern",
+        "anchors": [
+          "urn:tag:style:qloo:visually_austere",
+          "urn:tag:style:qloo:somber"
+        ],
+        "qualities": [
+          "Visually Austere",
+          "Somber"
+        ],
+        "translation": "My interpretation: visually austere and somber direct a sparse composition with a flat dusk sky, few shapes and one small cold light source.",
+        "tokens": {
+          "colors": [
+            "#141518",
+            "#c3c7cb",
+            "#bfe0ff"
+          ],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "surprise": true,
+        "novel": {
+          "colors": [
+            "#bfe0ff"
+          ],
+          "parts": [],
+          "proportions": null,
+          "gait": []
+        }
+      }
+    ],
+    "rejected": [
+      {
+        "ref": "00000000-0000-4000-8000-000000000080",
+        "reason": "Its returned tags (Adult, Science Fiction Fantasy, Audiobook, Literature, School) are catalogue and format labels with no visual, material, rhythmic or vocal quality to translate; using it would mean importing a dystopian theme from my own knowledge that the fixed lore does not support."
+      }
+    ],
+    "coverage": {
+      "required": [
+        "00000000-0000-4000-8000-00000000004D",
+        "00000000-0000-4000-8000-000000000002",
+        "00000000-0000-4000-8000-00000000002B",
+        "00000000-0000-4000-8000-000000000080",
+        "00000000-0000-4000-8000-00000000000C",
+        "00000000-0000-4000-8000-000000000034"
+      ],
+      "used": [
+        "00000000-0000-4000-8000-00000000004D",
+        "00000000-0000-4000-8000-000000000002",
+        "00000000-0000-4000-8000-00000000002B",
+        "00000000-0000-4000-8000-00000000000C",
+        "00000000-0000-4000-8000-000000000034"
+      ],
+      "rejected": [
+        "00000000-0000-4000-8000-000000000080"
+      ]
+    },
+    "sourceType": "model-interpretation",
+    "stats": {
+      "devices": 9,
+      "layers": [
+        "palette",
+        "silhouette",
+        "costume",
+        "motion",
+        "signature",
+        "light",
+        "voice",
+        "imagery"
+      ],
+      "qlooAnchoredDevices": 9,
+      "surpriseAnchoredDevices": 9,
+      "modelAnchoredDevices": 0,
+      "surpriseShare": 1,
+      "sketchMoves": {
+        "colors": [
+          "#9a4630",
+          "#5e6234",
+          "#bfe0ff"
+        ],
+        "parts": [
+          "folk-hat",
+          "hat-tip",
+          "coat-skirt",
+          "coat-tail",
+          "bellows-lantern",
+          "pleat-collar",
+          "bedroll",
+          "pack-strap",
+          "rust-sash",
+          "sash-tail"
+        ],
+        "proportions": true,
+        "gait": [
+          "walk.cadence",
+          "walk.lean",
+          "walk.armSwing"
+        ]
+      }
+    }
+  },
+  "character": {
+    "savedAt": "2026-10-04T21:18:17.306Z",
+    "bytes": 13168,
+    "parts": 44,
+    "cloth": 3,
+    "effects": 3
+  },
+  "measures": {
+    "figureHeight": 180,
+    "headShare": 0.233,
+    "legShare": 0.478,
+    "height": 180,
+    "width": 50,
+    "stride": {
+      "length": 107.7,
+      "legs": 1.38,
+      "clamped": false
+    },
+    "warnings": [
+      "hidden-parts"
+    ]
+  },
+  "conformance": {
+    "score": 1,
+    "present": 9,
+    "partial": 0,
+    "missing": 0,
+    "total": 9
+  },
+  "portraits": [
+    {
+      "device": "dna9",
+      "subject": "A tall slender lamplighter in profile facing right on a bare basalt cliff ledge at dusk, black long coat, silver hair, pointed soft hat with a bent tip, holding a pleated paper lantern with a pale blue flame.",
+      "aspect": "portrait",
+      "prompt": "Use your built-in image generation tool to create exactly one image, then reply with one sentence describing what it shows. Do not write code, run commands or create files yourself.\nSubject: A tall slender lamplighter in profile facing right on a bare basalt cliff ledge at dusk, black long coat, silver hair, pointed soft hat with a bent tip, holding a pleated paper lantern with a pale blue flame.\nArt direction: Austere, somber portrait: a lone tall figure in black and silver on a bare basalt ledge, lit only by a small silver-blue lantern. Palette: #141518, #c3c7cb, #bfe0ff. Qualities: Visually Austere, Somber.\nNo text, letters, numbers, logos, brand marks, recognizable people or copyrighted characters.\nPortrait, 2:3.",
+      "provider": "codex",
+      "version": "0.160.0",
+      "status": "generated",
+      "requestedAt": "2026-10-04T21:14:36.521Z",
+      "path": "generated/dna9-1.jpg",
+      "format": "jpeg",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 111089,
+      "durationMs": 34166,
+      "description": "A tall, silver-haired lamplighter faces right on a basalt cliff at dusk, holding a pale blue lantern beneath a bent-tip hat and long black coat."
+    }
+  ],
+  "events": [
+    {
+      "time": "2026-10-04T21:11:49.031Z",
+      "type": "taste",
+      "message": "Prediction frozen: 43 entities and qualities across 8 domains, with a character sketch."
+    },
+    {
+      "time": "2026-10-04T21:11:49.039Z",
+      "type": "taste",
+      "message": "Taste profile revealed after the prediction was frozen: 76 of 79 measured entities were neither predicted nor named in the brief. 16 style and aesthetic tags were measured; 16 were not predicted."
+    },
+    {
+      "time": "2026-10-04T21:14:32.723Z",
+      "type": "taste",
+      "message": "Character DNA saved: 9 devices across 8 layers; 9 rest on entities or tags the model did not predict."
+    },
+    {
+      "time": "2026-10-04T21:14:36.521Z",
+      "type": "image",
+      "message": "Painting dna9-1 from dna9; the host wrote the prompt from that device."
+    },
+    {
+      "time": "2026-10-04T21:15:10.691Z",
+      "type": "image",
+      "message": "Generated generated/dna9-1.jpg from dna9 in 34 s."
+    },
+    {
+      "time": "2026-10-04T21:16:11.103Z",
+      "type": "warning",
+      "message": "Rejected character.json: cloth[1].fill: This field is required."
+    },
+    {
+      "time": "2026-10-04T21:17:10.199Z",
+      "type": "file",
+      "message": "Saved character.json: 44 parts, 3 cloth chains, 3 effects."
+    },
+    {
+      "time": "2026-10-04T21:17:12.074Z",
+      "type": "conformance",
+      "message": "Character check: 9 present, 0 partial, 0 missing; 1 warnings."
+    },
+    {
+      "time": "2026-10-04T21:18:17.306Z",
+      "type": "file",
+      "message": "Saved character.json: 44 parts, 3 cloth chains, 3 effects."
+    },
+    {
+      "time": "2026-10-04T21:18:17.385Z",
+      "type": "conformance",
+      "message": "Character check: 9 present, 0 partial, 0 missing; 1 warnings."
+    }
+  ]
+}

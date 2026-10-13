@@ -1,0 +1,98 @@
+{
+  "captures": [
+    {
+      "id": "r1-board",
+      "view": "board",
+      "width": 1440,
+      "height": 900,
+      "bytes": 195635,
+      "round": 1,
+      "path": ".mousa/captures/r1-board.png",
+      "entry": "index.html",
+      "capturedAt": "2026-10-06T10:38:40.813Z"
+    },
+    {
+      "id": "r1-phone-screen-welcome",
+      "view": "phone",
+      "target": "screen-welcome",
+      "width": 390,
+      "height": 844,
+      "bytes": 56188,
+      "round": 1,
+      "path": ".mousa/captures/r1-phone-screen-welcome.png",
+      "entry": "index.html",
+      "capturedAt": "2026-10-06T10:38:42.331Z"
+    },
+    {
+      "id": "r1-phone-screen-walks",
+      "view": "phone",
+      "target": "screen-walks",
+      "width": 390,
+      "height": 844,
+      "bytes": 55413,
+      "round": 1,
+      "path": ".mousa/captures/r1-phone-screen-walks.png",
+      "entry": "index.html",
+      "capturedAt": "2026-10-06T10:38:43.887Z"
+    },
+    {
+      "id": "r1-phone-screen-walk",
+      "view": "phone",
+      "target": "screen-walk",
+      "width": 390,
+      "height": 844,
+      "bytes": 34923,
+      "round": 1,
+      "path": ".mousa/captures/r1-phone-screen-walk.png",
+      "entry": "index.html",
+      "capturedAt": "2026-10-06T10:38:45.388Z"
+    },
+    {
+      "id": "r2-phone-screen-welcome",
+      "view": "phone",
+      "target": "screen-welcome",
+      "width": 390,
+      "height": 844,
+      "bytes": 54846,
+      "round": 2,
+      "path": ".mousa/captures/r2-phone-screen-welcome.png",
+      "entry": "index.html",
+      "capturedAt": "2026-10-06T10:39:40.257Z"
+    },
+    {
+      "id": "r2-phone-screen-walk",
+      "view": "phone",
+      "target": "screen-walk",
+      "width": 390,
+      "height": 844,
+      "bytes": 34765,
+      "round": 2,
+      "path": ".mousa/captures/r2-phone-screen-walk.png",
+      "entry": "index.html",
+      "capturedAt": "2026-10-06T10:39:41.762Z"
+    },
+    {
+      "id": "r2-phone-screen-walks",
+      "view": "phone",
+      "target": "screen-walks",
+      "width": 390,
+      "height": 844,
+      "bytes": 55408,
+      "round": 2,
+      "path": ".mousa/captures/r2-phone-screen-walks.png",
+      "entry": "index.html",
+      "capturedAt": "2026-10-06T10:39:43.261Z"
+    },
+    {
+      "id": "r2-board",
+      "view": "board",
+      "width": 1440,
+      "height": 900,
+      "bytes": 195973,
+      "round": 2,
+      "path": ".mousa/captures/r2-board.png",
+      "entry": "index.html",
+      "capturedAt": "2026-10-06T10:39:44.925Z"
+    }
+  ]
+}

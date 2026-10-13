@@ -1,0 +1,136 @@
+/* Ramble's screens as a screen-printed coastal poster. Every color, family, type size, space and radius comes from
+   tokens/tokens.css through var(). */
+@font-face{font-family:'Rozha One';src:url('fonts/rozha-one-latin-400-normal.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url('fonts/bricolage-grotesque-latin-wght-normal.woff2') format('woff2');font-weight:200 800;font-style:normal;font-display:swap}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: auto; }
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0;
+  background-color: var(--color-background);
+  background-image: radial-gradient(circle, var(--color-line) 1.2px, transparent 1.6px);
+  background-size: 14px 14px;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--size-body);
+  line-height: var(--leading-body);
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: var(--weight-regular); line-height: var(--leading-tight); margin: 0 0 var(--space-3); }
+h1 { font-size: var(--size-title); }
+h2 { font-size: var(--size-heading); margin: 0; }
+h3 { font-size: var(--size-heading); margin-top: var(--space-6); }
+p { margin: 0 0 var(--space-3); }
+
+.eyebrow, .ticket-no, .stats dt, .screen-note {
+  font-family: var(--font-body);
+  font-size: var(--size-eyebrow);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+.eyebrow { color: var(--color-accent); margin-bottom: var(--space-2); }
+
+/* The board: the four screens side by side, each in a phone frame. */
+.board { display: grid; grid-template-columns: repeat(4, var(--device-width)); gap: var(--space-6); justify-content: center; align-items: start; min-height: 100vh; padding: var(--space-6); }
+.phone { display: flex; flex-direction: column; width: var(--device-width); height: var(--device-height); overflow: hidden; background: var(--color-surface); border: var(--border-ink) solid var(--color-ink); border-radius: var(--radius-device); box-shadow: 6px 6px 0 var(--color-accent); }
+
+.screen-header { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-6) var(--space-4) var(--space-3); background: var(--color-ink); color: var(--color-surface); }
+.screen-header h2 { color: var(--color-surface); }
+.screen-header .screen-note { margin: 0 0 0 auto; color: var(--color-badge); white-space: nowrap; }
+.app-name { margin: 0; font-family: var(--font-display); font-size: var(--size-heading); color: var(--color-badge); }
+.screen-body { flex: 1; overflow-y: auto; padding: var(--space-4); }
+.screen-actions { display: grid; gap: var(--space-2); padding: var(--space-3) var(--space-4) var(--space-4); border-top: var(--border-ink) solid var(--color-ink); background: var(--color-surface); }
+
+/* The harbour-sun print: flat inks overprinted with multiply, a misregistered outline, like a hand-pulled poster. */
+.poster { display: block; width: 100%; height: auto; flex: none; border-bottom: var(--border-ink) solid var(--color-ink); }
+.p-sky { fill: var(--color-badge); }
+.p-sun { fill: var(--color-rose); }
+.p-hill-far { fill: var(--color-rose); mix-blend-mode: multiply; }
+.p-hill { fill: var(--color-accent); mix-blend-mode: multiply; }
+.p-register { fill: none; stroke: var(--color-ink); stroke-width: 1.4; }
+.p-town, .p-pier, .p-boat { fill: var(--color-ink); }
+.p-windows { fill: var(--color-badge); }
+.p-sea { fill: var(--color-sea); }
+.p-waves, .p-birds { fill: none; stroke-width: 2; stroke-linecap: round; }
+.p-waves { stroke: var(--color-surface); }
+.p-birds { stroke: var(--color-ink); }
+.p-sail { fill: var(--color-surface); }
+.p-lamp { fill: var(--color-rose); }
+.p-title { fill: var(--color-surface); font-family: var(--font-display); font-size: var(--size-heading); letter-spacing: var(--tracking-wide); }
+.p-sun-rise { animation: sun-rise 1.8s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes sun-rise { from { transform: translateY(46px); } to { transform: translateY(0); } }
+
+#screen-welcome h1 { margin-bottom: var(--space-2); }
+.lead { color: var(--color-muted); }
+.benefits { list-style: none; margin: 0; padding: 0; }
+.benefits li { position: relative; padding-left: var(--space-6); margin-bottom: var(--space-2); font-size: var(--size-small); }
+.benefits li::before { content: ""; position: absolute; left: 0; top: 0.35em; width: 12px; height: 12px; border-radius: 50%; background: var(--color-rose); box-shadow: 2px 2px 0 var(--color-ink); }
+
+.button { display: block; width: 100%; padding: var(--space-3) var(--space-4); border: var(--border-ink) solid var(--color-ink); border-radius: var(--radius-control); font: inherit; font-weight: var(--weight-bold); text-align: center; text-decoration: none; cursor: pointer; }
+.button.primary { background: var(--color-accent); color: var(--color-accent-ink); box-shadow: 3px 3px 0 var(--color-ink); }
+.button.primary:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--color-ink); }
+.button.quiet { background: transparent; color: var(--color-ink); }
+.button:focus-visible, .chip:focus-visible, .walk-card:focus-visible, .back:focus-visible { outline: 3px solid var(--color-rose); outline-offset: 2px; }
+
+/* The walks: a filter row, a perforated tear, then a run of ferry tickets. */
+.walks-intro { padding: var(--space-4) var(--space-4) var(--space-3); }
+.filters { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip { padding: var(--space-1) var(--space-3); border: var(--border-ink) solid var(--color-ink); border-radius: var(--radius-control); background: var(--color-surface); color: var(--color-ink); font: inherit; font-size: var(--size-small); font-weight: var(--weight-bold); cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--color-ink); color: var(--color-badge); }
+.tear { flex: none; display: flex; justify-content: center; height: 16px; margin: 0 var(--space-4); background-image: radial-gradient(circle, var(--color-accent) 2.5px, transparent 3px); background-size: 12px 16px; background-repeat: repeat-x; background-position: center; }
+.tear span { padding: 0 var(--space-2); background: var(--color-surface); color: var(--color-accent); font-size: var(--size-eyebrow); font-weight: var(--weight-bold); letter-spacing: var(--tracking-wide); text-transform: uppercase; line-height: 16px; }
+
+.walk-list, .stop-list, .route { list-style: none; margin: 0; padding: 0; }
+.walk-list li + li { margin-top: var(--space-3); }
+.walk-card { position: relative; display: grid; grid-template-columns: 1fr 76px; width: 100%; padding: 0; border: var(--border-ink) solid var(--color-ink); border-radius: var(--radius-card); background: var(--color-surface); color: var(--color-ink); font: inherit; text-align: left; cursor: pointer; overflow: visible; }
+.walk-card::before, .walk-card::after { content: ""; position: absolute; right: 68px; width: 16px; height: 16px; border-radius: 50%; background: var(--color-surface); border: var(--border-ink) solid var(--color-ink); }
+.walk-card::before { top: -9px; clip-path: inset(50% 0 0 0); }
+.walk-card::after { bottom: -9px; clip-path: inset(0 0 50% 0); }
+.walk-card:hover .ticket-stub { background: var(--color-rose); }
+.ticket-main { display: grid; gap: var(--space-1); padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4); }
+.ticket-no { color: var(--color-accent); }
+.walk-name { font-family: var(--font-display); font-size: var(--size-heading); line-height: var(--leading-tight); }
+.walk-meta, .district { color: var(--color-muted); font-size: var(--size-small); }
+.ticket-stub { display: grid; place-content: center; text-align: center; border-left: var(--border-ink) solid var(--color-ink); border-left-style: dashed; border-radius: 0 calc(var(--radius-card) - 2px) calc(var(--radius-card) - 2px) 0; background: var(--color-badge); color: var(--color-ink); transition: background-color .2s; }
+.stub-minutes { font-family: var(--font-display); font-size: var(--size-stub); line-height: var(--leading-tight); }
+.stub-unit { font-size: var(--size-eyebrow); font-weight: var(--weight-bold); letter-spacing: var(--tracking-wide); text-transform: uppercase; }
+.badge { justify-self: start; margin-top: var(--space-1); padding: 0 var(--space-2); border-radius: var(--radius-control); background: var(--color-sea); color: var(--color-surface); font-size: var(--size-eyebrow); font-weight: var(--weight-bold); }
+
+/* The chosen walk. */
+.back { color: var(--color-badge); font-size: var(--size-heading); text-decoration: none; }
+.district { font-weight: var(--weight-bold); color: var(--color-accent); }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin: var(--space-4) 0; }
+.stats div { padding: var(--space-2); border: var(--border-ink) solid var(--color-ink); border-radius: var(--radius-card); background: var(--color-background); }
+.stats dt { color: var(--color-muted); }
+.stats dd { margin: 0; font-family: var(--font-display); font-size: var(--size-body); }
+.stop-list { counter-reset: stop; }
+.stop-list li { counter-increment: stop; display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) 0; border-bottom: var(--border-ink) dotted var(--color-line); }
+.stop-list li::before { content: counter(stop); display: grid; place-items: center; flex: none; width: 26px; height: 26px; border: var(--border-ink) solid var(--color-rose); border-radius: 50%; color: var(--color-ink); font-size: var(--size-eyebrow); font-weight: var(--weight-bold); }
+
+/* The walk in progress: the journey as stamps on a dotted harbour line. */
+.journey { position: relative; margin-bottom: var(--space-6); padding: var(--space-4) var(--space-1); }
+.journey::before { content: ""; position: absolute; left: var(--space-3); right: var(--space-3); top: 50%; border-top-width: 3px; border-top-style: dotted; border-top-color: var(--color-ink); }
+.route { position: relative; display: flex; justify-content: space-between; align-items: center; }
+.route li { flex: none; width: 18px; height: 18px; border: var(--border-ink) solid var(--color-ink); border-radius: 50%; background: var(--color-surface); }
+.route li[data-state="done"] { background: var(--color-ink); }
+.route li[data-state="current"] { width: 24px; height: 24px; background: var(--color-rose); box-shadow: 0 0 0 4px var(--color-surface), 0 0 0 6px var(--color-rose); }
+.stop-card { padding: var(--space-4); border: var(--border-ink) solid var(--color-ink); border-radius: var(--radius-card); background: var(--color-background); box-shadow: 4px 4px 0 var(--color-badge); }
+.stop-card h3 { margin-top: 0; font-size: var(--size-title); }
+.stop-card p { margin: 0; }
+.stop-card.stamp { animation: stamp-in .45s cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes stamp-in { from { opacity: 0; transform: scale(1.12) rotate(-2deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+.kind-note { margin-top: var(--space-4); color: var(--color-muted); font-size: var(--size-small); }
+.noscript { padding: var(--space-6); text-align: center; }
+
+/* A phone shows one screen per viewport, without the frame. */
+@media (max-width: 899px) {
+  .board { display: block; padding: 0; }
+  .phone { width: auto; height: 100vh; height: 100dvh; border: 0; border-radius: 0; box-shadow: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .p-sun-rise, .stop-card.stamp { animation: none; }
+  .ticket-stub { transition: none; }
+}

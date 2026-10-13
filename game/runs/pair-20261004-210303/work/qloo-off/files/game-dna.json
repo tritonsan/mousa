@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "1.0",
+  "thesis": "Ilo is a small, plush, bottom-heavy figure in undyed linen and ink-slate wool who walks the cliff road slowly with a paper lantern raised on a pole, holds still, and then throws the flame up on a swung off-beat.",
+  "devices": [
+    {
+      "id": "dna1",
+      "layer": "palette",
+      "device": "Undyed-cloth palette: ink-slate wool over unbleached linen, ochre wood and one rust thread, nothing saturated but the flame",
+      "anchors": ["M01", "M40"],
+      "qualities": ["unbleached natural materials", "plain unbranded goods", "muted ink and ochre palette"],
+      "translation": "My reading of a no-brand, undyed household-goods aesthetic and a muted ink-and-ochre palette: the cloak is two slates of ink, the scarf and face are linen tones, the pole and boots are ochre-brown wood and leather, and a single rust band in the scarf is the only accent, so the lantern's flame is the only bright thing on screen.",
+      "tokens": {
+        "colors": ["#2b2f3a", "#4a5161", "#e8dcc4", "#c9a46a", "#8c3b2e"]
+      }
+    },
+    {
+      "id": "dna2",
+      "layer": "silhouette",
+      "device": "Round plush hood over a small bell cloak: one rounded, bottom-heavy mass with a drooping hood point and a pole rising in front",
+      "anchors": ["M07", "M44"],
+      "qualities": ["soft rounded creature shapes", "bottom-heavy plush masses", "minimal bold silhouettes"],
+      "translation": "My interpretation of the soft, pear-shaped forest-spirit forms of a gentle hand-drawn family film and of minimal bold silhouettes: a head share near a third, one unbroken hood mass, a widening bell cloak and short legs, readable as a single dark shape at small size.",
+      "tokens": {
+        "parts": ["hood", "hood-tip", "cloak"],
+        "proportions": { "height": 130, "headShare": 0.3 }
+      }
+    },
+    {
+      "id": "dna3",
+      "layer": "costume",
+      "device": "Walker's wool kit: a long banded scarf streaming in the cliff wind, wrapped collar, ochre hip satchel, leather boots and a paper lantern on a wooden pole",
+      "anchors": ["M28", "M42", "M45"],
+      "qualities": ["a long scarf trailing across vast emptiness", "weathered wood, paper and wool", "worn natural fabrics"],
+      "translation": "My reading of a lone pilgrim crossing an empty landscape with cloth streaming behind it, rendered in weathered wood, paper and wool: the scarf is plain linen with rust bands (no glyphs or patterns borrowed from anywhere), the lantern is paper over a wooden frame, and everything looks hand-made and mended.",
+      "tokens": {
+        "parts": ["scarf", "scarf-wrap", "satchel", "lantern-pole", "paper-lantern", "boots"],
+        "colors": ["#e8dcc4", "#8c3b2e"]
+      }
+    },
+    {
+      "id": "dna4",
+      "layer": "motion",
+      "device": "Ritual walk: slow steps with little bounce, a slight lean, a level head, a small free-arm swing and an eased pivot turn",
+      "anchors": ["M34", "M36", "M38"],
+      "qualities": ["slow contemplative pacing", "everyday ritual and repetition", "quiet melancholy"],
+      "translation": "My interpretation of slow contemplative pacing and everyday ritual: 1.6 steps a second, bounciness 0.25, a 4 degree lean, an 18 degree arm swing, a head held level at 0.8 so the lantern does not jog, and a pivot turn that eases around like someone who has walked this road many times.",
+      "tokens": {
+        "motion": [
+          { "param": "walk.cadence", "value": 1.6 },
+          { "param": "walk.bounciness", "value": 0.25 },
+          { "param": "walk.lean", "value": 4 },
+          { "param": "walk.armSwing", "value": 18 },
+          { "param": "walk.headStabilize", "value": 0.8 },
+          { "param": "turn.style", "value": "pivot" }
+        ]
+      }
+    },
+    {
+      "id": "dna5",
+      "layer": "signature",
+      "device": "Off-beat throw: dip the lantern, hold still, then swing the pole up and flick the flame free just after the beat with an overshoot",
+      "anchors": ["M24", "M39"],
+      "qualities": ["laid-back swung hip-hop rhythm", "sudden swells after long stillness"],
+      "translation": "My reading of a laid-back, swung beat under sword-fight choreography and of sudden swells after stillness: a 3.4 second clip whose dip and hold take the first 1.4 seconds, then the arm rises and the flame leaves at 2.1 seconds, late like a swung note, with an outBack overshoot and a ring of light.",
+      "tokens": {
+        "clips": [{ "name": "signature", "duration": 3.4, "kindleAt": 2.1, "tracks": ["upperArmFront", "forearmFront", "torso", "head"] }],
+        "effects": ["kindle-swell", "kindle-ring"]
+      }
+    },
+    {
+      "id": "dna6",
+      "layer": "light",
+      "device": "Breathing paper lantern: a pale amber light that swells and fades slowly instead of flickering, with motes drifting upward",
+      "anchors": ["M13", "M43"],
+      "qualities": ["slow bowed swells", "high, fragile warmth", "warm glow in deep darkness"],
+      "translation": "My interpretation of slow, bowed, high-register swells and of a warm glow in deep darkness: a #ffc46b light of radius 230 with a slow 1.6-speed, 0.14-amount flicker that reads as breathing, and an aura of rising ember motes.",
+      "tokens": {
+        "light": { "color": "#ffc46b", "radius": 230 },
+        "effects": ["ember-motes"],
+        "colors": ["#ffe3a8"]
+      }
+    },
+    {
+      "id": "dna7",
+      "layer": "voice",
+      "device": "Plain-dream register: short, literal sentences that accept strange things calmly, a pause in the middle, no exclamations",
+      "anchors": ["M19", "M38"],
+      "qualities": ["matter-of-fact surreal narration", "lonely young traveller", "quiet melancholy"],
+      "translation": "My reading of a novel narrated flatly by a young runaway in a dreamlike world: Ilo states things simply, treats the stopped sun and a cold beacon as ordinary, and speaks in two short sentences per line.",
+      "tokens": {
+        "lines": [
+          "The cloud is quiet below the road tonight. I like it when it is quiet.",
+          "I saw the bridge. I crossed it anyway. The beacon is just up the road, then.",
+          "Wake up, Vesper. I carried this a long way for you.",
+          "I see them. Sit a while, Maren. The road will keep."
+        ]
+      }
+    },
+    {
+      "id": "dna8",
+      "layer": "imagery",
+      "device": "Hand-drawn dusk portrait: Ilo small against a vast cloud sea, soft textured ink line, slate, linen and ochre, lit only by the lantern",
+      "anchors": ["M37", "M41", "M35"],
+      "qualities": ["hand-drawn animation", "hand-drawn textured line", "long held wide shots with a small figure"],
+      "translation": "My interpretation of hand-drawn animation, textured ink line and wide shots with small figures: the portrait uses painted backgrounds, a soft dark contour and the palette of dna1, with the lantern as the single warm source.",
+      "tokens": {
+        "colors": ["#2b2f3a", "#4a5161", "#e8dcc4", "#ffc46b"]
+      }
+    }
+  ],
+  "rejected": []
+}

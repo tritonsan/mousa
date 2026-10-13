@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "1.0",
+  "id": "ilo-silver-bellows",
+  "name": "Ilo",
+  "role": "Lamplighter",
+  "description": "A tall, slim lamplighter with silver hair under a pointed black soft hat whose tip bends back in the wind. A long black coat with silver buttons and a pleated silver collar flows behind; a moss bedroll rides the back. From the front hand hangs a folded paper lantern with rust ribs and a silver-blue flame.",
+  "palette": {
+    "coat": "#141518",
+    "coatdk": "#0b0b0d",
+    "coatlt": "#2c2e33",
+    "silver": "#c3c7cb",
+    "silverdk": "#8a8f95",
+    "rust": "#9a4630",
+    "rustdk": "#6b2e20",
+    "moss": "#5e6234",
+    "mossdk": "#41442a",
+    "skin": "#d9b48f",
+    "skindk": "#b48a66",
+    "ink": "#08080a",
+    "paper": "#e4eef5",
+    "flame": "#bfe0ff"
+  },
+  "style": { "outline": { "color": "#08080a", "width": 1.2 }, "backShade": 0.38, "shadow": 0.6 },
+  "skeleton": {
+    "hip": [0, -86], "chest": [3, -128], "neck": [5, -138], "head": [7, -152], "shoulder": [2, -126],
+    "elbow": [3, -100], "wrist": [4, -76], "knee": [2, -46], "ankle": [0, -8], "toe": [16, 0]
+  },
+  "parts": [
+    { "id": "thigh", "bone": "thigh", "z": 0, "shape": "capsule", "from": [0, -86], "to": [2, -46], "r1": 8, "r2": 6.2, "fill": "coatlt" },
+    { "id": "shin", "bone": "shin", "z": 0, "shape": "capsule", "from": [2, -46], "to": [0, -9], "r1": 6.2, "r2": 4.6, "fill": "coatlt" },
+    { "id": "shin-light", "bone": "shin", "z": 1, "shape": "capsule", "from": [5, -42], "to": [3.5, -14], "r1": 1.4, "r2": 1, "fill": "silverdk", "opacity": 0.5, "strokeWidth": 0 },
+    { "id": "boot", "bone": "foot", "z": 1, "shape": "path", "d": "M-6,-15 C-6,-19 6,-19 6.5,-13 L8,-7 C13,-7 18,-5 18,-1 L18,1 L-7,1 L-7,-7 Z", "fill": "coatdk" },
+    { "id": "boot-cap", "bone": "foot", "z": 2, "shape": "path", "d": "M10,-6 C14,-6 18,-4 18,-1 L18,1 L11,1 Z", "fill": "silverdk" },
+
+    { "id": "coat-skirt", "bone": "pelvis", "z": 3, "shape": "path", "d": "M-13,-90 L12,-90 C14,-78 16,-64 18,-52 C10,-49 0,-46 -8,-44 C-14,-42 -19,-41 -22,-41 C-19,-58 -16,-74 -13,-90 Z", "fill": "coat" },
+    { "id": "coat-skirt-shade", "bone": "pelvis", "z": 4, "shape": "path", "d": "M-13,-90 L-7,-90 C-8,-76 -9,-60 -9,-44 C-14,-42 -19,-41 -22,-41 C-19,-58 -16,-74 -13,-90 Z", "fill": "coatdk" },
+    { "id": "coat-skirt-edge", "bone": "pelvis", "z": 4, "shape": "path", "d": "M10,-90 L12,-90 C14,-78 16,-64 18,-52 L15.5,-51 C13.5,-64 11.5,-78 10,-90 Z", "fill": "coatlt" },
+    { "id": "rust-sash", "bone": "pelvis", "z": 5, "shape": "path", "d": "M-14,-92 L13,-92 L13.5,-85 L-14.5,-85 Z", "fill": "rust" },
+    { "id": "sash-knot", "bone": "pelvis", "z": 6, "shape": "ellipse", "center": [-12, -88.5], "rx": 3.5, "ry": 4, "fill": "rustdk" },
+
+    { "id": "neck", "bone": "torso", "z": 1, "shape": "capsule", "from": [5, -130], "to": [7, -143], "r1": 4.2, "fill": "skindk" },
+    { "id": "torso", "bone": "torso", "z": 2, "shape": "path", "d": "M-13,-84 C-15,-104 -13,-122 -8,-134 C-3,-139 9,-139 12,-133 C15,-120 14,-100 12,-84 Z", "fill": "coat" },
+    { "id": "torso-shade", "bone": "torso", "z": 3, "shape": "path", "d": "M-13,-84 C-15,-104 -13,-122 -8,-134 C-9,-120 -9,-100 -7,-84 Z", "fill": "coatdk" },
+    { "id": "torso-edge", "bone": "torso", "z": 3, "shape": "path", "d": "M12,-133 C15,-120 14,-100 12,-84 L9.5,-84 C11.5,-100 12,-118 10,-132 Z", "fill": "coatlt" },
+    { "id": "button-1", "bone": "torso", "z": 4, "shape": "circle", "center": [10.5, -122], "r": 1.6, "fill": "silver" },
+    { "id": "button-2", "bone": "torso", "z": 4, "shape": "circle", "center": [11, -111], "r": 1.6, "fill": "silver" },
+    { "id": "button-3", "bone": "torso", "z": 4, "shape": "circle", "center": [11, -100], "r": 1.6, "fill": "silver" },
+    { "id": "pack-strap", "bone": "torso", "z": 4, "shape": "path", "d": "M-5,-136 C0,-124 5,-110 10,-96", "fill": "none", "stroke": "rust", "strokeWidth": 2.6 },
+    { "id": "bedroll", "bone": "torso", "z": 5, "shape": "ellipse", "center": [-16, -122], "rx": 7.5, "ry": 10, "fill": "moss" },
+    { "id": "bedroll-shade", "bone": "torso", "z": 6, "shape": "path", "d": "M-23,-124 C-23,-116 -20,-112 -16,-112 C-19,-115 -20,-120 -20,-126 Z", "fill": "mossdk" },
+    { "id": "bedroll-spiral", "bone": "torso", "z": 6, "shape": "circle", "center": [-15, -123], "r": 4, "fill": "none", "stroke": "mossdk", "strokeWidth": 1.2 },
+    { "id": "bedroll-tie", "bone": "torso", "z": 7, "shape": "path", "d": "M-24,-116 L-9,-116 L-9,-111 L-24,-111 Z", "fill": "rust" },
+    { "id": "pleat-collar", "bone": "torso", "z": 8, "shape": "path", "d": "M-7,-134 L-4,-141 L-1,-134 L2,-141 L5,-134 L8,-141 L11,-134 L13,-129 L-8,-129 Z", "fill": "silver" },
+    { "id": "pleat-collar-shade", "bone": "torso", "z": 9, "shape": "path", "d": "M-4,-141 L-1,-134 L2,-141 M5,-134 L8,-141 L11,-134", "fill": "none", "stroke": "silverdk", "strokeWidth": 1 },
+
+    { "id": "upper-arm", "bone": "upperArm", "z": 5, "shape": "capsule", "from": [2, -126], "to": [3, -100], "r1": 6.5, "r2": 5.5, "fill": "coat" },
+    { "id": "upper-arm-edge", "bone": "upperArm", "z": 6, "shape": "capsule", "from": [6.5, -122], "to": [7, -103], "r1": 1.3, "r2": 1, "fill": "coatlt", "strokeWidth": 0 },
+    { "id": "forearm", "bone": "forearm", "z": 5, "shape": "capsule", "from": [3, -100], "to": [4, -78], "r1": 5.5, "r2": 5, "fill": "coat" },
+    { "id": "cuff", "bone": "forearm", "z": 6, "shape": "capsule", "from": [3.8, -83], "to": [4, -78], "r1": 5.8, "fill": "silver" },
+    { "id": "hand", "bone": "hand", "z": 7, "shape": "circle", "center": [4.5, -73], "r": 4.2, "fill": "skin" },
+
+    { "id": "face", "bone": "head", "z": 10, "shape": "ellipse", "center": [9, -150], "rx": 9.5, "ry": 12, "fill": "skin" },
+    { "id": "face-shade", "bone": "head", "z": 11, "shape": "path", "d": "M2,-158 C-1,-152 0,-143 5,-139 C3,-145 3,-152 6,-158 Z", "fill": "skindk" },
+    { "id": "hair", "bone": "head", "z": 12, "shape": "path", "d": "M-3,-162 C-9,-158 -10,-148 -7,-140 C-2,-141 2,-146 3,-152 C4,-157 2,-160 -3,-162 Z", "fill": "silver" },
+    { "id": "hair-shade", "bone": "head", "z": 13, "shape": "path", "d": "M-7,-156 C-9,-150 -8,-145 -7,-141 C-5,-145 -5,-151 -4,-157 Z", "fill": "silverdk" },
+    { "id": "eye", "bone": "head", "z": 14, "role": "eye", "shape": "ellipse", "center": [14.5, -151], "rx": 1.3, "ry": 1.8, "fill": "ink" },
+    { "id": "brow", "bone": "head", "z": 14, "shape": "path", "d": "M12,-155 L17,-154.5", "fill": "none", "stroke": "silverdk", "strokeWidth": 1.1 },
+    { "id": "nose", "bone": "head", "z": 14, "shape": "path", "d": "M18.2,-150 L20.5,-145.5 L17.8,-144.8", "fill": "none", "stroke": "skindk", "strokeWidth": 1.2 },
+    { "id": "mouth", "bone": "head", "z": 14, "shape": "path", "d": "M14.5,-141.5 L17,-141.8", "fill": "none", "stroke": "skindk", "strokeWidth": 1 },
+    { "id": "blush", "bone": "head", "z": 14, "shape": "circle", "center": [12.5, -146], "r": 2, "fill": "#c98a70", "opacity": 0.35, "strokeWidth": 0 },
+    { "id": "folk-hat", "bone": "head", "z": 15, "shape": "path", "d": "M-7,-162 C-4,-169 -1,-176 3,-180 C6,-176 11,-169 17,-162 Z", "fill": "coat" },
+    { "id": "folk-hat-shade", "bone": "head", "z": 16, "shape": "path", "d": "M-7,-162 C-4,-169 -1,-176 3,-180 C1,-174 0,-168 -1,-162 Z", "fill": "coatdk" },
+    { "id": "hat-band", "bone": "head", "z": 16, "shape": "path", "d": "M-6,-163 L16,-163 L14.5,-167 L-4.5,-167 Z", "fill": "silver" },
+    { "id": "hat-brim", "bone": "head", "z": 17, "shape": "ellipse", "center": [5, -161.5], "rx": 21, "ry": 3, "fill": "coat" },
+    { "id": "hat-brim-edge", "bone": "head", "z": 18, "shape": "path", "d": "M14,-160 C20,-160.5 24,-161 26,-161.5", "fill": "none", "stroke": "coatlt", "strokeWidth": 1.2 },
+    { "id": "hat-tip", "bone": "head", "z": 16, "shape": "path", "d": "M3.5,-179 C-1,-179.5 -7,-178 -12,-173 L-10,-172 C-6,-175.5 -1,-176.5 3,-176.5 Z", "fill": "coat",
+      "spring": { "pivot": [3, -178], "stiffness": 0.35, "damping": 0.3, "gain": 1.2 } }
+  ],
+  "cloth": [
+    { "id": "coat-tail", "bone": "pelvis", "anchor": [-11, -82], "segments": 6, "length": 44, "width": [14, 20], "fill": "coat", "stroke": "coatdk", "strokeWidth": 1, "rest": 105, "stiffness": 0.45, "damping": 0.3, "gravity": 0.9, "wind": 0.8, "z": -8 },
+    { "id": "sash-tail", "bone": "pelvis", "anchor": [-12, -88], "segments": 6, "length": 34, "width": [4, 2.5], "fill": "rust", "stripes": ["#9a4630", "#6b2e20"], "rest": 125, "stiffness": 0.2, "damping": 0.25, "gravity": 0.7, "wind": 1.2, "z": -6 },
+    { "id": "bellows-lantern", "bone": "hand", "side": "front", "anchor": [5, -70], "segments": 2, "length": 12, "width": [1.2, 1.2], "fill": "#8a8f95", "rest": 90, "stiffness": 0, "damping": 0.3, "gravity": 1, "wind": 0.15, "z": 8,
+      "tip": [
+        { "shape": "path", "d": "M-6,0 L6,0 L7.5,3 L-7.5,3 Z", "fill": "#9a4630" },
+        { "shape": "path", "d": "M-7.5,3 C-10.5,8 -10.5,18 -7.5,23 L7.5,23 C10.5,18 10.5,8 7.5,3 Z", "fill": "#e4eef5" },
+        { "shape": "path", "d": "M-9.4,8 L9.4,8", "fill": "none", "stroke": "#6b2e20", "strokeWidth": 0.9 },
+        { "shape": "path", "d": "M-10,13 L10,13", "fill": "none", "stroke": "#6b2e20", "strokeWidth": 0.9 },
+        { "shape": "path", "d": "M-9.4,18 L9.4,18", "fill": "none", "stroke": "#6b2e20", "strokeWidth": 0.9 },
+        { "shape": "ellipse", "center": [0, 13], "rx": 3.4, "ry": 5, "fill": "#bfe0ff", "opacity": 0.95 },
+        { "shape": "circle", "center": [0, 14], "r": 1.7, "fill": "#ffffff" },
+        { "shape": "path", "d": "M-7.5,23 L7.5,23 L5.5,26.5 L-5.5,26.5 Z", "fill": "#9a4630" }
+      ] }
+  ],
+  "light": { "color": "#bfe0ff", "radius": 230, "intensity": 1.05, "flicker": { "speed": 3, "amount": 0.12 }, "attach": { "cloth": "bellows-lantern", "offset": [0, 13] } },
+  "motion": {
+    "walk": { "speed": 70, "cadence": 1.3, "stepHeight": 0.12, "bob": 0.03, "bounciness": 0.1, "lean": -2, "armSwing": 30, "elbowBend": 15, "hipSway": 7, "headStabilize": 0.9, "squash": 0.01, "accel": 0.6 },
+    "idle": { "breathRate": 10, "breathDepth": 0.5, "sway": 0.5, "weightShift": 0.5, "lookAround": 0.3, "blinkInterval": 5, "stance": 0.18 },
+    "turn": { "style": "pivot", "duration": 0.5 },
+    "carry": { "arm": "front", "upperArm": -25, "forearm": -45, "hand": 10 }
+  },
+  "clips": {
+    "signature": {
+      "duration": 3.6,
+      "kindleAt": 2.3,
+      "tracks": {
+        "torso": [[0, 0], [0.9, -4, "inOut"], [1.8, -7, "inOut"], [2.3, -9, "out"], [3.0, -3, "inOut"], [3.6, 0, "inOut"]],
+        "head": [[0, 0], [0.9, -5, "inOut"], [1.8, -10, "inOut"], [2.3, -14, "out"], [3.0, -5, "inOut"], [3.6, 0, "inOut"]],
+        "upperArmFront": [[0, -25], [0.9, -65, "inOut"], [1.8, -110, "inOut"], [2.3, -128, "outBack"], [3.0, -122, "inOut"], [3.6, -25, "inOut"]],
+        "forearmFront": [[0, -45], [0.9, -35, "inOut"], [1.8, -25, "inOut"], [2.3, -18, "out"], [3.0, -20, "inOut"], [3.6, -45, "inOut"]],
+        "upperArmBack": [[0, 0], [0.9, -20, "inOut"], [1.8, -45, "inOut"], [2.3, -75, "outBack"], [3.0, -70, "inOut"], [3.6, 0, "inOut"]],
+        "forearmBack": [[0, 0], [1.8, -15, "inOut"], [2.3, -25, "out"], [3.6, 0, "inOut"]]
+      },
+      "root": [[0, 0, 0], [2.3, 0, -2, "out"], [3.6, 0, 0, "inOut"]],
+      "squash": [[0, 1], [1.8, 0.97, "inOut"], [2.3, 1.04, "outBack"], [3.6, 1, "inOut"]],
+      "events": [{ "t": 2.3, "emit": "silver-motes" }]
+    },
+    "greet": {
+      "duration": 2.0,
+      "tracks": {
+        "torso": [[0, 0], [0.7, 18, "inOut"], [1.3, 18, "inOut"], [2.0, 0, "inOut"]],
+        "head": [[0, 0], [0.7, 10, "inOut"], [1.3, 10, "inOut"], [2.0, 0, "inOut"]],
+        "upperArmBack": [[0, 0], [0.7, -55, "inOut"], [1.3, -55, "inOut"], [2.0, 0, "inOut"]],
+        "forearmBack": [[0, 0], [0.7, -60, "inOut"], [1.3, -60, "inOut"], [2.0, 0, "inOut"]]
+      }
+    },
+    "fidget": {
+      "duration": 2.6,
+      "tracks": {
+        "head": [[0, 0], [0.8, -12, "inOut"], [1.8, -12, "inOut"], [2.6, 0, "inOut"]],
+        "upperArmFront": [[0, -25], [1.0, -40, "inOut"], [1.6, -40, "inOut"], [2.6, -25, "inOut"]]
+      }
+    }
+  },
+  "effects": [
+    { "id": "basalt-dust", "kind": "footstep", "shape": "circle", "colors": ["#4a4a4e", "#2c2e33"], "size": [1, 2.4], "life": [0.3, 0.7], "rate": 3, "speed": [10, 30], "spread": 80, "direction": -90, "gravity": 40, "drag": 0.6, "blend": "normal" },
+    { "id": "lantern-glimmer", "kind": "aura", "shape": "circle", "colors": ["#bfe0ff", "#e4eef5"], "size": [0.6, 1.6], "life": [1, 2.2], "rate": 4, "speed": [4, 14], "spread": 50, "direction": -90, "gravity": -10, "drag": 0.5, "blend": "add" },
+    { "id": "silver-motes", "kind": "burst", "shape": "diamond", "colors": ["#bfe0ff", "#e4eef5", "#c3c7cb"], "size": [1, 2.6], "life": [0.6, 1.4], "rate": 36, "speed": [60, 200], "spread": 100, "direction": -60, "gravity": -20, "drag": 0.5, "blend": "add" }
+  ],
+  "lines": {
+    "arrive": "Cold wind off the cloud sea. I hold the lantern close, like a promise I made to no one in particular.",
+    "greet": "I won't turn back, keeper. I didn't walk all this way to stop at a bridge.",
+    "kindle": "Wake now, Vesper. I carried this light the whole long road for you.",
+    "after": "They are. One by one. Let me sit with you a while before I walk on."
+  }
+}

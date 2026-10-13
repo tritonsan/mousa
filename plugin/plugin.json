@@ -1,0 +1,19 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "culture-grounded-design",
+  "version": "0.4.0",
+  "description": "Assess creative research needs across web, game, RPG and writing work, turn measured Qloo taste into a binding Design DNA, and preserve cultural evidence separately from creative interpretation.",
+  "author": { "name": "Moûsa" },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Moûsa",
+        "shortDescription": "Culture into shared design",
+        "longDescription": "Assess whether an open creative decision needs research, reuse, a reference question or no Qloo call. Share authored context across web design, game creation, RPGs and writing, then resolve cultural references and preserve actual evidence separately from creative interpretation. Imported records remain unverified.",
+        "developerName": "Moûsa",
+        "category": "Productivity",
+        "defaultPrompt": "Help us build one coherent shared design from our cultural references, grounding decisions in Qloo evidence."
+      }
+    }
+  }
+}

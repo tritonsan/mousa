@@ -1,0 +1,1084 @@
+{
+  "schemaVersion": "1.0",
+  "mode": "baseline",
+  "startedAt": "2026-10-04T21:03:15.197Z",
+  "calls": 18,
+  "checks": 2,
+  "pipeline": {
+    "status": "constructed",
+    "predictedAt": "2026-10-04T21:03:46.551Z",
+    "revealedAt": "2026-10-04T21:03:46.552Z",
+    "specifiedAt": "2026-10-04T21:06:28.705Z",
+    "constructionStartedAt": "2026-10-04T21:06:34.564Z"
+  },
+  "assumption": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Players who love quiet, melancholy, hand-crafted worlds: hand-drawn games and animation, post-rock and jazzy lo-fi beats, and slow films about everyday ritual. They want atmosphere, small figures in vast places and warmth found in repetition.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "videogame",
+      "style",
+      "aesthetic"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Muji"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Studio Ghibli"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Moleskine"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Leica"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Uniqlo"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Patagonia"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "My Neighbor Totoro"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Princess Mononoke"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Perfect Days"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Lost in Translation"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Your Name"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "Only Lovers Left Alive"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Jónsi"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Ólafur Arnalds"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "J Dilla"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Joe Hisaishi"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Explosions in the Sky"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "Bon Iver"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Kafka on the Shore"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Norwegian Wood"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "The Little Prince"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "A Wizard of Earthsea"
+      },
+      {
+        "id": "M23",
+        "domain": "book",
+        "name": "Piranesi"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Samurai Champloo"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Mushishi"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Cowboy Bebop"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Twin Peaks"
+      },
+      {
+        "id": "M28",
+        "domain": "videogame",
+        "name": "Journey"
+      },
+      {
+        "id": "M29",
+        "domain": "videogame",
+        "name": "Ori and the Blind Forest"
+      },
+      {
+        "id": "M30",
+        "domain": "videogame",
+        "name": "Gris"
+      },
+      {
+        "id": "M31",
+        "domain": "videogame",
+        "name": "Hyper Light Drifter"
+      },
+      {
+        "id": "M32",
+        "domain": "videogame",
+        "name": "Outer Wilds"
+      },
+      {
+        "id": "M33",
+        "domain": "videogame",
+        "name": "Celeste"
+      },
+      {
+        "id": "M34",
+        "domain": "style",
+        "name": "slow contemplative pacing"
+      },
+      {
+        "id": "M35",
+        "domain": "style",
+        "name": "long held wide shots with a small figure"
+      },
+      {
+        "id": "M36",
+        "domain": "style",
+        "name": "everyday ritual and repetition"
+      },
+      {
+        "id": "M37",
+        "domain": "style",
+        "name": "hand-drawn animation"
+      },
+      {
+        "id": "M38",
+        "domain": "style",
+        "name": "quiet melancholy"
+      },
+      {
+        "id": "M39",
+        "domain": "style",
+        "name": "sudden swells after long stillness"
+      },
+      {
+        "id": "M40",
+        "domain": "aesthetic",
+        "name": "muted ink and ochre palette"
+      },
+      {
+        "id": "M41",
+        "domain": "aesthetic",
+        "name": "hand-drawn textured line"
+      },
+      {
+        "id": "M42",
+        "domain": "aesthetic",
+        "name": "weathered wood, paper and wool"
+      },
+      {
+        "id": "M43",
+        "domain": "aesthetic",
+        "name": "warm glow in deep darkness"
+      },
+      {
+        "id": "M44",
+        "domain": "aesthetic",
+        "name": "minimal bold silhouettes"
+      },
+      {
+        "id": "M45",
+        "domain": "aesthetic",
+        "name": "worn natural fabrics"
+      }
+    ],
+    "sourceType": "model-assumption",
+    "characterSketch": {
+      "summary": "A small hooded lamplighter with a big round head and a long trailing scarf, carrying a warm paper lantern on a pole along the cliff road.",
+      "palette": [
+        "#2b2f3a",
+        "#4a5161",
+        "#c9a46a",
+        "#e8dcc4",
+        "#8c3b2e"
+      ],
+      "height": 130,
+      "headShare": 0.3,
+      "elements": [
+        "hood",
+        "cloak",
+        "scarf",
+        "lantern-pole",
+        "paper-lantern",
+        "boots",
+        "satchel"
+      ],
+      "gait": {
+        "cadence": 1.6,
+        "bounciness": 0.25,
+        "lean": 4,
+        "armSwing": 18,
+        "turnStyle": "pivot"
+      },
+      "light": "#ffc46b",
+      "voice": "quiet, plain, short sentences with pauses",
+      "motifs": [
+        "trailing scarf in the wind",
+        "warm lantern against slate dusk",
+        "small figure in a vast place"
+      ]
+    }
+  },
+  "input": {
+    "schemaVersion": "1.0",
+    "source": "model-assumption",
+    "entities": [
+      {
+        "ref": "M01",
+        "name": "Muji",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M02",
+        "name": "Studio Ghibli",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M03",
+        "name": "Moleskine",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M04",
+        "name": "Leica",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M05",
+        "name": "Uniqlo",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M06",
+        "name": "Patagonia",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M07",
+        "name": "My Neighbor Totoro",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M08",
+        "name": "Princess Mononoke",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M09",
+        "name": "Perfect Days",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M10",
+        "name": "Lost in Translation",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M11",
+        "name": "Your Name",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M12",
+        "name": "Only Lovers Left Alive",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M13",
+        "name": "Jónsi",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M14",
+        "name": "Ólafur Arnalds",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M15",
+        "name": "J Dilla",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M16",
+        "name": "Joe Hisaishi",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M17",
+        "name": "Explosions in the Sky",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M18",
+        "name": "Bon Iver",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M19",
+        "name": "Kafka on the Shore",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M20",
+        "name": "Norwegian Wood",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M21",
+        "name": "The Little Prince",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M22",
+        "name": "A Wizard of Earthsea",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M23",
+        "name": "Piranesi",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M24",
+        "name": "Samurai Champloo",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M25",
+        "name": "Mushishi",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M26",
+        "name": "Cowboy Bebop",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M27",
+        "name": "Twin Peaks",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M28",
+        "name": "Journey",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M29",
+        "name": "Ori and the Blind Forest",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M30",
+        "name": "Gris",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M31",
+        "name": "Hyper Light Drifter",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M32",
+        "name": "Outer Wilds",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M33",
+        "name": "Celeste",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M34",
+        "name": "slow contemplative pacing",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M35",
+        "name": "long held wide shots with a small figure",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M36",
+        "name": "everyday ritual and repetition",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M37",
+        "name": "hand-drawn animation",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M38",
+        "name": "quiet melancholy",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M39",
+        "name": "sudden swells after long stillness",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M40",
+        "name": "muted ink and ochre palette",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M41",
+        "name": "hand-drawn textured line",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M42",
+        "name": "weathered wood, paper and wool",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M43",
+        "name": "warm glow in deep darkness",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M44",
+        "name": "minimal bold silhouettes",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M45",
+        "name": "worn natural fabrics",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      }
+    ],
+    "requiredAnchors": [
+      "M01",
+      "M07",
+      "M13",
+      "M19",
+      "M24",
+      "M28"
+    ],
+    "metrics": {
+      "predictions": 33,
+      "tagPredictions": 12
+    },
+    "seeds": [],
+    "signature": [],
+    "limitations": []
+  },
+  "dna": {
+    "schemaVersion": "1.0",
+    "thesis": "Ilo is a small, plush, bottom-heavy figure in undyed linen and ink-slate wool who walks the cliff road slowly with a paper lantern raised on a pole, holds still, and then throws the flame up on a swung off-beat.",
+    "devices": [
+      {
+        "id": "dna1",
+        "layer": "palette",
+        "device": "Undyed-cloth palette: ink-slate wool over unbleached linen, ochre wood and one rust thread, nothing saturated but the flame",
+        "anchors": [
+          "M01",
+          "M40"
+        ],
+        "qualities": [
+          "unbleached natural materials",
+          "plain unbranded goods",
+          "muted ink and ochre palette"
+        ],
+        "translation": "My reading of a no-brand, undyed household-goods aesthetic and a muted ink-and-ochre palette: the cloak is two slates of ink, the scarf and face are linen tones, the pole and boots are ochre-brown wood and leather, and a single rust band in the scarf is the only accent, so the lantern's flame is the only bright thing on screen.",
+        "tokens": {
+          "colors": [
+            "#2b2f3a",
+            "#4a5161",
+            "#e8dcc4",
+            "#c9a46a",
+            "#8c3b2e"
+          ],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna2",
+        "layer": "silhouette",
+        "device": "Round plush hood over a small bell cloak: one rounded, bottom-heavy mass with a drooping hood point and a pole rising in front",
+        "anchors": [
+          "M07",
+          "M44"
+        ],
+        "qualities": [
+          "soft rounded creature shapes",
+          "bottom-heavy plush masses",
+          "minimal bold silhouettes"
+        ],
+        "translation": "My interpretation of the soft, pear-shaped forest-spirit forms of a gentle hand-drawn family film and of minimal bold silhouettes: a head share near a third, one unbroken hood mass, a widening bell cloak and short legs, readable as a single dark shape at small size.",
+        "tokens": {
+          "colors": [],
+          "parts": [
+            "hood",
+            "hood-tip",
+            "cloak"
+          ],
+          "proportions": {
+            "height": 130,
+            "headShare": 0.3
+          },
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [
+            "hood-tip"
+          ],
+          "proportions": {
+            "height": 0,
+            "headShare": 0
+          },
+          "gait": []
+        }
+      },
+      {
+        "id": "dna3",
+        "layer": "costume",
+        "device": "Walker's wool kit: a long banded scarf streaming in the cliff wind, wrapped collar, ochre hip satchel, leather boots and a paper lantern on a wooden pole",
+        "anchors": [
+          "M28",
+          "M42",
+          "M45"
+        ],
+        "qualities": [
+          "a long scarf trailing across vast emptiness",
+          "weathered wood, paper and wool",
+          "worn natural fabrics"
+        ],
+        "translation": "My reading of a lone pilgrim crossing an empty landscape with cloth streaming behind it, rendered in weathered wood, paper and wool: the scarf is plain linen with rust bands (no glyphs or patterns borrowed from anywhere), the lantern is paper over a wooden frame, and everything looks hand-made and mended.",
+        "tokens": {
+          "colors": [
+            "#e8dcc4",
+            "#8c3b2e"
+          ],
+          "parts": [
+            "scarf",
+            "scarf-wrap",
+            "satchel",
+            "lantern-pole",
+            "paper-lantern",
+            "boots"
+          ],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [
+            "scarf-wrap"
+          ],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna4",
+        "layer": "motion",
+        "device": "Ritual walk: slow steps with little bounce, a slight lean, a level head, a small free-arm swing and an eased pivot turn",
+        "anchors": [
+          "M34",
+          "M36",
+          "M38"
+        ],
+        "qualities": [
+          "slow contemplative pacing",
+          "everyday ritual and repetition",
+          "quiet melancholy"
+        ],
+        "translation": "My interpretation of slow contemplative pacing and everyday ritual: 1.6 steps a second, bounciness 0.25, a 4 degree lean, an 18 degree arm swing, a head held level at 0.8 so the lantern does not jog, and a pivot turn that eases around like someone who has walked this road many times.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [
+            {
+              "param": "walk.cadence",
+              "value": 1.6
+            },
+            {
+              "param": "walk.bounciness",
+              "value": 0.25
+            },
+            {
+              "param": "walk.lean",
+              "value": 4
+            },
+            {
+              "param": "walk.armSwing",
+              "value": 18
+            },
+            {
+              "param": "walk.headStabilize",
+              "value": 0.8
+            },
+            {
+              "param": "turn.style",
+              "value": "pivot"
+            }
+          ],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna5",
+        "layer": "signature",
+        "device": "Off-beat throw: dip the lantern, hold still, then swing the pole up and flick the flame free just after the beat with an overshoot",
+        "anchors": [
+          "M24",
+          "M39"
+        ],
+        "qualities": [
+          "laid-back swung hip-hop rhythm",
+          "sudden swells after long stillness"
+        ],
+        "translation": "My reading of a laid-back, swung beat under sword-fight choreography and of sudden swells after stillness: a 3.4 second clip whose dip and hold take the first 1.4 seconds, then the arm rises and the flame leaves at 2.1 seconds, late like a swung note, with an outBack overshoot and a ring of light.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [
+            {
+              "name": "signature",
+              "duration": 3.4,
+              "kindleAt": 2.1,
+              "tracks": [
+                "upperArmFront",
+                "forearmFront",
+                "torso",
+                "head"
+              ]
+            }
+          ],
+          "effects": [
+            "kindle-swell",
+            "kindle-ring"
+          ],
+          "light": null,
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna6",
+        "layer": "light",
+        "device": "Breathing paper lantern: a pale amber light that swells and fades slowly instead of flickering, with motes drifting upward",
+        "anchors": [
+          "M13",
+          "M43"
+        ],
+        "qualities": [
+          "slow bowed swells",
+          "high, fragile warmth",
+          "warm glow in deep darkness"
+        ],
+        "translation": "My interpretation of slow, bowed, high-register swells and of a warm glow in deep darkness: a #ffc46b light of radius 230 with a slow 1.6-speed, 0.14-amount flicker that reads as breathing, and an aura of rising ember motes.",
+        "tokens": {
+          "colors": [
+            "#ffe3a8"
+          ],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [
+            "ember-motes"
+          ],
+          "light": {
+            "color": "#ffc46b",
+            "radius": 230
+          },
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna7",
+        "layer": "voice",
+        "device": "Plain-dream register: short, literal sentences that accept strange things calmly, a pause in the middle, no exclamations",
+        "anchors": [
+          "M19",
+          "M38"
+        ],
+        "qualities": [
+          "matter-of-fact surreal narration",
+          "lonely young traveller",
+          "quiet melancholy"
+        ],
+        "translation": "My reading of a novel narrated flatly by a young runaway in a dreamlike world: Ilo states things simply, treats the stopped sun and a cold beacon as ordinary, and speaks in two short sentences per line.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": [
+            "The cloud is quiet below the road tonight. I like it when it is quiet.",
+            "I saw the bridge. I crossed it anyway. The beacon is just up the road, then.",
+            "Wake up, Vesper. I carried this a long way for you.",
+            "I see them. Sit a while, Maren. The road will keep."
+          ]
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": []
+        }
+      },
+      {
+        "id": "dna8",
+        "layer": "imagery",
+        "device": "Hand-drawn dusk portrait: Ilo small against a vast cloud sea, soft textured ink line, slate, linen and ochre, lit only by the lantern",
+        "anchors": [
+          "M37",
+          "M41",
+          "M35"
+        ],
+        "qualities": [
+          "hand-drawn animation",
+          "hand-drawn textured line",
+          "long held wide shots with a small figure"
+        ],
+        "translation": "My interpretation of hand-drawn animation, textured ink line and wide shots with small figures: the portrait uses painted backgrounds, a soft dark contour and the palette of dna1, with the lantern as the single warm source.",
+        "tokens": {
+          "colors": [
+            "#2b2f3a",
+            "#4a5161",
+            "#e8dcc4",
+            "#ffc46b"
+          ],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "novel": {
+          "colors": [
+            "#ffc46b"
+          ],
+          "parts": [],
+          "proportions": null,
+          "gait": []
+        }
+      }
+    ],
+    "rejected": [],
+    "coverage": {
+      "required": [
+        "M01",
+        "M07",
+        "M13",
+        "M19",
+        "M24",
+        "M28"
+      ],
+      "used": [
+        "M01",
+        "M07",
+        "M13",
+        "M19",
+        "M24",
+        "M28"
+      ],
+      "rejected": []
+    },
+    "sourceType": "model-interpretation",
+    "stats": {
+      "devices": 8,
+      "layers": [
+        "palette",
+        "silhouette",
+        "costume",
+        "motion",
+        "signature",
+        "light",
+        "voice",
+        "imagery"
+      ],
+      "qlooAnchoredDevices": 0,
+      "surpriseAnchoredDevices": 0,
+      "modelAnchoredDevices": 8,
+      "surpriseShare": 0,
+      "sketchMoves": {
+        "colors": [
+          "#ffc46b"
+        ],
+        "parts": [
+          "hood-tip",
+          "scarf-wrap"
+        ],
+        "proportions": false,
+        "gait": []
+      }
+    }
+  },
+  "character": {
+    "savedAt": "2026-10-04T21:11:00.435Z",
+    "bytes": 12471,
+    "parts": 36,
+    "cloth": 3,
+    "effects": 4
+  },
+  "measures": {
+    "figureHeight": 131,
+    "headShare": 0.305,
+    "legShare": 0.382,
+    "height": 131,
+    "width": 94.3,
+    "stride": {
+      "length": 65,
+      "legs": 1.51,
+      "clamped": false
+    },
+    "warnings": []
+  },
+  "conformance": {
+    "score": 1,
+    "present": 8,
+    "partial": 0,
+    "missing": 0,
+    "total": 8
+  },
+  "portraits": [
+    {
+      "device": "dna8",
+      "subject": "A small lamplighter in a round slate hood and bell cloak, a linen scarf with rust bands streaming back, raising a paper lantern on a wooden pole on a basalt cliff road above a sea of cloud at dusk.",
+      "aspect": "portrait",
+      "prompt": "Use your built-in image generation tool to create exactly one image, then reply with one sentence describing what it shows. Do not write code, run commands or create files yourself.\nSubject: A small lamplighter in a round slate hood and bell cloak, a linen scarf with rust bands streaming back, raising a paper lantern on a wooden pole on a basalt cliff road above a sea of cloud at dusk.\nArt direction: Hand-drawn dusk portrait: Ilo small against a vast cloud sea, soft textured ink line, slate, linen and ochre, lit only by the lantern. Palette: #2b2f3a, #4a5161, #e8dcc4, #ffc46b. Qualities: hand-drawn animation, hand-drawn textured line, long held wide shots with a small figure.\nNo text, letters, numbers, logos, brand marks, recognizable people or copyrighted characters.\nPortrait, 2:3.",
+      "provider": "codex",
+      "version": "0.160.0",
+      "status": "generated",
+      "requestedAt": "2026-10-04T21:06:34.564Z",
+      "path": "generated/dna8-1.jpg",
+      "format": "jpeg",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 264692,
+      "durationMs": 41531,
+      "description": "A small hooded lamplighter raises a glowing paper lantern on a basalt cliff road, scarf streaming above a vast sea of clouds at dusk."
+    }
+  ],
+  "events": [
+    {
+      "time": "2026-10-04T21:03:46.551Z",
+      "type": "taste",
+      "message": "Prediction frozen: 45 entities and qualities across 8 domains, with a character sketch."
+    },
+    {
+      "time": "2026-10-04T21:03:46.552Z",
+      "type": "taste",
+      "message": "The model's own prediction became its taste input; no measured taste data exists in this run."
+    },
+    {
+      "time": "2026-10-04T21:06:05.299Z",
+      "type": "warning",
+      "message": "Rejected game-dna.json: dna.devices[1].device: Text of 3-200 characters is required."
+    },
+    {
+      "time": "2026-10-04T21:06:28.705Z",
+      "type": "taste",
+      "message": "Character DNA saved: 8 devices across 8 layers; 0 rest on entities or tags the model did not predict."
+    },
+    {
+      "time": "2026-10-04T21:06:34.564Z",
+      "type": "image",
+      "message": "Painting dna8-1 from dna8; the host wrote the prompt from that device."
+    },
+    {
+      "time": "2026-10-04T21:07:16.098Z",
+      "type": "image",
+      "message": "Generated generated/dna8-1.jpg from dna8 in 42 s."
+    },
+    {
+      "time": "2026-10-04T21:08:13.855Z",
+      "type": "warning",
+      "message": "Rejected character.json: parts[20].spring: Unsupported field \"gravity\"; allowed fields are pivot, stiffness, damping, gain."
+    },
+    {
+      "time": "2026-10-04T21:09:04.826Z",
+      "type": "warning",
+      "message": "Rejected character.json: cloth[0].fill: This field is required."
+    },
+    {
+      "time": "2026-10-04T21:09:55.672Z",
+      "type": "file",
+      "message": "Saved character.json: 36 parts, 3 cloth chains, 4 effects."
+    },
+    {
+      "time": "2026-10-04T21:09:55.772Z",
+      "type": "conformance",
+      "message": "Character check: 8 present, 0 partial, 0 missing; 1 warnings."
+    },
+    {
+      "time": "2026-10-04T21:11:00.435Z",
+      "type": "file",
+      "message": "Saved character.json: 36 parts, 3 cloth chains, 4 effects."
+    },
+    {
+      "time": "2026-10-04T21:11:00.495Z",
+      "type": "conformance",
+      "message": "Character check: 8 present, 0 partial, 0 missing; 0 warnings."
+    }
+  ]
+}

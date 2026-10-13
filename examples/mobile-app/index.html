@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ramble · Self-guided walks in Port Calder</title>
+  <link rel="stylesheet" href="tokens/tokens.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="board" aria-label="Ramble app screens">
+    <section class="screen" id="screen-welcome" aria-labelledby="welcome-title">
+      <div class="phone">
+        <header class="screen-header">
+          <p class="app-name">Ramble</p>
+        </header>
+        <div class="screen-body">
+          <h1 id="welcome-title">Walk the city at your own pace</h1>
+          <p class="lead">Self-guided routes through Port Calder, with a guide for every stop along the way.</p>
+          <ul class="benefits">
+            <li id="benefit-routes">Routes for an afternoon or an hour</li>
+            <li>Step-free routes are marked</li>
+            <li>A short note at every stop</li>
+          </ul>
+        </div>
+        <footer class="screen-actions">
+          <a class="button primary" href="#screen-walks" id="start-exploring">Start exploring</a>
+          <a class="button quiet" href="#screen-walks">I'll choose later</a>
+        </footer>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-walks" aria-labelledby="walks-title">
+      <div class="phone">
+        <header class="screen-header">
+          <h2 id="walks-title">Walks</h2>
+          <p class="screen-note" id="walk-count">Loading walks…</p>
+        </header>
+        <div class="filters" role="group" aria-label="Filter walks">
+          <button type="button" class="chip" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="chip" data-filter="short" aria-pressed="false">Under an hour</button>
+          <button type="button" class="chip" data-filter="step-free" aria-pressed="false">Step-free</button>
+        </div>
+        <div class="screen-body">
+          <ul class="walk-list" id="walk-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-detail" aria-labelledby="detail-title">
+      <div class="phone">
+        <header class="screen-header">
+          <a class="back" href="#screen-walks" aria-label="Back to walks">←</a>
+          <h2 id="detail-title">Walk</h2>
+        </header>
+        <div class="screen-body">
+          <p class="district" id="detail-district"></p>
+          <p id="detail-summary"></p>
+          <dl class="stats" id="detail-stats"></dl>
+          <h3>Stops</h3>
+          <ol class="stop-list" id="detail-stops"></ol>
+        </div>
+        <footer class="screen-actions">
+          <a class="button primary" href="#screen-walk" id="start-walk">Start walk</a>
+        </footer>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-walk" aria-labelledby="walk-title">
+      <div class="phone">
+        <header class="screen-header">
+          <h2 id="walk-title">On the walk</h2>
+          <p class="screen-note" id="walk-progress" aria-live="polite"></p>
+        </header>
+        <div class="screen-body">
+          <ol class="route" id="walk-route" aria-label="Stops on this walk"></ol>
+          <h3 id="stop-name"></h3>
+          <p id="stop-note"></p>
+        </div>
+        <footer class="screen-actions">
+          <button type="button" class="button primary" id="next-stop">Next stop</button>
+          <a class="button quiet" href="#screen-walks" id="end-walk">End walk</a>
+        </footer>
+      </div>
+    </section>
+  </main>
+  <noscript><p class="noscript">Ramble needs JavaScript to list its walks.</p></noscript>
+</body>
+</html>

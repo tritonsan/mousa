@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0",
+  "audienceSummary": "Players who love quiet, melancholy, hand-crafted worlds: hand-drawn games and animation, post-rock and jazzy lo-fi beats, and slow films about everyday ritual. They want atmosphere, small figures in vast places and warmth found in repetition.",
+  "predictions": {
+    "brand": ["Muji", "Studio Ghibli", "Moleskine", "Leica", "Uniqlo", "Patagonia"],
+    "movie": ["My Neighbor Totoro", "Princess Mononoke", "Perfect Days", "Lost in Translation", "Your Name", "Only Lovers Left Alive"],
+    "artist": ["Jónsi", "Ólafur Arnalds", "J Dilla", "Joe Hisaishi", "Explosions in the Sky", "Bon Iver"],
+    "book": ["Kafka on the Shore", "Norwegian Wood", "The Little Prince", "A Wizard of Earthsea", "Piranesi"],
+    "tv_show": ["Samurai Champloo", "Mushishi", "Cowboy Bebop", "Twin Peaks"],
+    "videogame": ["Journey", "Ori and the Blind Forest", "Gris", "Hyper Light Drifter", "Outer Wilds", "Celeste"],
+    "style": ["slow contemplative pacing", "long held wide shots with a small figure", "everyday ritual and repetition", "hand-drawn animation", "quiet melancholy", "sudden swells after long stillness"],
+    "aesthetic": ["muted ink and ochre palette", "hand-drawn textured line", "weathered wood, paper and wool", "warm glow in deep darkness", "minimal bold silhouettes", "worn natural fabrics"]
+  },
+  "characterSketch": {
+    "summary": "A small hooded lamplighter with a big round head and a long trailing scarf, carrying a warm paper lantern on a pole along the cliff road.",
+    "palette": ["#2b2f3a", "#4a5161", "#c9a46a", "#e8dcc4", "#8c3b2e"],
+    "height": 130,
+    "headShare": 0.3,
+    "elements": ["hood", "cloak", "scarf", "lantern-pole", "paper-lantern", "boots", "satchel"],
+    "gait": { "cadence": 1.6, "bounciness": 0.25, "lean": 4, "armSwing": 18, "turnStyle": "pivot" },
+    "light": "#ffc46b",
+    "voice": "quiet, plain, short sentences with pauses",
+    "motifs": ["trailing scarf in the wind", "warm lantern against slate dusk", "small figure in a vast place"]
+  }
+}

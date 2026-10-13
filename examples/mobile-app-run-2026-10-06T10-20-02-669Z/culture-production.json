@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "steps": [
+    {"device": "sunset-inks", "method": "design-tokens", "cluster": "expressive-heat", "why": "The inks are shared by every screen, so they live in tokens.json and reach the CSS through var()."},
+    {"device": "fat-face-type", "method": "library-font", "cluster": "expressive-heat", "why": "Rozha One and Bricolage Grotesque come from the OFL library with their @font-face rules and are named by the font tokens."},
+    {"device": "harbour-sun-print", "method": "inline-svg", "cluster": "coastal-prints", "why": "A flat three-ink harbour print is drawn best as vector shapes with multiply blending, which reads as overprinted ink."},
+    {"device": "ferry-ticket-cards", "method": "screen-layout", "cluster": "coastal-prints", "why": "The ticket is a card component: a numbered body, a dashed perforation and a stub with the minutes."},
+    {"device": "journey-route", "method": "screen-layout", "cluster": "passionate-journey", "why": "The route of stops is a list component with done, current and next states on a dotted line."},
+    {"device": "stamp-in-motion", "method": "css-motion", "cluster": "expressive-heat", "why": "Two one-shot keyframe animations, both removed under prefers-reduced-motion; neither loops, so no pause control is needed."},
+    {"device": "passionate-voice", "method": "copy", "cluster": "passionate-journey", "why": "Titles, buttons, onboarding and progress text are rewritten in the warm, encouraging register around the fixed facts."}
+  ],
+  "review": [
+    {"id": "welcome-poster", "device": "harbour-sun-print", "look": "The welcome screen opens on a three-ink harbour print with a striped sun, hills, pier light and waves, the overprinted inks visibly blending, above a fat-face headline.", "view": "phone"},
+    {"id": "ticket-list", "device": "ferry-ticket-cards", "look": "Each walk in the list reads as a numbered printed ticket with a dashed perforation and a stub showing its minutes, and the walk facts are legible.", "view": "phone"},
+    {"id": "type-and-ink", "device": "fat-face-type", "look": "Headlines are set in a heavy fat-face serif and body text in a grotesque, on cream stock with indigo ink and terracotta actions, consistently across all four screens.", "view": "board"},
+    {"id": "journey-line", "device": "journey-route", "look": "The walk screen shows every stop as a stamp on a dotted line with visited, current and next clearly different.", "view": "phone"},
+    {"id": "voice", "device": "passionate-voice", "look": "Titles and buttons speak in a warm, passionate, encouraging voice without changing any walk fact.", "view": "board"}
+  ]
+}

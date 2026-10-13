@@ -1,0 +1,15 @@
+# Keep LF line endings in the working tree on every platform: several tests compare files byte for byte
+# (the skill policy copies against their runtime constants), and Git for Windows would otherwise check out CRLF.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff2 binary
+*.mp3 binary
+*.ogg binary
+*.zip binary
+*.gz binary

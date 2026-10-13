@@ -1,0 +1,983 @@
+{
+  "schemaVersion": "1.0",
+  "mode": "baseline",
+  "startedAt": "2026-10-06T00:43:36.682Z",
+  "calls": 8,
+  "checks": 1,
+  "pipeline": {
+    "status": "constructed",
+    "predictedAt": "2026-10-06T00:43:36.698Z",
+    "revealedAt": "2026-10-06T00:43:36.699Z",
+    "specifiedAt": "2026-10-06T00:43:36.730Z",
+    "constructionStartedAt": "2026-10-06T00:43:36.739Z"
+  },
+  "assumption": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Fixture prediction for the dry run: players who like slow, wistful exploration and handmade worlds.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "videogame",
+      "style",
+      "aesthetic",
+      "qualities",
+      "art_style"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Fixture predicted brand one"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Fixture predicted brand two"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Fixture predicted brand three"
+      },
+      {
+        "id": "M04",
+        "domain": "movie",
+        "name": "Fixture predicted film one"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "Fixture predicted film two"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Fixture Film: Mint Harbour"
+      },
+      {
+        "id": "M07",
+        "domain": "artist",
+        "name": "Fixture predicted artist one"
+      },
+      {
+        "id": "M08",
+        "domain": "artist",
+        "name": "Fixture predicted artist two"
+      },
+      {
+        "id": "M09",
+        "domain": "artist",
+        "name": "Fixture predicted artist three"
+      },
+      {
+        "id": "M10",
+        "domain": "book",
+        "name": "Fixture predicted book one"
+      },
+      {
+        "id": "M11",
+        "domain": "book",
+        "name": "Fixture predicted book two"
+      },
+      {
+        "id": "M12",
+        "domain": "book",
+        "name": "Fixture Book: The Quiet Mile"
+      },
+      {
+        "id": "M13",
+        "domain": "tv_show",
+        "name": "Fixture predicted show one"
+      },
+      {
+        "id": "M14",
+        "domain": "tv_show",
+        "name": "Fixture predicted show two"
+      },
+      {
+        "id": "M15",
+        "domain": "tv_show",
+        "name": "Fixture predicted show three"
+      },
+      {
+        "id": "M16",
+        "domain": "videogame",
+        "name": "Fixture predicted game one"
+      },
+      {
+        "id": "M17",
+        "domain": "videogame",
+        "name": "Fixture predicted game two"
+      },
+      {
+        "id": "M18",
+        "domain": "videogame",
+        "name": "Fixture predicted game three"
+      },
+      {
+        "id": "M19",
+        "domain": "style",
+        "name": "Contemplative"
+      },
+      {
+        "id": "M20",
+        "domain": "style",
+        "name": "Slow"
+      },
+      {
+        "id": "M21",
+        "domain": "style",
+        "name": "Wistful"
+      },
+      {
+        "id": "M22",
+        "domain": "aesthetic",
+        "name": "Weathered"
+      },
+      {
+        "id": "M23",
+        "domain": "aesthetic",
+        "name": "Hooded Shapes"
+      },
+      {
+        "id": "M24",
+        "domain": "aesthetic",
+        "name": "Muted Earth"
+      },
+      {
+        "id": "M25",
+        "domain": "qualities",
+        "name": "Solitary"
+      },
+      {
+        "id": "M26",
+        "domain": "qualities",
+        "name": "Nostalgic"
+      },
+      {
+        "id": "M27",
+        "domain": "qualities",
+        "name": "Curious"
+      },
+      {
+        "id": "M28",
+        "domain": "art_style",
+        "name": "Watercolor"
+      },
+      {
+        "id": "M29",
+        "domain": "art_style",
+        "name": "Painterly"
+      },
+      {
+        "id": "M30",
+        "domain": "art_style",
+        "name": "Soft pastel"
+      }
+    ],
+    "sourceType": "model-assumption",
+    "characterSketch": {
+      "summary": "A tall, hooded pilgrim in pale ash cloth who carries a lantern high on a crooked staff and walks slowly.",
+      "palette": [
+        "#d9d2c3",
+        "#c99a3b",
+        "#3b3a46",
+        "#5a4434"
+      ],
+      "height": 183,
+      "headShare": 0.24,
+      "elements": [
+        "hood",
+        "staff",
+        "scarf",
+        "cloak-tail"
+      ],
+      "gait": {
+        "cadence": 1.7,
+        "bounciness": 0.12,
+        "lean": 7,
+        "armSwing": 16,
+        "turnStyle": "pivot"
+      },
+      "light": "#ffb85c",
+      "voice": "quiet, sparse and weathered",
+      "motifs": [
+        "ash cloth",
+        "a lantern held high"
+      ],
+      "scene": {
+        "sky": [
+          "#2b2338",
+          "#c9a98f"
+        ],
+        "palette": [
+          "#f4e6cf",
+          "#b9a593",
+          "#2f2a30",
+          "#6f7a58"
+        ],
+        "weather": "leaves",
+        "towers": "ruin"
+      },
+      "render": "watercolor",
+      "music": "peaceful-night-st-adam"
+    }
+  },
+  "input": {
+    "schemaVersion": "1.0",
+    "source": "model-assumption",
+    "entities": [
+      {
+        "ref": "M01",
+        "name": "Fixture predicted brand one",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M02",
+        "name": "Fixture predicted brand two",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M03",
+        "name": "Fixture predicted brand three",
+        "domain": "brand",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M04",
+        "name": "Fixture predicted film one",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M05",
+        "name": "Fixture predicted film two",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M06",
+        "name": "Fixture Film: Mint Harbour",
+        "domain": "movie",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M07",
+        "name": "Fixture predicted artist one",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M08",
+        "name": "Fixture predicted artist two",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M09",
+        "name": "Fixture predicted artist three",
+        "domain": "artist",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M10",
+        "name": "Fixture predicted book one",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M11",
+        "name": "Fixture predicted book two",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M12",
+        "name": "Fixture Book: The Quiet Mile",
+        "domain": "book",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M13",
+        "name": "Fixture predicted show one",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M14",
+        "name": "Fixture predicted show two",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M15",
+        "name": "Fixture predicted show three",
+        "domain": "tv_show",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M16",
+        "name": "Fixture predicted game one",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M17",
+        "name": "Fixture predicted game two",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M18",
+        "name": "Fixture predicted game three",
+        "domain": "videogame",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M19",
+        "name": "Contemplative",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M20",
+        "name": "Slow",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M21",
+        "name": "Wistful",
+        "domain": "style",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M22",
+        "name": "Weathered",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M23",
+        "name": "Hooded Shapes",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M24",
+        "name": "Muted Earth",
+        "domain": "aesthetic",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M25",
+        "name": "Solitary",
+        "domain": "qualities",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M26",
+        "name": "Nostalgic",
+        "domain": "qualities",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M27",
+        "name": "Curious",
+        "domain": "qualities",
+        "source": "model-assumption"
+      },
+      {
+        "ref": "M28",
+        "name": "Watercolor",
+        "domain": "art_style",
+        "source": "model-assumption",
+        "preset": "watercolor"
+      },
+      {
+        "ref": "M29",
+        "name": "Painterly",
+        "domain": "art_style",
+        "source": "model-assumption",
+        "preset": "watercolor"
+      },
+      {
+        "ref": "M30",
+        "name": "Soft pastel",
+        "domain": "art_style",
+        "source": "model-assumption",
+        "preset": "watercolor"
+      }
+    ],
+    "requiredAnchors": [
+      "M25",
+      "M26",
+      "M27",
+      "M16",
+      "M01",
+      "M04",
+      "M28"
+    ],
+    "metrics": {
+      "predictions": 18,
+      "tagPredictions": 6,
+      "qualityPredictions": 3,
+      "artStylePredictions": 3
+    },
+    "seeds": [],
+    "signature": [],
+    "limitations": [],
+    "renderStyles": [
+      {
+        "preset": "watercolor",
+        "ref": "M28",
+        "name": "Watercolor"
+      }
+    ]
+  },
+  "dna": {
+    "schemaVersion": "1.0",
+    "thesis": "Fixture thesis for the dry run: A tall pilgrim in an ash-white hooded cloak and an ochre scarf, face lost in the hood's shadow, carrying an amber lantern high on a crooked staff.",
+    "devices": [
+      {
+        "id": "dna1",
+        "layer": "palette",
+        "device": "Fixture palette",
+        "anchors": [
+          "M25"
+        ],
+        "qualities": [
+          "fixture quality"
+        ],
+        "translation": "Fixture translation for the dry run: fixture palette.",
+        "tokens": {
+          "colors": [
+            "#3b3a46",
+            "#2c2420",
+            "#d9d2c3"
+          ],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna2",
+        "layer": "silhouette",
+        "device": "Fixture silhouette",
+        "anchors": [
+          "M26"
+        ],
+        "qualities": [
+          "fixture quality"
+        ],
+        "translation": "Fixture translation for the dry run: fixture silhouette.",
+        "tokens": {
+          "colors": [],
+          "parts": [
+            "hood"
+          ],
+          "proportions": {
+            "height": 183.2,
+            "headShare": 0.236
+          },
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": {
+            "height": 0.001,
+            "headShare": 0.004
+          },
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna3",
+        "layer": "costume",
+        "device": "Fixture costume",
+        "anchors": [
+          "M22",
+          "M27"
+        ],
+        "qualities": [
+          "fixture quality"
+        ],
+        "translation": "Fixture translation for the dry run: fixture costume.",
+        "tokens": {
+          "colors": [],
+          "parts": [
+            "cloak-tail",
+            "scarf",
+            "lantern-rope"
+          ],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [
+            "lantern-rope"
+          ],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna4",
+        "layer": "motion",
+        "device": "Fixture gait",
+        "anchors": [
+          "M19",
+          "M16"
+        ],
+        "qualities": [
+          "fixture quality"
+        ],
+        "translation": "Fixture translation for the dry run: fixture gait.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [
+            {
+              "param": "walk.cadence",
+              "value": 1.7
+            },
+            {
+              "param": "walk.bounciness",
+              "value": 0.12
+            },
+            {
+              "param": "turn.style",
+              "value": "pivot"
+            }
+          ],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna5",
+        "layer": "signature",
+        "device": "Fixture kindling move",
+        "anchors": [
+          "M01"
+        ],
+        "qualities": [
+          "fixture quality"
+        ],
+        "translation": "Fixture translation for the dry run: fixture kindling move.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [
+            {
+              "name": "signature",
+              "duration": 3.4,
+              "kindleAt": 2.1,
+              "tracks": [
+                "upperArmFront",
+                "forearmFront"
+              ]
+            }
+          ],
+          "effects": [],
+          "light": null,
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna6",
+        "layer": "light",
+        "device": "Fixture carried light",
+        "anchors": [
+          "M04"
+        ],
+        "qualities": [
+          "fixture quality"
+        ],
+        "translation": "Fixture translation for the dry run: fixture carried light.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": {
+            "color": "#ffb85c",
+            "radius": 230
+          },
+          "lines": []
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "dna7",
+        "layer": "voice",
+        "device": "Fixture voice",
+        "anchors": [
+          "M25"
+        ],
+        "qualities": [
+          "fixture quality"
+        ],
+        "translation": "Fixture translation for the dry run: fixture voice.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": [
+            "The wind smells of cold ash. Close now.",
+            "The road is lit. Someone will walk it after me."
+          ]
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "scene1",
+        "layer": "scene",
+        "device": "Fixture moment",
+        "anchors": [
+          "M25"
+        ],
+        "qualities": [
+          "fixture quality"
+        ],
+        "translation": "Fixture translation for the dry run: fixture moment.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": [],
+          "scene": {
+            "sky": [
+              "#3a2c3c",
+              "#e8b787"
+            ],
+            "colors": [
+              "#d8b9a0",
+              "#3a3036"
+            ],
+            "weather": "leaves",
+            "towers": "ruin"
+          }
+        },
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "render1",
+        "layer": "render",
+        "device": "Fixture render style",
+        "anchors": [
+          "M28"
+        ],
+        "qualities": [
+          "fixture quality"
+        ],
+        "translation": "Fixture translation for the dry run: fixture render style.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": [],
+          "render": "watercolor"
+        },
+        "presetFrom": "M28",
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      },
+      {
+        "id": "music1",
+        "layer": "music",
+        "device": "Fixture track",
+        "anchors": [
+          "M25"
+        ],
+        "qualities": [
+          "peaceful"
+        ],
+        "translation": "Fixture translation for the dry run: fixture track.",
+        "tokens": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "motion": [],
+          "clips": [],
+          "effects": [],
+          "light": null,
+          "lines": [],
+          "music": "peaceful-night-st-adam"
+        },
+        "moods": [
+          "peaceful"
+        ],
+        "novel": {
+          "colors": [],
+          "parts": [],
+          "proportions": null,
+          "gait": [],
+          "world": {
+            "sceneColors": [],
+            "weather": false,
+            "towers": false,
+            "render": false,
+            "music": false
+          }
+        }
+      }
+    ],
+    "rejected": [],
+    "coverage": {
+      "required": [
+        "M25",
+        "M26",
+        "M27",
+        "M16",
+        "M01",
+        "M04",
+        "M28"
+      ],
+      "used": [
+        "M25",
+        "M26",
+        "M27",
+        "M16",
+        "M01",
+        "M04",
+        "M28"
+      ],
+      "rejected": []
+    },
+    "sourceType": "model-interpretation",
+    "rules": {
+      "artDirection": true,
+      "music": true,
+      "departure": true
+    },
+    "stats": {
+      "devices": 10,
+      "layers": [
+        "palette",
+        "silhouette",
+        "costume",
+        "motion",
+        "signature",
+        "light",
+        "voice",
+        "scene",
+        "render",
+        "music"
+      ],
+      "qlooAnchoredDevices": 0,
+      "surpriseAnchoredDevices": 0,
+      "modelAnchoredDevices": 10,
+      "qualityAnchoredDevices": 8,
+      "surpriseShare": 0,
+      "sketchMoves": {
+        "colors": [],
+        "parts": [
+          "lantern-rope"
+        ],
+        "proportions": false,
+        "gait": [],
+        "world": {
+          "sceneColors": [],
+          "changed": []
+        }
+      }
+    }
+  },
+  "character": {
+    "savedAt": "2026-10-06T00:43:36.739Z",
+    "bytes": 8888,
+    "parts": 20,
+    "cloth": 3,
+    "effects": 3
+  },
+  "measures": {
+    "figureHeight": 183.2,
+    "headShare": 0.236,
+    "legShare": 0.48,
+    "height": 205.1,
+    "width": 53.2,
+    "stride": {
+      "length": 108.2,
+      "legs": 1.35,
+      "clamped": false
+    },
+    "warnings": []
+  },
+  "conformance": {
+    "score": 1,
+    "present": 10,
+    "partial": 0,
+    "missing": 0,
+    "total": 10
+  },
+  "portraits": [],
+  "paint": [],
+  "events": [
+    {
+      "time": "2026-10-06T00:43:36.698Z",
+      "type": "taste",
+      "message": "Prediction frozen: 30 entities and qualities across 10 domains, with a character sketch."
+    },
+    {
+      "time": "2026-10-06T00:43:36.699Z",
+      "type": "taste",
+      "message": "The model's own prediction became its taste input; no measured taste data exists in this run."
+    },
+    {
+      "time": "2026-10-06T00:43:36.730Z",
+      "type": "taste",
+      "message": "Character DNA saved: 10 devices across 10 layers; 0 rest on entities, tags or qualities the model did not predict, and 8 translate qualities."
+    },
+    {
+      "time": "2026-10-06T00:43:36.739Z",
+      "type": "file",
+      "message": "Saved character.json: 20 parts, 3 cloth chains, 3 effects."
+    },
+    {
+      "time": "2026-10-06T00:43:36.806Z",
+      "type": "conformance",
+      "message": "Character check: 10 present, 0 partial, 0 missing; 0 warnings."
+    }
+  ],
+  "checkedSave": "2026-10-06T00:43:36.739Z"
+}

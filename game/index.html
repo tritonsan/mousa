@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="The Long Dusk: a playable moment on the Vesper Cliffs, where a lamplighter wakes a cold beacon.">
+  <title>The Long Dusk: Vesper Cliffs</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="src/main.js"></script>
+</head>
+<body class="play">
+  <main class="stage" id="stage">
+    <canvas id="view" class="view" role="img" aria-label="The Vesper Cliffs at dusk: a basalt road above a sea of cloud, a frozen sun on the horizon and a cold beacon ahead."></canvas>
+    <section class="title-card" id="title-card" aria-labelledby="title">
+      <h1 id="title">The Long Dusk</h1>
+      <p class="title-scene">Vesper Cliffs</p>
+      <p class="title-premise" id="premise"></p>
+      <button type="button" class="begin" id="begin">Begin</button>
+      <p class="title-keys">Walk with <kbd>A</kbd> <kbd>D</kbd> or the arrow keys. Interact with <kbd>E</kbd>.</p>
+      <div class="title-credit" id="title-credit" hidden></div>
+    </section>
+    <div class="toolbar">
+      <button type="button" id="music" aria-pressed="false" hidden>Music</button>
+      <button type="button" id="pause" aria-pressed="false">Pause</button>
+      <a href="compare.html">Compare</a>
+    </div>
+    <div class="now-playing" id="now-playing" hidden></div>
+    <div class="touch" aria-hidden="true">
+      <button type="button" data-touch="left" tabindex="-1">&#9664;</button>
+      <button type="button" data-touch="right" tabindex="-1">&#9654;</button>
+      <button type="button" data-touch="act" tabindex="-1">E</button>
+    </div>
+    <section class="load-error" id="load-error" hidden role="alert"></section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,2324 @@
+{
+  "schemaVersion": "1.0",
+  "pairId": "pair-20261004-210303",
+  "kind": "live",
+  "createdAt": "2026-10-04T21:03:03.784Z",
+  "brief": {
+    "name": "The Long Dusk: lamplighter taste difference check",
+    "brief": "Design Ilo, the playable lamplighter of The Long Dusk, for one moment on the Vesper Cliffs: walking the cliff road, answering the keeper and waking the cold beacon. My audience loves Hollow Knight, Spirited Away, Sigur Rós, Nujabes and the film Paterson. Make Ilo a character this audience would want to play: their look, the way they move and the way they speak. Keep the world, its lore, the keeper and Ilo's fixed facts. Write the character's description and lines in English.",
+    "references": [
+      {
+        "name": "Hollow Knight",
+        "role": "audience",
+        "origin": "user-provided"
+      },
+      {
+        "name": "Spirited Away",
+        "role": "audience",
+        "origin": "user-provided"
+      },
+      {
+        "name": "Sigur Rós",
+        "role": "audience",
+        "origin": "user-provided"
+      },
+      {
+        "name": "Nujabes",
+        "role": "audience",
+        "origin": "user-provided"
+      },
+      {
+        "name": "Paterson",
+        "role": "audience",
+        "origin": "user-provided"
+      }
+    ]
+  },
+  "model": "claude-opus-5.5",
+  "effort": "medium",
+  "protocol": {
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "videogame",
+      "style",
+      "aesthetic"
+    ],
+    "requiredAnchors": 6,
+    "portraitsPerArm": 1
+  },
+  "arms": [
+    {
+      "key": "qloo-off",
+      "label": "Qloo off",
+      "mode": "baseline",
+      "status": "completed",
+      "durationMs": 484190,
+      "calls": 18,
+      "checks": 2,
+      "events": [
+        {
+          "time": "2026-10-04T21:03:46.551Z",
+          "type": "taste",
+          "message": "Prediction frozen: 45 entities and qualities across 8 domains, with a character sketch."
+        },
+        {
+          "time": "2026-10-04T21:03:46.552Z",
+          "type": "taste",
+          "message": "The model's own prediction became its taste input; no measured taste data exists in this run."
+        },
+        {
+          "time": "2026-10-04T21:06:05.299Z",
+          "type": "warning",
+          "message": "Rejected game-dna.json: dna.devices[1].device: Text of 3-200 characters is required."
+        },
+        {
+          "time": "2026-10-04T21:06:28.705Z",
+          "type": "taste",
+          "message": "Character DNA saved: 8 devices across 8 layers; 0 rest on entities or tags the model did not predict."
+        },
+        {
+          "time": "2026-10-04T21:06:34.564Z",
+          "type": "image",
+          "message": "Painting dna8-1 from dna8; the host wrote the prompt from that device."
+        },
+        {
+          "time": "2026-10-04T21:07:16.098Z",
+          "type": "image",
+          "message": "Generated generated/dna8-1.jpg from dna8 in 42 s."
+        },
+        {
+          "time": "2026-10-04T21:08:13.855Z",
+          "type": "warning",
+          "message": "Rejected character.json: parts[20].spring: Unsupported field \"gravity\"; allowed fields are pivot, stiffness, damping, gain."
+        },
+        {
+          "time": "2026-10-04T21:09:04.826Z",
+          "type": "warning",
+          "message": "Rejected character.json: cloth[0].fill: This field is required."
+        },
+        {
+          "time": "2026-10-04T21:09:55.672Z",
+          "type": "file",
+          "message": "Saved character.json: 36 parts, 3 cloth chains, 4 effects."
+        },
+        {
+          "time": "2026-10-04T21:09:55.772Z",
+          "type": "conformance",
+          "message": "Character check: 8 present, 0 partial, 0 missing; 1 warnings."
+        },
+        {
+          "time": "2026-10-04T21:11:00.435Z",
+          "type": "file",
+          "message": "Saved character.json: 36 parts, 3 cloth chains, 4 effects."
+        },
+        {
+          "time": "2026-10-04T21:11:00.495Z",
+          "type": "conformance",
+          "message": "Character check: 8 present, 0 partial, 0 missing; 0 warnings."
+        }
+      ],
+      "audienceSummary": "Players who love quiet, melancholy, hand-crafted worlds: hand-drawn games and animation, post-rock and jazzy lo-fi beats, and slow films about everyday ritual. They want atmosphere, small figures in vast places and warmth found in repetition.",
+      "predictions": 45,
+      "sketch": {
+        "summary": "A small hooded lamplighter with a big round head and a long trailing scarf, carrying a warm paper lantern on a pole along the cliff road.",
+        "palette": [
+          "#2b2f3a",
+          "#4a5161",
+          "#c9a46a",
+          "#e8dcc4",
+          "#8c3b2e"
+        ],
+        "height": 130,
+        "headShare": 0.3,
+        "elements": [
+          "hood",
+          "cloak",
+          "scarf",
+          "lantern-pole",
+          "paper-lantern",
+          "boots",
+          "satchel"
+        ],
+        "gait": {
+          "cadence": 1.6,
+          "bounciness": 0.25,
+          "lean": 4,
+          "armSwing": 18,
+          "turnStyle": "pivot"
+        },
+        "light": "#ffc46b",
+        "voice": "quiet, plain, short sentences with pauses",
+        "motifs": [
+          "trailing scarf in the wind",
+          "warm lantern against slate dusk",
+          "small figure in a vast place"
+        ]
+      },
+      "taste": {
+        "source": "model-assumption",
+        "metrics": {
+          "predictions": 33,
+          "tagPredictions": 12
+        },
+        "requiredAnchors": [
+          {
+            "ref": "M01",
+            "name": "Muji",
+            "domain": "brand",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M07",
+            "name": "My Neighbor Totoro",
+            "domain": "movie",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M13",
+            "name": "Jónsi",
+            "domain": "artist",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M19",
+            "name": "Kafka on the Shore",
+            "domain": "book",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M24",
+            "name": "Samurai Champloo",
+            "domain": "tv_show",
+            "source": "model-assumption"
+          },
+          {
+            "ref": "M28",
+            "name": "Journey",
+            "domain": "videogame",
+            "source": "model-assumption"
+          }
+        ]
+      },
+      "dna": {
+        "thesis": "Ilo is a small, plush, bottom-heavy figure in undyed linen and ink-slate wool who walks the cliff road slowly with a paper lantern raised on a pole, holds still, and then throws the flame up on a swung off-beat.",
+        "devices": [
+          {
+            "id": "dna1",
+            "layer": "palette",
+            "device": "Undyed-cloth palette: ink-slate wool over unbleached linen, ochre wood and one rust thread, nothing saturated but the flame",
+            "translation": "My reading of a no-brand, undyed household-goods aesthetic and a muted ink-and-ochre palette: the cloak is two slates of ink, the scarf and face are linen tones, the pole and boots are ochre-brown wood and leather, and a single rust band in the scarf is the only accent, so the lantern's flame is the only bright thing on screen.",
+            "qualities": [
+              "unbleached natural materials",
+              "plain unbranded goods",
+              "muted ink and ochre palette"
+            ],
+            "anchors": [
+              {
+                "ref": "M01",
+                "name": "Muji",
+                "domain": "brand",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M40",
+                "name": "muted ink and ochre palette",
+                "domain": "aesthetic",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [
+                "#2b2f3a",
+                "#4a5161",
+                "#e8dcc4",
+                "#c9a46a",
+                "#8c3b2e"
+              ],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            }
+          },
+          {
+            "id": "dna2",
+            "layer": "silhouette",
+            "device": "Round plush hood over a small bell cloak: one rounded, bottom-heavy mass with a drooping hood point and a pole rising in front",
+            "translation": "My interpretation of the soft, pear-shaped forest-spirit forms of a gentle hand-drawn family film and of minimal bold silhouettes: a head share near a third, one unbroken hood mass, a widening bell cloak and short legs, readable as a single dark shape at small size.",
+            "qualities": [
+              "soft rounded creature shapes",
+              "bottom-heavy plush masses",
+              "minimal bold silhouettes"
+            ],
+            "anchors": [
+              {
+                "ref": "M07",
+                "name": "My Neighbor Totoro",
+                "domain": "movie",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M44",
+                "name": "minimal bold silhouettes",
+                "domain": "aesthetic",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [
+                "hood",
+                "hood-tip",
+                "cloak"
+              ],
+              "proportions": {
+                "height": 130,
+                "headShare": 0.3
+              },
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            }
+          },
+          {
+            "id": "dna3",
+            "layer": "costume",
+            "device": "Walker's wool kit: a long banded scarf streaming in the cliff wind, wrapped collar, ochre hip satchel, leather boots and a paper lantern on a wooden pole",
+            "translation": "My reading of a lone pilgrim crossing an empty landscape with cloth streaming behind it, rendered in weathered wood, paper and wool: the scarf is plain linen with rust bands (no glyphs or patterns borrowed from anywhere), the lantern is paper over a wooden frame, and everything looks hand-made and mended.",
+            "qualities": [
+              "a long scarf trailing across vast emptiness",
+              "weathered wood, paper and wool",
+              "worn natural fabrics"
+            ],
+            "anchors": [
+              {
+                "ref": "M28",
+                "name": "Journey",
+                "domain": "videogame",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M42",
+                "name": "weathered wood, paper and wool",
+                "domain": "aesthetic",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M45",
+                "name": "worn natural fabrics",
+                "domain": "aesthetic",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [
+                "#e8dcc4",
+                "#8c3b2e"
+              ],
+              "parts": [
+                "scarf",
+                "scarf-wrap",
+                "satchel",
+                "lantern-pole",
+                "paper-lantern",
+                "boots"
+              ],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            }
+          },
+          {
+            "id": "dna4",
+            "layer": "motion",
+            "device": "Ritual walk: slow steps with little bounce, a slight lean, a level head, a small free-arm swing and an eased pivot turn",
+            "translation": "My interpretation of slow contemplative pacing and everyday ritual: 1.6 steps a second, bounciness 0.25, a 4 degree lean, an 18 degree arm swing, a head held level at 0.8 so the lantern does not jog, and a pivot turn that eases around like someone who has walked this road many times.",
+            "qualities": [
+              "slow contemplative pacing",
+              "everyday ritual and repetition",
+              "quiet melancholy"
+            ],
+            "anchors": [
+              {
+                "ref": "M34",
+                "name": "slow contemplative pacing",
+                "domain": "style",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M36",
+                "name": "everyday ritual and repetition",
+                "domain": "style",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M38",
+                "name": "quiet melancholy",
+                "domain": "style",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [
+                {
+                  "param": "walk.cadence",
+                  "value": 1.6
+                },
+                {
+                  "param": "walk.bounciness",
+                  "value": 0.25
+                },
+                {
+                  "param": "walk.lean",
+                  "value": 4
+                },
+                {
+                  "param": "walk.armSwing",
+                  "value": 18
+                },
+                {
+                  "param": "walk.headStabilize",
+                  "value": 0.8
+                },
+                {
+                  "param": "turn.style",
+                  "value": "pivot"
+                }
+              ],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            }
+          },
+          {
+            "id": "dna5",
+            "layer": "signature",
+            "device": "Off-beat throw: dip the lantern, hold still, then swing the pole up and flick the flame free just after the beat with an overshoot",
+            "translation": "My reading of a laid-back, swung beat under sword-fight choreography and of sudden swells after stillness: a 3.4 second clip whose dip and hold take the first 1.4 seconds, then the arm rises and the flame leaves at 2.1 seconds, late like a swung note, with an outBack overshoot and a ring of light.",
+            "qualities": [
+              "laid-back swung hip-hop rhythm",
+              "sudden swells after long stillness"
+            ],
+            "anchors": [
+              {
+                "ref": "M24",
+                "name": "Samurai Champloo",
+                "domain": "tv_show",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M39",
+                "name": "sudden swells after long stillness",
+                "domain": "style",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [
+                {
+                  "name": "signature",
+                  "duration": 3.4,
+                  "kindleAt": 2.1,
+                  "tracks": [
+                    "upperArmFront",
+                    "forearmFront",
+                    "torso",
+                    "head"
+                  ]
+                }
+              ],
+              "effects": [
+                "kindle-swell",
+                "kindle-ring"
+              ],
+              "light": null,
+              "lines": []
+            }
+          },
+          {
+            "id": "dna6",
+            "layer": "light",
+            "device": "Breathing paper lantern: a pale amber light that swells and fades slowly instead of flickering, with motes drifting upward",
+            "translation": "My interpretation of slow, bowed, high-register swells and of a warm glow in deep darkness: a #ffc46b light of radius 230 with a slow 1.6-speed, 0.14-amount flicker that reads as breathing, and an aura of rising ember motes.",
+            "qualities": [
+              "slow bowed swells",
+              "high, fragile warmth",
+              "warm glow in deep darkness"
+            ],
+            "anchors": [
+              {
+                "ref": "M13",
+                "name": "Jónsi",
+                "domain": "artist",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M43",
+                "name": "warm glow in deep darkness",
+                "domain": "aesthetic",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [
+                "#ffe3a8"
+              ],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [
+                "ember-motes"
+              ],
+              "light": {
+                "color": "#ffc46b",
+                "radius": 230
+              },
+              "lines": []
+            }
+          },
+          {
+            "id": "dna7",
+            "layer": "voice",
+            "device": "Plain-dream register: short, literal sentences that accept strange things calmly, a pause in the middle, no exclamations",
+            "translation": "My reading of a novel narrated flatly by a young runaway in a dreamlike world: Ilo states things simply, treats the stopped sun and a cold beacon as ordinary, and speaks in two short sentences per line.",
+            "qualities": [
+              "matter-of-fact surreal narration",
+              "lonely young traveller",
+              "quiet melancholy"
+            ],
+            "anchors": [
+              {
+                "ref": "M19",
+                "name": "Kafka on the Shore",
+                "domain": "book",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M38",
+                "name": "quiet melancholy",
+                "domain": "style",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": [
+                "The cloud is quiet below the road tonight. I like it when it is quiet.",
+                "I saw the bridge. I crossed it anyway. The beacon is just up the road, then.",
+                "Wake up, Vesper. I carried this a long way for you.",
+                "I see them. Sit a while, Maren. The road will keep."
+              ]
+            }
+          },
+          {
+            "id": "dna8",
+            "layer": "imagery",
+            "device": "Hand-drawn dusk portrait: Ilo small against a vast cloud sea, soft textured ink line, slate, linen and ochre, lit only by the lantern",
+            "translation": "My interpretation of hand-drawn animation, textured ink line and wide shots with small figures: the portrait uses painted backgrounds, a soft dark contour and the palette of dna1, with the lantern as the single warm source.",
+            "qualities": [
+              "hand-drawn animation",
+              "hand-drawn textured line",
+              "long held wide shots with a small figure"
+            ],
+            "anchors": [
+              {
+                "ref": "M37",
+                "name": "hand-drawn animation",
+                "domain": "style",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M41",
+                "name": "hand-drawn textured line",
+                "domain": "aesthetic",
+                "source": "model-assumption"
+              },
+              {
+                "ref": "M35",
+                "name": "long held wide shots with a small figure",
+                "domain": "style",
+                "source": "model-assumption"
+              }
+            ],
+            "tokens": {
+              "colors": [
+                "#2b2f3a",
+                "#4a5161",
+                "#e8dcc4",
+                "#ffc46b"
+              ],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            }
+          }
+        ],
+        "rejected": [],
+        "stats": {
+          "devices": 8,
+          "layers": [
+            "palette",
+            "silhouette",
+            "costume",
+            "motion",
+            "signature",
+            "light",
+            "voice",
+            "imagery"
+          ],
+          "qlooAnchoredDevices": 0,
+          "surpriseAnchoredDevices": 0,
+          "modelAnchoredDevices": 8,
+          "surpriseShare": 0,
+          "sketchMoves": {
+            "colors": [
+              "#ffc46b"
+            ],
+            "parts": [
+              "hood-tip",
+              "scarf-wrap"
+            ],
+            "proportions": false,
+            "gait": []
+          }
+        }
+      },
+      "portraits": [
+        {
+          "path": "runs/pair-20261004-210303/qloo-off-portrait-1.jpg",
+          "device": "dna8",
+          "subject": "A small lamplighter in a round slate hood and bell cloak, a linen scarf with rust bands streaming back, raising a paper lantern on a wooden pole on a basalt cliff road above a sea of cloud at dusk.",
+          "aspect": "portrait",
+          "prompt": "Use your built-in image generation tool to create exactly one image, then reply with one sentence describing what it shows. Do not write code, run commands or create files yourself.\nSubject: A small lamplighter in a round slate hood and bell cloak, a linen scarf with rust bands streaming back, raising a paper lantern on a wooden pole on a basalt cliff road above a sea of cloud at dusk.\nArt direction: Hand-drawn dusk portrait: Ilo small against a vast cloud sea, soft textured ink line, slate, linen and ochre, lit only by the lantern. Palette: #2b2f3a, #4a5161, #e8dcc4, #ffc46b. Qualities: hand-drawn animation, hand-drawn textured line, long held wide shots with a small figure.\nNo text, letters, numbers, logos, brand marks, recognizable people or copyrighted characters.\nPortrait, 2:3.",
+          "width": 1024,
+          "height": 1536,
+          "description": "A small hooded lamplighter raises a glowing paper lantern on a basalt cliff road, scarf streaming above a vast sea of clouds at dusk.",
+          "durationMs": 41531,
+          "provider": "codex",
+          "version": "0.160.0",
+          "status": "generated"
+        }
+      ],
+      "character": "runs/pair-20261004-210303/qloo-off.json",
+      "measures": {
+        "height": 131,
+        "figureHeight": 131,
+        "headHeight": 40,
+        "headShare": 0.305,
+        "hipHeight": 50,
+        "legShare": 0.382,
+        "width": 94.3,
+        "aspect": 0.72,
+        "legLength": 43,
+        "armLength": 33.1,
+        "stride": {
+          "length": 65,
+          "legs": 1.51,
+          "clamped": false
+        },
+        "light": {
+          "color": "#ffc46b",
+          "radius": 230,
+          "position": [
+            53,
+            -91
+          ]
+        },
+        "visibleColors": [
+          {
+            "hex": "#4a5161",
+            "share": 0.3429
+          },
+          {
+            "hex": "#2b2f3a",
+            "share": 0.1683
+          },
+          {
+            "hex": "#7a5a36",
+            "share": 0.1134
+          },
+          {
+            "hex": "#e8dcc4",
+            "share": 0.0911
+          },
+          {
+            "hex": "#bfae90",
+            "share": 0.0826
+          },
+          {
+            "hex": "#c9a46a",
+            "share": 0.0438
+          },
+          {
+            "hex": "#d9c3a3",
+            "share": 0.0434
+          },
+          {
+            "hex": "#5f6879",
+            "share": 0.0425
+          },
+          {
+            "hex": "#ffe3a8",
+            "share": 0.0187
+          },
+          {
+            "hex": "#534231",
+            "share": 0.016
+          }
+        ],
+        "parts": 36,
+        "cloth": 3,
+        "effects": 4,
+        "warnings": [],
+        "keeper": {
+          "name": "Maren",
+          "figureHeight": 156,
+          "ratio": 0.84
+        }
+      },
+      "conformance": {
+        "score": 1,
+        "present": 8,
+        "partial": 0,
+        "missing": 0,
+        "total": 8,
+        "devices": [
+          {
+            "id": "dna1",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna2",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna3",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna4",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna5",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna6",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna7",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna8",
+            "status": "present",
+            "missing": []
+          }
+        ],
+        "limitation": "Checks that declared colours, part and cloth IDs, proportions, motion values, clip timings and tracks, effects, the light and the lines literally occur in the saved character, and that imagery devices produced portraits. It does not measure visual quality, motion feel, likeness or player preference."
+      },
+      "divergence": {
+        "palette": 0.125,
+        "proportions": 0.05,
+        "elements": 0,
+        "motion": 0,
+        "score": 0.044,
+        "colors": {
+          "character": [
+            "#4a5161",
+            "#2b2f3a",
+            "#7a5a36",
+            "#e8dcc4",
+            "#bfae90",
+            "#c9a46a",
+            "#d9c3a3",
+            "#5f6879"
+          ],
+          "new": [
+            "#7a5a36"
+          ]
+        },
+        "figure": {
+          "sketchHeight": 130,
+          "height": 131,
+          "sketchHeadShare": 0.3,
+          "headShare": 0.305
+        },
+        "planned": {
+          "elements": [
+            "hood",
+            "cloak",
+            "scarf",
+            "lantern-pole",
+            "paper-lantern",
+            "boots",
+            "satchel"
+          ],
+          "kept": [
+            "hood",
+            "cloak",
+            "scarf",
+            "lantern-pole",
+            "paper-lantern",
+            "boots",
+            "satchel"
+          ],
+          "dropped": []
+        },
+        "gait": {
+          "moved": []
+        },
+        "light": {
+          "sketch": "#ffc46b",
+          "character": "#ffc46b",
+          "moved": false
+        },
+        "method": "Shares of the character's eight most visible colours at least CIE76 20 from every sketch colour, of the sketch's planned elements the character does not draw, and of the sketch's five gait choices that moved past their thresholds, with a proportion score that reaches 1 at twice the departure threshold; the score is their mean."
+      }
+    },
+    {
+      "key": "qloo-on",
+      "label": "Qloo on",
+      "mode": "qloo",
+      "status": "completed",
+      "durationMs": 435933,
+      "calls": 16,
+      "checks": 2,
+      "events": [
+        {
+          "time": "2026-10-04T21:11:49.031Z",
+          "type": "taste",
+          "message": "Prediction frozen: 43 entities and qualities across 8 domains, with a character sketch."
+        },
+        {
+          "time": "2026-10-04T21:11:49.039Z",
+          "type": "taste",
+          "message": "Taste profile revealed after the prediction was frozen: 76 of 79 measured entities were neither predicted nor named in the brief. 16 style and aesthetic tags were measured; 16 were not predicted."
+        },
+        {
+          "time": "2026-10-04T21:14:32.723Z",
+          "type": "taste",
+          "message": "Character DNA saved: 9 devices across 8 layers; 9 rest on entities or tags the model did not predict."
+        },
+        {
+          "time": "2026-10-04T21:14:36.521Z",
+          "type": "image",
+          "message": "Painting dna9-1 from dna9; the host wrote the prompt from that device."
+        },
+        {
+          "time": "2026-10-04T21:15:10.691Z",
+          "type": "image",
+          "message": "Generated generated/dna9-1.jpg from dna9 in 34 s."
+        },
+        {
+          "time": "2026-10-04T21:16:11.103Z",
+          "type": "warning",
+          "message": "Rejected character.json: cloth[1].fill: This field is required."
+        },
+        {
+          "time": "2026-10-04T21:17:10.199Z",
+          "type": "file",
+          "message": "Saved character.json: 44 parts, 3 cloth chains, 3 effects."
+        },
+        {
+          "time": "2026-10-04T21:17:12.074Z",
+          "type": "conformance",
+          "message": "Character check: 9 present, 0 partial, 0 missing; 1 warnings."
+        },
+        {
+          "time": "2026-10-04T21:18:17.306Z",
+          "type": "file",
+          "message": "Saved character.json: 44 parts, 3 cloth chains, 3 effects."
+        },
+        {
+          "time": "2026-10-04T21:18:17.385Z",
+          "type": "conformance",
+          "message": "Character check: 9 present, 0 partial, 0 missing; 1 warnings."
+        }
+      ],
+      "audienceSummary": "An audience drawn to quiet, melancholic, hand-crafted worlds: hand-drawn games and animation, post-rock and lo-fi jazz hip-hop, and slow films about everyday ritual and attention.",
+      "predictions": 43,
+      "sketch": {
+        "summary": "A small, big-headed lamplighter in a dark navy hooded cloak with a pale bone-coloured face, carrying an amber lantern on a short pole while a long scarf trails in the cliff wind.",
+        "palette": [
+          "#1e2633",
+          "#3b4a63",
+          "#d8cfc0",
+          "#f2b24c",
+          "#7a8a9a"
+        ],
+        "height": 120,
+        "headShare": 0.32,
+        "elements": [
+          "hood",
+          "cloak",
+          "mask-face",
+          "lantern-pole",
+          "lantern",
+          "scarf",
+          "boots"
+        ],
+        "gait": {
+          "cadence": 1.8,
+          "bounciness": 0.3,
+          "lean": 4,
+          "armSwing": 12,
+          "turnStyle": "pivot"
+        },
+        "light": "#ffb84a",
+        "voice": "hushed, short plain sentences with pauses",
+        "motifs": [
+          "hooded silhouette",
+          "swinging lantern",
+          "scarf trailing in the wind",
+          "small figure against a vast sky"
+        ]
+      },
+      "taste": {
+        "source": "qloo-profile",
+        "metrics": {
+          "measuredEntities": 79,
+          "predictedByModel": 3,
+          "knownFromBrief": 0,
+          "surprises": 76,
+          "surpriseShare": 0.962,
+          "predictions": 32,
+          "predictionsConfirmed": 3,
+          "measuredTags": 16,
+          "tagsPredicted": 0,
+          "tagSurprises": 16,
+          "tagPredictions": 11
+        },
+        "requiredAnchors": [
+          {
+            "ref": "00000000-0000-4000-8000-00000000004D",
+            "name": "Grimgar, Ashes and Illusions",
+            "domain": "tv_show",
+            "source": "qloo",
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "00000000-0000-4000-8000-000000000002",
+            "name": "Neutral Milk Hotel",
+            "domain": "artist",
+            "source": "qloo",
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "00000000-0000-4000-8000-00000000002B",
+            "name": "Anomalisa",
+            "domain": "movie",
+            "source": "qloo",
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "00000000-0000-4000-8000-000000000080",
+            "name": "Brave New World",
+            "domain": "book",
+            "source": "qloo",
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "00000000-0000-4000-8000-00000000000C",
+            "name": "LA Kings",
+            "domain": "brand",
+            "source": "qloo",
+            "surprise": true,
+            "predictedByModel": false
+          },
+          {
+            "ref": "00000000-0000-4000-8000-000000000034",
+            "name": "Kiki's Delivery Service",
+            "domain": "movie",
+            "source": "qloo",
+            "surprise": true,
+            "predictedByModel": false
+          }
+        ]
+      },
+      "dna": {
+        "thesis": "Ilo becomes a tall, black-and-silver folk wanderer in a pointed soft hat, carrying an accordion-pleated paper lantern with a silver-blue flame, who walks the cliff road with a slow, majestic sea-legged roll and kindles the beacon with an operatic, singing gesture.",
+        "devices": [
+          {
+            "id": "dna1",
+            "layer": "palette",
+            "device": "Black-and-silver wanderer's coat with faded rust and moss folk accents",
+            "translation": "My interpretation: the returned black-and-silver palette tag becomes the main masses (near-black coat and hat, silver hair, trim, buttons and pleated collar); the lo-fi folk tag adds two faded, home-dyed accents, a rust sash and lantern ribs and a moss bedroll; the neutral palette tag keeps everything else desaturated. No logo or team mark is used.",
+            "qualities": [
+              "Black And Silver Palette",
+              "Lo-Fi Psychedelic Folk",
+              "Neutral Color Palettes"
+            ],
+            "anchors": [
+              {
+                "ref": "00000000-0000-4000-8000-00000000000C",
+                "name": "LA Kings",
+                "domain": "brand",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              },
+              {
+                "ref": "00000000-0000-4000-8000-000000000002",
+                "name": "Neutral Milk Hotel",
+                "domain": "artist",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              },
+              {
+                "ref": "urn:tag:aesthetic_property:qloo:neutral_color_palettes",
+                "name": "Neutral Color Palettes",
+                "domain": "aesthetic",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              }
+            ],
+            "tokens": {
+              "colors": [
+                "#141518",
+                "#c3c7cb",
+                "#9a4630",
+                "#5e6234"
+              ],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna2",
+            "layer": "silhouette",
+            "device": "Tall, narrow figure under a pointed soft folk hat whose tip bends back in the wind, over a long coat whose skirt and tail flow behind",
+            "translation": "My interpretation: the folk-fantasy and witch tags become an original pointed, wide-brimmed soft hat with a sprung, bent tip (not any film costume); the fluid-silhouettes tag becomes one continuous outline from hat tip to a flared coat skirt with a trailing coat tail. The figure grows tall and slim, so the head and hat take a smaller share than a big-headed design.",
+            "qualities": [
+              "Fluid Silhouettes",
+              "Folk fantasy",
+              "Witch"
+            ],
+            "anchors": [
+              {
+                "ref": "urn:tag:aesthetic_property:qloo:fluid_silhouettes",
+                "name": "Fluid Silhouettes",
+                "domain": "aesthetic",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              },
+              {
+                "ref": "00000000-0000-4000-8000-000000000034",
+                "name": "Kiki's Delivery Service",
+                "domain": "movie",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [
+                "folk-hat",
+                "hat-tip",
+                "coat-skirt",
+                "coat-tail"
+              ],
+              "proportions": {
+                "height": 180,
+                "headShare": 0.23
+              },
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna3",
+            "layer": "costume",
+            "device": "Accordion-pleated paper bellows lantern and a matching pleated silver collar",
+            "translation": "My interpretation: the accordion tag becomes the lantern's construction, a hanging paper lantern folded like bellows with rust ribs and caps; the sculptural-designs tag turns the same zigzag fold into a stiff pleated collar at the neck, so the light and the costume share one folded form.",
+            "qualities": [
+              "Accordion",
+              "Lo-Fi Psychedelic Folk",
+              "Sculptural Designs"
+            ],
+            "anchors": [
+              {
+                "ref": "00000000-0000-4000-8000-000000000002",
+                "name": "Neutral Milk Hotel",
+                "domain": "artist",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              },
+              {
+                "ref": "urn:tag:aesthetic_property:qloo:sculptural_designs",
+                "name": "Sculptural Designs",
+                "domain": "aesthetic",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              }
+            ],
+            "tokens": {
+              "colors": [
+                "#9a4630"
+              ],
+              "parts": [
+                "bellows-lantern",
+                "pleat-collar"
+              ],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna4",
+            "layer": "costume",
+            "device": "Road kit of a working adventurer: moss bedroll on the back, a rust shoulder strap and a knotted sash",
+            "translation": "My interpretation: the adventurer tags become plain travelling gear rather than weapons (Ilo has no combat ability): a rolled moss blanket tied to the back, a strap crossing the chest and a sash whose tail blows in the wind; the craftsmanship tag shows in visible ties and stitched cuffs.",
+            "qualities": [
+              "Adventurer",
+              "Adventure",
+              "Quality Craftsmanship"
+            ],
+            "anchors": [
+              {
+                "ref": "00000000-0000-4000-8000-00000000004D",
+                "name": "Grimgar, Ashes and Illusions",
+                "domain": "tv_show",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              },
+              {
+                "ref": "urn:tag:aesthetic_property:qloo:quality_craftsmanship",
+                "name": "Quality Craftsmanship",
+                "domain": "aesthetic",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              }
+            ],
+            "tokens": {
+              "colors": [
+                "#5e6234"
+              ],
+              "parts": [
+                "bedroll",
+                "pack-strap",
+                "rust-sash",
+                "sash-tail"
+              ],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna5",
+            "layer": "motion",
+            "device": "Slow, upright, majestic walk with a rolling sea-legged hip sway and a deliberate pivot turn",
+            "translation": "My interpretation: majestic sets a slow cadence, almost no bounce, a chest held slightly back and a level head; nautical adds a sailor's rolling hip sway above the sea of cloud and a full free swing of the empty arm, while the lantern arm is carried out in front; the turn is an unhurried pivot.",
+            "qualities": [
+              "Majestic",
+              "Nautical"
+            ],
+            "anchors": [
+              {
+                "ref": "urn:tag:style:qloo:majestic",
+                "name": "Majestic",
+                "domain": "style",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              },
+              {
+                "ref": "urn:tag:style:qloo:nautical",
+                "name": "Nautical",
+                "domain": "style",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [
+                {
+                  "param": "walk.cadence",
+                  "value": 1.3
+                },
+                {
+                  "param": "walk.bounciness",
+                  "value": 0.1
+                },
+                {
+                  "param": "walk.lean",
+                  "value": -2
+                },
+                {
+                  "param": "walk.armSwing",
+                  "value": 30
+                },
+                {
+                  "param": "walk.hipSway",
+                  "value": 7
+                },
+                {
+                  "param": "walk.headStabilize",
+                  "value": 0.9
+                },
+                {
+                  "param": "turn.style",
+                  "value": "pivot"
+                }
+              ],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna6",
+            "layer": "signature",
+            "device": "Operatic kindling: Ilo leans back, lifts the head as if holding a sung note, raises the bellows lantern overhead and opens the other arm before releasing the flame",
+            "translation": "My interpretation: operatic and singer become a long, swelling gesture with a held peak: a slow rise over 2.3 seconds, the flame leaving at the top like the last note, then a long settle; silver-blue motes burst at the release.",
+            "qualities": [
+              "Operatic",
+              "Singer"
+            ],
+            "anchors": [
+              {
+                "ref": "urn:tag:style:qloo:operatic",
+                "name": "Operatic",
+                "domain": "style",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              },
+              {
+                "ref": "00000000-0000-4000-8000-000000000034",
+                "name": "Kiki's Delivery Service",
+                "domain": "movie",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [
+                {
+                  "name": "signature",
+                  "duration": 3.6,
+                  "kindleAt": 2.3,
+                  "tracks": [
+                    "upperArmFront",
+                    "upperArmBack",
+                    "torso",
+                    "head"
+                  ]
+                }
+              ],
+              "effects": [
+                "silver-motes"
+              ],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna7",
+            "layer": "light",
+            "device": "Silver-blue enchanted flame glowing through pale pleated paper, with motes drifting up from it",
+            "translation": "My interpretation: enchanting becomes a cool, moonlit silver-blue flame instead of a plain warm lamp, so the beacon and far towers answer in an uncanny pale light, with a slow flicker and a few motes rising from the lantern.",
+            "qualities": [
+              "Enchanting"
+            ],
+            "anchors": [
+              {
+                "ref": "urn:tag:style:qloo:enchanting",
+                "name": "Enchanting",
+                "domain": "style",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [
+                "lantern-glimmer"
+              ],
+              "light": {
+                "color": "#bfe0ff",
+                "radius": 230
+              },
+              "lines": []
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna8",
+            "layer": "voice",
+            "device": "Moody, earnest, devoted lines: short plain sentences with a ragged emotional catch",
+            "translation": "My interpretation: moody and character-study set an inward, observational register; emotive and devoted give each line a plain, unguarded promise to the road and the beacon. The words are my own, quoting nothing.",
+            "qualities": [
+              "Moody",
+              "Character studies",
+              "Emotive",
+              "Devoted"
+            ],
+            "anchors": [
+              {
+                "ref": "00000000-0000-4000-8000-00000000002B",
+                "name": "Anomalisa",
+                "domain": "movie",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              },
+              {
+                "ref": "00000000-0000-4000-8000-000000000002",
+                "name": "Neutral Milk Hotel",
+                "domain": "artist",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              }
+            ],
+            "tokens": {
+              "colors": [],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": [
+                "Cold wind off the cloud sea. I hold the lantern close, like a promise I made to no one in particular.",
+                "I won't turn back, keeper. I didn't walk all this way to stop at a bridge.",
+                "Wake now, Vesper. I carried this light the whole long road for you.",
+                "They are. One by one. Let me sit with you a while before I walk on."
+              ]
+            },
+            "surprise": true
+          },
+          {
+            "id": "dna9",
+            "layer": "imagery",
+            "device": "Austere, somber portrait: a lone tall figure in black and silver on a bare basalt ledge, lit only by a small silver-blue lantern",
+            "translation": "My interpretation: visually austere and somber direct a sparse composition with a flat dusk sky, few shapes and one small cold light source.",
+            "qualities": [
+              "Visually Austere",
+              "Somber"
+            ],
+            "anchors": [
+              {
+                "ref": "urn:tag:style:qloo:visually_austere",
+                "name": "Visually Austere",
+                "domain": "style",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              },
+              {
+                "ref": "urn:tag:style:qloo:somber",
+                "name": "Somber",
+                "domain": "style",
+                "source": "qloo",
+                "surprise": true,
+                "predictedByModel": false
+              }
+            ],
+            "tokens": {
+              "colors": [
+                "#141518",
+                "#c3c7cb",
+                "#bfe0ff"
+              ],
+              "parts": [],
+              "proportions": null,
+              "motion": [],
+              "clips": [],
+              "effects": [],
+              "light": null,
+              "lines": []
+            },
+            "surprise": true
+          }
+        ],
+        "rejected": [
+          {
+            "ref": "00000000-0000-4000-8000-000000000080",
+            "reason": "Its returned tags (Adult, Science Fiction Fantasy, Audiobook, Literature, School) are catalogue and format labels with no visual, material, rhythmic or vocal quality to translate; using it would mean importing a dystopian theme from my own knowledge that the fixed lore does not support.",
+            "name": "Brave New World"
+          }
+        ],
+        "stats": {
+          "devices": 9,
+          "layers": [
+            "palette",
+            "silhouette",
+            "costume",
+            "motion",
+            "signature",
+            "light",
+            "voice",
+            "imagery"
+          ],
+          "qlooAnchoredDevices": 9,
+          "surpriseAnchoredDevices": 9,
+          "modelAnchoredDevices": 0,
+          "surpriseShare": 1,
+          "sketchMoves": {
+            "colors": [
+              "#9a4630",
+              "#5e6234",
+              "#bfe0ff"
+            ],
+            "parts": [
+              "folk-hat",
+              "hat-tip",
+              "coat-skirt",
+              "coat-tail",
+              "bellows-lantern",
+              "pleat-collar",
+              "bedroll",
+              "pack-strap",
+              "rust-sash",
+              "sash-tail"
+            ],
+            "proportions": true,
+            "gait": [
+              "walk.cadence",
+              "walk.lean",
+              "walk.armSwing"
+            ]
+          }
+        }
+      },
+      "portraits": [
+        {
+          "path": "runs/pair-20261004-210303/qloo-on-portrait-1.jpg",
+          "device": "dna9",
+          "subject": "A tall slender lamplighter in profile facing right on a bare basalt cliff ledge at dusk, black long coat, silver hair, pointed soft hat with a bent tip, holding a pleated paper lantern with a pale blue flame.",
+          "aspect": "portrait",
+          "prompt": "Use your built-in image generation tool to create exactly one image, then reply with one sentence describing what it shows. Do not write code, run commands or create files yourself.\nSubject: A tall slender lamplighter in profile facing right on a bare basalt cliff ledge at dusk, black long coat, silver hair, pointed soft hat with a bent tip, holding a pleated paper lantern with a pale blue flame.\nArt direction: Austere, somber portrait: a lone tall figure in black and silver on a bare basalt ledge, lit only by a small silver-blue lantern. Palette: #141518, #c3c7cb, #bfe0ff. Qualities: Visually Austere, Somber.\nNo text, letters, numbers, logos, brand marks, recognizable people or copyrighted characters.\nPortrait, 2:3.",
+          "width": 1024,
+          "height": 1536,
+          "description": "A tall, silver-haired lamplighter faces right on a basalt cliff at dusk, holding a pale blue lantern beneath a bent-tip hat and long black coat.",
+          "durationMs": 34166,
+          "provider": "codex",
+          "version": "0.160.0",
+          "status": "generated"
+        }
+      ],
+      "character": "runs/pair-20261004-210303/qloo-on.json",
+      "measures": {
+        "height": 180,
+        "figureHeight": 180,
+        "headHeight": 42,
+        "headShare": 0.233,
+        "hipHeight": 86,
+        "legShare": 0.478,
+        "width": 50,
+        "aspect": 0.278,
+        "legLength": 78.1,
+        "armLength": 50,
+        "stride": {
+          "length": 107.7,
+          "legs": 1.38,
+          "clamped": false
+        },
+        "light": {
+          "color": "#bfe0ff",
+          "radius": 230,
+          "position": [
+            46,
+            -67
+          ]
+        },
+        "visibleColors": [
+          {
+            "hex": "#141518",
+            "share": 0.3585
+          },
+          {
+            "hex": "#0b0b0d",
+            "share": 0.1481
+          },
+          {
+            "hex": "#2c2e33",
+            "share": 0.0747
+          },
+          {
+            "hex": "#c3c7cb",
+            "share": 0.0712
+          },
+          {
+            "hex": "#9a4630",
+            "share": 0.067
+          },
+          {
+            "hex": "#d9b48f",
+            "share": 0.0475
+          },
+          {
+            "hex": "#0e1118",
+            "share": 0.0414
+          },
+          {
+            "hex": "#e4eef5",
+            "share": 0.04
+          },
+          {
+            "hex": "#23262f",
+            "share": 0.0372
+          },
+          {
+            "hex": "#8a8f95",
+            "share": 0.034
+          }
+        ],
+        "parts": 44,
+        "cloth": 3,
+        "effects": 3,
+        "warnings": [
+          "These parts are completely covered when standing: thigh. Check their z order, or remove them if they only show in motion by design."
+        ],
+        "keeper": {
+          "name": "Maren",
+          "figureHeight": 156,
+          "ratio": 1.15
+        }
+      },
+      "conformance": {
+        "score": 1,
+        "present": 9,
+        "partial": 0,
+        "missing": 0,
+        "total": 9,
+        "devices": [
+          {
+            "id": "dna1",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna2",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna3",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna4",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna5",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna6",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna7",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna8",
+            "status": "present",
+            "missing": []
+          },
+          {
+            "id": "dna9",
+            "status": "present",
+            "missing": []
+          }
+        ],
+        "limitation": "Checks that declared colours, part and cloth IDs, proportions, motion values, clip timings and tracks, effects, the light and the lines literally occur in the saved character, and that imagery devices produced portraits. It does not measure visual quality, motion feel, likeness or player preference."
+      },
+      "divergence": {
+        "palette": 0.125,
+        "proportions": 1,
+        "elements": 1,
+        "motion": 0.6,
+        "score": 0.681,
+        "colors": {
+          "character": [
+            "#141518",
+            "#0b0b0d",
+            "#2c2e33",
+            "#c3c7cb",
+            "#9a4630",
+            "#d9b48f",
+            "#0e1118",
+            "#e4eef5"
+          ],
+          "new": [
+            "#9a4630"
+          ]
+        },
+        "figure": {
+          "sketchHeight": 120,
+          "height": 180,
+          "sketchHeadShare": 0.32,
+          "headShare": 0.233
+        },
+        "planned": {
+          "elements": [
+            "hood",
+            "cloak",
+            "mask-face",
+            "lantern-pole",
+            "lantern",
+            "scarf",
+            "boots"
+          ],
+          "kept": [],
+          "dropped": [
+            "hood",
+            "cloak",
+            "mask-face",
+            "lantern-pole",
+            "lantern",
+            "scarf",
+            "boots"
+          ]
+        },
+        "gait": {
+          "moved": [
+            "walk.cadence",
+            "walk.lean",
+            "walk.armSwing"
+          ]
+        },
+        "light": {
+          "sketch": "#ffb84a",
+          "character": "#bfe0ff",
+          "moved": true
+        },
+        "method": "Shares of the character's eight most visible colours at least CIE76 20 from every sketch colour, of the sketch's planned elements the character does not draw, and of the sketch's five gait choices that moved past their thresholds, with a proportion score that reaches 1 at twice the departure threshold; the score is their mean."
+      }
+    }
+  ],
+  "taste": {
+    "status": "ok",
+    "calls": 17,
+    "seeds": [
+      {
+        "name": "Hollow Knight",
+        "role": "audience",
+        "origin": "user-provided",
+        "resolution": "entity",
+        "entityId": "00000000-0000-4000-8000-000000000083",
+        "matchedName": "Hollow Knight",
+        "type": "urn:entity:videogame",
+        "evidenceId": "taste-source-2"
+      },
+      {
+        "name": "Spirited Away",
+        "role": "audience",
+        "origin": "user-provided",
+        "resolution": "entity",
+        "entityId": "00000000-0000-4000-8000-000000000053",
+        "matchedName": "Spirited Away",
+        "type": "urn:entity:movie",
+        "evidenceId": "taste-source-1"
+      },
+      {
+        "name": "Sigur Rós",
+        "role": "audience",
+        "origin": "user-provided",
+        "resolution": "entity",
+        "entityId": "00000000-0000-4000-8000-00000000003B",
+        "matchedName": "Sigur Rós",
+        "type": "urn:entity:artist",
+        "evidenceId": "taste-source-4"
+      },
+      {
+        "name": "Nujabes",
+        "role": "audience",
+        "origin": "user-provided",
+        "resolution": "entity",
+        "entityId": "00000000-0000-4000-8000-000000000076",
+        "matchedName": "Nujabes",
+        "type": "urn:entity:artist",
+        "evidenceId": "taste-source-3"
+      },
+      {
+        "name": "Paterson",
+        "role": "audience",
+        "origin": "user-provided",
+        "resolution": "entity",
+        "entityId": "00000000-0000-4000-8000-00000000006A",
+        "matchedName": "Paterson",
+        "type": "urn:entity:movie",
+        "evidenceId": "taste-source-5"
+      }
+    ],
+    "results": [
+      {
+        "domain": "brand",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "taste-source-6",
+        "count": 10
+      },
+      {
+        "domain": "movie",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "taste-source-7",
+        "count": 10
+      },
+      {
+        "domain": "artist",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "taste-source-11",
+        "count": 10
+      },
+      {
+        "domain": "book",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "taste-source-8",
+        "count": 10
+      },
+      {
+        "domain": "tv_show",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "taste-source-9",
+        "count": 10
+      },
+      {
+        "domain": "videogame",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "taste-source-10",
+        "count": 10
+      },
+      {
+        "domain": "style",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "taste-source-12",
+        "count": 8
+      },
+      {
+        "domain": "aesthetic",
+        "band": "core",
+        "status": "ok",
+        "evidenceId": "taste-source-13",
+        "count": 8
+      },
+      {
+        "domain": "brand",
+        "band": "deep-cut",
+        "status": "ok",
+        "evidenceId": "taste-source-14",
+        "count": 10
+      },
+      {
+        "domain": "movie",
+        "band": "deep-cut",
+        "status": "ok",
+        "evidenceId": "taste-source-15",
+        "count": 10
+      }
+    ],
+    "limitations": []
+  },
+  "comparison": {
+    "schemaVersion": "1.0",
+    "computedAt": "2026-10-04T21:18:33.196Z",
+    "distance": {
+      "overall": 0.395,
+      "palette": 0.297,
+      "silhouette": 0.584,
+      "motion": 0.1,
+      "signature": 0.239,
+      "voice": 0.761,
+      "light": 1,
+      "method": "Weighted heuristic: visible palette CIE76 distance (25%), silhouette outline overlap and proportions (25%), gait, idle and turn parameters by their ranges (25%), signature clip timing and structure (10%), shared content words of the four lines (10%) and light colour (5%)."
+    },
+    "fingerprints": {
+      "baseline": {
+        "palette": [
+          {
+            "hex": "#4a5161",
+            "share": 0.3429
+          },
+          {
+            "hex": "#2b2f3a",
+            "share": 0.1683
+          },
+          {
+            "hex": "#7a5a36",
+            "share": 0.1134
+          },
+          {
+            "hex": "#e8dcc4",
+            "share": 0.0911
+          },
+          {
+            "hex": "#bfae90",
+            "share": 0.0826
+          },
+          {
+            "hex": "#c9a46a",
+            "share": 0.0438
+          },
+          {
+            "hex": "#d9c3a3",
+            "share": 0.0434
+          },
+          {
+            "hex": "#5f6879",
+            "share": 0.0425
+          }
+        ],
+        "silhouette": {
+          "figureHeight": 131,
+          "headShare": 0.305,
+          "legShare": 0.382,
+          "aspect": 0.72,
+          "mask": [
+            "000000000000010000000000",
+            "000000000111111110000000",
+            "000000011111111110000000",
+            "000001111111111111000000",
+            "000001111111111111100000",
+            "000011011111111111100000",
+            "000000011111111111100000",
+            "000000011111111111100000",
+            "000000011111111111100000",
+            "000000001111111111000000",
+            "000000001111111111000001",
+            "000000001111111110000001",
+            "000001111111111100000010",
+            "001111111111111100000010",
+            "111110001111111110000000",
+            "000000001111111110000100",
+            "000000001111111110000100",
+            "000000011111111110001000",
+            "000000011111111111111000",
+            "000000011111111111110000",
+            "000000111111111110110000",
+            "000000111111111111100000",
+            "000000111111111111000000",
+            "000000111111111111000000",
+            "000000111111111111000000",
+            "000001111111111111000000",
+            "000001111111111111000000",
+            "000001111111111111100000",
+            "000011100001111000000000",
+            "000011000001111000000000",
+            "000000000001111000000000",
+            "000000000011111000000000",
+            "000000000011110000000000",
+            "000000000011110000000000",
+            "000000000011111000000000",
+            "000000000011111110000000"
+          ]
+        },
+        "motion": {
+          "walk": {
+            "speed": 52,
+            "cadence": 1.6,
+            "stepHeight": 0.12,
+            "bob": 0.04,
+            "bounciness": 0.25,
+            "lean": 4,
+            "armSwing": 18,
+            "elbowBend": 20,
+            "hipSway": 3,
+            "headStabilize": 0.8,
+            "squash": 0.02,
+            "accel": 0.5
+          },
+          "idle": {
+            "breathRate": 10,
+            "breathDepth": 0.55,
+            "sway": 0.35,
+            "weightShift": 0.3,
+            "lookAround": 0.45,
+            "blinkInterval": 5,
+            "stance": 0.12
+          },
+          "turn": {
+            "style": "pivot",
+            "duration": 0.45
+          },
+          "stride": 1.51
+        },
+        "signature": {
+          "duration": 3.4,
+          "kindleAt": 2.1,
+          "kindleShare": 0.618,
+          "tracks": 7,
+          "root": false,
+          "squash": true,
+          "events": 2
+        },
+        "light": {
+          "color": "#ffc46b",
+          "radius": 230,
+          "intensity": 1.05,
+          "flicker": {
+            "speed": 1.6,
+            "amount": 0.14
+          }
+        },
+        "effects": [
+          "aura",
+          "burst",
+          "burst",
+          "footstep"
+        ],
+        "lines": {
+          "arrive": "The cloud is quiet below the road tonight. I like it when it is quiet.",
+          "greet": "I saw the bridge. I crossed it anyway. The beacon is just up the road, then.",
+          "kindle": "Wake up, Vesper. I carried this a long way for you.",
+          "after": "I see them. Sit a while, Maren. The road will keep."
+        }
+      },
+      "qloo": {
+        "palette": [
+          {
+            "hex": "#141518",
+            "share": 0.3585
+          },
+          {
+            "hex": "#0b0b0d",
+            "share": 0.1481
+          },
+          {
+            "hex": "#2c2e33",
+            "share": 0.0747
+          },
+          {
+            "hex": "#c3c7cb",
+            "share": 0.0712
+          },
+          {
+            "hex": "#9a4630",
+            "share": 0.067
+          },
+          {
+            "hex": "#d9b48f",
+            "share": 0.0475
+          },
+          {
+            "hex": "#0e1118",
+            "share": 0.0414
+          },
+          {
+            "hex": "#e4eef5",
+            "share": 0.04
+          }
+        ],
+        "silhouette": {
+          "figureHeight": 180,
+          "headShare": 0.233,
+          "legShare": 0.478,
+          "aspect": 0.278,
+          "mask": [
+            "000000000000000000000000",
+            "000000000000010000000000",
+            "000000000000111000000000",
+            "000000000001111100000000",
+            "000000000011111110000000",
+            "000000000001111100000000",
+            "000000000001111100000000",
+            "000000000001011100000000",
+            "000000000000011000000000",
+            "000000000001111000000000",
+            "000000001111111000000000",
+            "000000001111111000000000",
+            "000000001111111000000000",
+            "000000001111111100000000",
+            "000000000011111100000000",
+            "000000000011111111000000",
+            "000000000011111111111000",
+            "000000000011111001111100",
+            "000000000011111000000000",
+            "000000000111111000000000",
+            "000000000111111000001110",
+            "000000001111111100011110",
+            "000000001111111100011110",
+            "000000011111111100011110",
+            "000000011111111100001110",
+            "000000011111111100000000",
+            "000000011111111100000000",
+            "000000111111111100000000",
+            "000000011111111100000000",
+            "000000000001111000000000",
+            "000000000001111000000000",
+            "000000000001111000000000",
+            "000000000011011000000000",
+            "000000000111111000000000",
+            "000000000111111000000000",
+            "000000000111111110000000"
+          ]
+        },
+        "motion": {
+          "walk": {
+            "speed": 70,
+            "cadence": 1.3,
+            "stepHeight": 0.12,
+            "bob": 0.03,
+            "bounciness": 0.1,
+            "lean": -2,
+            "armSwing": 30,
+            "elbowBend": 15,
+            "hipSway": 7,
+            "headStabilize": 0.9,
+            "squash": 0.01,
+            "accel": 0.6
+          },
+          "idle": {
+            "breathRate": 10,
+            "breathDepth": 0.5,
+            "sway": 0.5,
+            "weightShift": 0.5,
+            "lookAround": 0.3,
+            "blinkInterval": 5,
+            "stance": 0.18
+          },
+          "turn": {
+            "style": "pivot",
+            "duration": 0.5
+          },
+          "stride": 1.38
+        },
+        "signature": {
+          "duration": 3.6,
+          "kindleAt": 2.3,
+          "kindleShare": 0.639,
+          "tracks": 6,
+          "root": true,
+          "squash": true,
+          "events": 1
+        },
+        "light": {
+          "color": "#bfe0ff",
+          "radius": 230,
+          "intensity": 1.05,
+          "flicker": {
+            "speed": 3,
+            "amount": 0.12
+          }
+        },
+        "effects": [
+          "aura",
+          "burst",
+          "footstep"
+        ],
+        "lines": {
+          "arrive": "Cold wind off the cloud sea. I hold the lantern close, like a promise I made to no one in particular.",
+          "greet": "I won't turn back, keeper. I didn't walk all this way to stop at a bridge.",
+          "kindle": "Wake now, Vesper. I carried this light the whole long road for you.",
+          "after": "They are. One by one. Let me sit with you a while before I walk on."
+        }
+      }
+    },
+    "qloo": {
+      "devices": 9,
+      "layers": [
+        "palette",
+        "silhouette",
+        "costume",
+        "motion",
+        "signature",
+        "light",
+        "voice",
+        "imagery"
+      ],
+      "qlooAnchoredDevices": 9,
+      "surpriseAnchoredDevices": 9,
+      "modelAnchoredDevices": 0,
+      "surpriseShare": 1,
+      "sketchMoves": {
+        "colors": [
+          "#9a4630",
+          "#5e6234",
+          "#bfe0ff"
+        ],
+        "parts": [
+          "folk-hat",
+          "hat-tip",
+          "coat-skirt",
+          "coat-tail",
+          "bellows-lantern",
+          "pleat-collar",
+          "bedroll",
+          "pack-strap",
+          "rust-sash",
+          "sash-tail"
+        ],
+        "proportions": true,
+        "gait": [
+          "walk.cadence",
+          "walk.lean",
+          "walk.armSwing"
+        ]
+      },
+      "conformance": 1,
+      "prediction": {
+        "measuredEntities": 79,
+        "predictedByModel": 3,
+        "knownFromBrief": 0,
+        "surprises": 76,
+        "surpriseShare": 0.962,
+        "predictions": 32,
+        "predictionsConfirmed": 3,
+        "measuredTags": 16,
+        "tagsPredicted": 0,
+        "tagSurprises": 16,
+        "tagPredictions": 11
+      },
+      "sketch": {
+        "palette": 0.125,
+        "proportions": 1,
+        "elements": 1,
+        "motion": 0.6,
+        "score": 0.681,
+        "colors": {
+          "character": [
+            "#141518",
+            "#0b0b0d",
+            "#2c2e33",
+            "#c3c7cb",
+            "#9a4630",
+            "#d9b48f",
+            "#0e1118",
+            "#e4eef5"
+          ],
+          "new": [
+            "#9a4630"
+          ]
+        },
+        "figure": {
+          "sketchHeight": 120,
+          "height": 180,
+          "sketchHeadShare": 0.32,
+          "headShare": 0.233
+        },
+        "planned": {
+          "elements": [
+            "hood",
+            "cloak",
+            "mask-face",
+            "lantern-pole",
+            "lantern",
+            "scarf",
+            "boots"
+          ],
+          "kept": [],
+          "dropped": [
+            "hood",
+            "cloak",
+            "mask-face",
+            "lantern-pole",
+            "lantern",
+            "scarf",
+            "boots"
+          ]
+        },
+        "gait": {
+          "moved": [
+            "walk.cadence",
+            "walk.lean",
+            "walk.armSwing"
+          ]
+        },
+        "light": {
+          "sketch": "#ffb84a",
+          "character": "#bfe0ff",
+          "moved": true
+        },
+        "method": "Shares of the character's eight most visible colours at least CIE76 20 from every sketch colour, of the sketch's planned elements the character does not draw, and of the sketch's five gait choices that moved past their thresholds, with a proportion score that reaches 1 at twice the departure threshold; the score is their mean."
+      }
+    },
+    "baseline": {
+      "devices": 8,
+      "layers": [
+        "palette",
+        "silhouette",
+        "costume",
+        "motion",
+        "signature",
+        "light",
+        "voice",
+        "imagery"
+      ],
+      "qlooAnchoredDevices": 0,
+      "surpriseAnchoredDevices": 0,
+      "modelAnchoredDevices": 8,
+      "surpriseShare": 0,
+      "sketchMoves": {
+        "colors": [
+          "#ffc46b"
+        ],
+        "parts": [
+          "hood-tip",
+          "scarf-wrap"
+        ],
+        "proportions": false,
+        "gait": []
+      },
+      "conformance": 1,
+      "sketch": {
+        "palette": 0.125,
+        "proportions": 0.05,
+        "elements": 0,
+        "motion": 0,
+        "score": 0.044,
+        "colors": {
+          "character": [
+            "#4a5161",
+            "#2b2f3a",
+            "#7a5a36",
+            "#e8dcc4",
+            "#bfae90",
+            "#c9a46a",
+            "#d9c3a3",
+            "#5f6879"
+          ],
+          "new": [
+            "#7a5a36"
+          ]
+        },
+        "figure": {
+          "sketchHeight": 130,
+          "height": 131,
+          "sketchHeadShare": 0.3,
+          "headShare": 0.305
+        },
+        "planned": {
+          "elements": [
+            "hood",
+            "cloak",
+            "scarf",
+            "lantern-pole",
+            "paper-lantern",
+            "boots",
+            "satchel"
+          ],
+          "kept": [
+            "hood",
+            "cloak",
+            "scarf",
+            "lantern-pole",
+            "paper-lantern",
+            "boots",
+            "satchel"
+          ],
+          "dropped": []
+        },
+        "gait": {
+          "moved": []
+        },
+        "light": {
+          "sketch": "#ffc46b",
+          "character": "#ffc46b",
+          "moved": false
+        },
+        "method": "Shares of the character's eight most visible colours at least CIE76 20 from every sketch colour, of the sketch's planned elements the character does not draw, and of the sketch's five gait choices that moved past their thresholds, with a proportion score that reaches 1 at twice the departure threshold; the score is their mean."
+      }
+    },
+    "headline": "9 of 9 character devices in the Qloo on design rest on entities or tags the model did not predict.",
+    "detail": "The model predicted 3 of 79 measured entities before seeing them; 76 were new to it.",
+    "sketchHeadline": "Against each run's own frozen sketch, the Qloo on character moved 68% of its palette, proportions, planned elements and gait; the Qloo off character moved 4%.",
+    "limitation": "One pair. Character distance is a heuristic over tokens, outline and motion parameters, not a perceptual or quality measure. Compare repeated Qloo-to-baseline distances with baseline-to-baseline distances before claiming the difference exceeds model variance. Departure from the sketch is required of surprise-anchored devices, so it shows what measured data changed under this protocol, not an unprompted effect."
+  },
+  "status": "completed",
+  "finishedAt": "2026-10-04T21:18:33.196Z"
+}

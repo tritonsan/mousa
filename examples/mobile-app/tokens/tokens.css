@@ -1,0 +1,27 @@
+/* The custom properties of tokens.json, one per token. Change a value in both files. */
+:root {
+  --color-background: #eef0f3;
+  --color-surface: #ffffff;
+  --color-ink: #1d232b;
+  --color-muted: #5b6573;
+  --color-line: #d5dae1;
+  --color-accent: #2563c9;
+  --color-accent-ink: #ffffff;
+  --color-badge: #e3ecfa;
+  --font-body: system-ui, sans-serif;
+  --font-display: system-ui, sans-serif;
+  --size-title: 28px;
+  --size-heading: 20px;
+  --size-body: 16px;
+  --size-small: 14px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --radius-control: 10px;
+  --radius-card: 14px;
+  --radius-device: 28px;
+  --device-width: 320px;
+  --device-height: 720px;
+}

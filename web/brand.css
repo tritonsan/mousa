@@ -1,0 +1,40 @@
+/* Display the supplied lockup unchanged; crop its surrounding canvas in CSS. */
+.masthead { background: #fff; }
+.wordmark { gap: 14px; flex-shrink: 0; }
+.brand-lockup {
+  --brand-width: 190px;
+  position: relative;
+  display: inline-block;
+  width: var(--brand-width);
+  height: calc(var(--brand-width) * .2815846);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.brand-lockup img {
+  position: absolute;
+  display: block;
+  width: calc(var(--brand-width) * 1.3426124);
+  height: calc(var(--brand-width) * 1.3426124);
+  max-width: none;
+  left: calc(var(--brand-width) * -.1745182);
+  top: calc(var(--brand-width) * -.5203426);
+}
+.studio-label {
+  padding: 5px 7px;
+  border: 1px solid #e5def7;
+  border-radius: 6px;
+  color: #7855b8;
+  background: #f7f4fd;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: .12em;
+}
+.footer-brand { color: #34334e; }
+@media (max-width: 680px) {
+  .wordmark { gap: 8px; }
+  .brand-lockup { --brand-width: 153px; }
+  .studio-label { font-size: 9px; padding: 4px 5px; }
+}
+@media (max-width: 360px) {
+  .studio-label { display: none; }
+}

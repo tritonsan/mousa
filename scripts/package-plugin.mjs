@@ -1,0 +1,31 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import { rootDir } from '../src/config.mjs';
+import { CREATIVE_POLICY_TEXT } from '../plugin/server/culture/policy.mjs';
+import { TASTE_POLICY_TEXT } from '../plugin/server/culture/taste.mjs';
+import { PRODUCTION_POLICY_TEXT } from '../plugin/server/production/policy.mjs';
+const exec = promisify(execFile);
+const source = path.join(rootDir, 'plugin');
+const manifest = JSON.parse(await fs.readFile(path.join(source, 'plugin.json'), 'utf8'));
+const packagedPolicy = await fs.readFile(path.join(source, 'skills', manifest.name, 'policy.md'), 'utf8');
+if (packagedPolicy !== CREATIVE_POLICY_TEXT) throw new Error('The portable skill policy must exactly match the shared runtime policy.');
+const packagedTastePolicy = await fs.readFile(path.join(source, 'skills', manifest.name, 'taste-policy.md'), 'utf8');
+if (packagedTastePolicy !== TASTE_POLICY_TEXT) throw new Error('The portable taste-led policy must exactly match the shared runtime policy.');
+const packagedProductionPolicy = await fs.readFile(path.join(source, 'skills', manifest.name, 'production-policy.md'), 'utf8');
+if (packagedProductionPolicy !== PRODUCTION_POLICY_TEXT) throw new Error('The portable production policy must exactly match the shared runtime policy.');
+if (!/^[a-z][a-z0-9-]{0,63}$/.test(manifest.name)) throw new Error('Invalid portable plugin name.');
+const artifacts = process.env.PLUGIN_PACKAGE_DIRECTORY ? path.resolve(process.env.PLUGIN_PACKAGE_DIRECTORY) : path.join(rootDir, 'artifacts');
+const staging = path.join(artifacts, 'package', manifest.name);
+await fs.mkdir(staging, { recursive: true });
+await fs.cp(source, staging, { recursive: true, filter: file => !/(^|[\\/])(node_modules|\.env|\.git|data)([\\/]|$)/.test(file) });
+// The open-licence font library travels with the plugin, so a standalone session loads the same families as the Studio.
+// The photo and music libraries stay behind: one belongs to a Studio starter and the other is CC BY with credits.
+await fs.cp(path.join(rootDir, 'library', 'fonts'), path.join(staging, 'library', 'fonts'), { recursive: true });
+const archive = path.join(artifacts, `${manifest.name}-${manifest.version}.tar.gz`);
+await exec('tar', ['-czf', archive, '-C', path.dirname(staging), manifest.name], { windowsHide: true });
+const contents = await exec('tar', ['-tzf', archive], { windowsHide: true });
+if (!['plugin.json', 'server/index.mjs', 'server/culture/policy.mjs', 'server/culture/taste.mjs', 'server/production/tools.mjs', 'library/fonts/fonts.json', `skills/${manifest.name}/policy.md`, `skills/${manifest.name}/taste-policy.md`, `skills/${manifest.name}/production-policy.md`].every(file => contents.stdout.includes(`${manifest.name}/${file}`))) throw new Error('Archive is missing its executable plugin entrypoint, its font library or its shared creative, taste-led and production policies.');
+console.log(archive);
+console.log(`Verified ${contents.stdout.trim().split(/\r?\n/).length} archive entries; no account upload or installation performed.`);

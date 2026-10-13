@@ -1,0 +1,32 @@
+# This Dockerfile uses the repository root as its build context.
+# Keep only runtime source, the game and libraries it serves, and its deployment entrypoint.
+**
+!package.json
+!src/
+!src/**
+!web/
+!web/**
+!plugin/
+!plugin/**
+!game/
+!game/**
+# Recorded runs hold design sessions and Kiro homes; tests are not runtime code.
+game/runs
+game/runs/**
+game/tests
+game/tests/**
+!library/
+!library/**
+!deploy/
+!deploy/Dockerfile
+!deploy/Dockerfile.dockerignore
+!deploy/entrypoint.sh
+**/.env
+**/.env.*
+**/node_modules
+**/.git
+**/data
+**/secrets
+**/*.pem
+**/*.key
+**/*credentials*

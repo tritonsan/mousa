@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ramble · Self-guided walks in Port Calder</title>
+  <link rel="stylesheet" href="tokens/tokens.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="board" aria-label="Ramble app screens">
+    <section class="screen" id="screen-welcome" aria-labelledby="welcome-title">
+      <div class="phone">
+        <header class="screen-header">
+          <p class="app-name">Ramble</p>
+          <p class="screen-note">Port Calder</p>
+        </header>
+        <svg class="poster" id="harbour-poster" viewBox="0 0 320 220" role="img" aria-labelledby="poster-title">
+          <title id="poster-title">A screen-printed poster of Port Calder bay: a striped setting sun behind the hills, the town on the slope, the east pier with its red lamp and waves in the harbour.</title>
+          <rect class="p-sky" x="0" y="0" width="320" height="220"/>
+          <g class="p-sun-rise">
+            <circle class="p-sun" cx="196" cy="118" r="60"/>
+            <rect class="p-sky" x="128" y="104" width="140" height="3"/>
+            <rect class="p-sky" x="128" y="114" width="140" height="4"/>
+            <rect class="p-sky" x="128" y="125" width="140" height="5"/>
+            <rect class="p-sky" x="128" y="137" width="140" height="6"/>
+          </g>
+          <g class="p-birds">
+            <path d="M52 52 q5 -6 10 0 q5 -6 10 0"/>
+            <path d="M80 38 q4 -5 8 0 q4 -5 8 0"/>
+            <path d="M104 60 q3 -4 6 0 q3 -4 6 0"/>
+          </g>
+          <path class="p-hill-far" d="M0 150 L0 112 C34 92 70 96 104 116 C128 130 150 128 172 138 C190 146 200 148 214 150 Z"/>
+          <path class="p-hill" d="M0 150 L0 126 C24 108 58 106 86 120 C108 131 124 142 140 150 Z"/>
+          <path class="p-register" d="M0 126 C24 108 58 106 86 120 C108 131 124 142 140 150" transform="translate(2 1.5)"/>
+          <g class="p-town">
+            <rect x="14" y="112" width="12" height="14"/>
+            <path d="M12 113 L20 104 L28 113 Z"/>
+            <rect x="32" y="108" width="10" height="16"/>
+            <rect x="35" y="94" width="4" height="14"/>
+            <rect x="48" y="112" width="14" height="12"/>
+            <path d="M46 113 L55 106 L64 113 Z"/>
+            <rect x="68" y="116" width="10" height="12"/>
+          </g>
+          <g class="p-windows">
+            <rect x="18" y="117" width="3" height="3"/>
+            <rect x="35" y="113" width="3" height="3"/>
+            <rect x="52" y="116" width="3" height="3"/>
+            <rect x="71" y="120" width="3" height="3"/>
+          </g>
+          <path class="p-hill" d="M244 150 C258 132 284 122 320 124 L320 150 Z"/>
+          <rect class="p-sea" x="0" y="150" width="320" height="70"/>
+          <g class="p-pier">
+            <rect x="150" y="144" width="108" height="6"/>
+            <rect x="158" y="150" width="3" height="10"/>
+            <rect x="184" y="150" width="3" height="10"/>
+            <rect x="210" y="150" width="3" height="10"/>
+            <rect x="236" y="150" width="3" height="10"/>
+            <path d="M246 144 L250 112 L260 112 L264 144 Z"/>
+            <rect x="248" y="104" width="14" height="8"/>
+            <path d="M246 104 L255 96 L264 104 Z"/>
+          </g>
+          <circle class="p-lamp" cx="255" cy="108" r="3.5"/>
+          <g class="p-waves">
+            <path d="M8 168 q8 -5 16 0 t16 0 t16 0 t16 0"/>
+            <path d="M120 176 q8 -5 16 0 t16 0 t16 0 t16 0 t16 0"/>
+            <path d="M30 188 q8 -5 16 0 t16 0 t16 0"/>
+            <path d="M210 186 q8 -5 16 0 t16 0 t16 0 t16 0"/>
+          </g>
+          <path class="p-boat" d="M92 166 L126 166 L120 174 L98 174 Z"/>
+          <path class="p-sail" d="M108 164 L108 140 L124 164 Z"/>
+          <text class="p-title" x="160" y="210" text-anchor="middle">PORT CALDER</text>
+        </svg>
+        <div class="screen-body">
+          <h1 id="welcome-title">Fall for Port Calder, one stop at a time</h1>
+          <p class="lead">Self-guided walks through the harbour town, with a little story waiting at every stop.</p>
+          <ul class="benefits">
+            <li id="benefit-routes">Walks for a long afternoon or a quick hour</li>
+            <li>Step-free walks, clearly marked</li>
+            <li>A short note at every stop</li>
+          </ul>
+        </div>
+        <footer class="screen-actions">
+          <a class="button primary" href="#screen-walks" id="start-exploring">Let's go</a>
+          <a class="button quiet" href="#screen-walks">Just looking for now</a>
+        </footer>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-walks" aria-labelledby="walks-title">
+      <div class="phone">
+        <header class="screen-header">
+          <h2 id="walks-title">The walks</h2>
+          <p class="screen-note" id="walk-count">Loading walks…</p>
+        </header>
+        <div class="walks-intro">
+          <p class="eyebrow">Pick a walk that steals your heart</p>
+          <div class="filters" role="group" aria-label="Filter walks">
+            <button type="button" class="chip" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="chip" data-filter="short" aria-pressed="false">Under an hour</button>
+            <button type="button" class="chip" data-filter="step-free" aria-pressed="false">Step-free</button>
+          </div>
+        </div>
+        <div class="tear" id="ticket-tear"><span>Admit one walker</span></div>
+        <div class="screen-body">
+          <ul class="walk-list" id="walk-list"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-detail" aria-labelledby="detail-title">
+      <div class="phone">
+        <header class="screen-header">
+          <a class="back" href="#screen-walks" aria-label="Back to the walks">←</a>
+          <h2 id="detail-title">Walk</h2>
+        </header>
+        <div class="screen-body">
+          <p class="district" id="detail-district"></p>
+          <p class="summary" id="detail-summary"></p>
+          <dl class="stats" id="detail-stats"></dl>
+          <h3>The stops you'll fall for</h3>
+          <ol class="stop-list" id="detail-stops"></ol>
+        </div>
+        <footer class="screen-actions">
+          <a class="button primary" href="#screen-walk" id="start-walk">Take me there</a>
+        </footer>
+      </div>
+    </section>
+
+    <section class="screen" id="screen-walk" aria-labelledby="walk-title">
+      <div class="phone">
+        <header class="screen-header">
+          <h2 id="walk-title">On the walk</h2>
+          <p class="screen-note" id="walk-progress" aria-live="polite"></p>
+        </header>
+        <div class="screen-body">
+          <p class="eyebrow">You're on your way</p>
+          <div class="journey" id="journey-line">
+            <ol class="route" id="walk-route" aria-label="Stops on this walk"></ol>
+          </div>
+          <div class="stop-card" id="stop-card">
+            <h3 id="stop-name"></h3>
+            <p id="stop-note"></p>
+          </div>
+          <p class="kind-note">Take it at your own pace. The city will wait for you.</p>
+        </div>
+        <footer class="screen-actions">
+          <button type="button" class="button primary" id="next-stop">On to the next stop</button>
+          <a class="button quiet" href="#screen-walks" id="end-walk">Stop here for today</a>
+        </footer>
+      </div>
+    </section>
+  </main>
+  <noscript><p class="noscript">Ramble needs JavaScript to list its walks.</p></noscript>
+</body>
+</html>

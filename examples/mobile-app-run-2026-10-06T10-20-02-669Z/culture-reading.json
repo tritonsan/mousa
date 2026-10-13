@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "clusters": [
+    {
+      "id": "expressive-heat",
+      "name": "Expressive, bright, romantic warmth",
+      "refs": ["quality:look:expressive", "quality:mood:emotional", "quality:mood:romantic", "quality:look:energetic", "00000000-0000-4000-8000-00000000001E", "00000000-0000-4000-8000-00000000003F"],
+      "layers": ["palette", "typography", "motion"],
+      "reading": "The measured neighbours are not quiet: they are melodic Latin pop ballads and a bright, emotional, romantic musical telenovela. Read against the seeds, this is the warm, sun-struck, danceable side of Khruangbin's global funk rather than a hushed storybook. The palette goes hot and saturated (terracotta, marigold, magenta-rose on deep indigo) and the type gets an expressive, high-contrast display face with real swagger."
+    },
+    {
+      "id": "coastal-prints",
+      "name": "Coastal bohemian, vintage prints, made by hand",
+      "refs": ["urn:tag:aesthetic_property:qloo:coastal", "urn:tag:aesthetic_property:qloo:bohemian", "urn:tag:aesthetic_property:qloo:vintage_prints", "urn:tag:aesthetic_property:qloo:quality_craftsmanship", "quality:mood:melodic"],
+      "layers": ["imagery", "layout", "structure"],
+      "reading": "The aesthetic tags are the clearest link to the seeds: coastal, bohemian, vintage prints and craftsmanship. Port Calder is a harbour town, so the imagery becomes a screen-printed travel-poster look: flat two- or three-colour inks, a sun over the bay, misregistered layers, and walk cards that read like printed tickets or record sleeves."
+    },
+    {
+      "id": "passionate-journey",
+      "name": "Passionate, compassionate journey",
+      "refs": ["quality:meaning:passionate", "quality:mood:compassionate", "00000000-0000-4000-8000-000000000051", "quality:meaning:diverse"],
+      "layers": ["voice", "interaction"],
+      "reading": "Passion, compassion and 'the journey' set the voice: warm, direct, a little exclamatory, inviting the visitor to fall for the city stop by stop. The walk in progress is framed as a journey you are on, with encouragement at each stop rather than neutral status text."
+    }
+  ],
+  "setAside": [
+    {"ref": "00000000-0000-4000-8000-000000000042", "reason": "A superhero blockbuster of near-total popularity (0.9993); its destruction and laser-gun tags reflect general popularity drift, not a usable register for a gentle self-guided walking app."}
+  ],
+  "approach": "The measured profile overturned my storybook-watercolour prediction: none of my 23 predicted entities came back and every quality was a surprise. I keep what the measurement agrees on — expressive, emotional, romantic, passionate, coastal, bohemian, vintage prints — and translate it into a hot, screen-printed coastal poster style with an expressive display face and a warm, passionate voice. The mainstream brand and book results (Instagram, Nike, self-help titles) are popularity noise and are not used."
+}

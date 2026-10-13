@@ -1,0 +1,32 @@
+{
+  "name": "mousa-designer",
+  "description": "Redesigns the Ramble app interface in this folder from a measured audience taste, with the Moûsa production stages.",
+  "prompt": "file://../prompts/mousa-designer.md",
+  "mcpServers": {
+    "mousa": {
+      "command": "node",
+      "args": ["../../plugin/server/index.mjs"],
+      "env": { "MOUSA_PROJECT_DIR": "." },
+      "timeout": 600000
+    }
+  },
+  "tools": ["@mousa", "read", "write"],
+  "allowedTools": ["@mousa"],
+  "toolsSettings": {
+    "read": {
+      "allowedPaths": ["./**"],
+      "deniedPaths": ["**/.env", "**/.env.*", ".kiro/**"]
+    },
+    "write": {
+      "allowedPaths": ["./**"],
+      "deniedPaths": ["**/.env", "**/.env.*", ".kiro/**", ".mousa/**", "data/**", "serve.mjs"]
+    }
+  },
+  "resources": [
+    "file://../../../../plugin/skills/culture-grounded-design/SKILL.md",
+    "file://../../../../plugin/skills/culture-grounded-design/policy.md",
+    "file://../../../../plugin/skills/culture-grounded-design/taste-policy.md",
+    "file://../../../../plugin/skills/culture-grounded-design/production-policy.md"
+  ],
+  "includeMcpJson": false
+}

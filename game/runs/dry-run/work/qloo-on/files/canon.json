@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "world": "The Long Dusk",
+  "premise": "Generations ago the sun stopped on the horizon. Lamplighters walk the old roads to wake the beacons that once called the morning.",
+  "scene": {
+    "id": "vesper-cliffs",
+    "name": "Vesper Cliffs",
+    "summary": "A basalt cliff road above a sea of cloud. It crosses a rope bridge, passes the keeper's bench and ends at the cold Vesper beacon, with far towers on the spires beyond."
+  },
+  "character": {
+    "name": "Ilo",
+    "role": "Lamplighter",
+    "abilities": [
+      {
+        "id": "kindle",
+        "name": "Kindle",
+        "description": "Wake a cold beacon with the flame you carry."
+      },
+      {
+        "id": "carried-flame",
+        "name": "Carried flame",
+        "description": "The light you carry pushes the dusk back around you."
+      }
+    ],
+    "rules": [
+      "Ilo carries a light that can be seen in the dusk.",
+      "Ilo walks the road and does not fly or teleport."
+    ]
+  },
+  "keeper": {
+    "name": "Maren",
+    "role": "Keeper of the Vesper beacon"
+  },
+  "script": {
+    "keeperGreeting": "Another lamplighter on the cliff road. The last one turned back at the bridge.",
+    "keeperRequest": "The beacon has been cold three winters. The far towers will not wake until Vesper does.",
+    "keeperAfter": "Look along the cliffs. The far towers are answering."
+  }
+}

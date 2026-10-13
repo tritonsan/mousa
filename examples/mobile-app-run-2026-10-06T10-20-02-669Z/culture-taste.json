@@ -1,0 +1,1727 @@
+{
+  "source": "qloo-profile",
+  "requiredAnchors": [
+    {
+      "ref": "quality:look:expressive",
+      "name": "Expressive",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "look",
+      "count": 6,
+      "domains": [
+        "artist"
+      ],
+      "examples": [
+        "Chyno Miranda",
+        "Maite Perroni",
+        "Ana Paula"
+      ],
+      "tags": [
+        "Expressive"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    },
+    {
+      "ref": "quality:mood:emotional",
+      "name": "Emotional",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "mood",
+      "count": 5,
+      "domains": [
+        "tv_show",
+        "artist"
+      ],
+      "examples": [
+        "Soy Luna",
+        "Elite",
+        "Christian Nodal"
+      ],
+      "tags": [
+        "Emotional"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    },
+    {
+      "ref": "quality:meaning:passionate",
+      "name": "Passionate",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "meaning",
+      "count": 6,
+      "domains": [
+        "tv_show",
+        "artist"
+      ],
+      "examples": [
+        "Sin Senos Sí Hay Paraíso",
+        "Down to Earth with Zac Efron",
+        "Anuel AA"
+      ],
+      "tags": [
+        "Passionate"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000001E",
+      "name": "Maite Perroni",
+      "domain": "artist",
+      "source": "qloo",
+      "tags": [
+        "Melodic Latin",
+        "Expressive",
+        "Latin Pop Ballad",
+        "Energetic",
+        "Versatile"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000003F",
+      "name": "Soy Luna",
+      "domain": "tv_show",
+      "source": "qloo",
+      "tags": [
+        "Bright",
+        "Choreography focused",
+        "Emotional",
+        "Romantic",
+        "Conflicted"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000042",
+      "name": "Avengers: Infinity War",
+      "domain": "movie",
+      "source": "qloo",
+      "tags": [
+        "Spectacular",
+        "Compassionate",
+        "Action packed",
+        "Destruction",
+        "Laser gun"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    }
+  ],
+  "entities": [
+    {
+      "ref": "00000000-0000-4000-8000-000000000026",
+      "name": "Instagram",
+      "domain": "brand",
+      "source": "qloo",
+      "tags": [
+        "Minimalist UI",
+        "Dynamic Color Gradients",
+        "High-Resolution Imagery",
+        "Vertical Video Layout",
+        "Curated Feeds"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000020",
+      "name": "Calvin Klein",
+      "domain": "brand",
+      "source": "qloo",
+      "tags": [
+        "Casual",
+        "Other",
+        "Shoe brands",
+        "1980s fashion",
+        "Lifestyle / Casual"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000006F",
+      "name": "Victoria's Secret",
+      "domain": "brand",
+      "source": "qloo",
+      "tags": [
+        "Pink And Black Color Palette",
+        "1977 establishments in California",
+        "Swimwear manufacturers",
+        "1990s fashion",
+        "Fashion"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000006B",
+      "name": "Nike",
+      "domain": "brand",
+      "source": "qloo",
+      "tags": [
+        "Nike",
+        "Fashion",
+        "1970s fashion",
+        "Watch manufacturing companies of the United States",
+        "Clothing companies established in 1964"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000052",
+      "name": "Spotify",
+      "domain": "brand",
+      "source": "qloo",
+      "tags": [
+        "Minimalist",
+        "High-Contrast",
+        "Green and Black Palette",
+        "Clean Typography",
+        "Dynamic Imagery"
+      ],
+      "contributors": [
+        "Vivian Maier",
+        "Khruangbin",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000000E",
+      "name": "Chanel",
+      "domain": "brand",
+      "source": "qloo",
+      "tags": [
+        "Eyewear brands of France",
+        "Vague or ambiguous time from July 2013",
+        "Design companies established in 1909",
+        "Fashion accessory brands",
+        "Haute couture"
+      ],
+      "contributors": [
+        "Vivian Maier",
+        "Khruangbin",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000045",
+      "name": "Tommy Hilfiger",
+      "domain": "brand",
+      "source": "qloo",
+      "tags": [
+        "Red, White, and Blue Color Palette",
+        "Preppy Stripes",
+        "Color-Blocking",
+        "Classic Silhouettes",
+        "Embroidered Logo"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000019",
+      "name": "Billboard",
+      "domain": "brand",
+      "source": "qloo",
+      "tags": [
+        "Clean Layout",
+        "Dynamic Imagery",
+        "Bold Typography",
+        "Chart-Focused Visuals",
+        "Working In Music Industry"
+      ],
+      "contributors": [
+        "Vivian Maier",
+        "Studio Ghibli",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000012",
+      "name": "Forever 21",
+      "domain": "brand",
+      "source": "qloo",
+      "tags": [
+        "High-Energy",
+        "Contemporary",
+        "Graphic-Forward",
+        "Versatile",
+        "Influencer Aesthetic"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000005A",
+      "name": "FC Barcelona",
+      "domain": "brand",
+      "source": "qloo",
+      "tags": [
+        "Blue and Red Stripes",
+        "Iconic Crest",
+        "Dynamic Stadium Architecture",
+        "Athletic Excellence",
+        "Global Connection"
+      ],
+      "contributors": [
+        "Vivian Maier",
+        "Khruangbin",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000042",
+      "name": "Avengers: Infinity War",
+      "domain": "movie",
+      "source": "qloo",
+      "tags": [
+        "Spectacular",
+        "Compassionate",
+        "Action packed",
+        "Destruction",
+        "Laser gun"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000024",
+      "name": "Spider-Man: Far from Home",
+      "domain": "movie",
+      "source": "qloo",
+      "tags": [
+        "Coming of age",
+        "Fire creature",
+        "Disguise",
+        "Superhero",
+        "Bitterness"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000006D",
+      "name": "Spider-Man: No Way Home",
+      "domain": "movie",
+      "source": "qloo",
+      "tags": [
+        "Wiped memory",
+        "Alien symbiote",
+        "Anonymity",
+        "Arrest warrant",
+        "Stabbed from behind"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000035",
+      "name": "Karol G",
+      "domain": "artist",
+      "source": "qloo",
+      "tags": [
+        "Latin Pop",
+        "Energetic",
+        "Trap Latino",
+        "Reggaeton",
+        "Charismatic"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000063",
+      "name": "Bad Bunny",
+      "domain": "artist",
+      "source": "qloo",
+      "tags": [
+        "Dynamic",
+        "Reggaeton",
+        "Trap Latino",
+        "Urban",
+        "Rhythmic"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000018",
+      "name": "Christian Nodal",
+      "domain": "artist",
+      "source": "qloo",
+      "tags": [
+        "Ranchera-Rooted",
+        "Mariachi-Infused",
+        "Norteño-Driven",
+        "Melodic",
+        "Emotional"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000036",
+      "name": "Chyno Miranda",
+      "domain": "artist",
+      "source": "qloo",
+      "tags": [
+        "Latin Pop",
+        "Expressive",
+        "Tropical Pop",
+        "Charismatic",
+        "Urban Ballad"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000001E",
+      "name": "Maite Perroni",
+      "domain": "artist",
+      "source": "qloo",
+      "tags": [
+        "Melodic Latin",
+        "Expressive",
+        "Latin Pop Ballad",
+        "Energetic",
+        "Versatile"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000007F",
+      "name": "Anuel AA",
+      "domain": "artist",
+      "source": "qloo",
+      "tags": [
+        "Trap Latino",
+        "Urban Hip Hop",
+        "Charismatic",
+        "Streetwise",
+        "Emotional"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000065",
+      "name": "Ana Paula",
+      "domain": "artist",
+      "source": "qloo",
+      "tags": [
+        "Brazilian Pop",
+        "Melodic Pop",
+        "Energetic",
+        "Expressive",
+        "Melodic"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000004F",
+      "name": "Demi Lovato",
+      "domain": "artist",
+      "source": "qloo",
+      "tags": [
+        "Pop Rock",
+        "Passionate",
+        "Expressive",
+        "Soulful Ballad",
+        "Power Ballad"
+      ],
+      "contributors": [
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000023",
+      "name": "Florentino",
+      "domain": "artist",
+      "source": "qloo",
+      "tags": [
+        "Expressive",
+        "Urban Bachata",
+        "Engaging",
+        "Melodic",
+        "Romantic"
+      ],
+      "contributors": [
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000002F",
+      "name": "Shakira",
+      "domain": "artist",
+      "source": "qloo",
+      "tags": [
+        "Expressive",
+        "Charismatic",
+        "Energetic",
+        "Melodic",
+        "Versatile"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000008",
+      "name": "I’m Glad My Mom Died",
+      "domain": "book",
+      "source": "qloo",
+      "tags": [
+        "Contemporary",
+        "Memoir",
+        "Mental Health",
+        "Audiobook",
+        "Adult"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Studio Ghibli",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000067",
+      "name": "Dear Pope Francis: The Pope Answers Letters from Children Around the World",
+      "domain": "book",
+      "source": "qloo",
+      "contributors": [
+        "Khruangbin",
+        "Studio Ghibli",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000030",
+      "name": "Renegades: Born in the USA",
+      "domain": "book",
+      "source": "qloo",
+      "tags": [
+        "History",
+        "Biography Memoir",
+        "Nonfiction",
+        "Music",
+        "Biography"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000004B",
+      "name": "Dreams from My Father: A Story of Race and Inheritance",
+      "domain": "book",
+      "source": "qloo",
+      "tags": [
+        "Biography Memoir",
+        "History",
+        "Autobiography",
+        "Biography",
+        "Audiobook"
+      ],
+      "contributors": [
+        "Vivian Maier",
+        "Khruangbin",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000003A",
+      "name": "Barack Obama in His Own Words",
+      "domain": "book",
+      "source": "qloo",
+      "tags": [
+        "Biography",
+        "History",
+        "Politics",
+        "Nonfiction",
+        "The United States Of America"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Studio Ghibli",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000085",
+      "name": "Unshakeable: Your Financial Freedom Playbook",
+      "domain": "book",
+      "source": "qloo",
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000025",
+      "name": "Why We Want You To Be Rich: Two Men, One Message",
+      "domain": "book",
+      "source": "qloo",
+      "contributors": [
+        "Khruangbin",
+        "Studio Ghibli",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000003E",
+      "name": "The 10X Rule: The Only Difference Between Success and Failure",
+      "domain": "book",
+      "source": "qloo",
+      "contributors": [
+        "Khruangbin",
+        "Vivian Maier",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000002D",
+      "name": "Promise Me, Dad: A Year of Hope, Hardship, and Purpose",
+      "domain": "book",
+      "source": "qloo",
+      "tags": [
+        "Biography",
+        "History",
+        "Politics",
+        "Memoir",
+        "Biography Memoir"
+      ],
+      "contributors": [
+        "Vivian Maier",
+        "Khruangbin",
+        "Studio Ghibli"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000062",
+      "name": "Superheroes Are Everywhere",
+      "domain": "book",
+      "source": "qloo",
+      "tags": [
+        "Memoir",
+        "Nonfiction",
+        "Biography Memoir",
+        "Superheroes",
+        "Politics"
+      ],
+      "contributors": [
+        "Khruangbin",
+        "Studio Ghibli",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000082",
+      "name": "World of Dance",
+      "domain": "tv_show",
+      "source": "qloo",
+      "tags": [
+        "Audience reaction pacing",
+        "Rhythmic quick cut editing",
+        "Spectacular",
+        "Resourceful",
+        "Competition based"
+      ],
+      "contributors": [
+        "Vivian Maier",
+        "Studio Ghibli",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000003F",
+      "name": "Soy Luna",
+      "domain": "tv_show",
+      "source": "qloo",
+      "tags": [
+        "Bright",
+        "Choreography focused",
+        "Emotional",
+        "Romantic",
+        "Conflicted"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000007E",
+      "name": "Cable Girls",
+      "domain": "tv_show",
+      "source": "qloo",
+      "tags": [
+        "Friendship",
+        "The outcast",
+        "Job",
+        "Telephone",
+        "1930s"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000009",
+      "name": "Dark Desire",
+      "domain": "tv_show",
+      "source": "qloo",
+      "tags": [
+        "Obsession",
+        "Infidelity",
+        "Psychological thriller",
+        "Drunken woman",
+        "Drama"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000021",
+      "name": "Elite",
+      "domain": "tv_show",
+      "source": "qloo",
+      "tags": [
+        "Emotional",
+        "Manipulative",
+        "Complex",
+        "Flawed",
+        "The tragic hero"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000074",
+      "name": "Sin Senos Sí Hay Paraíso",
+      "domain": "tv_show",
+      "source": "qloo",
+      "tags": [
+        "Theatrical",
+        "Glamorous production design",
+        "Cunning",
+        "Passionate",
+        "Gritty"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000001B",
+      "name": "Elite Short Stories",
+      "domain": "tv_show",
+      "source": "qloo",
+      "tags": [
+        "Naturalistic",
+        "Reflective",
+        "Humorous",
+        "Dark comedy",
+        "Short films"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000046",
+      "name": "Neymar: The Perfect Chaos",
+      "domain": "tv_show",
+      "source": "qloo",
+      "tags": [
+        "Archive focused collage",
+        "Cinematic",
+        "Ambitious",
+        "Reflective",
+        "Character driven"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000051",
+      "name": "Down to Earth with Zac Efron",
+      "domain": "tv_show",
+      "source": "qloo",
+      "tags": [
+        "Photoreal",
+        "Passionate",
+        "Determined",
+        "The journey",
+        "Conservation"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000054",
+      "name": "Lady of Steel",
+      "domain": "tv_show",
+      "source": "qloo",
+      "tags": [
+        "Soap opera grandiosity",
+        "Intense",
+        "Determined",
+        "Fast paced",
+        "Conflicted"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:bohemian",
+      "name": "Bohemian",
+      "domain": "aesthetic",
+      "source": "qloo",
+      "tags": [
+        "Bohemian"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:coastal",
+      "name": "Coastal",
+      "domain": "aesthetic",
+      "source": "qloo",
+      "tags": [
+        "Coastal"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:vintage_prints",
+      "name": "Vintage Prints",
+      "domain": "aesthetic",
+      "source": "qloo",
+      "tags": [
+        "Vintage Prints"
+      ],
+      "predictedByModel": true,
+      "surprise": false
+    },
+    {
+      "ref": "urn:tag:aesthetic_property:qloo:quality_craftsmanship",
+      "name": "Quality Craftsmanship",
+      "domain": "aesthetic",
+      "source": "qloo",
+      "tags": [
+        "Quality Craftsmanship"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000005",
+      "name": "Farmacias Cruz Azul",
+      "domain": "brand",
+      "source": "qloo",
+      "band": "deep-cut",
+      "tags": [
+        "Blue Branding",
+        "Clean Clinical Design",
+        "Functional Layout",
+        "Healthy Living",
+        "Preventive Healthcare"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-00000000001F",
+      "name": "Autolasa",
+      "domain": "brand",
+      "source": "qloo",
+      "band": "deep-cut",
+      "tags": [
+        "Clean",
+        "Corporate",
+        "Functional",
+        "Professional",
+        "Personal Mobility"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Khruangbin",
+        "Vivian Maier"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "00000000-0000-4000-8000-000000000011",
+      "name": "Pontificia Universidad Católica del Ecuador",
+      "domain": "brand",
+      "source": "qloo",
+      "band": "deep-cut",
+      "tags": [
+        "Academic Formalism",
+        "Institutional Professionalism",
+        "Educational Signage",
+        "Professional Success",
+        "Global Networking"
+      ],
+      "contributors": [
+        "Studio Ghibli",
+        "Vivian Maier",
+        "Khruangbin"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:look:expressive",
+      "name": "Expressive",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "look",
+      "count": 6,
+      "domains": [
+        "artist"
+      ],
+      "examples": [
+        "Chyno Miranda",
+        "Maite Perroni",
+        "Ana Paula"
+      ],
+      "tags": [
+        "Expressive"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    },
+    {
+      "ref": "quality:look:spectacular",
+      "name": "Spectacular",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "look",
+      "count": 2,
+      "domains": [
+        "tv_show",
+        "movie"
+      ],
+      "examples": [
+        "World of Dance",
+        "Avengers: Infinity War"
+      ],
+      "tags": [
+        "Spectacular"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:look:charismatic",
+      "name": "Charismatic",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "look",
+      "count": 4,
+      "domains": [
+        "artist"
+      ],
+      "examples": [
+        "Karol G",
+        "Chyno Miranda",
+        "Anuel AA"
+      ],
+      "tags": [
+        "Charismatic"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:look:energetic",
+      "name": "Energetic",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "look",
+      "count": 4,
+      "domains": [
+        "artist"
+      ],
+      "examples": [
+        "Karol G",
+        "Maite Perroni",
+        "Ana Paula"
+      ],
+      "tags": [
+        "Energetic"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:look:trap-latino",
+      "name": "Trap Latino",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "look",
+      "count": 3,
+      "domains": [
+        "artist"
+      ],
+      "examples": [
+        "Karol G",
+        "Bad Bunny",
+        "Anuel AA"
+      ],
+      "tags": [
+        "Trap Latino"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:look:dynamic-imagery",
+      "name": "Dynamic Imagery",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "look",
+      "count": 2,
+      "domains": [
+        "brand"
+      ],
+      "examples": [
+        "Spotify",
+        "Billboard"
+      ],
+      "tags": [
+        "Dynamic Imagery"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:mood:emotional",
+      "name": "Emotional",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "mood",
+      "count": 5,
+      "domains": [
+        "tv_show",
+        "artist"
+      ],
+      "examples": [
+        "Soy Luna",
+        "Elite",
+        "Christian Nodal"
+      ],
+      "tags": [
+        "Emotional"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    },
+    {
+      "ref": "quality:mood:romantic",
+      "name": "Romantic",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "mood",
+      "count": 5,
+      "domains": [
+        "tv_show",
+        "artist"
+      ],
+      "examples": [
+        "Soy Luna",
+        "Lady of Steel",
+        "Chyno Miranda"
+      ],
+      "tags": [
+        "Romantic"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:mood:versatile",
+      "name": "Versatile",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "mood",
+      "count": 4,
+      "domains": [
+        "brand",
+        "artist"
+      ],
+      "examples": [
+        "Forever 21",
+        "Bad Bunny",
+        "Maite Perroni"
+      ],
+      "tags": [
+        "Versatile"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:mood:melodic",
+      "name": "Melodic",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "mood",
+      "count": 5,
+      "domains": [
+        "artist"
+      ],
+      "examples": [
+        "Christian Nodal",
+        "Maite Perroni",
+        "Ana Paula"
+      ],
+      "tags": [
+        "Melodic"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:mood:compassionate",
+      "name": "Compassionate",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "mood",
+      "count": 2,
+      "domains": [
+        "tv_show",
+        "movie"
+      ],
+      "examples": [
+        "Soy Luna",
+        "Avengers: Infinity War"
+      ],
+      "tags": [
+        "Compassionate"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:mood:action-packed",
+      "name": "Action packed",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "mood",
+      "count": 2,
+      "domains": [
+        "tv_show",
+        "movie"
+      ],
+      "examples": [
+        "Lady of Steel",
+        "Avengers: Infinity War"
+      ],
+      "tags": [
+        "Action packed"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:meaning:passionate",
+      "name": "Passionate",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "meaning",
+      "count": 6,
+      "domains": [
+        "tv_show",
+        "artist"
+      ],
+      "examples": [
+        "Sin Senos Sí Hay Paraíso",
+        "Down to Earth with Zac Efron",
+        "Anuel AA"
+      ],
+      "tags": [
+        "Passionate"
+      ],
+      "predictedByModel": false,
+      "surprise": true,
+      "required": true
+    },
+    {
+      "ref": "quality:meaning:empowerment",
+      "name": "Empowerment",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "meaning",
+      "count": 5,
+      "domains": [
+        "artist"
+      ],
+      "examples": [
+        "Karol G",
+        "Maite Perroni",
+        "Ana Paula"
+      ],
+      "tags": [
+        "Empowerment"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:meaning:youthful",
+      "name": "Youthful",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "meaning",
+      "count": 2,
+      "domains": [
+        "tv_show",
+        "artist"
+      ],
+      "examples": [
+        "Soy Luna",
+        "Anuel AA"
+      ],
+      "tags": [
+        "Youthful"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:meaning:diverse",
+      "name": "Diverse",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "meaning",
+      "count": 4,
+      "domains": [
+        "artist"
+      ],
+      "examples": [
+        "Karol G",
+        "Bad Bunny",
+        "Christian Nodal"
+      ],
+      "tags": [
+        "Diverse"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:meaning:romance",
+      "name": "Romance",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "meaning",
+      "count": 3,
+      "domains": [
+        "artist"
+      ],
+      "examples": [
+        "Christian Nodal",
+        "Chyno Miranda",
+        "Maite Perroni"
+      ],
+      "tags": [
+        "Romance"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "quality:meaning:heartbreak",
+      "name": "Heartbreak",
+      "domain": "qualities",
+      "source": "qloo",
+      "band": "derived",
+      "family": "meaning",
+      "count": 2,
+      "domains": [
+        "artist"
+      ],
+      "examples": [
+        "Karol G",
+        "Florentino"
+      ],
+      "tags": [
+        "Heartbreak"
+      ],
+      "predictedByModel": false,
+      "surprise": true
+    },
+    {
+      "ref": "M01",
+      "name": "Muji",
+      "domain": "brand",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M02",
+      "name": "Patagonia",
+      "domain": "brand",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M03",
+      "name": "Leica",
+      "domain": "brand",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M04",
+      "name": "Moleskine",
+      "domain": "brand",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M05",
+      "name": "Polaroid",
+      "domain": "brand",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M06",
+      "name": "Amélie",
+      "domain": "movie",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M07",
+      "name": "Paterson",
+      "domain": "movie",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M08",
+      "name": "Lost in Translation",
+      "domain": "movie",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M09",
+      "name": "The Grand Budapest Hotel",
+      "domain": "movie",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M10",
+      "name": "Spirited Away",
+      "domain": "movie",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M11",
+      "name": "Bonobo",
+      "domain": "artist",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M12",
+      "name": "Tame Impala",
+      "domain": "artist",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M13",
+      "name": "Leon Bridges",
+      "domain": "artist",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M14",
+      "name": "Mild High Club",
+      "domain": "artist",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M15",
+      "name": "Nujabes",
+      "domain": "artist",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M16",
+      "name": "The Little Prince",
+      "domain": "book",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M17",
+      "name": "Norwegian Wood",
+      "domain": "book",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M18",
+      "name": "The Flâneur",
+      "domain": "book",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M19",
+      "name": "Kafka on the Shore",
+      "domain": "book",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M20",
+      "name": "Midnight Diner",
+      "domain": "tv_show",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M21",
+      "name": "Bob Ross: The Joy of Painting",
+      "domain": "tv_show",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M22",
+      "name": "Twin Peaks",
+      "domain": "tv_show",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M23",
+      "name": "Atlanta",
+      "domain": "tv_show",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M24",
+      "name": "slow contemplative pacing",
+      "domain": "style",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M25",
+      "name": "whimsical",
+      "domain": "style",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M26",
+      "name": "nostalgic",
+      "domain": "style",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M27",
+      "name": "dreamlike",
+      "domain": "style",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M28",
+      "name": "hand-drawn watercolor",
+      "domain": "aesthetic",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M29",
+      "name": "film grain",
+      "domain": "aesthetic",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M30",
+      "name": "vintage",
+      "domain": "aesthetic",
+      "source": "model-assumption",
+      "confirmedBy": "urn:tag:aesthetic_property:qloo:vintage_prints"
+    },
+    {
+      "ref": "M31",
+      "name": "pastoral",
+      "domain": "aesthetic",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M32",
+      "name": "warm",
+      "domain": "qualities",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M33",
+      "name": "melancholic",
+      "domain": "qualities",
+      "source": "model-assumption"
+    },
+    {
+      "ref": "M34",
+      "name": "cozy",
+      "domain": "qualities",
+      "source": "model-assumption"
+    }
+  ],
+  "metrics": {
+    "measuredEntities": 46,
+    "predictedByModel": 0,
+    "knownFromBrief": 0,
+    "surprises": 46,
+    "surpriseShare": 1,
+    "predictions": 23,
+    "predictionsConfirmed": 0,
+    "measuredTags": 4,
+    "tagsPredicted": 1,
+    "tagSurprises": 3,
+    "tagPredictions": 8,
+    "measuredQualities": 18,
+    "qualitiesPredicted": 0,
+    "qualitySurprises": 18,
+    "qualityPredictions": 3
+  },
+  "seeds": [
+    {
+      "name": "Studio Ghibli",
+      "role": "audience",
+      "resolution": "entity",
+      "matchedName": "Studio Ghibli"
+    },
+    {
+      "name": "Khruangbin",
+      "role": "audience",
+      "resolution": "entity",
+      "matchedName": "Khruangbin"
+    },
+    {
+      "name": "Vivian Maier",
+      "role": "audience",
+      "resolution": "entity",
+      "matchedName": "Vivian Maier"
+    }
+  ],
+  "signature": [
+    "Expressive",
+    "Emotional",
+    "Melodic",
+    "Memoir",
+    "Romantic",
+    "Versatile",
+    "Charismatic",
+    "Energetic",
+    "Biography",
+    "Determined"
+  ]
+}

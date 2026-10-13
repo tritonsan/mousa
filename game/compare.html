@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Two lamplighters in the same moment on the Vesper Cliffs, side by side.">
+  <title>The Long Dusk: two lamplighters</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="src/compare.js"></script>
+</head>
+<body class="compare">
+  <header class="compare-head">
+    <div>
+      <h1>The Long Dusk</h1>
+      <p id="compare-lede">One moment on the Vesper Cliffs, two lamplighters.</p>
+    </div>
+    <div class="compare-controls">
+      <button type="button" class="primary" id="play-moment">Play the moment</button>
+      <button type="button" id="reset">Reset</button>
+      <button type="button" id="pause" aria-pressed="false">Pause</button>
+      <p class="compare-hint">Or walk both with <kbd>A</kbd> <kbd>D</kbd> and act with <kbd>E</kbd>.</p>
+      <a class="record-link" id="record-link" href="#record" hidden>How each was designed</a>
+    </div>
+  </header>
+  <p class="run-notice" id="run-notice" role="note" hidden></p>
+  <main class="duo" id="duo">
+    <section class="arm" id="arm-a" aria-labelledby="label-a">
+      <div class="arm-top">
+        <h2 class="arm-label" id="label-a">Sample A</h2>
+        <button type="button" class="arm-music" aria-pressed="false" hidden>Music</button>
+        <a class="arm-play" href="index.html">Play it full screen</a>
+      </div>
+      <div class="stage"><canvas class="view" role="img"></canvas></div>
+      <article class="sheet"></article>
+    </section>
+    <section class="arm" id="arm-b" aria-labelledby="label-b">
+      <div class="arm-top">
+        <h2 class="arm-label" id="label-b">Sample B</h2>
+        <button type="button" class="arm-music" aria-pressed="false" hidden>Music</button>
+        <a class="arm-play" href="index.html">Play it full screen</a>
+      </div>
+      <div class="stage"><canvas class="view" role="img"></canvas></div>
+      <article class="sheet"></article>
+    </section>
+  </main>
+  <section class="record" id="record" aria-labelledby="record-title" hidden></section>
+  <section class="load-error" id="load-error" hidden role="alert"></section>
+</body>
+</html>

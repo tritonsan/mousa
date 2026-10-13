@@ -1,0 +1,59 @@
+name: qloo-design-demo
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        KIRO_RELEASE_CHANNEL: ${KIRO_RELEASE_CHANNEL:-stable}
+        KIRO_EXPECTED_VERSION: ${KIRO_EXPECTED_VERSION:-}
+    image: qloo-design-demo:local
+    platform: linux/amd64
+    init: true
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${DEMO_PORT:-8787}:8787"
+      - "127.0.0.1:${DEMO_PREVIEW_PORT:-8788}:8788"
+    environment:
+      HOST: 0.0.0.0
+      PORT: "8787"
+      PREVIEW_PORT: "8788"
+      PUBLIC_PREVIEW_BASE_URL: ${PUBLIC_PREVIEW_BASE_URL:?Set the browser-reachable preview origin}
+      NODE_ENV: production
+      DEMO_ACCESS_TOKEN: ${DEMO_ACCESS_TOKEN:?Set a private review access token before starting the container}
+      KIRO_API_KEY: ${KIRO_API_KEY:-}
+      KIRO_MODEL: ${KIRO_MODEL:-}
+      KIRO_EFFORT: ${KIRO_EFFORT:-medium}
+      QLOO_API_KEY: ${QLOO_API_KEY:-}
+      QLOO_API_BASE_URL: ${QLOO_API_BASE_URL:-https://hackathon.api.qloo.com}
+      KIRO_RUN_TIMEOUT_MS: ${KIRO_RUN_TIMEOUT_MS:-900000}
+      # Recorded jobs copied into the volume count toward this limit too.
+      MAX_JOBS: ${MAX_JOBS:-30}
+      DATA_DIR: /data/jobs
+      # No Codex here: the Studio offers no image generator, and plans make imagery without one.
+      MOUSA_ENVIRONMENT: hosted
+      PRODUCTION_STAGES: ${PRODUCTION_STAGES:-on}
+      MOUSA_CAPTURE: ${MOUSA_CAPTURE:-auto}
+      # Empty keeps Chromium's own sandbox, which this container's default profile blocks, so the review is left out.
+      # Read docs/aws-deployment.md before setting 1: the container is then the only boundary around the captured pages.
+      MOUSA_CAPTURE_NO_SANDBOX: ${MOUSA_CAPTURE_NO_SANDBOX:-}
+    volumes:
+      - demo-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=512m,uid=1000,gid=1000
+    # Chromium's renderer uses shared memory beyond Docker's 64 MB default.
+    shm_size: 256m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    # Threads count toward this limit; a headless Chromium alone runs well over a hundred.
+    pids_limit: 512
+    mem_limit: 2g
+    cpus: 1.0
+    stop_grace_period: 20s
+
+volumes:
+  demo-data:

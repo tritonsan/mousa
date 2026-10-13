@@ -1,0 +1,51 @@
+{
+  "name": "The Long Dusk: lamplighter taste difference check",
+  "brief": "Design Ilo, the playable lamplighter of The Long Dusk, for one moment on the Vesper Cliffs: walking the cliff road, answering the keeper and waking the cold beacon. My audience loves Hollow Knight, Spirited Away, Sigur Rós, Nujabes and the film Paterson. Make Ilo a character this audience would want to play: their look, the way they move and the way they speak. Keep the world, its lore, the keeper and Ilo's fixed facts. Write the character's description and lines in English.",
+  "references": [
+    {
+      "name": "Hollow Knight",
+      "role": "audience",
+      "origin": "user-provided"
+    },
+    {
+      "name": "Spirited Away",
+      "role": "audience",
+      "origin": "user-provided"
+    },
+    {
+      "name": "Sigur Rós",
+      "role": "audience",
+      "origin": "user-provided"
+    },
+    {
+      "name": "Nujabes",
+      "role": "audience",
+      "origin": "user-provided"
+    },
+    {
+      "name": "Paterson",
+      "role": "audience",
+      "origin": "user-provided"
+    }
+  ],
+  "fixedFacts": {
+    "name": "Ilo",
+    "role": "Lamplighter",
+    "abilities": [
+      {
+        "id": "kindle",
+        "name": "Kindle",
+        "description": "Wake a cold beacon with the flame you carry."
+      },
+      {
+        "id": "carried-flame",
+        "name": "Carried flame",
+        "description": "The light you carry pushes the dusk back around you."
+      }
+    ],
+    "rules": [
+      "Ilo carries a light that can be seen in the dusk.",
+      "Ilo walks the road and does not fly or teleport."
+    ]
+  }
+}

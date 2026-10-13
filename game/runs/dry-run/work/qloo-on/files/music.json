@@ -1,0 +1,372 @@
+{
+  "about": "Tracks for the moment, from an open music library. Genres and tags are each track's own catalogue metadata. A music device picks one track by ID; its genres or tags must share a word with a quality of the device, or a close form of it: the same first five letters in a word at most three letters longer or shorter.",
+  "tracks": [
+    {
+      "id": "a-melancholical-hero-daniel-bautista",
+      "title": "A Melancholical Hero",
+      "artist": "Daniel Bautista",
+      "genres": [
+        "country",
+        "filmscore",
+        "western"
+      ],
+      "tags": [
+        "bells",
+        "film",
+        "melancholic",
+        "percussion"
+      ],
+      "tempo": "medium",
+      "seconds": 175,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "millennium-sunset-zero-project",
+      "title": "Millennium sunset",
+      "artist": "zero-project",
+      "genres": [
+        "ambient",
+        "darkwave",
+        "electronic"
+      ],
+      "tags": [
+        "atmospheric",
+        "electricpiano",
+        "neutral",
+        "peaceful",
+        "piano"
+      ],
+      "tempo": "medium",
+      "seconds": 104,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "peaceful-night-st-adam",
+      "title": "peaceful night",
+      "artist": "St Adam",
+      "genres": [
+        "pop"
+      ],
+      "tags": [
+        "neutral",
+        "peaceful"
+      ],
+      "tempo": "medium",
+      "seconds": 133,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "still-breathing-zero-project",
+      "title": "Still breathing",
+      "artist": "zero-project",
+      "genres": [
+        "ambient",
+        "darkwave",
+        "trance"
+      ],
+      "tags": [
+        "dreamy",
+        "neutral",
+        "strings",
+        "synthesizer"
+      ],
+      "tempo": "medium",
+      "seconds": 252,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "the-mystery-of-haunted-avenue-daniel-bautista",
+      "title": "The Mystery Of Haunted Avenue",
+      "artist": "Daniel Bautista",
+      "genres": [
+        "metal",
+        "progressivemetal",
+        "progressiverock"
+      ],
+      "tags": [
+        "electricguitar",
+        "electroamplified",
+        "energetic",
+        "mystery",
+        "sad"
+      ],
+      "tempo": "fast",
+      "seconds": 220,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "dark-moment-dark-epic-trailer-e-erkut",
+      "title": "Dark Moment - Dark Epic Trailer",
+      "artist": "E. Erkut",
+      "genres": [
+        "filmscore"
+      ],
+      "tags": [
+        "dark",
+        "epic",
+        "epicdrums",
+        "improvisation",
+        "orchestra"
+      ],
+      "tempo": "medium",
+      "seconds": 96,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "fusion-dark-epic-trailer-e-erkut",
+      "title": "Fusion - Dark Epic Trailer",
+      "artist": "E. Erkut",
+      "genres": [
+        "filmscore"
+      ],
+      "tags": [
+        "dark",
+        "epic",
+        "epicdrums",
+        "improvisation",
+        "orchestra"
+      ],
+      "tempo": "medium",
+      "seconds": 97,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "be-happy-free-music-antarcticbreeze",
+      "title": "Be Happy - FREE MUSIC",
+      "artist": "ANtarcticbreeze",
+      "genres": [
+        "pop"
+      ],
+      "tags": [
+        "happy",
+        "inspirational",
+        "inspire"
+      ],
+      "tempo": "medium",
+      "seconds": 184,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "ocean-deep-e-s-c-p",
+      "title": "Ocean Deep",
+      "artist": "e s c p",
+      "genres": [
+        "electronic",
+        "experimental",
+        "synthpop"
+      ],
+      "tags": [
+        "mystery",
+        "nostalgic",
+        "synthesizer"
+      ],
+      "tempo": "medium",
+      "seconds": 232,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "anxiety-calm-ancient-harp-melody-konstantinpazuzustudio",
+      "title": "Anxiety Calm Ancient Harp Melody",
+      "artist": "KonstantinPazuzuStudio",
+      "genres": [
+        "newage"
+      ],
+      "tags": [
+        "atmospheric",
+        "calm",
+        "harp",
+        "neutral",
+        "strings"
+      ],
+      "tempo": "slow",
+      "seconds": 200,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "red-moonlight-extended-mix-pokki-dj",
+      "title": "Red Moonlight ( Extended Mix )",
+      "artist": "Pokki DJ",
+      "genres": [
+        "dance",
+        "electronic",
+        "electropop"
+      ],
+      "tags": [
+        "energetic",
+        "guitar",
+        "happy",
+        "party",
+        "summer"
+      ],
+      "tempo": "medium",
+      "seconds": 240,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "sad-piano-alexander-blu",
+      "title": "Sad Piano",
+      "artist": "Alexander Blu",
+      "genres": [
+        "ambient",
+        "newage"
+      ],
+      "tags": [
+        "lounge",
+        "piano",
+        "sad",
+        "sadpiano",
+        "sentimental"
+      ],
+      "tempo": "medium",
+      "seconds": 201,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "an-adventure-through-gas-jeffrey-c-audio",
+      "title": "An Adventure Through Gas",
+      "artist": "Jeffrey C. Audio",
+      "genres": [
+        "electronic",
+        "industrial",
+        "loop"
+      ],
+      "tags": [
+        "adventure",
+        "digital",
+        "energetic",
+        "happy",
+        "synthesizer",
+        "travel"
+      ],
+      "tempo": "medium",
+      "seconds": 76,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "white-beach-christian-petermann",
+      "title": "White_beach",
+      "artist": "Christian Petermann",
+      "genres": [
+        "ambient",
+        "chillout",
+        "newage"
+      ],
+      "tags": [
+        "chilloutmusic",
+        "classicalguitar",
+        "lounge",
+        "peaceful",
+        "romantic",
+        "strings"
+      ],
+      "tempo": "medium",
+      "seconds": 223,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "idempotence-social-bot-73xt",
+      "title": "Idempotence",
+      "artist": "Social Bot 73XT",
+      "genres": [
+        "8bit",
+        "dance",
+        "electronic"
+      ],
+      "tags": [
+        "chiptunes",
+        "education",
+        "happy"
+      ],
+      "tempo": "medium",
+      "seconds": 224,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "piano-jams-razvan-veina",
+      "title": "Piano Jams",
+      "artist": "Razvan Veina",
+      "genres": [
+        "classical",
+        "filmscore"
+      ],
+      "tags": [
+        "dreaming",
+        "melancholic",
+        "piano",
+        "sad"
+      ],
+      "tempo": "medium",
+      "seconds": 235,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "ljosalfheimr-iv-ivan-tregub-ber",
+      "title": "Ljosalfheimr IV",
+      "artist": "Ivan Tregub (BER)",
+      "genres": [
+        "ambient",
+        "filmscore",
+        "tribal"
+      ],
+      "tags": [
+        "dark",
+        "melancholic",
+        "orchestral"
+      ],
+      "tempo": "fast",
+      "seconds": 252,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "folk-dance-ivan-tregub-ber",
+      "title": "Folk dance",
+      "artist": "Ivan Tregub (BER)",
+      "genres": [
+        "ambient",
+        "folk"
+      ],
+      "tags": [
+        "drumming",
+        "drums",
+        "ethno",
+        "flute"
+      ],
+      "tempo": "medium",
+      "seconds": 199,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "exp-gone-jazz-flex-blur",
+      "title": "(exp) Gone Jazz",
+      "artist": "Flex Blur",
+      "genres": [
+        "dubstep",
+        "electronic",
+        "jazz"
+      ],
+      "tags": [
+        "guitar"
+      ],
+      "tempo": "medium",
+      "seconds": 210,
+      "license": "CC BY 3.0"
+    },
+    {
+      "id": "plathe-beatless-ambient-mix-poa",
+      "title": "Plathe (Beatless Ambient Mix)",
+      "artist": "POA",
+      "genres": [
+        "ambient",
+        "electronic"
+      ],
+      "tags": [
+        "commercial",
+        "dreamy",
+        "synthesizer"
+      ],
+      "tempo": "medium",
+      "seconds": 109,
+      "license": "CC BY 3.0"
+    }
+  ]
+}

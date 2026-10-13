@@ -1,0 +1,10 @@
+{
+  "name": "Echo Atlas — taste difference check",
+  "templateId": "indie-game",
+  "brief": "Echo Atlas is a fictional exploration game in which players collect the sounds of an abandoned city and bring its spaces back to life. My audience loves Outer Wilds, Studio Ghibli films and ambient music. Design a launch site that preserves the identity of the game and brings discovery into the web experience. Keep the existing game features; do not invent awards, reviews or sales figures. Preserve the local wishlist flow. Write all site content, interface labels and design explanations in English.",
+  "cultureBrief": {
+    "brand": { "notes": "Echo Atlas is a fictional exploration game. Preserve its existing mechanics, sample levels and local wishlist.", "protectedFiles": ["app.js"], "protectedSnippets": [] },
+    "audiences": [{ "id": "explorers", "label": "Audience described in the Echo Atlas brief", "references": ["Outer Wilds", "Studio Ghibli films", "ambient music"] }]
+  },
+  "audienceId": "explorers"
+}

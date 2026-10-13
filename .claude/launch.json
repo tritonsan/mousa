@@ -1,0 +1,35 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "studio",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["src/server.mjs"],
+      "port": 8787
+    },
+    {
+      "name": "studio-max-jobs-60",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--import", "data:text/javascript;base64,cHJvY2Vzcy5lbnYuTUFYX0pPQlMgfHw9ICc2MCc7", "src/server.mjs"],
+      "port": 8787
+    },
+    {
+      "name": "studio-production-runs",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--import", "data:text/javascript;base64,cHJvY2Vzcy5lbnYuTUFYX0pPQlMgfHw9ICcxMDAnOyBwcm9jZXNzLmVudi5LSVJPX1JVTl9USU1FT1VUX01TIHx8PSAnOTAwMDAwJzs=", "src/server.mjs"],
+      "port": 8787
+    },
+    {
+      "name": "showcase-2026-10-06",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/serve-static.mjs", "output/showcase-2026-10-06", "8792"],
+      "port": 8792
+    },
+    {
+      "name": "long-dusk",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["game/serve.mjs"],
+      "port": 8790
+    }
+  ]
+}
