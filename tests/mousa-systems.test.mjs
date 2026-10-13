@@ -7,7 +7,7 @@ import path from 'node:path';
 import { mkdtemp, rm, mkdir, writeFile } from 'node:fs/promises';
 import { checkDnaConformance } from '../plugin/server/culture/taste.mjs';
 import { checkLiteralConformance } from '../plugin/server/production/media.mjs';
-import { detectDesignSystem, checkDesignSystem } from '../plugin/server/design/systems.mjs';
+import { detectDesignSystem, checkDesignSystem, checkFontFiles, reachedPaths, styleFootprint, styleNotes } from '../plugin/server/design/systems.mjs';
 import { tailwindTheme, utilityNames } from '../plugin/server/design/tailwind.mjs';
 import { colorValues, holdsColor } from '../plugin/server/design/colors.mjs';
 import { createDesignTools } from '../plugin/server/design/tools.mjs';
@@ -102,6 +102,42 @@ test('a W3C design token file is found by its $value leaves, under any name', ()
   const files = { 'index.html': '<p>x</p>', 'design/brand.json': JSON.stringify({ color: { mist: { $type: 'color', $value: '#3e5c6b' } } }), 'tokens.css': ':root{--color-mist:#3e5c6b;--a:1;--b:2}' };
   assert.equal(detectDesignSystem(files).tokensFile, 'design/brand.json');
   assert.equal(detectDesignSystem({ ...files, 'src/theme.tokens.json': '{}' }).tokensFile, 'src/theme.tokens.json');
+});
+
+test('a font URL is followed from the stylesheet that holds it, and one that reaches no file is reported', async () => {
+  assert.deepEqual(reachedPaths('fonts/a.woff2', 'src/style.css'), ['src/fonts/a.woff2']);
+  assert.deepEqual(reachedPaths('../fonts/a.woff2?v=2', 'src/style.css'), ['fonts/a.woff2']);
+  assert.deepEqual(reachedPaths('/fonts/a.woff2', 'src/style.css'), ['fonts/a.woff2', 'public/fonts/a.woff2', 'static/fonts/a.woff2'], 'the site root, or a folder a build serves as it is');
+  assert.deepEqual([reachedPaths('https://cdn.example/a.woff2', 'a.css'), reachedPaths('../../a.woff2', 'src/a.css')], [[], []]);
+
+  const project = await mkdtemp(path.join(os.tmpdir(), 'mousa-fontfile-'));
+  try {
+    await mkdir(path.join(project, 'public', 'fonts'), { recursive: true });
+    await writeFile(path.join(project, 'public', 'fonts', 'jost-latin-wght-normal.woff2'), 'x');
+    const fonts = [{ family: 'Jost', files: ['fonts/jost-latin-wght-normal.woff2'] }];
+    const dna = { devices: [device('dna1', 'typography', { fonts: ['Jost'] })] };
+    const site = url => ({ 'index.html': '<p>Hi</p>', 'src/style.css': `@font-face{font-family:'Jost';src:url('${url}') format('woff2')}\nbody{font-family:'Jost',sans-serif}` });
+    const report = async url => checkFontFiles(checkDnaConformance(dna, site(url), { fonts }), dna, site(url), project, fonts);
+    // As in the live Vite session: the font sits in public/fonts, and the site serves it as /fonts/….
+    assert.equal(statusOf(await report('/fonts/jost-latin-wght-normal.woff2'), 'dna1').status, 'present');
+    assert.equal(statusOf(await report('../public/fonts/jost-latin-wght-normal.woff2'), 'dna1').status, 'present');
+    const wrong = await report('fonts/jost-latin-wght-normal.woff2');
+    assert.equal(statusOf(wrong, 'dna1').status, 'partial', 'the file name is right, and the path from src/ reaches nothing');
+    assert.match(statusOf(wrong, 'dna1').missing[0].detail, /src\/style\.css loads Jost from fonts\/jost-latin-wght-normal\.woff2, which reaches src\/fonts\/jost-latin-wght-normal\.woff2/u);
+    assert.equal(wrong.score, 0.5);
+  } finally { await rm(project, { recursive: true, force: true }); }
+});
+
+test('the check compares a Tailwind restyle with how the session found the project, and notes styling that left its classes', () => {
+  const start = styleFootprint({ 'index.html': '<main class="bg-white p-6 text-slate-900"><h1 class="font-display text-4xl">Hi</h1></main>', 'src/style.css': '@import "tailwindcss";\n@theme { --color-brand: #4f39f6; }' });
+  assert.deepEqual(start, { system: 'tailwind', stylesheets: ['src/style.css'], handWritten: 0, classes: 5 }, 'theme entries are not hand-written styling');
+  const rules = Array.from({ length: 12 }, (_, index) => `.block-${index}{display:grid;gap:1rem;padding:2rem;color:var(--color-brand)}`).join('');
+  const css = `@import "tailwindcss";\n@theme { --color-brand: #132e55; }\n@font-face{font-family:'Jost';src:url('/fonts/jost.woff2')}\n@keyframes glow { from { opacity: 0 } to { opacity: 1 } }\na:hover{color:red}${rules}`;
+  const now = styleFootprint({ 'index.html': '<main class="block-1"><h1 class="font-display">Hi</h1></main>', 'src/style.css': css });
+  assert.deepEqual([now.handWritten, now.classes], [49, 2], 'font faces and keyframes are left out, and a selector is not a declaration');
+  assert.match(styleNotes(start, now)[0], /had 0 hand-written CSS declarations when the session began and has 49 now/u);
+  assert.deepEqual(styleNotes(start, { ...now, handWritten: 40 }), [], 'a few rules for what no class can say are fine');
+  assert.deepEqual(styleNotes({ ...start, system: 'css-vars' }, now), [], 'a stylesheet project is styled in CSS');
 });
 
 test('a framework project is captured from its own build folder', async () => {

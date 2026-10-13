@@ -635,8 +635,12 @@ test('with a font library, the sketch and the DNA name only its families and con
   assert.equal(loaded.score, 1); assert.deepEqual(loaded.fonts, { loaded: ['Gelasio'], unknown: [] });
   const typography = report => report.devices.find(device => device.layer === 'typography');
   const unloaded = checkDnaConformance(dna, files(site.css.replace("url('fonts/gelasio-latin-wght-normal.woff2')", "url('fonts/gelasio-missing.woff2')")), { fonts });
-  assert.deepEqual(typography(unloaded).missing, [{ kind: 'font-file', value: 'Gelasio', detail: '@font-face for Gelasio with src fonts/gelasio-latin-wght-normal.woff2' }]);
+  assert.deepEqual(typography(unloaded).missing, [{ kind: 'font-file', value: 'Gelasio', detail: '@font-face for Gelasio whose src is one of its files, such as gelasio-latin-wght-normal.woff2' }]);
   assert.deepEqual(unloaded.fonts.unknown, ['fonts/gelasio-missing.woff2']);
+  // The file counts from any folder a stylesheet reaches it by, such as Vite's public/ served from the site root.
+  for (const url of ['/fonts/gelasio-latin-wght-normal.woff2', '../fonts/gelasio-latin-wght-normal.woff2?v=2']) {
+    assert.equal(typography(checkDnaConformance(dna, files(site.css.replace("url('fonts/gelasio-latin-wght-normal.woff2')", `url('${url}')`)), { fonts })).status, 'present', url);
+  }
   const faceOnly = checkDnaConformance(dna, files(site.css.replace('body{font-family:Gelasio,serif;', 'body{')), { fonts });
   assert.deepEqual(typography(faceOnly).missing.map(item => [item.kind, item.value]), [['font', 'Gelasio'], ['font', 'serif']]);
   assert.deepEqual(designFingerprint(files(site.css.replace('body{font-family:Gelasio,serif;', 'body{'))).fonts.families, [], 'The fingerprint ignores families named only in @font-face.');

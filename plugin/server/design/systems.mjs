@@ -9,7 +9,7 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { cssDeclarations, normalizeTasteName } from '../culture/taste.mjs';
+import { cssDeclarations, normalizeTasteName, fontFileName } from '../culture/taste.mjs';
 import { holdsColor } from './colors.mjs';
 import { usesTailwind, tailwindBindings } from './tailwind.mjs';
 
@@ -63,6 +63,47 @@ export function detectDesignSystem(files) {
   if (!pages.length && !components) notes.push('No page found: the specimen board is the visual review.');
   return { system: tailwind ? 'tailwind' : custom.size >= 3 ? 'css-vars' : 'text', medium, entry: pages.includes('index.html') ? 'index.html' : pages[0] || null, pages: pages.length,
     customProperties: custom.size, ...(tokensFile ? { tokensFile } : {}), ...(notes.length ? { notes } : {}) };
+}
+
+/** The text without each block an opening pattern starts, nested braces included. */
+function withoutBlocks(text, opener) {
+  let out = '', last = 0;
+  for (const match of text.matchAll(opener)) {
+    if (match.index < last) continue;
+    out += text.slice(last, match.index);
+    let depth = 1, index = match.index + match[0].length;
+    while (index < text.length && depth) { if (text[index] === '{') depth++; else if (text[index] === '}') depth--; index++; }
+    last = index;
+  }
+  return out + text.slice(last);
+}
+// Theme entries, font faces and keyframes are CSS that no class could replace; custom properties are tokens.
+const handWritten = css => [...withoutBlocks(css.replace(/\/\*[\s\S]*?\*\//gu, ' '), /@(?:theme|font-face|(?:-webkit-)?keyframes)\b[^{]*\{/giu)
+  .matchAll(/(?:^|[{;])\s*[a-z][a-z-]*\s*:\s*[^;{}]+(?=[;}])/giu)].length;
+
+/**
+ * How a project styles itself: its design system, its stylesheets, how many hand-written CSS declarations it has and
+ * how many class names its markup and templates use. Taken when a session starts, it shows later whether a restyle
+ * stayed in the project's own way of styling.
+ */
+export function styleFootprint(files) {
+  let declarations = 0, classes = 0;
+  for (const [name, text] of Object.entries(files)) {
+    if (typeof text !== 'string') continue;
+    const blocks = /\.css$/iu.test(name) ? [text] : /\.(?:html?|vue|svelte|astro)$/iu.test(name) ? [...text.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style\s*>/giu)].map(match => match[1]) : [];
+    for (const block of blocks) declarations += handWritten(block);
+    for (const match of text.matchAll(/\bclass(?:Name)?\s*=\s*(["'`])([^"'`]*)\1/gu)) classes += match[2].split(/\s+/u).filter(Boolean).length;
+  }
+  return { system: detectDesignSystem(files).system, stylesheets: Object.keys(files).filter(name => /\.css$/iu.test(name)).sort(), handWritten: declarations, classes };
+}
+
+// More hand-written declarations than this, added to a Tailwind project, move its styling out of its classes.
+export const STYLE_LIMITS = Object.freeze({ handWrittenGrowth: 40 });
+
+/** What a restyle changed in the project's way of styling, against how the session found it. */
+export function styleNotes(start, now) {
+  if (start?.system !== 'tailwind' || now.handWritten - start.handWritten <= STYLE_LIMITS.handWrittenGrowth) return [];
+  return [`This Tailwind project had ${start.handWritten} hand-written CSS declarations when the session began and has ${now.handWritten} now, so most of the new styling bypasses its classes. Restyle through the theme and the utility classes in the markup and templates, and keep hand-written CSS for @font-face, @keyframes and what no class can say.`];
 }
 
 /** One merged page for the literal checks, which read a single page: element IDs, drawings and copy of every page count. */
@@ -169,6 +210,68 @@ export function checkTailwind(dna, files, report) {
   return rescored(report, devices, { name: 'tailwind', version: theme.version, sources: theme.sources, colors: theme.colors.size, fonts: theme.fonts.size,
     bindings: bindings.map(({ device, kind, value, names, live }) => ({ device, kind, value, ...(live ? { name: live } : names.length ? { declaredAs: names, used: false } : { name: null }) })) },
     `${report.limitation} With Tailwind it also checks that each palette and typography value is held by the theme (@theme or tailwind.config) and named by a class.`);
+}
+
+// A path from the site root is served from the project folder, or from public/ or static/, where Vite, Next.js, Astro
+// and SvelteKit keep the files they serve as they are.
+const SERVED_ROOTS = ['', 'public/', 'static/'];
+
+/** The project files a URL in `from` can reach: none for a remote or data URL. */
+export function reachedPaths(url, from) {
+  const clean = String(url).split(/[?#]/u)[0];
+  if (!clean || /^(?:[a-z][a-z0-9+.-]*:|\/\/)/iu.test(clean)) return [];
+  const joined = clean.startsWith('/') ? SERVED_ROOTS.map(root => `${root}${clean.slice(1)}`) : [path.posix.join(path.posix.dirname(from), clean)];
+  return [...new Set(joined.map(item => path.posix.normalize(item)))].filter(item => item !== '..' && !item.startsWith('../'));
+}
+
+/** Every @font-face src of the stylesheets and the pages' style elements, with the file it names and where it is written. */
+export function fontFaceSources(files) {
+  const faces = [];
+  for (const [name, text] of Object.entries(files)) {
+    if (typeof text !== 'string') continue;
+    const blocks = /\.css$/iu.test(name) ? [text] : /\.html?$/iu.test(name) ? [...text.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style\s*>/giu)].map(match => match[1]) : [];
+    for (const block of blocks) for (const match of block.replace(/\/\*[\s\S]*?\*\//gu, ' ').matchAll(/@font-face\s*\{([^{}]*)\}/giu)) {
+      const family = /font-family\s*:\s*([^;]+)/iu.exec(match[1])?.[1].trim().replace(/^["']|["']$/gu, '');
+      if (!family) continue;
+      for (const url of [...match[1].matchAll(/url\(\s*(["']?)([^"')]+?)\1\s*\)/giu)].map(item => item[2].trim())) faces.push({ family, stylesheet: name, url, file: fontFileName(url) });
+    }
+  }
+  return faces;
+}
+
+/**
+ * The library fonts whose @font-face names their file by a path that reaches no file of the project. The literal check
+ * passes them, since it reads the file name, and the browser finds nothing: in a live session a stylesheet in src/
+ * loaded fonts/a.woff2 while the file sat in the project's fonts/. `fonts` is the library's families with their files.
+ */
+export async function checkFontFiles(report, dna, files, root, fonts = []) {
+  const library = new Map(fonts.map(family => [normalizeTasteName(family.family), family]));
+  const faces = fontFaceSources(files);
+  const exists = async relative => fs.stat(path.join(root, ...relative.split('/'))).then(item => item.isFile(), () => false);
+  const broken = new Map();
+  for (const device of dna.devices || []) for (const value of device.tokens?.fonts || []) {
+    const family = library.get(normalizeTasteName(value));
+    if (!family) continue;
+    const names = new Set(family.files.map(fontFileName));
+    const own = faces.filter(face => normalizeTasteName(face.family) === normalizeTasteName(family.family) && names.has(face.file));
+    if (!own.length) continue;
+    let reached = false;
+    for (const face of own) for (const candidate of reachedPaths(face.url, face.stylesheet)) if (!reached && await exists(candidate)) reached = true;
+    if (reached) continue;
+    const face = own[0], tried = reachedPaths(face.url, face.stylesheet);
+    const detail = `${face.stylesheet} loads ${family.family} from ${face.url}, which reaches ${tried.length ? tried.join(' or ') : 'no file of the project'}, and no font file is there. Write the path from ${face.stylesheet} to where the font was fetched; a file in public/ is served from the site root, as /fonts/….`;
+    if (!broken.has(device.id)) broken.set(device.id, []);
+    broken.get(device.id).push({ kind: 'font-file', value: family.family, detail });
+  }
+  if (!broken.size) return report;
+  const devices = report.devices.map(result => {
+    // Only a check the literal pass counted is taken back; a font file it already reports stays as it is.
+    const fresh = (broken.get(result.id) || []).filter(item => !result.missing.some(missing => missing.kind === 'font-file' && missing.value === item.value));
+    if (!fresh.length) return result;
+    const found = Math.max(0, result.found - fresh.length);
+    return { ...result, found, status: found === result.tokens ? 'present' : found ? 'partial' : 'missing', missing: [...result.missing, ...fresh] };
+  });
+  return rescored(report, devices, report.system, report.limitation);
 }
 
 /** The adapter for the project's design system, or, for any other project, the colours written in another notation. */

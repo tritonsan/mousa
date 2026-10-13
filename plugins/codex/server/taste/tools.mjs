@@ -20,6 +20,7 @@ export function qlooBudget(env) {
   return Number.isInteger(limit) && limit > 0 ? limit : null;
 }
 import { buildTasteBrief, buildBaselineBrief } from './brief.mjs';
+import { collectProjectFiles, styleFootprint } from '../design/systems.mjs';
 
 const ENTITY_KINDS = Object.freeze(['artist', 'book', 'brand', 'destination', 'movie', 'person', 'place', 'podcast', 'tv_show', 'videogame']);
 const QUESTION_IDS = Object.freeze(TASTE_QUESTIONS.map(question => question.id));
@@ -174,6 +175,8 @@ export function createTasteTools(context) {
     if (existing) archived = await archiveSession(root);
     const frozenAt = new Date(now()).toISOString();
     await writeState(root, 'taste/prediction', { ...prediction, frozenAt });
+    // How the project styles itself as the session finds it, before the write gate opens, for the check to compare.
+    await writeState(root, 'design/start', { savedAt: frozenAt, ...styleFootprint(await collectProjectFiles(root)) });
     await session(root, 'predicted');
     return { status: 'frozen', stage: 'prediction', domains: prediction.domains, entries: prediction.entries.length, designSketch: prediction.designSketch, frozenAt,
       ...(archived ? { archived } : {}), next: 'Call taste_profile without dryRun to measure the audience with Qloo.' };
@@ -188,7 +191,7 @@ export function createTasteTools(context) {
     const state = path.join(root, STATE_DIR), to = path.join(state, 'history', stamp);
     await fs.mkdir(path.join(to, 'design'), { recursive: true });
     const moves = [...['prediction', 'profile', 'evidence', 'input', 'brief', 'decisions'].map(name => [`taste/${name}.json`, `${name}.json`]),
-      ...['reading', 'dna', 'plan', 'reviews', 'check'].map(name => [`design/${name}.json`, `design/${name}.json`]),
+      ...['start', 'reading', 'dna', 'plan', 'reviews', 'check'].map(name => [`design/${name}.json`, `design/${name}.json`]),
       ...['captures.json', 'images.json', 'opened.json', 'captures'].map(name => [name, name])];
     for (const [from, name] of moves) await fs.rename(path.join(state, ...from.split('/')), path.join(to, ...name.split('/'))).catch(() => {});
     return `${STATE_DIR}/history/${stamp}`;

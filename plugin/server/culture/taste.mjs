@@ -1237,6 +1237,8 @@ function svgIllustrations(html) {
   return result;
 }
 const fontReferences = value => [...new Set(value.match(/fonts\/[a-z0-9][a-z0-9-]{0,80}\.woff2/gu) || [])].sort();
+/** The file a font URL or library path names, without its folder, query or fragment. */
+export const fontFileName = value => String(value).split(/[?#]/u)[0].split('/').pop();
 
 /**
  * Literal token presence only: a host check, not a judgment of quality, legibility or visitor preference.
@@ -1255,7 +1257,12 @@ export function checkDnaConformance(dna, files = {}, { library, fonts } = {}) {
   const copy = value => { const line = value.replace(/\s+/gu, ' ').trim().toLowerCase(); return visible.includes(line) || data.includes(line); };
   const photos = photoLibrary(library), referenced = photoReferences(site);
   const typefaces = fontLibrary(fonts);
-  const loaded = family => model.fontFaces.some(face => normalizeTasteName(face.family) === normalizeTasteName(family.family) && face.sources.some(source => family.files.includes(source)));
+  // A face loads a library file when its src names that file, from whatever folder the stylesheet reaches it: a Vite
+  // project serves fonts in public/ as /fonts/…. Whether the path reaches the file is the project check's.
+  const loaded = family => {
+    const names = new Set(family.files.map(fontFileName));
+    return model.fontFaces.some(face => normalizeTasteName(face.family) === normalizeTasteName(family.family) && face.sources.some(source => names.has(fontFileName(source))));
+  };
   const animations = animationUse(model.text), reduced = honorsReducedMotion(model.text), pauseControl = /data-motion-toggle/u.test(site);
   const illustrations = svgIllustrations(html);
   const devices = dna.devices.map(device => {
@@ -1267,7 +1274,7 @@ export function checkDnaConformance(dna, files = {}, { library, fonts } = {}) {
       ...(tokens.colors || []).map(value => ({ kind: 'color', value, present: colors.has(expandHex(value)) })),
       ...(tokens.fonts || []).map(value => ({ kind: 'font', value, present: fontValues.some(rule => rule.includes(value.toLowerCase())) })),
       ...(typefaces ? (tokens.fonts || []).map(value => typefaces.get(normalizeTasteName(value))).filter(Boolean).map(family => ({ kind: 'font-file', value: family.family, present: loaded(family),
-        detail: `@font-face for ${family.family} with src ${family.files[0]}` })) : []),
+        detail: `@font-face for ${family.family} whose src is one of its files, such as ${fontFileName(family.files[0])}` })) : []),
       ...(tokens.css || []).map(rule => ({ kind: 'css', value: `${rule.property}: ${rule.value}`, present: css.some(item => item.property === rule.property && compact(item.value).includes(compact(rule.value))) })),
       ...(tokens.keyframes || []).map(value => ({ kind: 'keyframes', value, present: model.keyframes.includes(value) && animations.used.includes(value),
         detail: !model.keyframes.includes(value) ? `no @keyframes ${value} rule` : `@keyframes ${value} is defined but no animation uses it` })),

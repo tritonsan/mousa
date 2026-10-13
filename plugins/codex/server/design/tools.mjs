@@ -19,7 +19,7 @@ import { pngSize, jpegSize, imagePalette, colorDistance, scalePng } from '../pro
 import { fontsForDna } from '../production/fonts.mjs';
 import { readState, writeState, resolveInProject, relativePath, readProjectFiles, STATE_DIR, WORKSPACE_FIELD } from '../production/project-files.mjs';
 import { tasteInputArgument } from '../production/tools.mjs';
-import { collectProjectFiles, detectDesignSystem, mergedPages, checkDesignSystem } from './systems.mjs';
+import { collectProjectFiles, detectDesignSystem, mergedPages, checkDesignSystem, checkFontFiles, styleFootprint, styleNotes } from './systems.mjs';
 import { buildSpecimen } from './specimen.mjs';
 
 export const PRODUCTION_MEDIA = Object.freeze(listMedia().map(medium => medium.id).filter(id => ['web', 'app-ui', 'generic'].includes(id)));
@@ -80,12 +80,14 @@ export const DESIGN_TOOLS = Object.freeze([
   },
   {
     name: 'materials',
-    description: 'The open-licence font library (SIL OFL 1.1) the plugin carries. find: families ranked by words for the character you want, such as condensed, warm, editorial or typewriter, with the system fonts each stands in for. fetch: copy the families your plan uses into the project (default folder fonts) with their licence files, and get the @font-face rules to paste into your stylesheet.',
+    description: 'The open-licence font library (SIL OFL 1.1) the plugin carries. find: families ranked by words for the character you want, such as condensed, warm, editorial or typewriter, with the system fonts each stands in for. fetch: copy the families your plan uses into the project (default folder fonts) with their licence files, and get the @font-face rules to paste into your stylesheet, with URLs written from the stylesheet you name.',
     inputSchema: { type: 'object', properties: {
       action: { type: 'string', enum: ['find', 'fetch'] },
       words: { type: 'array', maxItems: 8, items: { type: 'string', minLength: 2, maxLength: 40 } },
       fonts: { type: 'array', minItems: 1, maxItems: 4, items: { type: 'string', minLength: 1, maxLength: 60 } },
-      directory: { type: 'string', minLength: 1, maxLength: 80 }, workspace: WORKSPACE_FIELD,
+      directory: { type: 'string', minLength: 1, maxLength: 80, description: 'Where the fonts go, such as fonts, or public/fonts in a Vite project, which serves it from the site root.' },
+      stylesheet: { type: 'string', minLength: 1, maxLength: 200, description: 'The stylesheet that will hold the @font-face rules, such as src/style.css. Default: one at the project root.' },
+      workspace: WORKSPACE_FIELD,
     }, required: ['action'], additionalProperties: false },
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
@@ -273,13 +275,23 @@ export function createDesignTools(context) {
     // The project's own design system: custom properties, a Tailwind theme, or colours in any notation. App screens keep
     // their token check.
     if (profile.id !== 'app-ui') report = checkDesignSystem(record.dna, checked, report, detected);
-    await writeState(root, 'design/check', { checkedAt: stamp(), medium: profile.id, system: detected.system, score: report.score, devices: report.devices });
+    // A font file named by a path that reaches nothing, read from each stylesheet where it is written.
+    if (options.fonts) report = await checkFontFiles(report, record.dna, files, root, options.fonts);
+    // The project's way of styling, against how the session found it: a Tailwind restyle written as a stylesheet of
+    // new classes passed the theme check in a live session while leaving the project's classes behind.
+    const start = await readState(root, 'design/start');
+    const now = styleFootprint(files), drift = styleNotes(start, now);
+    const style = { ...(start ? { atStart: { stylesheets: start.stylesheets, handWritten: start.handWritten, classes: start.classes } } : {}), now: { stylesheets: now.stylesheets, handWritten: now.handWritten, classes: now.classes } };
+    await writeState(root, 'design/check', { checkedAt: stamp(), medium: profile.id, system: detected.system, score: report.score, devices: report.devices, style });
     await session(root, 'checked');
+    const notes = [...(detected.notes || []), ...drift];
+    const repair = report.devices.some(device => device.status !== 'present');
     return { status: 'checked', medium: profile.id, system: detected.system, score: report.score, meetsThreshold: report.meetsThreshold,
       devices: report.devices.map(device => ({ id: device.id, layer: device.layer, status: device.status, ...(device.missing.length ? { missing: device.missing.slice(0, 5) } : {}) })),
       ...(report.system ? { bindings: report.system.bindings } : {}), ...(report.motion ? { motion: { reducedMotion: report.motion.reducedMotion, pauseControl: report.motion.pauseControl, undefinedKeyframes: report.motion.undefined } } : {}),
-      ...(detected.notes ? { notes: detected.notes } : {}), limitation: 'Presence of the declared values, not visual quality or preference.',
-      next: report.devices.some(device => device.status !== 'present') ? 'Repair what is missing, check again, then capture the result with design_capture.' : 'Capture the result with design_capture and review it against your plan.' };
+      style, ...(notes.length ? { notes } : {}), limitation: 'Presence of the declared values, not visual quality or preference.',
+      next: drift.length ? `${repair ? 'Repair what is missing, and m' : 'M'}ove the styling back into the project's classes (see notes), check again, then capture the result with design_capture.`
+        : repair ? 'Repair what is missing, check again, then capture the result with design_capture.' : 'Capture the result with design_capture and review it against your plan.' };
   }
 
   async function captureResult(args, meta) {
@@ -425,6 +437,11 @@ export function createDesignTools(context) {
     const root = await project(meta, args.workspace);
     const planned = (await readState(root, 'design/plan'))?.plan?.uses?.materials?.fonts || null;
     const directory = relativePath(args.directory ?? 'fonts', { name: 'directory' });
+    const stylesheet = args.stylesheet ? relativePath(args.stylesheet, { name: 'stylesheet' }) : null;
+    // A folder a build serves as it is (public/ in Vite, Next.js and Astro, static/ in SvelteKit) is reached from the
+    // site root; any other folder by a path from the stylesheet.
+    const served = /^(?:public|static)(?:\/(.*))?$/u.exec(directory);
+    const urlFor = file => served ? `/${served[1] ? `${served[1]}/` : ''}${file}` : stylesheet ? path.posix.relative(path.posix.dirname(stylesheet), `${directory}/${file}`) : `${directory}/${file}`;
     const chosen = [...new Set(args.fonts.map(name => name.trim()))].map(name => {
       const family = library.families.find(item => normalizeTasteName(item.family) === normalizeTasteName(name)) || refuse('MATERIAL_UNKNOWN', `${name} is not in the font library. Use materials find to list its families.`);
       if (planned && !planned.some(item => normalizeTasteName(item) === normalizeTasteName(family.family))) refuse('MATERIAL_NOT_PLANNED', `The plan uses no ${family.family}; its library fonts are ${planned.join(', ') || 'none'}.`);
@@ -444,8 +461,8 @@ export function createDesignTools(context) {
       result.push({ family: family.family, files, license: family.license, ...(licence ? { licenseFile: `${directory}/${licence}` } : {}) });
     }
     return { status: 'fetched', directory, families: result.map(item => ({ family: item.family, files: item.files.map(face => face.path) })),
-      fontFace: result.flatMap(family => family.files.map(face => `@font-face{font-family:'${family.family}';src:url('${face.path}') format('woff2');font-weight:${face.weight};font-style:${face.style};font-display:swap}`)),
-      note: 'Paste the @font-face rules into your stylesheet with paths as seen from it, and keep the licence files beside the fonts.' };
+      fontFace: result.flatMap(family => family.files.map(face => `@font-face{font-family:'${family.family}';src:url('${urlFor(path.posix.basename(face.path))}') format('woff2');font-weight:${face.weight};font-style:${face.style};font-display:swap}`)),
+      note: `Paste the @font-face rules into ${stylesheet || 'a stylesheet at the project root'} as they are: their URLs are written from it${served ? ', and the site serves this folder from its root' : ''}. Keep the licence files beside the fonts.` };
   }
 
   async function compare(args, meta) {

@@ -62,7 +62,7 @@ The DNA result lists the methods available in this session for each layer. A met
 
 ## Materials
 
-- **Fonts.** `materials({ action: 'find', words: ['condensed', 'warm'] })` ranks the 33 open-licence families (SIL OFL 1.1) and the system fonts each stands in for. `materials({ action: 'fetch', fonts })` copies only the families the plan uses into `fonts/` (or `directory`), with their licence files, and returns the `@font-face` rules. Paste the rules with paths as seen from your stylesheet, and keep the licence files beside the fonts.
+- **Fonts.** `materials({ action: 'find', words: ['condensed', 'warm'] })` ranks the 33 open-licence families (SIL OFL 1.1) and the system fonts each stands in for. `materials({ action: 'fetch', fonts, stylesheet })` copies only the families the plan uses into `fonts/` (or `directory`), with their licence files, and returns the `@font-face` rules with URLs written from `stylesheet`. Paste them there as they are, and keep the licence files beside the fonts. A `directory` under `public/` or `static/` is served from the site root, so its rules load `/fonts/…`. The check follows each URL from the stylesheet that holds it and reports one that reaches no file.
 - **Pictures.** Request them only for devices whose step chose `generated-image`, and no more than the step's count. See [images.md](images.md).
 
 ## What freezes when

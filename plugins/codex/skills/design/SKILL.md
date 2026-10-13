@@ -91,7 +91,7 @@ The methods of each medium and the review rules are in [references/production.md
 
 ## 4. Gather only what the plan needs
 
-- **Fonts:** `materials({ action: 'fetch', fonts: ['planned families'] })` copies them into `fonts/` with their licences and returns the `@font-face` rules to paste.
+- **Fonts:** `materials({ action: 'fetch', fonts: ['planned families'], stylesheet })` copies them into `fonts/` with their licences and returns the `@font-face` rules to paste into that stylesheet, with URLs written from it. In a Vite, Next.js or Astro project, fetch into `public/fonts`, which the site serves from its root.
 - **Pictures:** for each planned picture, `image({ action: 'prompt', device, subject, aspect })` returns Moûsa's brief and the file to save. Make the picture with your own image tool, save it there, then call `image({ action: 'register', device, path })`. [references/images.md](references/images.md) covers each host and the fallbacks.
 
 ## 5. Build to the DNA
@@ -99,6 +99,8 @@ The methods of each medium and the review rules are in [references/production.md
 - **Every device, with its exact tokens.** Make each one by the method its step names, and do not fall back to a default look where a device says otherwise.
 - **In the project's own design system.** Each palette colour and font lives where the project keeps its values: in a custom property the styles use through `var()`, or in a Tailwind theme entry that a class names. Keep the project's own colour notation, such as `oklch()` or shadcn/ui's HSL triplets. See [references/design-systems.md](references/design-systems.md).
 - **In an existing project, restyle in place.** Change the values of its tokens, variables or theme, and keep their names, its content, its data and its scripts' hooks. Add no parallel stylesheet that overrides them.
+- **In its way of styling.** A Tailwind project styles its markup with utility classes, so restyle it through the theme and those classes, in the pages and the scripts' templates. Hand-written CSS is for `@font-face`, `@keyframes` and what no class can say. The check compares the project with how the session found it, and says when the styling has moved out of its classes.
+- **With your file tools.** Write the project's files with the host's editing tools (Write and Edit in Claude Code, `apply_patch` in Codex), not with shell commands: Moûsa's write gate watches those tools.
 - **Keep the product.** Keep its facts, its protected files and its accessibility. Visitor-facing text never mentions Qloo, agents or APIs, and nothing copies a work's logo, artwork, lyrics, characters or trade dress.
 - **Invent no fact.** The copy states only what the brief or the project says. Add no price or "free", no amenity, offer, schedule, award, review or claim that they do not state, however well it fits the voice. A detail the voice wants and the brief lacks is left out, or asked about. In the first live session a voice device added "free, no sign-up" and "two pairs of headphones" that no brief said.
 

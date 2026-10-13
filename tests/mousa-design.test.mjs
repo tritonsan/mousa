@@ -172,8 +172,15 @@ test('the design stages run end to end: reading, DNA, plan, fonts, pictures, che
     assert.equal(found.families[0].family, 'Jost');
     assert.equal((await call('materials', { action: 'fetch', fonts: ['Literata'] })).error.code, 'MATERIAL_NOT_PLANNED');
     const fetched = await call('materials', { action: 'fetch', fonts: ['Jost'] });
-    assert.ok(fetched.fontFace.every(rule => rule.includes("font-family:'Jost'")));
+    assert.ok(fetched.fontFace.every(rule => rule.includes("font-family:'Jost'") && rule.includes("url('fonts/jost-")));
     assert.ok(await exists(path.join(project, fetched.families[0].files[0])));
+    // The rules' URLs are written from the stylesheet named, and a folder a build serves as it is loads from the root.
+    const nested = await call('materials', { action: 'fetch', fonts: ['Jost'], stylesheet: 'src/style.css' });
+    assert.ok(nested.fontFace.every(rule => rule.includes("url('../fonts/jost-")), nested.fontFace[0]);
+    const served = await call('materials', { action: 'fetch', fonts: ['Jost'], directory: 'public/fonts', stylesheet: 'src/style.css' });
+    assert.ok(served.fontFace.every(rule => rule.includes("url('/fonts/jost-")), served.fontFace[0]);
+    assert.match(served.note, /serves this folder from its root/u);
+    assert.ok(await exists(path.join(project, 'public', 'fonts', path.basename(fetched.families[0].files[0]))));
 
     const named = await call('image', { action: 'prompt', device: 'dna4', subject: 'A still from Perfect Days on a misty street', aspect: 'landscape' });
     assert.equal(named.error.code, 'IMAGE_REQUEST_INVALID');
@@ -203,6 +210,9 @@ test('the design stages run end to end: reading, DNA, plan, fonts, pictures, che
     assert.equal(checked.score, 1);
     assert.ok(checked.bindings.some(item => item.value === '#3e5c6b' && item.property === '--mist'));
     assert.ok(checked.bindings.some(item => item.value === 'Jost' && item.property === '--text-font'));
+    assert.deepEqual(checked.style.atStart, { stylesheets: [], handWritten: 0, classes: 0 }, 'the project as the prediction found it: empty');
+    assert.ok(checked.style.now.handWritten > 0);
+    assert.ok(!(checked.notes || []).some(note => /bypasses its classes/u.test(note)), 'a new design in an empty folder has no way of styling to keep');
 
     const shots = await server.callTool('design_capture', {});
     assert.ok(!('structuredContent' in shots), 'no structuredContent, so Codex keeps the pictures');
@@ -233,6 +243,8 @@ test('the design stages run end to end: reading, DNA, plan, fonts, pictures, che
       assert.ok(!(await exists(path.join(project, '.mousa', ...record.split('/')))), `${record} left the session`);
       assert.ok(await exists(path.join(project, ...fresh.archived.split('/'), ...record.split('/'))), `${record} is kept in the history`);
     }
+    assert.ok(await exists(path.join(project, ...fresh.archived.split('/'), 'design', 'start.json')), 'the earlier session\'s starting point is kept');
+    assert.ok(JSON.parse(await readFile(path.join(project, '.mousa', 'design', 'start.json'), 'utf8')).handWritten > 0, 'the new session starts from the project as it is now');
     const sent = requests.length;
     assert.equal((await call('taste_profile', {})).status, 'ok');
     assert.equal(requests.length, sent, 'the same audience is measured again from the cache');

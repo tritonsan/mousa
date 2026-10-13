@@ -4,7 +4,7 @@ The DNA is neutral: it names colours, families and values. The project decides w
 
 | `designSystem.system` | When | What the check adds to the token check |
 | --- | --- | --- |
-| `tailwind` | a `tailwind.config.*`, or a stylesheet with `@import "tailwindcss"`, `@tailwind` or `@theme` | each palette colour and family is held by a theme entry that a class names |
+| `tailwind` | a `tailwind.config.*`, or a stylesheet with `@import "tailwindcss"`, `@tailwind` or `@theme` | each palette colour and family is held by a theme entry that a class or a `var()` names |
 | `css-vars` | three or more CSS custom properties, without Tailwind | each palette colour and family is held by a custom property the styles use through `var()` |
 | `text` | anything else | nothing more: each token is found as written |
 
@@ -45,7 +45,9 @@ body { color: var(--accent); background: var(--glass); font-family: var(--text-f
 
 ## Tailwind
 
-A theme value takes effect only where a class names it, so the check asks for both. The result's `bindings` give the theme name behind each value, or the names that hold it unused.
+A theme value takes effect where a class names it, or where a stylesheet uses its variable, such as `var(--color-mist)`. The check asks for the theme entry and one of those uses. The result's `bindings` give the theme name behind each value, or the names that hold it unused.
+
+- **Style with classes.** A Tailwind project styles its markup with utility classes. Restyle it the same way: change the theme, then the classes in the pages and in the scripts' templates. Keep hand-written CSS for `@font-face`, `@keyframes` and what no class can say. The check's `style` compares the hand-written declarations and the classes with how the session found the project. Its notes say when most of the new styling bypasses the classes, as a stylesheet of new class names would.
 
 - **Tailwind 4** keeps the theme in CSS. Add or change entries in `@theme`, and use them through classes:
 
@@ -72,6 +74,7 @@ A theme value takes effect only where a class names it, so the check asks for bo
 - **Keep what it does.** Its content and data, its routes and its scripts' hooks stay: the ids and classes that scripts or tests select.
 - **Ids.** Existing element ids are known ids. A structural device must add a new id for the sketch departure.
 - **The build.** If the project builds, as a Tailwind or Vite project does, run its own build and capture the output with `design_capture({ root: 'dist' })`, or whatever its output folder is. If it cannot be built here, review on the specimen board.
+- **Fonts in a build.** Fetch them where the build expects files it serves as they are: `materials({ action: 'fetch', fonts, directory: 'public/fonts', stylesheet: 'src/style.css' })` in Vite, Next.js or Astro, and `static/fonts` in SvelteKit. The rules then load `/fonts/…` from the site root.
 
 ## Other systems
 
