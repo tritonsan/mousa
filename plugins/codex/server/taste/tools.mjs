@@ -11,7 +11,7 @@ import { buildTasteProfile, normalizeTasteAssumption, tasteInputFromProfile, tas
 import { resolveQlooConnection } from '../connections/config.mjs';
 import { readState, writeState, STATE_DIR, WORKSPACE_FIELD } from '../production/project-files.mjs';
 import { fontsForDna } from '../production/fonts.mjs';
-import { planTaste, MEDIA, TASTE_QUESTIONS } from './questions.mjs';
+import { planTaste, MEDIA, TASTE_QUESTIONS, MEDIUM_RECIPES } from './questions.mjs';
 import { createCachingClient } from './cache.mjs';
 
 /** The Qloo request budget a person set for each project folder (MOUSA_QLOO_BUDGET), or null for none. */
@@ -170,7 +170,9 @@ export function createTasteTools(context) {
     const existing = await readState(root, 'taste/prediction');
     if (existing && !args.restart) refuse('PREDICTION_FROZEN', `Your prediction was frozen at ${existing.frozenAt}. It is the default the measurement is compared with, so it is not rewritten. To start a new design session, call again with restart:true.`);
     const library = await fonts();
-    const prediction = normalizeTasteAssumption(args.artifact, { domains: planned.domains, requireSketch: true, ...(library ? { fonts: fontsForDna(library) } : {}) });
+    // A plan made before the recipe named its typography is read from the recipe, as a plan made now names it.
+    const typography = planned.typography || MEDIUM_RECIPES[planned.medium]?.typography || 'required';
+    const prediction = normalizeTasteAssumption(args.artifact, { domains: planned.domains, requireSketch: true, typography, ...(library ? { fonts: fontsForDna(library) } : {}) });
     let archived = null;
     if (existing) archived = await archiveSession(root);
     const frozenAt = new Date(now()).toISOString();

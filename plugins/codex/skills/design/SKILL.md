@@ -21,9 +21,10 @@ Moûsa checks each stage of the design against the measured taste and saves it i
 The **medium** decides what is checked, and Moûsa detects it from the project:
 - `web`: pages and stylesheets. See [references/medium-web.md](references/medium-web.md).
 - `app-ui`: screens with a design token file. See [references/medium-app-ui.md](references/medium-app-ui.md).
-- `generic`: any other text project, such as a game, a native app or a document. See [references/medium-generic.md](references/medium-generic.md).
+- `game`: a game, a character or game art, whose look lives in the game's own data and code. Typography is optional, because the type belongs to the game's interface. See [references/medium-game.md](references/medium-game.md).
+- `generic`: any other text project, such as a native app or a document. See [references/medium-generic.md](references/medium-generic.md).
 
-An empty folder takes the medium of the taste recipe. `mousa_status` reports the design system it found.
+An empty folder takes the medium of the taste recipe, and a plan with the `game` recipe designs in the `game` medium even when the game is played in a page. `mousa_status` reports the design system it found.
 
 ## 1. Read the taste before you specify
 

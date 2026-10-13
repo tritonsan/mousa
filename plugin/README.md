@@ -117,7 +117,8 @@ The design tools take the work from the Taste Brief to a checked and captured re
 1. **Reading, DNA and plan.** `design_validate` checks and saves `reading`, `dna` and `plan` in that order, with the rules of the standalone stages described below. Each stage is frozen once the next one rests on it. `revise:true` replaces it and moves the later stages into `.mousa/history/`.
    - The DNA is checked against the frozen design sketch, so the surprises must move it away from the design the agent would have made without Qloo.
    - The DNA result lists the methods this session offers for each layer and how many pictures it can make.
-   - The medium (`web`, `app-ui` or `generic`) is detected from the project. An empty folder takes the medium of the taste recipe.
+   - The medium (`web`, `app-ui`, `game` or `generic`) is detected from the project. An empty folder takes the medium of the taste recipe, and a plan with the `game` recipe designs in the `game` medium even when the game is played in a page.
+   - In the `game` medium typography is optional, both in the frozen sketch and in the DNA, because a game's type belongs to its interface; palette, motion and voice are required. Its tokens are found in the game's own data as written, and its captures use one wide view, `frame` (1440×810).
 2. **Fonts.** `materials` ranks the families of the open-licence library. It copies the ones the plan uses into the project with their licence files and returns their `@font-face` rules. A family the plan does not use is refused.
 3. **Pictures.** `image` makes pictures only for imagery devices that the plan gives a `generated-image` step, up to the step's count and the session limit (`MOUSA_IMAGES_PER_RUN`, 4 by default).
    - `prompt` returns the brief Moûsa wrote from the device and the file to save (`generated/<device>-<n>.png`). The agent makes the picture with its own image tool.
@@ -130,6 +131,8 @@ The design tools take the work from the Taste Brief to a checked and captured re
    - **Token files.** A design token file is found under any name with W3C `$value` leaves.
    - **Other projects,** such as component or native code, are checked by finding each token as written, and the result says so.
 5. **Capture.** `design_capture` renders the project in a headless browser that can reach only the project. The pictures come back in the result itself, scaled to at most 1,568 pixels on the longer side. The result has no `structuredContent` copy, so Codex keeps the pictures.
+   - **Pages that draw.** A page that draws after it loads, such as a canvas, may set `window.captureReady` to a promise; the capture waits for it. A rejection fails the capture with its message, such as the field a game's validator refused.
+   - **Views a page draws.** `target` goes into the URL fragment, so a review page can draw the view it names, as `examples/long-dusk/capture.html#walk` does.
    - `specimen:true` captures the specimen board instead: one page that draws the DNA with its palette, its type in the library fonts, keyframes, SVG drawings, pictures, copy lines and landmark ids. It serves designs a browser cannot open, such as a game or a native app, and judging the system itself.
    - `root: 'dist'` serves a built folder, for a framework project after its own build.
    - A round holds six captures; a session has two rounds.
@@ -157,7 +160,7 @@ The skills carry what the agent needs to know, and the server instructions point
 | Skill | Loaded | What it covers |
 | --- | --- | --- |
 | `taste-brief` | by the agent, before any design for an audience | The audience signal and its roles, the plan, the frozen prediction, the measurement, how to read the Taste Brief, `taste_ask`, designing without Qloo, and the honesty rules. References: the nine taste questions and the recipes, how to read what Qloo measured, and how qualities become design layers |
-| `design` | by the agent, after the Taste Brief | The reading, the DNA, the plan, materials and pictures, the build, the check, captures and the review, with the schemas. References: the DNA with an example per layer and the common refusals, production methods per medium, the web, app-ui and generic media, design systems and pictures |
+| `design` | by the agent, after the Taste Brief | The reading, the DNA, the plan, materials and pictures, the build, the check, captures and the review, with the schemas. References: the DNA with an example per layer and the common refusals, production methods per medium, the web, app-ui, game and generic media, design systems and pictures |
 | `compare` | only when the person asks | Both arms in their own workspaces from one frozen prediction, `design_compare`, and the limits to report |
 | `connect` | only when the person asks; Codex's onboarding skill | The Qloo key per host, the local key page, the project folder, pictures, captures and Codex hooks |
 

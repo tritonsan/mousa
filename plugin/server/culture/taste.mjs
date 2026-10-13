@@ -632,24 +632,26 @@ function libraryFamily(name, fonts, path) {
  * The design the model would make from its own prediction, frozen before any taste data. Without Qloo it is the
  * starting point; with Qloo it is the counterfactual that surprise-anchored devices must depart from.
  */
-export function normalizeDesignSketch(value, path = 'designSketch', { fonts: fontsInput } = {}) {
+export function normalizeDesignSketch(value, path = 'designSketch', { fonts: fontsInput, typography = 'required' } = {}) {
   object(value, path, ['summary', 'palette', 'fonts', 'sections', 'motifs']);
   const library = fontsInput instanceof Map ? fontsInput : fontLibrary(fontsInput);
   const palette = [...new Set(list(value.palette, `${path}.palette`, { min: 3, max: 6 }).map((color, index) => hexColor(color, `${path}.palette[${index}]`)))];
-  const fonts = [...new Set(list(value.fonts, `${path}.fonts`, { min: 1, max: 3 }).map((font, index) => libraryFamily(fontName(font, `${path}.fonts[${index}]`), library, `${path}.fonts[${index}]`)))];
-  if (!fonts.some(font => !GENERIC_FONTS.has(font.toLowerCase()))) fail(`${path}.fonts`, 'Name at least one font family, not only a generic family such as serif.');
+  // A design whose type belongs to a fixed interface, such as a game character's, may sketch no family.
+  const optional = typography === 'optional';
+  const fonts = [...new Set(list(value.fonts ?? (optional ? [] : undefined), `${path}.fonts`, { min: optional ? 0 : 1, max: 3 }).map((font, index) => libraryFamily(fontName(font, `${path}.fonts[${index}]`), library, `${path}.fonts[${index}]`)))];
+  if ((!optional || fonts.length) && !fonts.some(font => !GENERIC_FONTS.has(font.toLowerCase()))) fail(`${path}.fonts`, 'Name at least one font family, not only a generic family such as serif.');
   const sections = [...new Set(list(value.sections, `${path}.sections`, { min: 3, max: 8 }).map((id, index) => elementId(id, `${path}.sections[${index}]`)))];
   const motifs = [...new Set(list(value.motifs, `${path}.motifs`, { min: 1, max: 5 }).map((motif, index) => text(motif, `${path}.motifs[${index}]`, { min: 3, max: 80 })))];
   return { summary: text(value.summary, `${path}.summary`, { min: 10, max: 400 }), palette, fonts, sections, motifs };
 }
 
 /** The prediction is the model's own taste input; IDs are host assigned so they cannot collide with catalogue IDs. */
-export function normalizeTasteAssumption(raw, { domains = DEFAULT_TASTE_DOMAINS, requireSketch = false, fonts } = {}) {
+export function normalizeTasteAssumption(raw, { domains = DEFAULT_TASTE_DOMAINS, requireSketch = false, fonts, typography = 'required' } = {}) {
   const domainList = normalizeTasteDomains(domains);
   const source = parsed(raw, 'assumption');
   object(source, 'assumption', ['schemaVersion', 'audienceSummary', 'predictions', 'designSketch']);
-  if (requireSketch && source.designSketch === undefined) fail('assumption.designSketch', 'Also sketch the design you would make from this prediction alone: {summary,palette:[3-6 hex colors],fonts:[1-3 font families],sections:[3-8 element IDs],motifs:[1-5 short phrases]}.');
-  const designSketch = source.designSketch === undefined ? null : normalizeDesignSketch(source.designSketch, 'assumption.designSketch', { fonts });
+  if (requireSketch && source.designSketch === undefined) fail('assumption.designSketch', `Also sketch the design you would make from this prediction alone: {summary,palette:[3-6 hex colors],fonts:[${typography === 'optional' ? '0' : '1'}-3 font families],sections:[3-8 element IDs],motifs:[1-5 short phrases]}.`);
+  const designSketch = source.designSketch === undefined ? null : normalizeDesignSketch(source.designSketch, 'assumption.designSketch', { fonts, typography });
   if (source.schemaVersion !== TASTE_SCHEMA_VERSION) fail('assumption.schemaVersion', "Use schemaVersion '1.0'.");
   const audienceSummary = text(source.audienceSummary, 'assumption.audienceSummary', { min: 10, max: 600 });
   if (!plain(source.predictions)) fail('assumption.predictions', `An object keyed by domain is required: ${domainList.join(', ')}.`);
@@ -859,11 +861,13 @@ const photoReferences = value => [...new Set(value.match(/library\/[a-z0-9][a-z0
  * inline SVG; a medium the host checks by literal text, such as a native app's source, may move and draw with any
  * declared token, and its devices may declare literals: exact strings the host finds in its files.
  */
-export const WEB_DNA_RULES = Object.freeze({ motion: 'css', illustration: 'svg', literals: false });
+export const WEB_DNA_RULES = Object.freeze({ motion: 'css', illustration: 'svg', literals: false, typography: 'required' });
 function dnaRules(rules) {
   if (rules === undefined) return WEB_DNA_RULES;
-  if (!plain(rules) || !['css', 'any'].includes(rules.motion ?? 'css') || !['svg', 'any'].includes(rules.illustration ?? 'svg') || typeof (rules.literals ?? false) !== 'boolean') fail('rules', 'Use {motion:"css"|"any", illustration:"svg"|"any", literals:boolean}.');
-  return { motion: rules.motion ?? 'css', illustration: rules.illustration ?? 'svg', literals: rules.literals ?? false };
+  if (!plain(rules) || !['css', 'any'].includes(rules.motion ?? 'css') || !['svg', 'any'].includes(rules.illustration ?? 'svg') || typeof (rules.literals ?? false) !== 'boolean'
+    || !['required', 'optional'].includes(rules.typography ?? 'required')) fail('rules', 'Use {motion:"css"|"any", illustration:"svg"|"any", literals:boolean, typography:"required"|"optional"}.');
+  // Typography is optional where the type belongs to a fixed interface, such as a game's, and the design has none.
+  return { motion: rules.motion ?? 'css', illustration: rules.illustration ?? 'svg', literals: rules.literals ?? false, typography: rules.typography ?? 'required' };
 }
 
 function normalizeTokens(value, path, { fonts: fontsLibrary = null, literals: allowLiterals = false } = {}) {
@@ -973,7 +977,9 @@ export function normalizeDesignDna(raw, { input, sketch, existingIds = [], libra
       ...(frozen ? { novel: sketchNovelty(tokens, frozen, starterIds) } : {}) };
   });
   const layers = new Set(devices.map(device => device.layer));
-  if (!layers.has('palette') || !layers.has('typography')) fail('dna.devices', 'Include palette and typography devices.');
+  // With optional typography, a type device the DNA does include still follows every typography rule.
+  const typed = rules.typography === 'required' || layers.has('typography');
+  if (!layers.has('palette') || (rules.typography === 'required' && !layers.has('typography'))) fail('dna.devices', rules.typography === 'required' ? 'Include palette and typography devices.' : 'Include a palette device.');
   if (!STRUCTURAL_DNA_LAYERS.some(layer => layers.has(layer))) fail('dna.devices', `Include at least one device in ${STRUCTURAL_DNA_LAYERS.join(', ')}.`);
   if (layers.size < 4) fail('dna.devices', 'Cover at least four distinct layers.');
   const listed = entities => entities.slice(0, 8).map(entity => `${entity.name} (${entity.ref})`).join(', ');
@@ -986,7 +992,7 @@ export function normalizeDesignDna(raw, { input, sketch, existingIds = [], libra
     const pool = [...shared].sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
       .concat(input.entities.filter(entity => isTagDomain(entity.domain) && (!measuredRun || entity.source === 'qloo')));
     const poolRefs = new Set(pool.map(entity => entity.ref));
-    for (const layer of ['palette', 'typography']) if (!devices.some(device => device.layer === layer && device.anchors.some(ref => poolRefs.has(ref)))) {
+    for (const layer of ['palette', ...(typed ? ['typography'] : [])]) if (!devices.some(device => device.layer === layer && device.anchors.some(ref => poolRefs.has(ref)))) {
       fail('dna.devices', `Qualities first: anchor a ${layer} device to at least one ${measuredRun ? 'measured ' : ''}quality ref, such as ${listed(pool)}, and let it set the ${layer === 'palette' ? 'colors' : 'type'}. Entities are evidence of the qualities; never take an entity's own brand or team colors, logo, packaging or trade dress.`);
     }
   }
@@ -1019,7 +1025,7 @@ export function normalizeDesignDna(raw, { input, sketch, existingIds = [], libra
     const sketchFonts = kept(['typography'], device => named(device).filter(font => !device.novel.fonts.includes(font)));
     const knownIds = kept(STRUCTURAL_DNA_LAYERS, device => device.tokens.ids.filter(id => !device.novel.ids.includes(id))).slice(0, 6).map(id => `#${id}`);
     if (!moved.some(device => device.layer === 'palette' && device.novel.colors.length >= 2)) fail('dna.devices', `Measured surprises must move the palette away from your frozen sketch (${frozen.palette.join(', ')}). Give a palette device anchored to a surprise entity or quality at least two colors with a CIE76 difference of at least ${TASTE_LIMITS.sketchDeltaE} from every sketch color.${close.length ? ` Too close now: ${close.join(', ')}.` : ''}`);
-    if (!moved.some(device => device.layer === 'typography' && named(device).length && device.novel.fonts.length === named(device).length)) fail('dna.devices', `Measured surprises must move the type system away from your frozen sketch (${frozen.fonts.join(', ')}). Give a typography device anchored to a surprise entity or quality only named font families outside the sketch, and use them for headings or body text.${sketchFonts.length ? ` Still from the sketch: ${sketchFonts.join(', ')}.` : ''}`);
+    if (typed && !moved.some(device => device.layer === 'typography' && named(device).length && device.novel.fonts.length === named(device).length)) fail('dna.devices', `Measured surprises must move the type system away from your frozen sketch (${frozen.fonts.join(', ') || 'no family'}). Give a typography device anchored to a surprise entity or quality only named font families outside the sketch, and use them for headings or body text.${sketchFonts.length ? ` Still from the sketch: ${sketchFonts.join(', ')}.` : ''}`);
     if (!moved.some(device => STRUCTURAL_DNA_LAYERS.includes(device.layer) && device.novel.ids.length)) fail('dna.devices', `Measured surprises must change the page structure, not only its surface. Give a ${STRUCTURAL_DNA_LAYERS.join(', ')} device anchored to a surprise entity or quality at least one new element ID for a new major section or component: not a sketch section (${frozen.sections.join(', ')}) and not an existing starter ID.${knownIds.length ? ` Already known: ${knownIds.join(', ')}.` : ''}`);
   }
   const used = new Set(devices.flatMap(device => device.anchors));

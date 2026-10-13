@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "1.0",
+  "id": "maren",
+  "name": "Maren",
+  "role": "Keeper of the Vesper beacon",
+  "description": "Maren, an old keeper in a long grey-green coat, wide-brimmed hat and faded red scarf, leaning on a tall staff.",
+  "palette": {
+    "coat": "#5d6a5c",
+    "coat-shade": "#465045",
+    "skirt": "#43404a",
+    "boots": "#2b2522",
+    "skin": "#d8b597",
+    "skin-shade": "#c29d80",
+    "hair": "#bdb8ae",
+    "hair-shade": "#9f9a90",
+    "hat": "#2e2a27",
+    "scarf": "#8d4a46",
+    "staff": "#4d3b2e",
+    "ink": "#1f1b1d"
+  },
+  "style": { "outline": null, "backShade": 0.35, "shadow": 0.6 },
+  "skeleton": {
+    "hip": [0, -72], "chest": [10, -110], "neck": [14, -116], "head": [19, -131], "shoulder": [9, -105],
+    "elbow": [14, -82], "wrist": [18, -60], "knee": [3, -38], "ankle": [0, -7], "toe": [14, 0]
+  },
+  "parts": [
+    { "id": "thigh", "bone": "thigh", "shape": "capsule", "from": [0, -72], "to": [3, -38], "r1": 7.5, "r2": 6, "fill": "skirt" },
+    { "id": "shin", "bone": "shin", "shape": "capsule", "from": [3, -38], "to": [1, -9], "r1": 6, "r2": 5, "fill": "skirt" },
+    { "id": "boot", "bone": "foot", "shape": "path", "d": "M-6,-13 C-6,-17 6,-17 7,-12 L8,-6 C13,-6 17,-4 17,-1 L17,1 L-7,1 L-7,-6 Z", "fill": "boots" },
+    { "id": "coat", "bone": "torso", "shape": "path", "d": "M-12,-74 C-15,-90 -8,-108 2,-116 C10,-121 20,-117 21,-108 C22,-94 18,-80 16,-70 L18,-30 C8,-26 -10,-26 -20,-30 Z", "fill": "coat" },
+    { "id": "coat-hem", "bone": "torso", "z": 1, "shape": "path", "d": "M-19,-31 C-10,-28 8,-28 17,-31 M-6,-70 L-9,-31", "fill": "none", "stroke": "coat-shade", "strokeWidth": 1.8 },
+    { "id": "scarf-wrap", "bone": "torso", "z": 4, "shape": "path", "d": "M2,-118 C8,-122 18,-121 22,-115 L21,-109 C15,-113 7,-113 1,-110 Z", "fill": "scarf" },
+    { "id": "hair-bun", "bone": "head", "z": 5, "shape": "path", "d": "M8,-138 C6,-146 14,-152 22,-150 C14,-148 10,-142 10,-134 Z", "fill": "hair" },
+    { "id": "head", "bone": "head", "z": 6, "shape": "ellipse", "center": [19, -131], "rx": 12, "ry": 13, "fill": "skin" },
+    { "id": "hair-side", "bone": "head", "z": 7, "shape": "path", "d": "M8,-136 C9,-128 11,-122 14,-119 C10,-121 7,-127 7,-133 Z", "fill": "hair-shade" },
+    { "id": "hat", "bone": "head", "z": 8, "shape": "path", "d": "M-4,-138 C6,-141 34,-141 44,-136 C34,-134 6,-134 -4,-138 Z M8,-138 C8,-150 14,-156 22,-156 C30,-156 34,-150 33,-138 Z", "fill": "hat" },
+    { "id": "eye", "bone": "head", "z": 9, "role": "eye", "shape": "ellipse", "center": [26, -130.5], "rx": 1.4, "ry": 1.9, "fill": "ink" },
+    { "id": "brow", "bone": "head", "z": 9, "shape": "path", "d": "M23,-134.5 C25,-135.5 28,-135.5 29.5,-134.5", "fill": "none", "stroke": "hair-shade", "strokeWidth": 1.2 },
+    { "id": "nose", "bone": "head", "z": 9, "shape": "path", "d": "M30,-131 C33.5,-129 33.5,-126 30,-125 Z", "fill": "skin-shade" },
+    { "id": "mouth", "bone": "head", "z": 9, "shape": "path", "d": "M25,-122 C27,-121 29,-121 30,-122.5", "fill": "none", "stroke": "#8e6b5c", "strokeWidth": 1 },
+    { "id": "sleeve-upper", "bone": "upperArm", "z": 5, "shape": "capsule", "from": [9, -105], "to": [14, -82], "r1": 6.5, "r2": 5.5, "fill": "coat" },
+    { "id": "sleeve-lower", "bone": "forearm", "z": 5, "shape": "capsule", "from": [14, -82], "to": [18, -63], "r1": 5.5, "r2": 5, "fill": "coat" },
+    { "id": "hand", "bone": "hand", "z": 6, "shape": "circle", "center": [19, -58], "r": 4, "fill": "skin" },
+    { "id": "staff", "bone": "hand", "side": "front", "z": 4, "shape": "path", "d": "M16.5,17 L16.5,-100 C16.5,-104 19.5,-106 21.5,-104 L21.5,17 Z", "fill": "staff" }
+  ],
+  "cloth": [
+    { "id": "scarf-tail", "bone": "torso", "anchor": [4, -114], "segments": 5, "length": 34, "width": [7, 5], "fill": "scarf", "rest": 150, "stiffness": 0.2, "damping": 0.3, "gravity": 0.7, "wind": 1.1, "z": 3 },
+    { "id": "braid", "bone": "head", "anchor": [8, -128], "segments": 6, "length": 44, "width": [6, 3.5], "fill": "hair", "stripes": ["hair", "hair-shade"], "rest": 105, "stiffness": 0.25, "damping": 0.3, "gravity": 1, "wind": 0.8, "z": 5 }
+  ],
+  "motion": {
+    "idle": { "breathRate": 8, "breathDepth": 0.6, "sway": 0.25, "weightShift": 0.15, "lookAround": 0.4, "blinkInterval": 4.5, "stance": 0.1 },
+    "turn": { "style": "pivot", "duration": 0.5 },
+    "carry": { "arm": "front", "upperArm": -25, "forearm": -30, "hand": 55 }
+  },
+  "clips": {
+    "greet": {
+      "duration": 1.8,
+      "tracks": {
+        "head": [[0, 0], [0.5, 12, "inOut"], [1, 12, "inOut"], [1.8, 0]],
+        "torso": [[0, 0], [0.6, 6, "inOut"], [1.8, 0]]
+      }
+    }
+  }
+}

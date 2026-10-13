@@ -22,10 +22,13 @@ import { tasteInputArgument } from '../production/tools.mjs';
 import { collectProjectFiles, detectDesignSystem, mergedPages, checkDesignSystem, checkFontFiles, styleFootprint, styleNotes } from './systems.mjs';
 import { buildSpecimen } from './specimen.mjs';
 
-export const PRODUCTION_MEDIA = Object.freeze(listMedia().map(medium => medium.id).filter(id => ['web', 'app-ui', 'generic'].includes(id)));
+export const PRODUCTION_MEDIA = Object.freeze(listMedia().map(medium => medium.id).filter(id => ['web', 'app-ui', 'game', 'generic'].includes(id)));
 // What a taste recipe usually makes when the project itself does not say: pages for a site, a place or a brand, an
 // interface with tokens for an app, source text for a game, writing and anything else.
-const RECIPE_ARTIFACT = Object.freeze({ web: 'web', 'app-ui': 'app-ui', place: 'web', brand: 'web', game: 'generic', writing: 'generic', generic: 'generic' });
+const RECIPE_ARTIFACT = Object.freeze({ web: 'web', 'app-ui': 'app-ui', place: 'web', brand: 'web', game: 'game', writing: 'generic', generic: 'generic' });
+// A page that draws after it loads, such as a canvas, may set window.captureReady to a promise that settles once the
+// view is drawn; a rejection names what went wrong, such as a data file the game could not load.
+const CAPTURE_READY = 'Promise.resolve(window.captureReady).then(value => value === undefined ? true : value, error => String(error && error.message || error))';
 // Captures handed to a model are scaled to this longer side, which models reduce larger pictures to anyway.
 export const INLINE_CAPTURE_MAX_SIDE = 1568;
 const SPECIMEN_VIEW = Object.freeze({ id: 'board', width: 1440, height: 900 });
@@ -39,7 +42,7 @@ export const DESIGN_TOOLS = Object.freeze([
     inputSchema: { type: 'object', properties: {
       stage: { type: 'string', enum: STAGES },
       artifact: { type: 'object', description: 'The stage\'s artifact as JSON.' },
-      medium: { type: 'string', enum: PRODUCTION_MEDIA, description: 'web (pages and stylesheets), app-ui (pages with a design token file) or generic (any source). Detected from the project when left out.' },
+      medium: { type: 'string', enum: PRODUCTION_MEDIA, description: 'web (pages and stylesheets), app-ui (pages with a design token file), game (a game, character or game art; type optional) or generic (any source). Detected from the project, or taken from a game plan, when left out.' },
       restart: { type: 'boolean' }, revise: { type: 'boolean' }, workspace: WORKSPACE_FIELD,
     }, required: ['stage', 'artifact'], additionalProperties: false },
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
@@ -55,7 +58,7 @@ export const DESIGN_TOOLS = Object.freeze([
   },
   {
     name: 'design_capture',
-    description: 'Capture the result for your review and see it: the pictures come back in this result. By default the project\'s entry page at each view of its medium (desktop and mobile for a site); target scrolls to an element id, full takes the whole height, and root serves a built folder such as dist. specimen:true captures the specimen board instead: the DNA drawn on one page (palette, type in its fonts, motion, drawings, pictures and voice), for designs a browser cannot open or to judge the system itself. Rounds hold 6 captures each; review each round with design_validate stage review.',
+    description: 'Capture the result for your review and see it: the pictures come back in this result. By default the project\'s entry page at each view of its medium (desktop and mobile for a site); entry names another page, target goes into the URL fragment (an element id to scroll to, or a view the page draws, such as walk on a game\'s review page), full takes the whole height, and root serves a built folder such as dist. A page that draws after it loads, such as a canvas, may set window.captureReady to a promise that settles once it is drawn. specimen:true captures the specimen board instead: the DNA drawn on one page (palette, type in its fonts, motion, drawings, pictures and voice), for designs a browser cannot open or to judge the system itself. Rounds hold 6 captures each; review each round with design_validate stage review.',
     inputSchema: { type: 'object', properties: {
       specimen: { type: 'boolean' }, entry: { type: 'string', minLength: 1, maxLength: 200 },
       views: { type: 'array', minItems: 1, maxItems: 4, items: { type: 'string', minLength: 1, maxLength: 30 } },
@@ -183,6 +186,9 @@ export function createDesignTools(context) {
     if (requested) return requested;
     const saved = (await readState(root, 'design/dna'))?.medium || (await readState(root, 'design/reading'))?.medium;
     if (saved) return saved;
+    // A game keeps its look in its own data, so a game plan is a game even when the game is played in a page.
+    const planned = RECIPE_ARTIFACT[(await readState(root, 'taste/plan'))?.medium];
+    if (planned === 'game') return 'game';
     const detected = detectDesignSystem(files || await collectProjectFiles(root));
     if (detected.pages || detected.medium !== 'generic') return detected.medium;
     return RECIPE_ARTIFACT[(await readState(root, 'taste/plan'))?.medium] || 'generic';
@@ -274,7 +280,8 @@ export function createDesignTools(context) {
     let report = profile.checkConformance(profile.dnaForCheck(record.dna), checked, options);
     // The project's own design system: custom properties, a Tailwind theme, or colours in any notation. App screens keep
     // their token check.
-    if (profile.id !== 'app-ui') report = checkDesignSystem(record.dna, checked, report, detected);
+    // A game's palette lives in its data, not in its interface's stylesheet, so only its literal check applies.
+    if (!['app-ui', 'game'].includes(profile.id)) report = checkDesignSystem(record.dna, checked, report, detected);
     // A font file named by a path that reaches nothing, read from each stylesheet where it is written.
     if (options.fonts) report = await checkFontFiles(report, record.dna, files, root, options.fonts);
     // The project's way of styling, against how the session found it: a Tailwind restyle written as a stylesheet of
@@ -325,7 +332,7 @@ export function createDesignTools(context) {
         const views = args.views === undefined ? medium.views : args.views.map(id => medium.views.find(view => view.id === id) || refuse('CAPTURE_INVALID', `views: use ${medium.views.map(view => view.id).join(', ')}.`));
         if (taken + views.length > CAPTURE_LIMITS.perRound) refuse('CAPTURE_LIMIT', `Round ${round} allows ${CAPTURE_LIMITS.perRound} captures and ${taken} were taken.`);
         served = await serveDirectory(site, { entry });
-        shots = await (capture || captureViews)({ browser: found, baseUrl: served.url, entry, views, target: args.target, full: args.full === true, outDir: out.file, prefix: `r${round}`, env });
+        shots = await (capture || captureViews)({ browser: found, baseUrl: served.url, entry, views, target: args.target, full: args.full === true, outDir: out.file, prefix: `r${round}`, env, ready: CAPTURE_READY });
       }
     } catch (error) {
       if (error instanceof DesignToolError) throw error;

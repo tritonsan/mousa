@@ -1,6 +1,6 @@
 # Medium: generic
 
-Any text project that is not a plain website, such as a game, a native app, a document, a slide deck or a piece of writing. `design_check` finds each token in the project's files exactly as written, so a device declares its tokens the way the source writes them.
+Any text project that is not a plain website or a game, such as a native app, a document, a slide deck or a piece of writing. `design_check` finds each token in the project's files exactly as written, so a device declares its tokens the way the source writes them.
 
 ## What the check looks for
 
@@ -24,17 +24,7 @@ In this medium, motion may be declared by its code in `literals` as well as by k
 
 ### A game, a character or game art
 
-Taste changes how the character or world looks, moves and speaks. It never changes the lore, the rules, the fixed facts of the character or the scene's story beats.
-
-| Layer | What it becomes in a game |
-| --- | --- |
-| palette | the character's and the scene's colours, as hex constants in the character or scene file |
-| silhouette, costume and form | proportions, garments, props and features as named parts. Use layout or structure devices with the part ids as `ids` |
-| motion | gait and timing: cadence, bounce, lean, arm swing, how it turns, the timing of its signature move. Declare the values as `literals` exactly as the code writes them |
-| imagery and render | the art style the frame is drawn in. The game's `art_style` entries, such as Pixel Art or Hand-Drawn, name it; anchor the render device to one |
-| voice | the character's lines in the voice device's register, never quoting a work |
-
-Never copy a character, costume, logo or trade dress of an anchor work.
+Use the `game` medium: see [medium-game.md](medium-game.md).
 
 ### A native app
 

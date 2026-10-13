@@ -123,3 +123,48 @@ export function siteFiles(fontFace) {
     'styles.css': `${fontFace.join('\n')}\n:root{--mist:#3e5c6b;--glass:#8fb0a9;--text-font:'Jost',sans-serif}body{color:var(--mist);background:var(--glass);font-family:var(--text-font)}#week-strip ol{display:flex}@keyframes mist-drift{from{transform:translateX(0)}to{transform:translateX(12px)}}.drift{animation:mist-drift 40s ease-in-out infinite}@media (prefers-reduced-motion: reduce){.drift{animation:none}}`,
   };
 }
+
+/** A prediction for the game recipe's domains, with a sketch that names no font, as a game's may. */
+export const gamePrediction = () => ({ ...prediction(), predictions: { videogame: ['Hollow Knight', 'Celeste', 'Journey'], movie: ['Spirited Away', 'Paprika', 'Akira'],
+  tv_show: ['Mushishi', 'Arcane', 'Samurai Champloo'], artist: ['Sigur Rós', 'Nujabes', 'Joe Hisaishi'], book: ['The Little Prince', 'Kitchen', 'Piranesi'],
+  style: ['slow', 'dreamlike', 'quiet'], aesthetic: ['hand-drawn', 'ink wash', 'muted'], tone: ['wistful', 'gentle', 'lonely'], qualities: ['melancholic', 'atmospheric', 'whimsical'],
+  art_style: ['pixel art', 'hand-drawn', 'watercolor'] },
+  designSketch: { summary: 'A small hooded wanderer in slate with an amber lantern, walking slowly.', palette: ['#f3ead8', '#2f2a24', '#b5653a'], fonts: [], sections: ['hood', 'scarf', 'lantern'], motifs: ['swinging lantern'] } });
+
+/** A game DNA for the fixture profile with no typography device: its tokens live in a character file. */
+export function gameDesignFor(input) {
+  const { reading: web } = designFor(input);
+  const by = predicate => input.entities.find(entity => entity.source === 'qloo' && predicate(entity));
+  const quality = family => by(entity => entity.domain === 'qualities' && entity.family === family && entity.required) || by(entity => entity.domain === 'qualities' && entity.family === family);
+  const look = quality('look'), mood = quality('mood'), meaning = quality('meaning');
+  const style = by(entity => entity.domain === 'style' && entity.surprise) || by(entity => entity.domain === 'style');
+  const aesthetic = by(entity => entity.domain === 'aesthetic');
+  const tone = by(entity => entity.domain === 'tone' && entity.surprise) || by(entity => entity.domain === 'tone');
+  const works = input.requiredAnchors.filter(anchor => anchor.domain !== 'qualities').map(anchor => input.entities.find(entity => entity.ref === anchor.ref));
+  const tagsOf = entity => entity?.tags?.length ? [entity.tags[0]] : [];
+  const reading = { ...web, clusters: [
+    { ...web.clusters[0], layers: ['palette', 'motion', 'imagery'] },
+    { ...web.clusters[1], layers: ['voice'] },
+    { ...web.clusters[2], layers: ['structure'] },
+  ], approach: 'The character carries the misty look in its palette, gait and render style, the quiet voice in its lines, and routine in what it carries.' };
+  const dna = { schemaVersion: '1.0', thesis: 'A slow lamplighter in mist and sea glass who speaks in short, quiet lines.', devices: [
+    { id: 'dna1', layer: 'palette', device: 'Mist and sea-glass cloak', anchors: [look.ref, works[0].ref], qualities: [look.name, ...tagsOf(works[0])], translation: 'Atmospheric works become a cool, hazy cloak.', tokens: { colors: ['#3e5c6b', '#8fb0a9'] } },
+    { id: 'dna2', layer: 'motion', device: 'An unhurried walk', anchors: [style.ref], qualities: [style.name], translation: 'Pensive pacing becomes a slow cadence with little bounce.', tokens: { literals: ['"cadence": 0.9'] } },
+    { id: 'dna3', layer: 'imagery', device: 'Drawn in ink', anchors: [aesthetic.ref], qualities: [aesthetic.name], translation: 'Sculptural forms become an inked frame.', tokens: { literals: ['"preset": "ink"'] } },
+    { id: 'dna4', layer: 'voice', device: 'Short lines with room between them', anchors: [tone.ref, mood.ref, works[1].ref], qualities: [tone.name, mood.name, ...tagsOf(works[1])], translation: 'A thoughtful tone becomes short lines with pauses.', tokens: { copy: ['The road is quiet tonight.', 'Rest. I will carry it.'] } },
+    { id: 'dna5', layer: 'structure', device: 'A moth-wing lantern', anchors: [meaning.ref, works[2].ref], qualities: [meaning.name, ...tagsOf(works[2])], translation: 'A routine of small lights becomes a lantern shaped like folded wings.', tokens: { ids: ['moth-lantern'] } },
+  ], rejected: [] };
+  const plan = { schemaVersion: '1.0', steps: [
+    { device: 'dna1', method: 'source', cluster: 'c1', why: 'The palette lives in the character file.' },
+    { device: 'dna2', method: 'source', cluster: 'c1', why: 'The walk is a motion parameter of the character.' },
+    { device: 'dna3', method: 'source', cluster: 'c1', why: 'The render preset draws the frame.' },
+    { device: 'dna4', method: 'copy', cluster: 'c2', why: 'The voice lives in the four lines.' },
+    { device: 'dna5', method: 'source', cluster: 'c3', why: 'The lantern is a named part.' },
+  ], review: [
+    { id: 'r1', device: 'dna1', look: 'The figure at rest reads as mist and sea glass, not grey.', view: 'frame' },
+    { id: 'r2', device: 'dna2', look: 'The walk cycle shows short, even steps.', view: 'frame' },
+  ] };
+  const character = JSON.stringify({ id: 'ilo', palette: { cloak: '#3e5c6b', glass: '#8fb0a9' }, parts: [{ id: 'moth-lantern' }], motion: { walk: { cadence: 0.9 } }, render: { preset: 'ink' },
+    lines: { arrive: 'The road is quiet tonight.', greet: 'Rest. I will carry it.' } }, null, 2);
+  return { reading, dna, plan, character };
+}

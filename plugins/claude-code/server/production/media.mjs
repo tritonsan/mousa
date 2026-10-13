@@ -180,6 +180,8 @@ const VIEWS = {
   web: [{ id: 'desktop', width: 1440, height: 900 }, { id: 'mobile', width: 390, height: 844 }],
   'app-ui': [{ id: 'phone', width: 390, height: 844 }, { id: 'board', width: 1440, height: 900 }],
   generic: [{ id: 'desktop', width: 1280, height: 800 }, { id: 'mobile', width: 390, height: 844 }],
+  // A game is played in a wide frame; its own review page picks what it draws, such as a pose or a walk cycle.
+  game: [{ id: 'frame', width: 1440, height: 810 }],
 };
 const websiteDna = rules => (raw, { input, sketch, existingIds, library, fonts, maxRequiredRejections } = {}) => normalizeDesignDna(raw, { input, sketch, existingIds, library, fonts, maxRequiredRejections, rules });
 
@@ -252,5 +254,15 @@ registerMedium({
   description: 'Any text project, such as a native app, a document or a slide deck, checked by finding each declared token in its files as written.',
   layers: DNA_LAYERS, requiredLayers: ['palette', 'typography', 'voice'], structuralLayers: STRUCTURAL_DNA_LAYERS, methods: GENERIC_METHODS, views: VIEWS.generic,
   validateDna: websiteDna({ motion: 'any', illustration: 'any', literals: true }), dnaForCheck: raw => normalizeDnaForCheck(raw, { literals: true }),
+  checkConformance: (dna, files) => checkLiteralConformance(dna, files),
+});
+// A game, a character or game art: the look lives in the game's own data and code, such as a character file, and is
+// found there as written. The type belongs to the game's fixed interface, so a typography device is optional, while
+// the way it moves and speaks is required.
+registerMedium({
+  id: 'game', label: 'Game or character', artifact: 'game', entry: 'index.html',
+  description: 'A game, a character or game art whose look, motion and voice live in the game\'s own data and code, checked by finding each declared token in its files as written.',
+  layers: DNA_LAYERS, requiredLayers: ['palette', 'motion', 'voice'], structuralLayers: STRUCTURAL_DNA_LAYERS, methods: GENERIC_METHODS, views: VIEWS.game,
+  validateDna: websiteDna({ motion: 'any', illustration: 'any', literals: true, typography: 'optional' }), dnaForCheck: raw => normalizeDnaForCheck(raw, { literals: true }),
   checkConformance: (dna, files) => checkLiteralConformance(dna, files),
 });

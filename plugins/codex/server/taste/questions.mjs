@@ -39,13 +39,14 @@ export const MEDIUM_RECIPES = Object.freeze({
   'app-ui': { label: 'App interface', domains: ['brand', 'tv_show', 'movie', 'artist', 'podcast', 'style', 'aesthetic', 'tone', 'qualities'], medium: [] },
   brand: { label: 'Brand identity, packaging or campaign', domains: ['brand', 'artist', 'movie', 'tv_show', 'book', 'aesthetic', 'style', 'tone', 'qualities'], medium: ['brand'] },
   place: { label: 'A physical place: café, restaurant, shop or hotel', domains: ['place', 'brand', 'artist', 'movie', 'tv_show', 'aesthetic', 'tone', 'qualities'], medium: ['place'], needs: ['location'] },
-  game: { label: 'Game, character or game art', domains: ['videogame', 'movie', 'tv_show', 'artist', 'book', 'style', 'aesthetic', 'tone', 'qualities', 'art_style'], medium: ['videogame'] },
+  // A game's type belongs to its fixed interface, so its sketch and DNA may leave typography out.
+  game: { label: 'Game, character or game art', domains: ['videogame', 'movie', 'tv_show', 'artist', 'book', 'style', 'aesthetic', 'tone', 'qualities', 'art_style'], medium: ['videogame'], typography: 'optional' },
   writing: { label: 'Copy, naming or narrative', domains: ['book', 'movie', 'tv_show', 'podcast', 'artist', 'style', 'tone', 'qualities'], medium: ['book'] },
   generic: { label: 'Any other design work', domains: ['brand', 'movie', 'artist', 'book', 'tv_show', 'style', 'aesthetic', 'tone', 'qualities'], medium: [] },
 });
 export const MEDIA = Object.freeze(Object.keys(MEDIUM_RECIPES));
 
-const PREDICTION_SHAPE = '{schemaVersion:"1.0", audienceSummary:"one or two sentences", predictions:{<each domain>:[3-6 entries]}, designSketch:{summary, palette:[3-6 #rrggbb], fonts:[1-3 library families], sections:[3-8 element IDs], motifs:[1-5 phrases]}}';
+const predictionShape = typography => `{schemaVersion:"1.0", audienceSummary:"one or two sentences", predictions:{<each domain>:[3-6 entries]}, designSketch:{summary, palette:[3-6 #rrggbb], fonts:[${typography === 'optional' ? '0-3 library families, none when the type belongs to a fixed interface' : '1-3 library families'}], sections:[3-8 element IDs], motifs:[1-5 phrases]}}`;
 const QUALITY_HINT = { style: 'pacing qualities of the films and TV it likes', aesthetic: 'visual and material qualities of what it likes', tone: 'emotional tones of what it likes',
   qualities: 'looks, moods or themes its favorite works share', art_style: 'art styles of what it likes, such as hand-drawn or pixel art' };
 
@@ -57,7 +58,7 @@ const QUALITY_HINT = { style: 'pacing qualities of the films and TV it likes', a
  */
 export function planTaste({ medium = 'web', references = [], segments = [], location, ages, decisions = [], deepCuts = true } = {}) {
   const recipe = MEDIUM_RECIPES[medium] ? medium : 'generic';
-  const { domains: base, medium: own, needs = [], label } = MEDIUM_RECIPES[recipe];
+  const { domains: base, medium: own, needs = [], label, typography = 'required' } = MEDIUM_RECIPES[recipe];
   const domains = [...base];
   if (location && !domains.includes('place') && domains.length < TASTE_LIMITS.domains) domains.push('place');
   const named = (Array.isArray(references) ? references : []).map(ref => typeof ref === 'string' ? { name: ref, role: 'audience' } : { role: 'audience', ...ref });
@@ -89,12 +90,12 @@ export function planTaste({ medium = 'web', references = [], segments = [], loca
   const question = item => ({ id: item.id, ask: item.ask, how: item.how, informs: item.informs, ...(focus.length ? { relevant: item.informs.some(layer => focus.some(word => layer.includes(word) || word.includes(layer))) } : {}), ...(item.caveat ? { caveat: item.caveat } : {}) });
 
   return {
-    medium: recipe, recipe: label, domains, ownMedium: own,
+    medium: recipe, recipe: label, domains, ownMedium: own, typography,
     signal: { basis, references: seeds, knownNames, segments: segmentList, ...(location ? { location } : {}), ...(ageList.length ? { ages: ageList } : {}), deepCuts },
     questions: { now: TASTE_QUESTIONS.filter(item => asked.has(item.id)).map(question), later: TASTE_QUESTIONS.filter(item => later.includes(item.id)).map(question) },
     requests: { estimate, limit: TASTE_LIMITS.calls, ...(notes.length ? { notes } : {}) },
     missing,
-    prediction: { domains, shape: PREDICTION_SHAPE,
+    prediction: { domains, shape: predictionShape(typography),
       entries: domains.map(domain => `${domain}: ${isTagDomain(domain) || isDerivedDomain(domain) ? QUALITY_HINT[domain] : 'real names you expect this audience to love'}`) },
   };
 }
