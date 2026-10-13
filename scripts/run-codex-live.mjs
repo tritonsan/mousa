@@ -25,7 +25,7 @@ import { spawn } from 'node:child_process';
 import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 import { loadDotEnv, rootDir } from '../src/config.mjs';
-import { readBrief, copyProject, compareProjects } from './run-claude-code-live.mjs';
+import { readBrief, copyProject, compareProjects, qlooRequestsIn } from './run-claude-code-live.mjs';
 
 const HOST_VARIABLES = /^(?:CLAUDECODE|CLAUDE_CODE_.*|CLAUDE_AGENT_SDK_.*|CLAUDE_PID|CLAUDE_EFFORT|CLAUDE_PREVIEW_.*|ANTHROPIC_.*|MOUSA_.*|QLOO_.*|KIRO_.*|CODEX_HOME)$/u;
 
@@ -161,9 +161,8 @@ async function main() {
     cleanup.push(await codexCommand(codex, ['plugin', 'remove', 'mousa@mousa'], env));
     cleanup.push(await codexCommand(codex, ['plugin', 'marketplace', 'remove', 'mousa'], env));
   }
-  const usage = JSON.parse(await fs.readFile(path.join(project, '.mousa', 'usage.json'), 'utf8').catch(() => '{}'));
   const summary = { startedAt: new Date(started).toISOString(), minutes: Number(((Date.now() - started) / 60000).toFixed(1)), exitCode: code, project,
-    ...(await summarize(path.join(folder, 'session.jsonl'))), qlooRequests: usage.qlooRequests ?? 0, budget,
+    ...(await summarize(path.join(folder, 'session.jsonl'))), qlooRequests: await qlooRequestsIn(project), budget,
     stage: JSON.parse(await fs.readFile(path.join(project, '.mousa', 'session.json'), 'utf8').catch(() => '{}')).stage || null,
     files: (await fs.readdir(project).catch(() => [])).filter(name => !name.startsWith('.')),
     captures: (await fs.readdir(path.join(project, '.mousa', 'captures')).catch(() => [])),

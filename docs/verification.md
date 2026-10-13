@@ -2,6 +2,49 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Live game comparisons in both hosts — October 13, 2026
+
+The game test as the Studio ran it: Ilo designed with Qloo and without it, from one frozen prediction. This time it ran through the plugins' `compare` skill, one session per host, both at the same time on copies of `examples/long-dusk`.
+- **Invoking the skill.** The skill is explicit-only: `/mousa:compare` on the Claude Code command line, and `$mousa:compare` in the Codex prompt. Codex names a plugin's skills with its namespace, so the Codex prompts of all four skills now say `$mousa:<skill>`.
+- **The request.** The Studio's brief (`scripts/briefs/long-dusk-compare-*.md`).
+- **Pictures.** On in Codex, as the person allowed for this run, and off in Claude Code. The game gained a place for one: an optional title-card portrait in the character file.
+- **The records.** They are in `D:/mousa-live/claude-code-long-dusk-compare-1/` and `D:/mousa-live/codex-long-dusk-compare-1/`, each with `compare/with-qloo` and `compare/without-qloo`.
+
+Built for it, before the runs (commit 83e507c):
+- **`design_compare({ prepare: true })`.** It copies the starter into both arms' folders, fonts included. Claude Code had no shell in these runs and cannot copy a binary file.
+- **A data distance for game arms.** It compares palettes, part ids and the words of the text, from the files the two arms changed differently. The website distance reads pages and stylesheets, which two game arms share unchanged, so it would have put them close to 0 apart.
+- **The play page.** It sets `window.captureReady` before its first await, so a capture waits for the portrait.
+- **The Claude Code launcher.** It passes a slash command on the command line before the flags, allows `Agent`, runs in `dontAsk` mode and keeps subagents in the foreground.
+
+What happened:
+- **Both hosts followed the skill's order.**
+  1. They prepared both folders.
+  2. They planned both arms with the same arguments.
+  3. They froze one prediction in both arms (`samePrediction: true`).
+  4. They locked the baseline arm before any measurement.
+  5. They measured once: 16 Qloo requests each.
+- **Claude Code** gave the arms to `mousa:mousa-baseline` and `mousa:mousa-designer`. The two subagents started six seconds apart and ran at the same time; the baseline took 8 minutes and the Qloo arm 10.5. The session took 11.9 minutes, at an API-equivalent $5.51 on the person's plan.
+  - **Qloo arm.** A grown lamplighter with a readable face and a half-smile, in a mended plum coat and a woven sash, with a felt cap bent back like a snuffed wick. Spare tapers ride on the back, and a rose-gold cup-lamp is held at the chest. The moment is drawn in watercolour, with petals and pagoda towers.
+    - The lines speak to Maren: "You have kept this road alone long enough."
+    - 9 of 9 devices rest on what the prediction did not contain.
+    - Round 2 met 5 of 6 criteria.
+  - **Baseline arm.** It stayed close to the frozen sketch: a small indigo hooded figure with a pale mask-like face and a tall hooked pole with an amber lantern, drawn in ink with snow.
+    - The lines are terse and mostly to themself.
+    - Round 2 met 2 criteria and partly met 3.
+    - Its mask face echoes Hollow Knight, which its own prediction named. The Qloo arm moved away from it.
+  - **Distance:** 0.526 (palette 0.192, part ids 0.84, words 0.75).
+  - **Shell calls.** The subagents tried the shell five times, to run the game's validator. Each was refused in `dontAsk` mode, and they validated through captures instead.
+- **Codex** built the baseline arm first, as the skill says, then measured and built the Qloo arm. The session took 6.8 minutes.
+  - **Qloo arm.** A round sage-banded cap, a terracotta apron coat with a mended pocket, a sage scarf in the cliff wind and an oval lamp, drawn in cel. 7 of 7 devices rest on surprises, and round 1 met all 3 criteria.
+  - **Baseline arm.** An indigo hood with a blunt peak and a brass lamp, drawn in ink. Its lamp merged with the legs in silhouette and was repaired in round 2.
+  - **Distance:** 0.566 (palette 0.157, part ids 0.98, words 0.81).
+  - **Pictures.** None. Codex's image tool was available to both arms, and neither plan chose a picture or the portrait slot. Each drew its imagery as the game's own render preset.
+- **Both hosts.**
+  - **Files.** Every arm wrote only its own `characters/ilo.json` inside its folder, and the starter outside the two folders is unchanged.
+  - **Checks and facts.** Every check scored 1.0, and every Ilo passes the game's validator and keeps the canon.
+
+Limits: one pair per host. The skill's own report says a single pair shows differences, not quality or preference; repeated pairs would be needed to isolate Qloo's effect.
+
 ## Live game character sessions in both hosts — October 13, 2026
 
 The Studio's game test ran through the packaged plugins, one session per host. Both sessions started at the same time, each on a copy of the new example, `examples/long-dusk`.

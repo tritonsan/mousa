@@ -64,6 +64,21 @@ export async function copyProject(from, to) {
   await fs.cp(source, to, { recursive: true, filter: file => file === source || !NOT_COPIED.test(path.basename(file)) });
 }
 
+/** The Qloo requests a session sent: the project's own count and each workspace's, such as a comparison's two arms. */
+export async function qlooRequestsIn(project) {
+  let total = 0;
+  async function visit(dir, depth) {
+    const usage = JSON.parse(await fs.readFile(path.join(dir, '.mousa', 'usage.json'), 'utf8').catch(() => '{}'));
+    total += Number.isInteger(usage.qlooRequests) ? usage.qlooRequests : 0;
+    if (depth >= 3) return;
+    for (const entry of await fs.readdir(dir, { withFileTypes: true }).catch(() => [])) {
+      if (entry.isDirectory() && !entry.name.startsWith('.') && !NOT_COMPARED.has(entry.name)) await visit(path.join(dir, entry.name), depth + 1);
+    }
+  }
+  await visit(project, 0);
+  return total;
+}
+
 /** The files a session added, changed and removed in a copied project. */
 export async function compareProjects(from, to) {
   async function list(root) {
@@ -170,9 +185,8 @@ async function main() {
   const code = await new Promise(resolve => child.on('close', resolve));
   await new Promise(resolve => stream.end(resolve));
   await new Promise(resolve => stderr.end(resolve));
-  const usage = JSON.parse(await fs.readFile(path.join(project, '.mousa', 'usage.json'), 'utf8').catch(() => '{}'));
   const summary = { startedAt: new Date(started).toISOString(), minutes: Number(((Date.now() - started) / 60000).toFixed(1)), exitCode: code, project,
-    ...(await summarize(path.join(folder, 'session.jsonl'))), qlooRequests: usage.qlooRequests ?? 0, budget,
+    ...(await summarize(path.join(folder, 'session.jsonl'))), qlooRequests: await qlooRequestsIn(project), budget,
     stage: JSON.parse(await fs.readFile(path.join(project, '.mousa', 'session.json'), 'utf8').catch(() => '{}')).stage || null,
     files: (await fs.readdir(project).catch(() => [])).filter(name => !name.startsWith('.')),
     ...(from ? { projectChanges: await compareProjects(from, project) } : {}),
