@@ -52,6 +52,52 @@ It offers three setup tools so far.
 
 Providers that take an API key can be added to the same list later.
 
+### Taste questions
+
+The taste tools tell the agent what to ask Qloo when it designs, so that knowledge lives in the plugin rather than in a host's prompt. Nine taste questions describe each request and the design layers its answer informs:
+- `world`: other works this audience loves.
+- `shared`: qualities their works have in common.
+- `pacing`: the pace of their films and TV.
+- `surfaces`: favoured surfaces and forms.
+- `tone`: emotional tone.
+- `difference`: what the agent did not predict.
+- `shortlist`: ranking given options.
+- `local`: places in a location.
+- `overlap`: what two audiences share.
+
+Each medium has a recipe of domains: `web`, `app-ui`, `brand`, `place`, `game`, `writing` and `generic`.
+
+The flow has four steps:
+1. **Plan.** `taste_profile({dryRun:true, medium, references, segments, location, ages, decisions})` plans with no request. It returns the questions for now and for later, the domains to measure, a request estimate, anything missing to ask the person, and the domains the prediction must cover.
+   - Brand and canon references become known names, never seeds.
+   - Audience descriptions such as "parents with young children" become Qloo audience segments.
+2. **Predict.** `design_validate({stage:'prediction', artifact})` freezes the agent's own prediction and design sketch before any data. The sketch's fonts must come from the library. The prediction is not rewritten; `restart:true` archives the session to `.mousa/history/` and starts a new one.
+3. **Measure.** `taste_profile()` makes at most 24 requests and keeps every answer in `.mousa/cache/qloo/` for a week. That folder carries its own `.gitignore`. It writes the profile, the evidence records and the taste input to `.mousa/taste/`, and returns the Taste Brief:
+   - qualities by family, with the works that carry them;
+   - pacing, surface and tone tags;
+   - works per domain;
+   - surprises and confirmed guesses;
+   - required anchors;
+   - cautions;
+   - a line per design layer.
+
+   The brief stays under 10 KiB. Five recorded Studio passes replayed through it gave about 5 KB each, against 51–62 KiB for the old taste input. A look quality carried mostly by brands is flagged as such.
+4. **Ask while designing.** `taste_ask` answers one question at a time. The agent writes its own guess first. `shortlist`, `local` and `overlap` make a few cached requests; the other questions are answered from the saved profile. Each answer is kept in `.mousa/taste/decisions.json`.
+
+`qloo_query` gives direct, cached access to search, tags, audiences and insights for anything else.
+
+The client now reads audiences:
+- `searchAudiences` calls `/v2/audiences`.
+- Insights take `audiences` and `audienceWeight`.
+- An Insights request needs at least one signal: works, tags, segments or a place.
+- `buildTasteProfile` takes `audiences`. A segment without named works is measured and reported as a broader signal.
+- The `tone` tag domain ranks emotional tones. It is used only by plugin recipes; Studio's defaults are unchanged.
+
+A live probe on 2026-10-13 (`scripts/verify-qloo-audiences-live.mjs`, 8 requests) found:
+- "Parents With Young Children" for the query "parent", and nothing for "remote".
+- Weighting films by that segment with Istanbul and ages 25–34 ranked *The Blue Elephant 2* first.
+- An emotional-tone ranking for Nujabes and Paterson returned Thoughtful, Introspective and Melancholic.
+
 ## Portable configuration
 
 `mcp.json` uses `${PLUGIN_ROOT}` for plugin-aware clients. For Kiro or another generic stdio MCP client, use its supported MCP configuration location and substitute the absolute extracted plugin path:

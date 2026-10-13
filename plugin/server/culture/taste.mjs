@@ -1,4 +1,4 @@
-import { QLOO_RESULT_TYPES, QLOO_AGE_BANDS } from '../qloo/client.mjs';
+import { QLOO_RESULT_TYPES, QLOO_AGE_BANDS, QLOO_AUDIENCE_WEIGHTS, AUDIENCE_ID } from '../qloo/client.mjs';
 
 export const TASTE_SCHEMA_VERSION = '1.0';
 /**
@@ -10,6 +10,9 @@ export const TASTE_SCHEMA_VERSION = '1.0';
 export const TASTE_TAG_DOMAINS = Object.freeze({
   style: Object.freeze({ tagTypes: Object.freeze(['urn:tag:style:qloo']), parentTypes: Object.freeze(['movie', 'tv_show']) }),
   aesthetic: Object.freeze({ tagTypes: Object.freeze(['urn:tag:aesthetic_property:qloo']) }),
+  // The emotional tone of what the audience likes, for voice: a live probe on 2026-10-13 returned Thoughtful,
+  // Introspective, Inspiring and Melancholic for the Gather seeds. Plugin plans ask for it; Studio's defaults do not.
+  tone: Object.freeze({ tagTypes: Object.freeze(['urn:tag:emotional_tone:qloo']) }),
 });
 export const TAG_DOMAINS = Object.freeze(Object.keys(TASTE_TAG_DOMAINS));
 // Qualities the host aggregates from the typed tags Qloo returns on the measured works; never requested on their own.
@@ -17,7 +20,7 @@ export const QUALITY_DOMAIN = 'qualities';
 // Art styles are aggregated the same way from the works' art_style tags, such as Pixel Art, Hand-drawn or Cel-Shaded.
 export const ART_STYLE_DOMAIN = 'art_style';
 export const TASTE_DOMAINS = Object.freeze(['brand', 'movie', 'artist', 'book', 'tv_show', 'videogame', 'podcast', 'place', 'destination', ...TAG_DOMAINS, QUALITY_DOMAIN, ART_STYLE_DOMAIN]);
-export const DEFAULT_TASTE_DOMAINS = Object.freeze(['brand', 'movie', 'artist', 'book', 'tv_show', ...TAG_DOMAINS, QUALITY_DOMAIN]);
+export const DEFAULT_TASTE_DOMAINS = Object.freeze(['brand', 'movie', 'artist', 'book', 'tv_show', 'style', 'aesthetic', QUALITY_DOMAIN]);
 /**
  * Qloo tag types grouped by what they describe, for design: look sets palette, type and imagery, mood sets motion and
  * voice, meaning sets voice and structure. The grouping is the host's; the tags, the works carrying them and their
@@ -427,10 +430,16 @@ function tasteArtStyles(works) {
  * With the qualities domain, the works' typed tags are kept by family and aggregated into qualities, and with the art
  * style domain their art_style tags into art styles; neither costs a request.
  */
-export async function buildTasteProfile({ client, references, domains = DEFAULT_TASTE_DOMAINS, location, age, deepCuts = true, perDomain = TASTE_LIMITS.perDomain,
+export async function buildTasteProfile({ client, references, domains = DEFAULT_TASTE_DOMAINS, location, age, audiences, audienceWeight, deepCuts = true, perDomain = TASTE_LIMITS.perDomain,
   maxCalls = TASTE_LIMITS.calls, concurrency = 2, rateLimitRetries = 2, retryDelayMs = 1500, knownNames = [], onEvidence, onCall } = {}) {
   if (!client || typeof client.searchEntities !== 'function' || typeof client.searchTags !== 'function' || typeof client.getInsights !== 'function') fail('client', 'A Qloo client with entity search, tag search and insights is required.');
-  const seedsInput = normalizeTasteReferences(references).slice(0, TASTE_LIMITS.references);
+  // Audience segments (URNs from an audience search) weight every request, and can stand in for named works: a
+  // profile from segments alone is broader, so it is reported as such.
+  const segments = audiences === undefined || audiences === null ? undefined : [...new Set(list(audiences, 'audiences', { min: 1, max: 3 }))];
+  if (segments?.some(id => typeof id !== 'string' || !AUDIENCE_ID.test(id))) fail('audiences', 'Use audience URNs such as urn:audience:life_stage:parents_with_young_children.');
+  if (audienceWeight !== undefined && (!segments || !(QLOO_AUDIENCE_WEIGHTS.includes(audienceWeight) || (typeof audienceWeight === 'number' && audienceWeight >= 0 && audienceWeight <= 100)))) fail('audienceWeight', `Use one of ${QLOO_AUDIENCE_WEIGHTS.join(', ')} with audiences.`);
+  const noReferences = references === undefined || references === null || (Array.isArray(references) && !references.length);
+  const seedsInput = noReferences && segments ? [] : normalizeTasteReferences(references).slice(0, TASTE_LIMITS.references);
   const domainList = normalizeTasteDomains(domains);
   const place = location === undefined || location === null || location === '' ? undefined : text(location, 'location', { max: 300 });
   // An age band weights the whole pass toward those ages, as a location does toward a place.
@@ -479,12 +488,13 @@ export async function buildTasteProfile({ client, references, domains = DEFAULT_
   const tagIds = [...new Set(seeds.filter(seed => seed.resolution === 'tag').map(seed => seed.tagId))].slice(0, 10);
   for (const seed of seeds) if (seed.resolution === 'unresolved') limitations.push(`"${seed.name}" was not resolved and did not contribute to the profile.${/^The closest match/u.test(seed.limitation || '') ? ` ${seed.limitation}` : ''}`);
   const base = { schemaVersion: TASTE_SCHEMA_VERSION, provider: 'Qloo', createdAt: new Date().toISOString(), domains: domainList, ...(place ? { location: place } : {}), ...(ages ? { age: ages } : {}),
-    seeds, interpretation: INTERPRETATION };
-  if (!entityIds.length && !tagIds.length) {
+    ...(segments ? { audiences: segments, ...(audienceWeight !== undefined ? { audienceWeight } : {}) } : {}), seeds, interpretation: INTERPRETATION };
+  if (!entityIds.length && !tagIds.length && !segments) {
     return { ...base, status: 'unresolved', calls, results: [], entities: [], signature: [],
       limitations: [...new Set([...limitations, 'No reference resolved to a Qloo entity or tag, so no taste profile was requested.'])].slice(0, 20) };
   }
-  const located = { ...(place ? { location: place } : {}), ...(ages ? { age: ages } : {}) };
+  if (!entityIds.length && !tagIds.length) limitations.push('Measured from audience segments without named works: a broader signal than the works an audience names.');
+  const located = { ...(place ? { location: place } : {}), ...(ages ? { age: ages } : {}), ...(segments ? { audiences: segments, ...(audienceWeight !== undefined ? { audienceWeight } : {}) } : {}) };
   const entitySeeds = entityIds.length ? { seedEntityIds: entityIds } : {}, tagSeeds = tagIds.length ? { seedTagIds: tagIds } : {};
   const signal = { ...entitySeeds, ...(entityIds.length ? { excludeEntityIds: entityIds } : {}), ...tagSeeds, ...located };
   // Tag requests rank qualities, so they exclude no seed. A live Echo Atlas probe ranked eight style tags for the game

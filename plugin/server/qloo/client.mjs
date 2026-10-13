@@ -15,6 +15,16 @@ export const QLOO_SEARCH_TYPES = Object.freeze([
 ]);
 // The age bands signal.demographics.age accepts, in the Insights API's OpenAPI definition: three broad, five narrow.
 export const QLOO_AGE_BANDS = Object.freeze(['35_and_younger', '36_to_55', '55_and_older', '24_and_younger', '25_to_29', '30_to_34', '35_to_44', '45_to_54']);
+/**
+ * Audience segments: /v2/audiences finds them by a partial name (a live probe on 2026-10-13 found "Parents With Young
+ * Children" for "parent" and nothing for "remote"), and Insights takes their URNs, such as
+ * urn:audience:life_stage:parents_with_young_children, in signal.demographics.audiences.
+ */
+export const QLOO_AUDIENCE_CATEGORIES = Object.freeze(['communities', 'global_issues', 'hobbies_and_interests', 'investing_interests', 'leisure', 'life_stage',
+  'lifestyle_preferences_beliefs', 'political_preferences', 'professional_area', 'spending_habits']);
+export const QLOO_AUDIENCE_WEIGHTS = Object.freeze(['very_low', 'low', 'mid', 'medium', 'high', 'very_high']);
+export const AUDIENCE_ID = /^urn:audience:[a-z0-9_]{1,60}(?::[a-z0-9_.-]{1,120})+$/u;
+const MAX_AUDIENCES = 3;
 
 export class QlooError extends Error {
   constructor(code, message, { status, retryable = false } = {}) {
@@ -85,10 +95,25 @@ function finite(value) {
   return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
 }
 
+function audiencesInput(value, weight) {
+  if (value === undefined) {
+    if (weight !== undefined) throw inputError('audienceWeight needs audiences.');
+    return {};
+  }
+  if (!Array.isArray(value) || value.length < 1 || value.length > MAX_AUDIENCES || value.some(id => typeof id !== 'string' || !AUDIENCE_ID.test(id))) {
+    throw inputError(`audiences must contain 1-${MAX_AUDIENCES} audience URNs such as urn:audience:life_stage:parents_with_young_children, found with an audience search.`);
+  }
+  if (weight !== undefined && !QLOO_AUDIENCE_WEIGHTS.includes(weight) && !(typeof weight === 'number' && Number.isFinite(weight) && weight >= 0 && weight <= 100)) {
+    throw inputError(`audienceWeight must be one of ${QLOO_AUDIENCE_WEIGHTS.join(', ')} or a number from 0 to 100.`);
+  }
+  return { audiences: [...new Set(value)], ...(weight !== undefined ? { weight } : {}) };
+}
+
 function resultRows(payload) {
   if (Array.isArray(payload?.results)) return payload.results;
   if (Array.isArray(payload?.results?.entities)) return payload.results.entities;
   if (Array.isArray(payload?.results?.tags)) return payload.results.tags;
+  if (Array.isArray(payload?.results?.audiences)) return payload.results.audiences;
   if (Array.isArray(payload?.entities)) return payload.entities;
   throw new QlooError('QLOO_RESPONSE_INVALID', 'Qloo returned an unrecognized response shape.');
 }
@@ -165,6 +190,12 @@ export class QlooClient {
         name: this.#text(tag.name, 180),
       })).filter(tag => tag.id && tag.name),
     };
+    // An audience segment is used by its URN, not by the entity ID that also identifies it.
+    if (typeof row.id === 'string' && AUDIENCE_ID.test(row.id)) {
+      result.audienceId = row.id;
+      const parents = (Array.isArray(row.parents) ? row.parents : []).map(parent => this.#text(parent?.name ?? parent?.id, 120)).filter(Boolean).slice(0, 4);
+      if (parents.length) result.parents = parents;
+    }
     const description = this.#text(properties.description ?? properties.short_description);
     if (description) result.description = description;
     const affinity = finite(row.query?.affinity) ?? finite(row.affinity);
@@ -285,9 +316,27 @@ export class QlooClient {
     });
   }
 
-  async getInsights({ seedEntityIds, seedTagIds, resultType, location, age, candidateEntityIds, excludeEntityIds, popularityMin, popularityMax, limit, explainability, tagTypes, parentTypes } = {}) {
-    const seeds = seedEntityIds === undefined && seedTagIds !== undefined ? undefined : idsInput(seedEntityIds, 'seedEntityIds', MAX_SEEDS);
+  /** Audience segments by a partial name and, optionally, their categories (life_stage, hobbies_and_interests, …). */
+  async searchAudiences({ query, categories, limit } = {}) {
+    const searchQuery = query === undefined ? undefined : textInput(query, 'query');
+    let parents;
+    if (categories !== undefined) {
+      if (!Array.isArray(categories) || categories.length < 1 || categories.length > 4 || categories.some(item => !QLOO_AUDIENCE_CATEGORIES.includes(String(item).replace(/^urn:audience:/u, '')))) {
+        throw inputError(`categories must contain 1-4 of: ${QLOO_AUDIENCE_CATEGORIES.join(', ')}.`);
+      }
+      parents = [...new Set(categories.map(item => `urn:audience:${String(item).replace(/^urn:audience:/u, '')}`))];
+    }
+    if (!searchQuery && !parents) throw inputError('Give a query, categories or both.');
+    const take = limitInput(limit);
+    return this.#request('/v2/audiences', { 'filter.query': searchQuery, 'filter.parents.types': parents?.join(','), take }, {
+      ...(searchQuery ? { text: searchQuery } : {}), ...(parents ? { categories: parents } : {}), limit: take,
+    });
+  }
+
+  async getInsights({ seedEntityIds, seedTagIds, resultType, location, age, audiences, audienceWeight, candidateEntityIds, excludeEntityIds, popularityMin, popularityMax, limit, explainability, tagTypes, parentTypes } = {}) {
+    const seeds = seedEntityIds === undefined ? undefined : idsInput(seedEntityIds, 'seedEntityIds', MAX_SEEDS);
     const tagSeeds = tagIdsInput(seedTagIds, 'seedTagIds', MAX_TAG_SEEDS, { optional: true });
+    const segment = audiencesInput(audiences, audienceWeight);
     const category = resultTypeInput(resultType);
     const candidates = idsInput(candidateEntityIds, 'candidateEntityIds', MAX_CANDIDATES, { optional: true });
     const excluded = idsInput(excludeEntityIds, 'excludeEntityIds', MAX_EXCLUDED, { optional: true });
@@ -335,9 +384,16 @@ export class QlooClient {
       ages = [...new Set(list)];
       parameters['signal.demographics.age'] = ages.join(',');
     }
+    if (segment.audiences) {
+      parameters['signal.demographics.audiences'] = segment.audiences.join(',');
+      if (segment.weight !== undefined) parameters['signal.demographics.audiences.weight'] = segment.weight;
+    }
+    // A request needs something to measure from: named works or tags, audience segments or a place.
+    if (!seeds && !tagSeeds && !segment.audiences && !local) throw inputError('Give at least one signal: seedEntityIds, seedTagIds, audiences or location.');
     return this.#request('/v2/insights', parameters, {
       ...(seeds ? { seedEntityIds: seeds } : {}), ...(tagSeeds ? { seedTagIds: tagSeeds } : {}), resultType: category,
       ...(local ? { location: local } : {}), ...(ages ? { age: ages } : {}),
+      ...(segment.audiences ? { audiences: segment.audiences, ...(segment.weight !== undefined ? { audienceWeight: segment.weight } : {}) } : {}),
       ...(explainability !== undefined ? { explainability } : {}),
       ...(candidates ? { candidateEntityIds: candidates } : {}),
       ...(excluded ? { excludeEntityIds: excluded } : {}),

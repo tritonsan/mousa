@@ -210,7 +210,9 @@ function testServer({ env = {}, dir, fetchImpl = qlooOk, browser = { available: 
     inspect: { browser: async () => browser, codex: async () => codex, fonts: async () => ({ families: new Array(33).fill({}) }) } });
 }
 
-test('the mousa surface starts lean: short instructions, three setup tools and the Codex folder capability', () => {
+const MOUSA_TOOL_NAMES = ['mousa_status', 'mousa_connect', 'mousa_open_project', 'taste_profile', 'design_validate', 'taste_ask', 'qloo_query'];
+
+test('the mousa surface stays lean: short instructions, few tools and the Codex folder capability', () => {
   assert.ok(MOUSA_INSTRUCTIONS.length <= MOUSA_INSTRUCTIONS_LIMIT, `instructions are ${MOUSA_INSTRUCTIONS.length} characters`);
   const server = createMousaServer({ env: {}, store: { read: async () => ({ qloo: null }) }, inspect: {} });
   const init = server.initialize({ protocolVersion: '2025-06-18' });
@@ -219,8 +221,8 @@ test('the mousa surface starts lean: short instructions, three setup tools and t
   assert.deepEqual(init.serverInfo, { name: 'mousa', version: '0.5.0' });
   assert.deepEqual(init.capabilities.experimental, { [CODEX_SANDBOX_META]: {} });
   assert.equal(init.instructions, MOUSA_INSTRUCTIONS);
-  assert.deepEqual(server.listTools().map(tool => tool.name), ['mousa_status', 'mousa_connect', 'mousa_open_project']);
-  for (const tool of MOUSA_SETUP_TOOLS) assert.ok(tool.description.length <= 2048);
+  assert.deepEqual(server.listTools().map(tool => tool.name), MOUSA_TOOL_NAMES);
+  for (const tool of [...MOUSA_SETUP_TOOLS, ...server.listTools()]) assert.ok(tool.description.length <= 2048, `${tool.name} description is too long for Claude Code`);
 });
 
 test('mousa_status says what is missing in the host\'s own words and makes no request unless asked', async () => {
@@ -317,7 +319,7 @@ test('the mousa entry speaks MCP over stdio and refuses tools before initializat
     assert.equal(messages.length, 5);
     assert.equal(messages[0].error.code, -32000);
     assert.equal(messages[1].result.serverInfo.name, 'mousa');
-    assert.deepEqual(messages[2].result.tools.map(tool => tool.name), ['mousa_status', 'mousa_connect', 'mousa_open_project']);
+    assert.deepEqual(messages[2].result.tools.map(tool => tool.name), MOUSA_TOOL_NAMES);
     const status = JSON.parse(messages[3].result.content[0].text);
     assert.equal(status.host, 'codex');
     assert.equal(status.qloo.connected, false);

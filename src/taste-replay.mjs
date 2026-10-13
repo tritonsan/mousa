@@ -3,7 +3,10 @@
 // derivations, such as the art styles a pair recorded before the art style domain existed. A request the pass did not
 // record is reported as missing, and its domain stays empty: nothing is invented.
 
-import { buildTasteProfile } from '../plugin/server/culture/taste.mjs';
+import { buildTasteProfile, TASTE_TAG_DOMAINS } from '../plugin/server/culture/taste.mjs';
+
+// A tag ranking is recorded under its taste domain (style, aesthetic, tone), found from the first tag type it asked for.
+const tagDomainOf = tagTypes => Object.entries(TASTE_TAG_DOMAINS).find(([, spec]) => spec.tagTypes[0] === tagTypes?.[0])?.[0] ?? 'aesthetic';
 
 /** A Qloo client that answers from recorded evidence; `missing` collects the requests it could not answer. */
 export function replayClient(evidence, missing = []) {
@@ -14,7 +17,7 @@ export function replayClient(evidence, missing = []) {
     async searchEntities({ query }) { const record = lookup('qloo_search_entities', query); if (!record) throw absent(`entity search "${query}"`); return answer(record); },
     async searchTags({ query }) { const record = lookup('qloo_search_tags', query); if (!record) throw absent(`tag search "${query}"`); return answer(record); },
     async getInsights(input) {
-      const domain = input.resultType === 'tag' ? (input.tagTypes?.[0] === 'urn:tag:style:qloo' ? 'style' : 'aesthetic') : input.resultType;
+      const domain = input.resultType === 'tag' ? tagDomainOf(input.tagTypes) : input.resultType;
       const band = input.popularityMax === undefined ? 'core' : 'deep-cut';
       const candidates = evidence.filter(record => record.tool === 'qloo_get_insights' && record.tastePass?.domain === domain && record.tastePass?.band === band);
       // A request sent with the entity seeds alone answers only its own kind of request.

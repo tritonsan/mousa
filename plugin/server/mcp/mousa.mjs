@@ -11,6 +11,9 @@ import { resolveProjectRoot, checkProjectFolder, ProjectScopeError, CODEX_SANDBO
 import { inspectImageProviders } from '../production/images.mjs';
 import { inspectBrowser, verifyBrowser } from '../production/capture.mjs';
 import { fontLibraryRoot, loadFontLibrary } from '../production/fonts.mjs';
+import { QlooError } from '../qloo/client.mjs';
+import { TasteProtocolError } from '../culture/taste.mjs';
+import { createTasteTools, TasteToolError } from '../taste/tools.mjs';
 
 export const MOUSA_SERVER_NAME = 'mousa';
 export const MOUSA_SERVER_VERSION = '0.5.0';
@@ -23,6 +26,7 @@ export const MOUSA_INSTRUCTIONS = [
   'Start every design session with mousa_status. It reports whether Qloo is connected, which project folder the tools use and what this session can make.',
   'If Qloo is not connected, call mousa_connect and give the person the link it returns: they enter their own Qloo API key on a page on this computer, so the key never passes through the chat.',
   'If no project folder is set, ask the person which folder to design in, then call mousa_open_project.',
+  'To measure an audience: taste_profile with dryRun:true plans the Qloo questions without a request; save your own prediction with design_validate (stage prediction) before any data; then taste_profile measures and returns the Taste Brief. While designing, ask taste_ask, writing your own guess first.',
   'Never invent Qloo results, entities or affinities. Report missing connections, unresolved names and empty results as they are.',
 ].join(' ');
 
@@ -106,7 +110,6 @@ export function createMousaServer({ env = process.env, platform = process.platfo
   const connections = store || createConnectionStore({ env, platform });
   const connectPage = page || createConnectionPage({ store: connections, ...(fetchImpl ? { fetchImpl } : {}) });
   const session = { root: null };
-  const tools = [...MOUSA_SETUP_TOOLS];
   let browser = null, images = null, fonts = null;
   const browserStatus = () => browser ||= (inspect.browser ? inspect.browser() : inspectBrowser({ env, platform }).then(found => verifyBrowser(found, { env })))
     .catch(() => ({ available: false, reason: 'The browser could not be checked on this machine.' }));
@@ -118,6 +121,8 @@ export function createMousaServer({ env = process.env, platform = process.platfo
     try { const { root, source } = await resolveProjectRoot({ env, meta, session }); return { folder: root, source }; }
     catch (error) { return { folder: null, problem: error instanceof ProjectScopeError ? error.message : 'The project folder could not be checked.' }; }
   }
+  const taste = createTasteTools({ env, connections, fetchImpl, fonts: fontStatus, project: async meta => (await resolveProjectRoot({ env, meta, session })).root });
+  const tools = [...MOUSA_SETUP_TOOLS, ...taste.definitions];
 
   async function status(args, meta) {
     const connection = await resolveQlooConnection({ env, store: connections });
@@ -161,9 +166,12 @@ export function createMousaServer({ env = process.env, platform = process.platfo
       if (name === 'mousa_status') return textResult(await status(args, meta));
       if (name === 'mousa_connect') return await connect();
       if (name === 'mousa_open_project') return await openProject(args, meta);
+      if (taste.names.includes(name)) return textResult(await taste.handle(name, args, meta));
       return errorResult('TOOL_UNKNOWN', 'This tool is not available in this session.');
     } catch (error) {
-      if (error instanceof ArgumentError || error instanceof ProjectScopeError || error instanceof ConnectionStoreError) return errorResult(error.code, error.message);
+      if (error instanceof ArgumentError || error instanceof ProjectScopeError || error instanceof ConnectionStoreError
+        || error instanceof TasteToolError || error instanceof TasteProtocolError) return errorResult(error.code, error.message);
+      if (error instanceof QlooError) return errorResult(error.code, error.message, error.retryable);
       return errorResult('TOOL_EXECUTION_FAILED', 'The tool could not complete. Call mousa_status to check the setup.');
     }
   }
