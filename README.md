@@ -251,6 +251,8 @@ codex plugin add mousa@mousa
 
 Each person uses their own Qloo API key. They can enter it in Claude Code's plugin settings or on Moûsa's local key page, `mousa_connect`, which never passes the key through the chat. `npm run build:plugins` rebuilds the packages, and a test fails when a committed package differs from what its sources build. See the [plugin README](plugin/README.md#packages).
 
+The plugins restyle existing projects in their own design systems: CSS custom properties, design token files and Tailwind themes. In live runs, Claude Code restyled the Ramble app (`examples/mobile-app`) through its design tokens, and Codex restyled a Vite and Tailwind CSS 4 site (`examples/tailwind-site`) through its `@theme` and its own build. Both kept every fact; see the [verification record](docs/verification.md#live-restyles-of-existing-projects--october-13-2026).
+
 The older standalone package follows.
 
 The Moûsa plugin in `plugin/` works independently and includes a Node STDIO MCP server using the Qloo key, a manifest, and a cultural design workflow. Its technical identifier remains `culture-grounded-design` for existing client connections. The cultural brief validation and compilation tools carry Studio JSON context between agents and label imported evidence as caller-provided, unverified data. See the [plugin README](plugin/README.md) for connection details and Kiro examples.

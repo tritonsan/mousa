@@ -2,6 +2,68 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Live restyles of existing projects — October 13, 2026
+
+Two sessions restyled copies of the repository's examples in their own design systems, with the packaged plugins. Both ran outside the repository: the launchers copy the project with `--from` and record which files changed. Both ran with `MOUSA_QLOO_BUDGET=24` and with pictures off (`MOUSA_IMAGES=off`), so no picture was made on the person's plan.
+
+**Ramble in Claude Code.** [`scripts/run-claude-code-live.mjs`](../scripts/run-claude-code-live.mjs) ran Claude Code 2.1.284 (claude-opus-5-5).
+- **The project.** A copy of `examples/mobile-app`, an app with design tokens.
+- **The request.** The one from the October 6 Kiro run ([`scripts/briefs/ramble.md`](../scripts/briefs/ramble.md)).
+- **The run.** It ended normally after 51 turns and 5.1 minutes. The record is in `D:/mousa-live/claude-code-ramble-1/`.
+
+What happened:
+- **Plan.** The app-ui recipe with the three references and no location, 9 domains. Port Calder is fictional, and the taste-brief skill now says a fictional place is not a location.
+- **Measurement.** 14 requests returned 69 works, and the prediction had named 5 of them.
+  - **Required anchors:** Intimate, Atmospheric, Love, Glass Beams, Gururi no koto and Forever.
+  - **One caution:** Minimalist is carried mostly by brands.
+- **Against the sketch.** The frozen sketch was warm cream with moss and terracotta, set in Fraunces, Cabin and Courier Prime, with drifting clouds. The DNA was valid at the first save, with 8 devices.
+  - **New:** five colours (linen grey, lamp black and one dusk blue), three families (Instrument Serif, Alegreya Sans and DM Mono) and four ids.
+  - **Kept from the sketch:** its contact-sheet idea, now anchored to Gururi no koto and Forever.
+- **In the system it has.**
+  - **Tokens.** The session changed the values of the tokens in `tokens/tokens.json` and `tokens/tokens.css` and kept every name. The two files still agree, and it added one token, `font.mono`.
+  - **Pages and styles.** It restyled `styles.css`. It added a drawing, a viewfinder and a contact sheet to `index.html`.
+  - **Script.** `app.js` gained a `reveal` argument for the stop's develop effect. Every id `app.js` uses, and every id of the original page, is still there.
+  - **Unchanged:** `data/walks.json`, `serve.mjs` and the README.
+- **Facts.** The copy takes its facts from the data, such as "4 routes of 40 to 70 minutes". The drawing of the city shows places the walks name: the canal, the bell tower, the glasshouse and the harbour light.
+- **Check and review.** The check scored 1.0 at the first run. Both reviews were audited, with 3 captures, all returned in the results.
+  - **Round 1:** 3 criteria met and 2 partly met. The mono filter chips wrapped onto two lines, and the reveal played on load, so the capture caught the stop blurred. Both were repaired.
+  - **Round 2:** all 5 met.
+- **Qloo in total:** 14 requests, within the budget of 24. Its one shell command was refused, because the run allowed no shell, and it made the change with Edit.
+
+**Lanterna in Codex.** [`scripts/run-codex-live.mjs`](../scripts/run-codex-live.mjs) ran Codex CLI 0.162.0-alpha.17.2.
+- **The project.** A copy of the new Tailwind example, `examples/tailwind-site`: a Vite 8 and Tailwind CSS 4.3 site of a fictional Lisbon cinema in a starter template's look.
+- **Before the session.** The launcher ran `npm ci` in the copy, because the sandbox has no network.
+- **The request.** [`scripts/briefs/lanterna.md`](../scripts/briefs/lanterna.md): people who love the films of Wong Kar-wai, the music of Cocteau Twins and the photographs of Saul Leiter.
+- **The run.** It ended normally after 3.6 minutes, and the plugin was removed afterwards. The record is in `D:/mousa-live/codex-lanterna-1/`.
+
+What happened:
+- **Measurement.** The web recipe, with no location. 14 requests returned 70 works, and the prediction had named 3 of them.
+  - **Required anchors:** Intimate, Character driven, Thoughtful, Shut Up and Play the Piano, The Path and Hope Sandoval & The Warm Inventions.
+  - **Cautions:** Eclectic, Minimalist and Clean Lines are carried mostly by brands.
+- **Against the sketch.** The sketch was a dark burgundy page with amber window art in Cormorant Garamond. The DNA has 6 devices:
+  - deep blue, ticket yellow, a pale blue and paper white;
+  - Instrument Serif and Libre Franklin;
+  - an abstract window of light drawn as inline SVG;
+  - a numbered programme.
+- **The theme.** It kept the theme's names, gave `brand` and `brand-dark` new values, and added `ticket`, `mist` and `paper`. It built with `npm run build` inside the sandbox and captured the build with `design_capture({ root: 'dist' })`.
+- **Facts.** `src/screenings.js` is unchanged. Every price, day, time and the address are kept, and the copy adds no fact.
+- **Review.** One round, 4 criteria met, audited.
+- **Qloo in total:** 14 requests, within the budget of 24.
+
+Findings from the Codex run, and what changed:
+- **The font check read paths literally.** The agent fetched the fonts into `public/fonts` and loaded them as `/fonts/…`, which is right for Vite. The check wanted the literal `fonts/<file>` and reported both families missing. Through four checks the agent moved the fonts to `fonts/`, then to `src/fonts/`, and read the plugin's source to find out why. Since fixed:
+  - **Matching.** The check matches the file name.
+  - **Paths.** The plugin follows each URL from the stylesheet that holds it. A URL from the site root reaches the project, `public/` and `static/`.
+  - **Reports.** A URL that reaches no file is reported with the path it tried.
+  - **Fetching.** `materials fetch` takes the `stylesheet` and writes the rules' URLs from it.
+- **The styling left Tailwind's classes.** The page passed the theme check through a few classes and `var(--color-…)`, but most of its styling became a stylesheet of new class names. Hand-written declarations went from 0 to 312, and class names from 195 to 54. Since fixed:
+  - **The record.** The prediction freeze now records how the project styles itself (`.mousa/design/start.json`).
+  - **The check.** `design_check` returns `style`. When a Tailwind project gains more than 40 hand-written declarations, it adds a note and a next step to move the styling back into the classes. Replayed on this run's files, the note fires.
+  - **The skill.** The design skill says to restyle a Tailwind project through its theme and classes.
+- **Files written from the shell.** The agent wrote `index.html`, `src/main.js` and `src/style.css` with PowerShell rather than `apply_patch`, so Moûsa's write gate could not see those writes. They came after the DNA was valid, so nothing early was written. The design skill now asks for the host's editing tools.
+
+Limits: one session per project, both on Windows. No Qloo off arm was run, and Claude Code's gate was again not exercised, because no write came early.
+
 ## Live Codex sessions with the packaged plugin — October 13, 2026
 
 [`scripts/run-codex-live.mjs`](../scripts/run-codex-live.mjs) ran the Claude Code session's brief in Codex (CLI 0.162.0-alpha.17.2, the default model).
