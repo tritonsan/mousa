@@ -71,6 +71,9 @@ test('a game plan designs in the game medium: no typography, tokens in the chara
     assert.equal(specified.status, 'valid', JSON.stringify(specified));
     assert.equal(specified.medium, 'game');
     assert.ok(specified.methods.motion.includes('source'));
+    // Both live game sessions first named the review page's own view; the refusal says where it goes.
+    const byPageView = await call('design_validate', { stage: 'plan', artifact: { ...plan, review: plan.review.map(item => ({ ...item, view: 'walk' })) } });
+    assert.match(byPageView.error.message, /Use a capture view: frame\. A view the page draws itself, such as a game's walk, is the capture's target/u);
     const planSaved = await call('design_validate', { stage: 'plan', artifact: plan });
     assert.equal(planSaved.status, 'valid', JSON.stringify(planSaved));
 

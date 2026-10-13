@@ -91,7 +91,8 @@ export function normalizeProductionPlan(raw, { dna, reading, capabilities } = {}
     criteria.add(id);
     const device = text(item.device, `${at}.device`, { max: 40 });
     if (!devices.has(device)) fail(`${at}.device`, `Use a device ID of the saved DNA: ${[...devices.keys()].join(', ')}.`);
-    if (item.view !== undefined && !views.has(item.view)) fail(`${at}.view`, views.size ? `Use a capture view: ${[...views].join(', ')}.` : 'This host captures no views.');
+    // Both live game sessions first named the game's own review views here; with one frame, those are capture targets.
+    if (item.view !== undefined && !views.has(item.view)) fail(`${at}.view`, views.size ? `Use a capture view: ${[...views].join(', ')}.${views.size === 1 ? ` A view the page draws itself, such as a game's walk, is the capture's target: name it in the look and use ${[...views][0]} here.` : ''}` : 'This host captures no views.');
     return { id, device, look: text(item.look, `${at}.look`, { min: 10, max: 300 }), ...(item.view !== undefined ? { view: item.view } : {}) };
   });
   const generators = {};

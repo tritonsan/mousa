@@ -2,6 +2,43 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Live game character sessions in both hosts — October 13, 2026
+
+The Studio's game test ran through the packaged plugins, one session per host. Both sessions started at the same time, each on a copy of the new example, `examples/long-dusk`.
+- **The example.** It is built from `game/` by `scripts/build-game-example.mjs`:
+  - the playable moment, with Ilo as the plain grey mannequin;
+  - the review page, which draws the view the URL fragment names;
+  - `FORMAT.md`, the game's format guide;
+  - the interface fonts.
+- **The request.** The Studio's brief, `scripts/briefs/long-dusk.md`: Hollow Knight, Spirited Away, Sigur Rós, Nujabes and Paterson.
+- **The conditions.** `MOUSA_QLOO_BUDGET=24`, and no pictures. The game tools of the Studio, such as painting the figure, are not part of the plugin.
+- **The records.** They are in `D:/mousa-live/claude-code-long-dusk-1/` and `D:/mousa-live/codex-long-dusk-1/`.
+
+Built for it, before the runs (commit 461c3e8):
+- **A game medium.** Palette, motion and voice are required. Typography is optional in the frozen sketch and in the DNA, because a game's type belongs to its interface. Before this, both would have had to name a font the character file has no field for.
+- **Medium choice.** A plan with the game recipe designs in the game medium, though the game is played in a page. Its check reads the character file and does not ask the interface's custom properties for the palette.
+- **Captures.** `design_capture` waits for `window.captureReady`, and a rejection fails the capture with the game's own message, such as "The name is a fixed fact". `target` goes into the URL fragment, so `capture.html#walk` draws the walk cycle.
+
+What happened:
+- **The same measurement in both hosts.** Each made 14 requests and got 60 works. The required anchors were Atmospheric, Melancholic, Love, RiME, It's Such a Beautiful Day and Elliott Smith, close to the Studio pairs of October 5 (Atmospheric, Melancholic, Love, RiME). The predictions had named 3 and 2 of the 60 works.
+- **The plans.** Both planned the game recipe with all five references as audience seeds and no location. Both froze a sketch with no font, made of part ids.
+- **Claude Code** (2.1.284, claude-opus-5-5): 8.4 minutes and 47 turns, at an API-equivalent $2.40.
+  - **The design.** A slight young lamplighter in a hand-knit moss cardigan, an oat knit cap with a bobbing pompom and a satchel with a notebook. Ilo carries a long brass lamplighter's pole with a peach lantern on its hook. The moment is drawn in ink, at a plum snow dusk with ruined towers.
+  - **The DNA.** 9 devices.
+  - **The review.** Round 1 met 2 criteria and partly met 2: the lantern swung too far and two coat tails read as extra legs; the ink preset lifted the dusk too pale. Round 2 met 3, and the dusk was still partly met.
+- **Codex** (0.162.0-alpha.17.2): 4.4 minutes.
+  - **The design.** Ilo in plum workcloth with a folded storm collar, a short apron with one pale repair, a flat wool cap and an enamel lamp. The moment is drawn in ink, with fireflies over a grey dusk.
+  - **The DNA.** 6 devices.
+  - **Validation.** Codex also checked the file with the game's own validator, through `node` and `src/format.js`.
+  - **The review.** One audited round, with all 4 criteria met.
+- **Both hosts.**
+  - **Files.** Each wrote only `characters/ilo.json`, which passes the game's strict validator. The engine, the world, the keeper and the pages are unchanged.
+  - **Check and captures.** The check scored 1.0, and every capture was a view of the review page by its target.
+  - **Facts.** The lines keep the canon: the bridge where the last lamplighter turned back, and the three cold winters.
+- **One snag in both.** Each first named the page's own views (pose, walk) as plan review views and was refused with "Use a capture view: frame." The refusal now says that such a view is the capture's target and belongs in the criterion's look, and `medium-game.md` says so too.
+
+Limits: one session per host; no Qloo off arm; no painted figure, since painting is a Studio game tool and pictures were off.
+
 ## Live restyles of existing projects — October 13, 2026
 
 Two sessions restyled copies of the repository's examples in their own design systems, with the packaged plugins. Both ran outside the repository: the launchers copy the project with `--from` and record which files changed. Both ran with `MOUSA_QLOO_BUDGET=24` and with pictures off (`MOUSA_IMAGES=off`), so no picture was made on the person's plan.

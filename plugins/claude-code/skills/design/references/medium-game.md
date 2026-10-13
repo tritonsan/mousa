@@ -38,4 +38,5 @@ design_capture({ entry: 'capture.html', target: 'walk' })
 - **When it is captured.** A page that draws after it loads sets `window.captureReady`, and the capture waits for it.
 - **An invalid file.** The game's validator stops the page, and the capture fails with its message, which names the field to fix. Fix it, save and capture again.
 - **Limits.** A round holds six captures, so choose the views your criteria judge, such as the figure at rest, a walk cycle and the moment in its scene.
+- **In the plan.** A review criterion's `view` is the medium's capture view, `frame`. Name the page's own view, such as the walk, in its `look`.
 - **Without a page.** A game a browser cannot open is reviewed on the specimen board, `design_capture({ specimen: true })`.
