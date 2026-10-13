@@ -7,7 +7,7 @@
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { htmlElementIds, designFingerprint, compareDesignFingerprints, normalizeTasteName, DNA_LAYERS } from '../culture/taste.mjs';
+import { htmlElementIds, designFingerprint, compareDesignFingerprints, normalizeTasteName, DNA_LAYERS, TasteProtocolError } from '../culture/taste.mjs';
 import { mediumProfile, listMedia } from '../production/media.mjs';
 import { normalizeTasteReading, applyReadingToDna } from '../production/reading.mjs';
 import { normalizeProductionPlan, generationAllowance } from '../production/plan.mjs';
@@ -17,7 +17,7 @@ import { serveDirectory, captureViews } from '../production/capture.mjs';
 import { buildImageBrief, buildImagePrompt, createCodexImageGenerator, IMAGE_ASPECTS, IMAGE_LIMITS } from '../production/images.mjs';
 import { pngSize, jpegSize, imagePalette, colorDistance, scalePng } from '../production/image-files.mjs';
 import { fontsForDna } from '../production/fonts.mjs';
-import { readState, writeState, resolveInProject, relativePath, readProjectFiles, STATE_DIR } from '../production/project-files.mjs';
+import { readState, writeState, resolveInProject, relativePath, readProjectFiles, STATE_DIR, WORKSPACE_FIELD } from '../production/project-files.mjs';
 import { tasteInputArgument } from '../production/tools.mjs';
 import { collectProjectFiles, detectDesignSystem, mergedPages, checkCssVariables } from './systems.mjs';
 import { buildSpecimen } from './specimen.mjs';
@@ -35,12 +35,12 @@ const STAGES = ['prediction', 'reading', 'dna', 'plan', 'review'];
 export const DESIGN_TOOLS = Object.freeze([
   {
     name: 'design_validate',
-    description: 'Validate and save one design stage; each stage is frozen once the next one rests on it. prediction: before any Qloo data, your own guess at what the audience loves in each planned domain and the design you would make from it (designSketch, library fonts); restart:true starts a new session. reading: 2-4 clusters of measured refs that belong together, each resting on a quality, the layers each carries, refs set aside with reasons, and how the medium carries them. dna: 5-10 concrete devices anchored to refs your reading kept, with literal tokens (hex colors, library fonts, CSS values, keyframes, SVG ids, element ids, copy, pictures); surprises must move it away from your sketch; the result lists the methods this session offers per layer. plan: one step per device with its method, the cluster it realizes and why, a count and fallback for generated pictures, and 2-6 review criteria. review: your verdict on each criterion from captures of this round. revise:true replaces a saved reading, DNA or plan and drops the stages after it.',
+    description: 'Validate and save one design stage; each stage is frozen once the next one rests on it. prediction: before any Qloo data, your own guess at what the audience loves in each planned domain and the design you would make from it (designSketch, library fonts); restart:true starts a new session. reading: 2-4 clusters of refs that belong together (name them as the Taste Brief lists them), each resting on a quality, the layers each carries, refs set aside with reasons, and how the medium carries them. dna: 5-10 concrete devices anchored to refs your reading kept, with literal tokens (hex colors, library fonts, CSS values, keyframes, SVG ids, element ids, copy, pictures); surprises must move it away from your sketch; the result lists the methods this session offers per layer. plan: one step per device with its method, the cluster it realizes and why, a count and fallback for generated pictures, and 2-6 review criteria. review: your verdict on each criterion from captures of this round. revise:true replaces a saved reading, DNA or plan and drops the stages after it.',
     inputSchema: { type: 'object', properties: {
       stage: { type: 'string', enum: STAGES },
       artifact: { type: 'object', description: 'The stage\'s artifact as JSON.' },
       medium: { type: 'string', enum: PRODUCTION_MEDIA, description: 'web (pages and stylesheets), app-ui (pages with a design token file) or generic (any source). Detected from the project when left out.' },
-      restart: { type: 'boolean' }, revise: { type: 'boolean' },
+      restart: { type: 'boolean' }, revise: { type: 'boolean' }, workspace: WORKSPACE_FIELD,
     }, required: ['stage', 'artifact'], additionalProperties: false },
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   },
@@ -49,7 +49,7 @@ export const DESIGN_TOOLS = Object.freeze([
     description: 'Check that every device of the saved DNA is really in the project: colors, fonts and their files, CSS values, keyframes with a reduced-motion fallback and a pause control for endless loops, SVG drawings, element ids, copy and pictures. In a project with CSS custom properties it also checks that each palette and typography value is held by a custom property the styles use through var(), and names it. Reads the project\'s pages, styles and scripts unless paths are given. Shows presence, not quality.',
     inputSchema: { type: 'object', properties: {
       paths: { type: 'array', minItems: 1, maxItems: 20, items: { type: 'string', minLength: 1, maxLength: 200 } },
-      medium: { type: 'string', enum: PRODUCTION_MEDIA },
+      medium: { type: 'string', enum: PRODUCTION_MEDIA }, workspace: WORKSPACE_FIELD,
     }, additionalProperties: false },
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
@@ -60,7 +60,7 @@ export const DESIGN_TOOLS = Object.freeze([
       specimen: { type: 'boolean' }, entry: { type: 'string', minLength: 1, maxLength: 200 },
       views: { type: 'array', minItems: 1, maxItems: 4, items: { type: 'string', minLength: 1, maxLength: 30 } },
       target: { type: 'string', minLength: 1, maxLength: 60 }, full: { type: 'boolean' },
-      round: { type: 'integer', minimum: 1, maximum: CAPTURE_LIMITS.rounds },
+      round: { type: 'integer', minimum: 1, maximum: CAPTURE_LIMITS.rounds }, workspace: WORKSPACE_FIELD,
     }, additionalProperties: false },
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   },
@@ -73,6 +73,7 @@ export const DESIGN_TOOLS = Object.freeze([
       subject: { type: 'string', minLength: 10, maxLength: 240, description: 'One sentence: what the picture shows, without naming any work, artist or brand.' },
       aspect: { type: 'string', enum: Object.keys(IMAGE_ASPECTS) },
       path: { type: 'string', minLength: 5, maxLength: 120, description: 'For register: the saved file, such as generated/dna5-1.png.' },
+      workspace: WORKSPACE_FIELD,
     }, required: ['action', 'device'], additionalProperties: false },
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true },
   },
@@ -83,13 +84,13 @@ export const DESIGN_TOOLS = Object.freeze([
       action: { type: 'string', enum: ['find', 'fetch'] },
       words: { type: 'array', maxItems: 8, items: { type: 'string', minLength: 2, maxLength: 40 } },
       fonts: { type: 'array', minItems: 1, maxItems: 4, items: { type: 'string', minLength: 1, maxLength: 60 } },
-      directory: { type: 'string', minLength: 1, maxLength: 80 },
+      directory: { type: 'string', minLength: 1, maxLength: 80 }, workspace: WORKSPACE_FIELD,
     }, required: ['action'], additionalProperties: false },
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
   {
     name: 'design_compare',
-    description: 'A heuristic distance between two designs in folders of the project, such as a design made with Qloo and one made without: palette, type classes, landmark sections and CSS features. One distance is not a quality or preference measure.',
+    description: 'A heuristic distance between two designs in folders of the project, such as a design made with Qloo and one made without: palette, type classes, landmark sections and CSS features. When the folders are design workspaces, it also reports where the taste of each came from, how many DNA devices rest on what the prediction did not contain, and whether both started from the same frozen prediction. One distance is not a quality or preference measure.',
     inputSchema: { type: 'object', properties: { a: { type: 'string', minLength: 1, maxLength: 200 }, b: { type: 'string', minLength: 1, maxLength: 200 } }, required: ['a', 'b'], additionalProperties: false },
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
@@ -105,6 +106,50 @@ function planDna(dna, profile) {
   const checked = profile.dnaForCheck(dna);
   return { devices: checked.devices.map((device, index) => ({ ...device, anchors: (dna.devices?.[index]?.anchors || []).filter(ref => typeof ref === 'string') })) };
 }
+// The marks the Taste Brief puts after a name: new (a surprise) or predicted.
+const BRIEF_MARK = / \((?:new|predicted)\)$/u;
+const REF_FIELDS = Object.freeze({ reading: [['clusters', 'refs'], ['setAside', 'ref']], dna: [['devices', 'anchors'], ['rejected', 'ref']] });
+
+/**
+ * The refs of a reading or DNA, which the agent may give as the Taste Brief names them. A name resolves to the one
+ * entity of the taste input that carries it, a measured one before the agent's own prediction of the same name; a name
+ * two measured entities share asks for the ref, and an unknown name is refused with where the names are listed.
+ */
+export function resolveTasteRefs(stage, artifact, input) {
+  let source = artifact;
+  if (typeof source === 'string') { try { source = JSON.parse(source); } catch { return artifact; } }
+  if (!source || typeof source !== 'object' || Array.isArray(source) || !REF_FIELDS[stage]) return artifact;
+  const entities = Array.isArray(input?.entities) ? input.entities : [];
+  const refs = new Set(entities.map(entity => entity.ref));
+  const byName = new Map();
+  for (const entity of entities) {
+    const key = normalizeTasteName(entity.name);
+    if (key) byName.set(key, [...(byName.get(key) || []), entity]);
+  }
+  const resolve = (value, at) => {
+    if (typeof value !== 'string') return value;
+    const given = value.trim();
+    if (refs.has(given)) return given;
+    const found = byName.get(normalizeTasteName(given.replace(BRIEF_MARK, ''))) || [];
+    const measured = found.filter(entity => entity.source === 'qloo');
+    const pool = [...new Map((measured.length ? measured : found).map(entity => [entity.ref, entity])).values()];
+    if (pool.length === 1) return pool[0].ref;
+    if (pool.length > 1) throw new TasteProtocolError(at, `${given} names ${pool.length} entries of the taste input: ${pool.slice(0, 4).map(entity => `${entity.ref} (${entity.domain})`).join(', ')}. Give the ref you mean.`);
+    throw new TasteProtocolError(at, `${given.slice(0, 80)} is not a name in this session's taste input. Use a name as the Taste Brief lists it, or a ref from ${STATE_DIR}/taste/input.json.`);
+  };
+  const copy = structuredClone(source);
+  for (const [list, field] of REF_FIELDS[stage]) {
+    if (!Array.isArray(copy[list])) continue;
+    copy[list].forEach((item, index) => {
+      if (!item || typeof item !== 'object') return;
+      const at = `${stage}.${list}[${index}].${field}`;
+      if (Array.isArray(item[field])) item[field] = item[field].map((value, position) => resolve(value, `${at}[${position}]`));
+      else if (item[field] !== undefined) item[field] = resolve(item[field], at);
+    });
+  }
+  return copy;
+}
+
 const stemMatch = (word, value) => {
   const a = normalizeTasteName(word), b = normalizeTasteName(value);
   return Boolean(a && b) && (b.split(' ').includes(a) || (a.length >= 5 && b.split(' ').some(part => part.length >= 5 && part.slice(0, 5) === a.slice(0, 5))));
@@ -141,17 +186,18 @@ export function createDesignTools(context) {
   }
 
   async function validate(args, meta) {
-    const root = await project(meta);
-    const input = await needed(root, 'taste/input', 'Measure the audience first: taste_profile with dryRun, design_validate for your prediction, then taste_profile.');
+    const root = await project(meta, args.workspace);
+    const input = await needed(root, 'taste/input', 'Measure the audience first: taste_profile with dryRun, design_validate for your prediction, then taste_profile (or taste_profile with baseline:true to design without Qloo).');
+    const nameOf = new Map((input.entities || []).map(entity => [entity.ref, entity.name]));
     if (args.stage === 'reading') {
       if ((await readState(root, 'design/dna')) && !args.revise) refuse('STAGE_FROZEN', 'Your Design DNA rests on this reading. To change it, call again with revise:true; the DNA and the plan after it are then removed.');
       const medium = await productionMedium(root, args.medium);
-      const reading = normalizeTasteReading(args.artifact, { input: tasteInputArgument(input), medium });
+      const reading = normalizeTasteReading(resolveTasteRefs('reading', args.artifact, input), { input: tasteInputArgument(input), medium });
       if (args.revise) await dropStages(root, ['dna', 'plan']);
       await writeState(root, 'design/reading', { medium, savedAt: stamp(), reading });
       await session(root, 'read');
       return { status: 'valid', stage: 'reading', medium, clusters: reading.clusters.map(cluster => ({ id: cluster.id, name: cluster.name, layers: cluster.layers })),
-        setAside: (reading.setAside || []).map(item => item.ref), next: 'Write the Design DNA from the refs your clusters keep, each device anchored to at least one of them, then design_validate with stage dna.' };
+        setAside: (reading.setAside || []).map(item => nameOf.get(item.ref) || item.ref), next: 'Write the Design DNA from the refs your clusters keep, each device anchored to at least one of them, then design_validate with stage dna.' };
     }
     if (args.stage === 'dna') {
       const record = await needed(root, 'design/reading', 'Save your reading first: design_validate with stage reading.');
@@ -161,7 +207,9 @@ export function createDesignTools(context) {
       const files = await collectProjectFiles(root);
       const existingIds = [...new Set(Object.entries(files).filter(([name]) => /\.html?$/iu.test(name)).flatMap(([, html]) => htmlElementIds(html)))];
       const library = await fonts();
-      const dna = profile.validateDna(applyReadingToDna(args.artifact, record.reading), { input: tasteInputArgument(input), sketch: prediction.designSketch, existingIds, ...(library ? { fonts: fontsForDna(library) } : {}) });
+      // No photo library on this surface: pictures come from the image tool, so a device lists only generated ones.
+      const dna = profile.validateDna(applyReadingToDna(resolveTasteRefs('dna', args.artifact, input), record.reading), { input: tasteInputArgument(input), sketch: prediction.designSketch, existingIds, library: [],
+        ...(library ? { fonts: fontsForDna(library) } : {}) });
       if (args.revise) await dropStages(root, ['plan']);
       await writeState(root, 'design/dna', { medium: profile.id, savedAt: stamp(), dna });
       await session(root, 'specified');
@@ -211,7 +259,7 @@ export function createDesignTools(context) {
   }
 
   async function check(args, meta) {
-    const root = await project(meta);
+    const root = await project(meta, args.workspace);
     const record = await needed(root, 'design/dna', 'Save the Design DNA first: design_validate with stage dna.');
     const files = args.paths ? await readProjectFiles(root, args.paths) : await collectProjectFiles(root);
     if (!Object.keys(files).length) refuse('PROJECT_EMPTY', 'The project has no pages, styles or scripts yet. Build the design, then check it.');
@@ -232,7 +280,7 @@ export function createDesignTools(context) {
   }
 
   async function captureResult(args, meta) {
-    const root = await project(meta);
+    const root = await project(meta, args.workspace);
     const found = await browser();
     if (!found.available) refuse('CAPTURE_UNAVAILABLE', `The result cannot be captured here: ${found.reason}`);
     const state = (await readState(root, 'captures')) || { captures: [] };
@@ -282,7 +330,7 @@ export function createDesignTools(context) {
   }
 
   async function picture(args, meta) {
-    const root = await project(meta);
+    const root = await project(meta, args.workspace);
     const dnaRecord = await needed(root, 'design/dna', 'Save the Design DNA first: pictures are made for its imagery devices.');
     const planRecord = await needed(root, 'design/plan', 'Save the production plan first: it says which devices get pictures and how many.');
     const records = (await readState(root, 'images'))?.images || [];
@@ -367,7 +415,7 @@ export function createDesignTools(context) {
         note: 'Category and character describe each typeface; they are not taste data. Name only these families in the DNA, and fetch the ones your plan uses.' };
     }
     if (!args.fonts?.length) refuse('TOOL_INPUT_INVALID', 'fetch needs fonts: the families to copy.');
-    const root = await project(meta);
+    const root = await project(meta, args.workspace);
     const planned = (await readState(root, 'design/plan'))?.plan?.uses?.materials?.fonts || null;
     const directory = relativePath(args.directory ?? 'fonts', { name: 'directory' });
     const chosen = [...new Set(args.fonts.map(name => name.trim()))].map(name => {
@@ -404,8 +452,31 @@ export function createDesignTools(context) {
       sets.push(files);
     }
     const [a, b] = sets.map(designFingerprint);
+    const arms = [];
+    for (const folder of folders) arms.push(await armRecord(root, folder));
+    const both = arms.every(Boolean);
+    const same = both && arms[0].prediction && arms[0].prediction === arms[1].prediction;
     return { status: 'compared', a: folders[0], b: folders[1], distance: compareDesignFingerprints(a, b),
-      limitation: 'A heuristic distance from palette, type classes, landmark sections and CSS features. Repeat the comparison under the same conditions before calling a difference the taste data\'s effect; it says nothing about quality.' };
+      ...(arms.some(Boolean) ? { arms: { a: arms[0]?.summary || null, b: arms[1]?.summary || null } } : {}),
+      ...(both ? { samePrediction: Boolean(same) } : {}),
+      limitation: `A heuristic distance from palette, type classes, landmark sections and CSS features.${both && !same ? ' The two designs did not start from the same frozen prediction, so their difference mixes the taste source with two different starting points.' : ''} Repeat the comparison under the same conditions before calling a difference the taste data's effect; it says nothing about quality.` };
+  }
+
+  /** What a design folder's own records say: where its taste came from, its frozen prediction and its DNA's anchors. */
+  async function armRecord(root, folder) {
+    const { file } = await resolveInProject(root, folder);
+    const real = await fs.realpath(file).catch(() => null);
+    if (!real) return null;
+    const [input, prediction, dnaRecord] = await Promise.all(['taste/input', 'taste/prediction', 'design/dna'].map(name => readState(real, name).catch(() => null)));
+    if (!input && !dnaRecord) return null;
+    const stats = dnaRecord?.dna?.stats;
+    const source = input?.source === 'qloo-profile' ? 'qloo' : input?.source === 'model-assumption' ? 'own prediction' : 'unknown';
+    return {
+      prediction: prediction ? JSON.stringify({ entries: (prediction.entries || []).map(entry => [entry.domain, normalizeTasteName(entry.name)]), sketch: prediction.designSketch || null }) : null,
+      summary: { taste: source, ...(stats ? { devices: stats.devices, layers: stats.layers, qualityAnchoredDevices: stats.qualityAnchoredDevices,
+        ...(source === 'qloo' ? { surpriseAnchoredDevices: stats.surpriseAnchoredDevices, headline: `${stats.surpriseAnchoredDevices} of ${stats.devices} devices rest on what the prediction did not contain.` } : {}),
+        ...(stats.sketchMoves ? { sketchMoves: stats.sketchMoves } : {}) } : {}) },
+    };
   }
 
   const names = DESIGN_TOOLS.map(tool => tool.name);

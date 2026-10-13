@@ -136,8 +136,11 @@ test('the taste flow plans without a request, freezes the prediction, measures o
     assert.deepEqual(brief.tags.tone, ['Thoughtful (new)', 'Introspective (new)', 'Melancholic (new)']);
     assert.deepEqual(brief.tags.pacing.slice(0, 1), ['Quiet (predicted)']);
     assert.ok(brief.worlds.films.length && brief.worlds['films (lesser known)'].length);
+    const perfectDays = brief.worlds.films.find(item => item.name === 'Perfect Days');
+    assert.deepEqual(perfectDays, { name: 'Perfect Days', predicted: true, tags: ['Atmospheric', 'Reflective', 'Routine'] }, 'a work shows its leading returned tags');
     assert.ok(brief.surprises.length && brief.confirmed.includes('Perfect Days'));
     assert.ok(brief.requiredAnchors.length >= 3);
+    assert.ok(brief.requiredAnchors.filter(anchor => !/quality|tag$/u.test(anchor.is)).every(anchor => anchor.tags?.length), 'a required work shows the tags a device may name');
     assert.ok(brief.cautions.some(line => /Minimalist is carried mostly by brands/u.test(line)));
     assert.ok(brief.cautions.some(line => /Studio Ghibli films/u.test(line)));
     assert.match(brief.layers.palette, /Atmospheric/u);

@@ -7,13 +7,13 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { QlooClient, QLOO_AGE_BANDS, QLOO_AUDIENCE_CATEGORIES, AUDIENCE_ID } from '../qloo/client.mjs';
-import { buildTasteProfile, normalizeTasteAssumption, tasteInputFromProfile, compactTasteInput, tasteNameMatch, normalizeTasteName, TasteProtocolError } from '../culture/taste.mjs';
+import { buildTasteProfile, normalizeTasteAssumption, tasteInputFromProfile, tasteInputFromAssumption, compactTasteInput, tasteNameMatch, normalizeTasteName, TasteProtocolError } from '../culture/taste.mjs';
 import { resolveQlooConnection } from '../connections/config.mjs';
-import { readState, writeState, STATE_DIR } from '../production/project-files.mjs';
+import { readState, writeState, STATE_DIR, WORKSPACE_FIELD } from '../production/project-files.mjs';
 import { fontsForDna } from '../production/fonts.mjs';
 import { planTaste, MEDIA, TASTE_QUESTIONS } from './questions.mjs';
 import { createCachingClient } from './cache.mjs';
-import { buildTasteBrief } from './brief.mjs';
+import { buildTasteBrief, buildBaselineBrief } from './brief.mjs';
 
 const ENTITY_KINDS = Object.freeze(['artist', 'book', 'brand', 'destination', 'movie', 'person', 'place', 'podcast', 'tv_show', 'videogame']);
 const QUESTION_IDS = Object.freeze(TASTE_QUESTIONS.map(question => question.id));
@@ -27,7 +27,7 @@ const NAMES = (min, max, description) => ({ type: 'array', minItems: min, maxIte
 export const TASTE_TOOLS = Object.freeze([
   {
     name: 'taste_profile',
-    description: 'Measure what an audience loves with Qloo. First call it with dryRun:true and the brief\'s audience: it returns, with no request, the taste questions for this medium, the domains to measure, a request estimate, anything missing to ask the person, and the domains your prediction must cover. Then save your prediction with design_validate (stage prediction). Then call it again without dryRun: it measures (at most 24 requests, cached for a week), saves the full profile in .mousa/taste/ and returns the Taste Brief: shared qualities, pacing, surface and tone tags, works per domain, what you did not predict, required anchors, cautions and where each design layer should look.',
+    description: 'Measure what an audience loves with Qloo. First call it with dryRun:true and the brief\'s audience: it returns, with no request, the taste questions for this medium, the domains to measure, a request estimate, anything missing to ask the person, and the domains your prediction must cover. Then save your prediction with design_validate (stage prediction). Then call it again without dryRun: it measures (at most 24 requests, cached for a week), saves the full profile in .mousa/taste/ and returns the Taste Brief: shared qualities, pacing, surface and tone tags, works per domain, what you did not predict, required anchors, cautions and where each design layer should look. With baseline:true instead, it designs without Qloo: your prediction becomes the taste input, with no request.',
     inputSchema: { type: 'object', properties: {
       dryRun: { type: 'boolean', description: 'Plan only: no request, nothing measured.' },
       medium: { type: 'string', enum: MEDIA, description: 'What is being designed: web, app-ui, brand, place (a café, shop or hotel), game, writing or generic.' },
@@ -38,6 +38,8 @@ export const TASTE_TOOLS = Object.freeze([
       decisions: NAMES(1, 8, 'The layers or choices this design must settle, such as palette, motion, voice or music.'),
       deepCuts: { type: 'boolean', description: 'Also measure lesser-known brands and films (default true).' },
       refresh: { type: 'boolean', description: 'Ignore cached Qloo answers.' },
+      baseline: { type: 'boolean', description: 'Design without Qloo: after your prediction, take it as the taste input, with no request. For the baseline arm of a comparison, or when the person declines Qloo.' },
+      workspace: WORKSPACE_FIELD,
     }, additionalProperties: false },
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true },
   },
@@ -52,6 +54,7 @@ export const TASTE_TOOLS = Object.freeze([
       kind: { type: 'string', enum: ENTITY_KINDS, description: 'For shortlist: what the candidates are; for overlap: the domain compared.' },
       place: { type: 'string', minLength: 2, maxLength: 120, description: 'For local: defaults to the brief\'s location.' },
       otherReferences: NAMES(1, 5, 'For overlap: what the other audience loves.'),
+      workspace: WORKSPACE_FIELD,
     }, required: ['question', 'decision'], additionalProperties: false },
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true },
   },
@@ -74,6 +77,7 @@ export const TASTE_TOOLS = Object.freeze([
       candidateEntityIds: { type: 'array', minItems: 1, maxItems: 50, items: { type: 'string', minLength: 1, maxLength: 160 } },
       popularityMax: { type: 'number', minimum: 0, maximum: 1 },
       limit: { type: 'integer', minimum: 1, maximum: 20 },
+      workspace: WORKSPACE_FIELD,
     }, required: ['kind'], additionalProperties: false },
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true },
   },
@@ -120,7 +124,7 @@ export function createTasteTools(context) {
   const session = (root, stage) => writeState(root, 'session', { plugin: 'mousa', stage, updatedAt: new Date(now()).toISOString() });
 
   async function plan(args, meta) {
-    const root = await project(meta);
+    const root = await project(meta, args.workspace);
     const planned = planTaste({ medium: args.medium, references: args.references, segments: args.segments, location: args.location, ages: args.ages, decisions: args.decisions, deepCuts: args.deepCuts ?? true });
     const prediction = await readState(root, 'taste/prediction');
     if (prediction && prediction.domains.join() !== planned.domains.join()) {
@@ -135,7 +139,7 @@ export function createTasteTools(context) {
   }
 
   async function validatePrediction(args, meta) {
-    const root = await project(meta);
+    const root = await project(meta, args.workspace);
     const planned = await readState(root, 'taste/plan');
     if (!planned) refuse('PLAN_MISSING', 'Plan first: call taste_profile with dryRun:true and the brief\'s audience.');
     const existing = await readState(root, 'taste/prediction');
@@ -162,13 +166,35 @@ export function createTasteTools(context) {
     return `${STATE_DIR}/history/${stamp}`;
   }
 
+  /** A session without Qloo keeps its own prediction as the taste input, so no taste question has a measured answer. */
+  const BASELINE = 'This session designs from your own prediction without Qloo, so it makes no Qloo request. Decide from your prediction, and say that no measured taste was used.';
+  const isBaseline = async root => (await readState(root, 'taste/input'))?.source === 'model-assumption';
+
+  /** The design session without Qloo: the frozen prediction becomes the taste input, with no request. */
+  async function baseline(args, meta) {
+    const root = await project(meta, args.workspace);
+    const planned = await readState(root, 'taste/plan');
+    if (!planned) refuse('PLAN_MISSING', 'Plan first: call taste_profile with dryRun:true and the brief\'s audience.');
+    const prediction = await readState(root, 'taste/prediction');
+    if (!prediction) refuse('PREDICTION_MISSING', `Save your own prediction first: design_validate({stage:"prediction", artifact}) for ${planned.domains.join(', ')}.`);
+    if ((await readState(root, 'taste/input'))?.source === 'qloo-profile') refuse('SESSION_MEASURED', 'This session already measured the audience with Qloo. Design without Qloo in a workspace of its own, or start a new session: design_validate with stage prediction and restart:true.');
+    const input = tasteInputFromAssumption(prediction, { medium: planned.ownMedium || [] });
+    await writeState(root, 'taste/input', compactTasteInput(input));
+    const brief = buildBaselineBrief({ plan: planned, input, files: { tasteInput: `${STATE_DIR}/taste/input.json` } });
+    await writeState(root, 'taste/brief', brief);
+    await session(root, 'baseline');
+    return { ...brief, next: 'Design from your own prediction through the same stages: design_validate the reading, the DNA and the plan, build, design_check, then design_capture and review. Say that no measured taste was used.' };
+  }
+
   async function measure(args, meta) {
-    const root = await project(meta);
+    if (args.baseline) return baseline(args, meta);
+    const root = await project(meta, args.workspace);
     const planned = await readState(root, 'taste/plan');
     if (!planned) refuse('PLAN_MISSING', 'Plan first: call taste_profile with dryRun:true and the brief\'s audience.');
     if (planned.missing.some(item => item.field === 'audience')) refuse('AUDIENCE_MISSING', `The plan has no audience yet. ${planned.missing[0].ask}`);
     const prediction = await readState(root, 'taste/prediction');
     if (!prediction) refuse('PREDICTION_MISSING', `Save your own prediction first: design_validate({stage:"prediction", artifact}) for ${planned.domains.join(', ')}.`);
+    if (await isBaseline(root)) refuse('BASELINE_SESSION', `${BASELINE} To measure, use a workspace of its own, or start a new session: design_validate with stage prediction and restart:true.`);
     const client = await qlooClient(root, { refresh: args.refresh === true });
     // Audience descriptions become Qloo segments by name; one that matches none is reported, never replaced.
     const segments = [];
@@ -230,7 +256,8 @@ export function createTasteTools(context) {
   }
 
   async function ask(args, meta) {
-    const root = await project(meta);
+    const root = await project(meta, args.workspace);
+    if (await isBaseline(root)) refuse('BASELINE_SESSION', BASELINE);
     const brief = await readState(root, 'taste/brief'), profile = await readState(root, 'taste/profile');
     if (!brief || !profile) refuse('PROFILE_MISSING', 'Measure the audience first: taste_profile with dryRun, then design_validate for your prediction, then taste_profile.');
     let answer, client = null;
@@ -289,7 +316,8 @@ export function createTasteTools(context) {
 
   async function query(args, meta) {
     let root = null;
-    try { root = await project(meta); } catch { /* Without a project folder, answers are not cached. */ }
+    try { root = await project(meta, args.workspace); } catch { /* Without a project folder, answers are not cached. */ }
+    if (root && await isBaseline(root)) refuse('BASELINE_SESSION', BASELINE);
     const client = await qlooClient(root);
     let result;
     if (args.kind === 'search') {

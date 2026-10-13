@@ -96,6 +96,21 @@ export async function resolveInProject(root, relative, options) {
   return { relative: clean, file: target };
 }
 
+/** The tool field naming a design workspace; see workspaceRoot. */
+export const WORKSPACE_FIELD = Object.freeze({ type: 'string', minLength: 1, maxLength: 120,
+  description: 'A folder inside the project that holds this design and its own .mousa records, such as compare/with-qloo. Default: the project folder.' });
+
+/**
+ * The folder a design lives in: the project folder, or a workspace inside it with its own .mousa records, such as one
+ * arm of a comparison or one app of a monorepo. A workspace is created when it is first named.
+ */
+export async function workspaceRoot(root, workspace) {
+  if (workspace === undefined || workspace === null) return root;
+  const { file } = await resolveInProject(root, workspace, { name: 'workspace' });
+  await fs.mkdir(file, { recursive: true });
+  return fs.realpath(file);
+}
+
 /** Text files of the project by relative path, as the conformance checks read them. */
 export async function readProjectFiles(root, paths) {
   if (!Array.isArray(paths) || !paths.length || paths.length > PROJECT_LIMITS.files) throw new ProjectScopeError(`paths: name 1-${PROJECT_LIMITS.files} text files of the project.`);

@@ -6,23 +6,13 @@ import { mkdtemp, rm, readFile, writeFile, mkdir } from 'node:fs/promises';
 import { checkDnaConformance } from '../plugin/server/culture/taste.mjs';
 import { detectDesignSystem, checkCssVariables, mergedPages, collectProjectFiles } from '../plugin/server/design/systems.mjs';
 import { buildSpecimen, keyframesRules } from '../plugin/server/design/specimen.mjs';
-import { encodePng, pngSize, scalePng, colorDistance } from '../plugin/server/production/image-files.mjs';
+import { pngSize, scalePng, colorDistance } from '../plugin/server/production/image-files.mjs';
 import { inspectBrowser, verifyBrowser, serveDirectory, captureViews } from '../plugin/server/production/capture.mjs';
 import { loadFontLibrary, fontLibraryRoot } from '../plugin/server/production/fonts.mjs';
 import { createMousaServer } from '../plugin/server/mcp/mousa.mjs';
 import { createConnectionStore, plainProtector } from '../plugin/server/connections/store.mjs';
-import { qlooFixture, prediction, parse, exists } from './helpers/mousa-fixtures.mjs';
+import { qlooFixture, prediction, parse, exists, png, designFor, siteFiles } from './helpers/mousa-fixtures.mjs';
 
-/** A solid PNG of one colour, or of two side by side. */
-function png(width, height, colors) {
-  const rgba = Buffer.alloc(width * height * 4);
-  for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
-    const hex = colors[Math.min(colors.length - 1, Math.floor((x / width) * colors.length))].replace('#', '');
-    const at = (y * width + x) * 4;
-    rgba[at] = Number.parseInt(hex.slice(0, 2), 16); rgba[at + 1] = Number.parseInt(hex.slice(2, 4), 16); rgba[at + 2] = Number.parseInt(hex.slice(4, 6), 16); rgba[at + 3] = 255;
-  }
-  return encodePng(width, height, rgba);
-}
 const device = (id, layer, tokens) => ({ id, layer, device: `${layer} device`, tokens: { colors: [], fonts: [], css: [], ids: [], copy: [], images: [], keyframes: [], svg: [], ...tokens } });
 
 test('the design system is read from the project: custom properties, tokens, components and Tailwind', () => {
@@ -125,51 +115,6 @@ test('captures for a model are scaled to fit, and colours are compared in CIE La
   assert.ok(colorDistance('#3e5c6b', '#3e5c6b') < 0.001);
   assert.ok(colorDistance('#3e5c6b', '#f3ead8') > 50);
 });
-
-/** A web DNA for the fixture profile: anchored to the reading's refs, departing from the frozen sketch. */
-function designFor(input) {
-  const by = predicate => input.entities.find(entity => entity.source === 'qloo' && predicate(entity));
-  const quality = family => by(entity => entity.domain === 'qualities' && entity.family === family && entity.required) || by(entity => entity.domain === 'qualities' && entity.family === family);
-  const look = quality('look'), mood = quality('mood'), meaning = quality('meaning');
-  const style = by(entity => entity.domain === 'style' && entity.surprise) || by(entity => entity.domain === 'style');
-  const aesthetic = by(entity => entity.domain === 'aesthetic');
-  const tone = by(entity => entity.domain === 'tone' && entity.surprise) || by(entity => entity.domain === 'tone');
-  const works = input.requiredAnchors.filter(anchor => anchor.domain !== 'qualities').map(anchor => input.entities.find(entity => entity.ref === anchor.ref));
-  const tagsOf = entity => entity?.tags?.length ? [entity.tags[0]] : [];
-  const reading = { schemaVersion: '1.0', clusters: [
-    { id: 'c1', name: 'Misty look', refs: [look.ref, style.ref, aesthetic.ref, works[0].ref], layers: ['palette', 'motion', 'imagery'], reading: 'What they love is hazy, slow and sculpted, seen through soft weather.' },
-    { id: 'c2', name: 'Quiet voice', refs: [mood.ref, tone.ref, works[1].ref], layers: ['typography', 'voice'], reading: 'They listen for thoughtful, reflective voices that leave room between lines.' },
-    { id: 'c3', name: 'Small routines', refs: [meaning.ref, works[2].ref], layers: ['structure'], reading: 'Their stories are about routine and who you become in it.' },
-  ], setAside: [], approach: 'The site carries the misty look in palette, motion and drawing, the quiet voice in type and copy, and routine in a weekly structure.' };
-  const dna = { schemaVersion: '1.0', thesis: 'A misty hillside pantry that moves slowly and speaks quietly.', devices: [
-    { id: 'dna1', layer: 'palette', device: 'Mist and sea-glass palette', anchors: [look.ref, works[0].ref], qualities: [look.name, ...tagsOf(works[0])], translation: 'Atmospheric works become cool, hazy colours.', tokens: { colors: ['#3e5c6b', '#8fb0a9'] } },
-    { id: 'dna2', layer: 'typography', device: 'Calm geometric type', anchors: [mood.ref], qualities: [mood.name], translation: 'A reflective mood becomes an even, open sans.', tokens: { fonts: ['Jost'] } },
-    { id: 'dna3', layer: 'motion', device: 'Slow mist drift', anchors: [style.ref], qualities: [style.name], translation: 'Pensive pacing becomes a forty-second drift with no overshoot.', tokens: { keyframes: ['mist-drift'], css: [{ property: 'animation', value: 'mist-drift 40s ease-in-out infinite' }] } },
-    { id: 'dna4', layer: 'imagery', device: 'Sculpted terrace drawing', anchors: [aesthetic.ref], qualities: [aesthetic.name], translation: 'Sculptural forms become stepped terraces drawn in line.', tokens: { svg: ['terrace'], ids: ['terrace-figure'], images: ['generated/dna4-1.png'] } },
-    { id: 'dna5', layer: 'voice', device: 'Short lines with room between them', anchors: [tone.ref, works[1].ref], qualities: [tone.name, ...tagsOf(works[1])], translation: 'A thoughtful tone becomes short sentences with pauses.', tokens: { copy: ['The street turns blue at six.', 'Take your time with the shelf.'] } },
-    { id: 'dna6', layer: 'structure', device: 'A week of small things', anchors: [meaning.ref, works[2].ref], qualities: [meaning.name, ...tagsOf(works[2])], translation: 'Routine becomes a strip of seven days.', tokens: { ids: ['week-strip'] } },
-  ], rejected: [] };
-  const plan = { schemaVersion: '1.0', steps: [
-    { device: 'dna1', method: 'css-palette', cluster: 'c1', why: 'Two custom properties carry the palette everywhere.' },
-    { device: 'dna2', method: 'library-font', cluster: 'c2', why: 'Jost loads from the library, so every visitor sees it.' },
-    { device: 'dna3', method: 'css-motion', cluster: 'c1', why: 'A keyframed drift with a pause control and a reduced-motion fallback.' },
-    { device: 'dna4', method: 'generated-image', cluster: 'c1', why: 'A picture of the terrace in the palette, with the drawing as its fallback.', count: 2, fallback: 'inline-svg' },
-    { device: 'dna5', method: 'copy', cluster: 'c2', why: 'The voice lives in the words themselves.' },
-    { device: 'dna6', method: 'css-layout', cluster: 'c3', why: 'Seven day cards in one row.' },
-  ], review: [
-    { id: 'r1', device: 'dna1', look: 'The first screen shows the mist palette, not white.', view: 'desktop' },
-    { id: 'r2', device: 'dna5', look: 'The headline reads as one short line at phone width.', view: 'mobile' },
-  ] };
-  return { reading, dna, plan };
-}
-
-function siteFiles(fontFace) {
-  const art = `<svg id="terrace" viewBox="0 0 80 40" aria-hidden="true">${[0, 10, 20, 30, 40, 50, 60, 70].map(x => `<rect x="${x}" y="${40 - x / 2}" width="10" height="${x / 2}"/>`).join('')}</svg>`;
-  return {
-    'index.html': `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Pantry</title><link rel="stylesheet" href="styles.css"></head><body><main><h1>The street turns blue at six.</h1><p>Take your time with the shelf.</p><figure id="terrace-figure">${art}<img src="generated/dna4-1.png" alt="A terrace"></figure><section id="week-strip"><ol><li>Mon</li></ol></section><button type="button" data-motion-toggle aria-pressed="false">Pause</button><div class="drift"></div></main></body></html>`,
-    'styles.css': `${fontFace.join('\n')}\n:root{--mist:#3e5c6b;--glass:#8fb0a9;--text-font:'Jost',sans-serif}body{color:var(--mist);background:var(--glass);font-family:var(--text-font)}#week-strip ol{display:flex}@keyframes mist-drift{from{transform:translateX(0)}to{transform:translateX(12px)}}.drift{animation:mist-drift 40s ease-in-out infinite}@media (prefers-reduced-motion: reduce){.drift{animation:none}}`,
-  };
-}
 
 test('the design stages run end to end: reading, DNA, plan, fonts, pictures, check, captures and review', async () => {
   const project = await mkdtemp(path.join(os.tmpdir(), 'mousa-design-'));

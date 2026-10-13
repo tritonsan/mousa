@@ -7,7 +7,7 @@
 import { createConnectionStore, ConnectionStoreError } from '../connections/store.mjs';
 import { resolveQlooConnection, hostName, testQlooKey } from '../connections/config.mjs';
 import { createConnectionPage } from '../connections/page.mjs';
-import { resolveProjectRoot, checkProjectFolder, readState, ProjectScopeError, CODEX_SANDBOX_META } from '../production/project-files.mjs';
+import { resolveProjectRoot, checkProjectFolder, readState, workspaceRoot, WORKSPACE_FIELD, ProjectScopeError, CODEX_SANDBOX_META } from '../production/project-files.mjs';
 import { inspectImageProviders } from '../production/images.mjs';
 import { inspectBrowser, verifyBrowser } from '../production/capture.mjs';
 import { fontLibraryRoot, loadFontLibrary } from '../production/fonts.mjs';
@@ -38,7 +38,7 @@ export const MOUSA_SETUP_TOOLS = Object.freeze([
   {
     name: 'mousa_status',
     description: 'Start here. Reports whether Qloo is connected and from where, the project folder the tools use, which image generators this session can use, whether results can be captured for review, and a one-line fix for anything missing. Makes no network request unless check is true, which tests the Qloo key with one request.',
-    inputSchema: { type: 'object', properties: { check: { type: 'boolean', description: 'Also test the Qloo key with one search request.' } }, additionalProperties: false },
+    inputSchema: { type: 'object', properties: { check: { type: 'boolean', description: 'Also test the Qloo key with one search request.' }, workspace: WORKSPACE_FIELD }, additionalProperties: false },
     annotations: { ...READ_ONLY, openWorldHint: true },
   },
   {
@@ -59,6 +59,23 @@ export const MOUSA_SETUP_TOOLS = Object.freeze([
 export function textResult(value) { return { content: [{ type: 'text', text: JSON.stringify(value) }] }; }
 export function errorResult(code, message, retryable = false) {
   return { content: [{ type: 'text', text: JSON.stringify({ status: 'error', error: { code, message, retryable } }) }], isError: true };
+}
+
+// The validators this surface shares with Studio name Studio's files and tools; here their messages name this
+// surface's own: the Taste Brief, the materials tool and pictures made with the image tool.
+const HOST_TERMS = [
+  [/Use a photo ID or path listed in culture-library\.json, such as library\/olive-oil-1\.jpg, or a picture generated for this device, such as (generated\/[a-z0-9_-]+\.png)\./gu,
+    'List only pictures made for this device with the image tool, such as $1.'],
+  [/This run has no host photo library, so a device cannot list photos\. Use original SVG or CSS imagery instead\./gu,
+    'This session has no photo library: list only pictures made with the image tool, such as generated/dna5-1.png, or draw the imagery with SVG or CSS.'],
+  [/(\S+) is not in culture-library\.json\. Use a listed photo path\./gu, '$1 is not a picture made in this session. List only pictures made with the image tool.'],
+  [/exactly as returned by project_get_taste/gu, 'as the Taste Brief names it'],
+  [/project_get_taste/gu, 'the Taste Brief'],
+  [/culture-fonts\.json/gu, 'the Moûsa font library (materials find)'],
+  [/your saved culture-dna\.json/gu, 'your saved Design DNA'],
+];
+export function inHostTerms(message) {
+  return HOST_TERMS.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), String(message ?? ''));
 }
 
 /** Argument checks for this surface's JSON Schema subset: object, string, boolean, integer, number, array, enum. */
@@ -124,7 +141,8 @@ export function createMousaServer({ env = process.env, platform = process.platfo
     try { const { root, source } = await resolveProjectRoot({ env, meta, session }); return { folder: root, source }; }
     catch (error) { return { folder: null, problem: error instanceof ProjectScopeError ? error.message : 'The project folder could not be checked.' }; }
   }
-  const projectFolder = async meta => (await resolveProjectRoot({ env, meta, session })).root;
+  // A tool's workspace, when it names one, is a folder inside the project with its own .mousa records.
+  const projectFolder = async (meta, workspace) => workspaceRoot((await resolveProjectRoot({ env, meta, session })).root, workspace);
   const taste = createTasteTools({ env, connections, fetchImpl, fonts: fontStatus, project: projectFolder });
   const design = createDesignTools({ env, host, project: projectFolder, fonts: fontStatus, images: imageStatus, browser: browserStatus, generate, capture });
   const tools = [...MOUSA_SETUP_TOOLS, ...taste.definitions, ...design.definitions];
@@ -142,12 +160,15 @@ export function createMousaServer({ env = process.env, platform = process.platfo
     const setup = setupHints({ host, qloo, project, images: imageProviders, capture: review });
     const ready = qloo.connected && (!qloo.check || qloo.check.ok) && Boolean(project.folder);
     // Where the project keeps its design values, and how far this design session has come.
-    let designSystem = null, stage = null;
+    let designSystem = null, stage = null, workspace = null;
     if (project.folder) {
-      designSystem = detectDesignSystem(await collectProjectFiles(project.folder));
-      stage = (await readState(project.folder, 'session').catch(() => null))?.stage || null;
+      const folder = await workspaceRoot(project.folder, args.workspace);
+      if (args.workspace !== undefined) workspace = args.workspace;
+      designSystem = detectDesignSystem(await collectProjectFiles(folder));
+      stage = (await readState(folder, 'session').catch(() => null))?.stage || null;
     }
-    return { status: ready ? 'ready' : 'needs-setup', version: MOUSA_SERVER_VERSION, host, environment, qloo, project, ...(designSystem ? { designSystem } : {}), ...(stage ? { stage } : {}),
+    return { status: ready ? 'ready' : 'needs-setup', version: MOUSA_SERVER_VERSION, host, environment, qloo, project, ...(workspace ? { workspace } : {}),
+      ...(designSystem ? { designSystem } : {}), ...(stage ? { stage } : {}),
       images: imageProviders.map(({ path: file, ...item }) => { void file; return item; }), capture: review, materials: { fonts: library?.families?.length ?? 0 }, ...(setup.length ? { setup } : {}) };
   }
 
@@ -188,8 +209,8 @@ export function createMousaServer({ env = process.env, platform = process.platfo
       return errorResult('TOOL_UNKNOWN', 'This tool is not available in this session.');
     } catch (error) {
       if (error instanceof ArgumentError || error instanceof ProjectScopeError || error instanceof ConnectionStoreError
-        || error instanceof TasteToolError || error instanceof TasteProtocolError) return errorResult(error.code, error.message);
-      if (error instanceof DesignToolError || error instanceof QlooError) return errorResult(error.code, error.message, Boolean(error.retryable));
+        || error instanceof TasteToolError || error instanceof TasteProtocolError) return errorResult(error.code, inHostTerms(error.message));
+      if (error instanceof DesignToolError || error instanceof QlooError) return errorResult(error.code, inHostTerms(error.message), Boolean(error.retryable));
       return errorResult('TOOL_EXECUTION_FAILED', 'The tool could not complete. Call mousa_status to check the setup.');
     }
   }

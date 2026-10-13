@@ -9,6 +9,10 @@ export const BRIEF_LIMIT_BYTES = 10 * 1024;
 const DOMAIN_LABELS = { brand: 'brands', movie: 'films', artist: 'music', book: 'books', tv_show: 'TV', videogame: 'games', podcast: 'podcasts', place: 'places', destination: 'destinations' };
 const byScore = (a, b) => (b.score ?? b.affinity ?? -1) - (a.score ?? a.affinity ?? -1);
 const mark = entity => `${entity.name}${entity.surprise ? ' (new)' : entity.predictedByModel ? ' (predicted)' : ''}`;
+const status = entity => entity.surprise ? { new: true } : entity.predictedByModel ? { predicted: true } : {};
+// A work with its leading returned tags (look, mood and meaning first): what it stands for in Qloo's own words, and the
+// tags a device anchored to it may name in its qualities.
+const work = entity => ({ name: entity.name, ...status(entity), ...(entity.tags?.length ? { tags: entity.tags.slice(0, 3) } : {}) });
 
 /** Brands whose own design tags lift a look quality: their logos and products, not the audience's eye. */
 function brandCarried(quality, entities) {
@@ -25,17 +29,18 @@ export function buildTasteBrief({ plan, profile, input, segments = [], cache = n
   const family = name => qualities.filter(entity => entity.family === name).sort(byScore).slice(0, 4).map(entity => {
     const source = profileEntities.find(item => item.ref === entity.ref) || entity;
     return { name: entity.name, works: (source.examples || entity.examples || []).slice(0, 3), domains: (source.domains || entity.domains || []).map(domain => DOMAIN_LABELS[domain] || domain),
-      ...(entity.surprise ? { new: true } : entity.predictedByModel ? { predicted: true } : {}) };
+      ...status(entity) };
   });
   const tags = domain => entities.filter(entity => entity.domain === domain).sort(byScore).slice(0, 6).map(mark);
   const worlds = {};
   for (const result of profile?.results || []) {
     if (isTagDomain(result.domain) || isQualityDomain(result.domain) || !result.count) continue;
     const label = `${DOMAIN_LABELS[result.domain] || result.domain}${result.band === 'deep-cut' ? ' (lesser known)' : ''}`;
-    worlds[label] = entities.filter(entity => entity.domain === result.domain && (entity.band || 'core') === result.band).sort(byScore).slice(0, result.band === 'deep-cut' ? 3 : 5).map(mark);
+    worlds[label] = entities.filter(entity => entity.domain === result.domain && (entity.band || 'core') === result.band).sort(byScore).slice(0, result.band === 'deep-cut' ? 3 : 5).map(work);
   }
   const anchors = (input?.requiredAnchors || []).map(ref => entities.find(entity => entity.ref === ref)).filter(Boolean)
-    .map(entity => ({ ref: entity.ref, name: entity.name, is: entity.family ? `${entity.family} quality` : isTagDomain(entity.domain) ? `${entity.domain} tag` : DOMAIN_LABELS[entity.domain] || entity.domain }));
+    .map(entity => ({ ref: entity.ref, name: entity.name, is: entity.family ? `${entity.family} quality` : isTagDomain(entity.domain) ? `${entity.domain} tag` : DOMAIN_LABELS[entity.domain] || entity.domain,
+      ...(!entity.family && !isTagDomain(entity.domain) && entity.tags?.length ? { tags: entity.tags.slice(0, 3) } : {}) }));
 
   const cautions = [];
   for (const quality of qualities) {
@@ -79,10 +84,43 @@ export function buildTasteBrief({ plan, profile, input, segments = [], cache = n
     requiredAnchors: anchors,
     ...(cautions.length ? { cautions: [...new Set(cautions)].slice(0, 8) } : {}),
     layers,
-    rules: 'Qloo measured entities, tags and their relationships; every color, font, layout, motion or line you derive from them is your interpretation. Use or reject each required anchor with a reason, and let the surprises move the design away from your frozen sketch.',
+    rules: 'Qloo measured entities, tags and their relationships; every color, font, layout, motion or line you derive from them is your interpretation. Cite them by the names listed here. A device anchored to a work names, in its qualities, the tags of that work it translates. Use or reject each required anchor with a reason, and let the surprises move the design away from your frozen sketch.',
     files,
   };
   return fitBrief(brief);
+}
+
+/**
+ * The brief of a session without Qloo: the agent's own frozen prediction is its taste input, so it lists the predicted
+ * qualities and works, the required anchors chosen from them and the same pointers per layer, and claims no measurement.
+ */
+export function buildBaselineBrief({ plan, input, files = {} }) {
+  const own = Array.isArray(input?.entities) ? input.entities.filter(entity => entity.source === 'model-assumption') : [];
+  const names = domain => own.filter(entity => entity.domain === domain).map(entity => entity.name);
+  const worlds = {};
+  for (const domain of plan?.domains || []) {
+    if (isQualityDomain(domain)) continue;
+    const listed = names(domain);
+    if (listed.length) worlds[DOMAIN_LABELS[domain] || domain] = listed;
+  }
+  const qualities = names(QUALITY_DOMAIN), pacing = names('style'), surfaces = [...names('aesthetic'), ...names(ART_STYLE_DOMAIN)], tone = names('tone');
+  const list = items => items.length ? items.join(', ') : 'none predicted';
+  const anchors = (input?.requiredAnchors || []).map(ref => own.find(entity => entity.ref === ref)).filter(Boolean)
+    .map(entity => ({ ref: entity.ref, name: entity.name, is: isQualityDomain(entity.domain) ? `predicted ${entity.domain === QUALITY_DOMAIN ? 'quality' : `${entity.domain} quality`}` : `predicted ${DOMAIN_LABELS[entity.domain] || entity.domain}` }));
+  return {
+    status: 'baseline', source: 'your own prediction', measured: { requests: 0 },
+    qualities, tags: { pacing, surfaces, tone }, worlds, requiredAnchors: anchors,
+    layers: {
+      palette: `Anchor to one of your predicted qualities: ${list(qualities)}.`,
+      typography: `Anchor to a predicted quality: ${list(qualities.slice(0, 4))}.`,
+      motion: `Your predicted pacing: ${list(pacing)}.`,
+      imagery: `Your predicted surfaces: ${list(surfaces)}.`,
+      voice: `Your predicted tone: ${list(tone)}. Write your own lines.`,
+      structure: `Your predicted qualities: ${list(qualities)}.`,
+    },
+    rules: 'No Qloo data in this session: the taste input is your own frozen prediction. Cite its entries by name, follow the same stages, and never claim measured affinity, surprises or research.',
+    files,
+  };
 }
 
 /** Trim the longest lists until the brief fits; the trim is recorded, never silent. */
@@ -95,6 +133,7 @@ function fitBrief(brief) {
     () => { trimmed.surprises = trimmed.surprises.slice(0, 8); trimmed.confirmed = trimmed.confirmed.slice(0, 5); },
     () => { for (const key of Object.keys(trimmed.qualities)) trimmed.qualities[key] = trimmed.qualities[key].slice(0, 3).map(item => ({ ...item, works: item.works.slice(0, 2) })); },
     () => { trimmed.cautions = (trimmed.cautions || []).slice(0, 4); },
+    () => { for (const key of Object.keys(trimmed.worlds)) trimmed.worlds[key] = trimmed.worlds[key].map(item => ({ ...item, tags: (item.tags || []).slice(0, 1) })); },
   ];
   for (const step of steps) {
     step();
