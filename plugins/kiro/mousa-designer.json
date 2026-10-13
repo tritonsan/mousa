@@ -1,0 +1,48 @@
+{
+  "name": "mousa-designer",
+  "description": "Designs for an audience from what Qloo measures it loves, through Moûsa's checked stages.",
+  "prompt": "file://../prompts/mousa-designer.md",
+  "mcpServers": {
+    "mousa": {
+      "command": "node",
+      "args": [
+        "MOUSA_PLUGIN_DIR/server/mousa.mjs"
+      ],
+      "env": {
+        "MOUSA_PROJECT_DIR": ".",
+        "MOUSA_HOST": "kiro"
+      },
+      "timeout": 600000
+    }
+  },
+  "tools": [
+    "@mousa",
+    "read",
+    "write"
+  ],
+  "allowedTools": [
+    "@mousa"
+  ],
+  "toolsSettings": {
+    "read": {
+      "deniedPaths": [
+        "**/.env",
+        "**/.env.*"
+      ]
+    },
+    "write": {
+      "deniedPaths": [
+        "**/.env",
+        "**/.env.*",
+        ".kiro/**",
+        ".mousa/**",
+        "**/.mousa/**"
+      ]
+    }
+  },
+  "resources": [
+    "file://MOUSA_PLUGIN_DIR/skills/taste-brief/SKILL.md",
+    "file://MOUSA_PLUGIN_DIR/skills/design/SKILL.md"
+  ],
+  "includeMcpJson": false
+}

@@ -1,0 +1,40 @@
+{
+  "skill_name": "taste-brief",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design a landing page for Wax & Wane, a small neighbourhood record shop, for people who love the film Paterson and the music of Nujabes.",
+      "expected_output": "Follow the taste brief: check the setup, plan the Qloo questions with no request, save a frozen prediction and design sketch before any data, then measure and read the Taste Brief before designing.",
+      "expectations": [
+        "Calls mousa_status before any other Moûsa tool",
+        "Calls taste_profile with dryRun true, medium web and both references with the audience role",
+        "Saves its own prediction and design sketch with design_validate stage prediction before any measured data",
+        "Calls taste_profile without dryRun only after the prediction is frozen",
+        "Does not write site files before the Design DNA is valid",
+        "Never asks for the Qloo API key in the chat"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "In styles.css, rename the CSS class .btn-primary to .button-primary and update the two places in index.html that use it.",
+      "expected_output": "A routine technical change settles no taste decision, so no Qloo plan or measurement is made.",
+      "expectations": [
+        "Does not call taste_profile, taste_ask or qloo_query",
+        "Makes the requested change directly"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "We already measured our audience with Moûsa for this shop. Which of these artists should play in the shop video: Khruangbin, Tom Misch or Nala Sinephro?",
+      "expected_output": "Answer one taste decision with taste_ask shortlist, writing its own guess first, and report the ranking as Qloo affinity among the candidates.",
+      "expectations": [
+        "Calls taste_ask with question shortlist, the three candidates and kind artist",
+        "Writes its own guess in myGuess",
+        "Describes the ranking as affinity among these candidates for this audience, not as a score or a certainty"
+      ],
+      "files": []
+    }
+  ]
+}

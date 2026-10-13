@@ -1,0 +1,17 @@
+{
+  "skill_name": "connect",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "$connect",
+      "expected_output": "Check the setup, give the person the local key page link for their own Qloo key, and verify the connection.",
+      "expectations": [
+        "Calls mousa_status first",
+        "Calls mousa_connect and gives the person the returned link",
+        "Never asks for the API key in the chat and never writes it to a file",
+        "Calls mousa_status with check true after the person saves the key"
+      ],
+      "files": []
+    }
+  ]
+}

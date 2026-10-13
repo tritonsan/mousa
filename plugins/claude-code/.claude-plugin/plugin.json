@@ -1,0 +1,33 @@
+{
+  "name": "mousa",
+  "version": "0.5.0",
+  "description": "Design for an audience from what Qloo measures it loves: Moûsa plans the taste questions, freezes your own prediction first, measures the audience and checks each design stage against the result, through review captures.",
+  "author": {
+    "name": "tritonsan"
+  },
+  "license": "MIT",
+  "keywords": [
+    "design",
+    "taste",
+    "qloo",
+    "brand",
+    "design-system",
+    "creative"
+  ],
+  "userConfig": {
+    "qloo_api_key": {
+      "type": "string",
+      "title": "Qloo API key",
+      "sensitive": true,
+      "required": false,
+      "description": "Your own Qloo API key. Leave it empty to enter it later on Moûsa's local key page (the mousa_connect tool)."
+    },
+    "qloo_base_url": {
+      "type": "string",
+      "title": "Qloo API endpoint",
+      "required": false,
+      "default": "https://hackathon.api.qloo.com",
+      "description": "https://hackathon.api.qloo.com for a hackathon key, https://api.qloo.com for a production key."
+    }
+  }
+}

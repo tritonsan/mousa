@@ -1,0 +1,1 @@
+{"question":"{{input.question}}","decision":"{{input.decision}}","answer":{"ranked":[{"name":"Nala Sinephro","affinity":0.812},{"name":"Khruangbin","affinity":0.741},{"name":"Tom Misch","affinity":0.618}],"note":"Ranked by Qloo affinity for this audience among the candidates only."},"requests":2,"fromCache":1}

@@ -236,6 +236,23 @@ Each job must be a completed record of its kind. `--app` builds `DATA_DIR/showca
 
 ## Portable plugin
 
+### Claude Code and Codex plugins (0.5.0)
+
+Moûsa ships as two plugins built from `plugin/`: `plugins/claude-code` and `plugins/codex`, with a Kiro agent template in `plugins/kiro`. Each plugin carries the `mousa` MCP server, the font library, four skills and a write gate. The four skills are `taste-brief`, `design`, `compare` and `connect`. The gate holds a design's file writes between the frozen prediction and a valid Design DNA. The repository root holds a marketplace for each host:
+
+```sh
+# Claude Code
+/plugin marketplace add <this repository>
+/plugin install mousa@mousa
+# Codex
+codex plugin marketplace add <this repository>
+codex plugin add mousa@mousa
+```
+
+Each person uses their own Qloo API key. They can enter it in Claude Code's plugin settings or on Moûsa's local key page, `mousa_connect`, which never passes the key through the chat. `npm run build:plugins` rebuilds the packages, and a test fails when a committed package differs from what its sources build. See the [plugin README](plugin/README.md#packages).
+
+The older standalone package follows.
+
 The Moûsa plugin in `plugin/` works independently and includes a Node STDIO MCP server using the Qloo key, a manifest, and a cultural design workflow. Its technical identifier remains `culture-grounded-design` for existing client connections. The cultural brief validation and compilation tools carry Studio JSON context between agents and label imported evidence as caller-provided, unverified data. See the [plugin README](plugin/README.md) for connection details and Kiro examples.
 
 Each client must also attach the plugin's [workflow skill](plugin/skills/culture-grounded-design/SKILL.md) to its host agent. Connecting the MCP server alone does not ensure the agent follows the policy. Studio attaches the workflow to its Kiro job. Reference selection and evidence reuse keep their declared origins; there is no shared cross-user cultural cache.

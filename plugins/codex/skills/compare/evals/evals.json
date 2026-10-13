@@ -1,0 +1,19 @@
+{
+  "skill_name": "compare",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "$compare Build the Wax & Wane landing page with Qloo and without it, and compare the two.",
+      "expected_output": "Plan both workspaces with identical arguments, save one prediction in both, lock the baseline workspace with taste_profile baseline true before either arm is built, build both arms, then design_compare and report the limits.",
+      "expectations": [
+        "Uses the workspaces compare/with-qloo and compare/without-qloo",
+        "Saves the identical prediction artifact in both workspaces before any measurement",
+        "Calls taste_profile with baseline true for compare/without-qloo before building either arm",
+        "Builds the baseline arm before measuring, when the arms run in one session",
+        "Calls design_compare with both workspaces and reports samePrediction and the surprise headline",
+        "States that one pair is one sample and that the distance does not measure quality"
+      ],
+      "files": []
+    }
+  ]
+}

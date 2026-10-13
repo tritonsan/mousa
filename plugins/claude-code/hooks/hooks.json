@@ -1,0 +1,17 @@
+{
+  "description": "Moûsa write gate: in a design session, from the frozen prediction until the Design DNA is valid, the design's files wait, and the records in .mousa/ are written only by Moûsa's tools.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/gate.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

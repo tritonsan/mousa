@@ -1,0 +1,45 @@
+{
+  "name": "mousa",
+  "version": "0.5.0",
+  "description": "Design for an audience from what Qloo measures it loves: Moûsa plans the taste questions, freezes your own prediction first, measures the audience and checks each design stage against the result, through review captures.",
+  "author": {
+    "name": "tritonsan"
+  },
+  "license": "MIT",
+  "keywords": [
+    "design",
+    "taste",
+    "qloo",
+    "brand",
+    "design-system",
+    "creative"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Moûsa",
+    "shortDescription": "Design for an audience from what Qloo measures it loves",
+    "longDescription": "Moûsa asks Qloo what an audience loves and turns the answer into design decisions. It plans the taste questions for the medium, freezes your own prediction first so the measurement shows what you did not expect, and returns a short Taste Brief. It then checks the reading, the Design DNA and the production plan, builds in the project's own design system, checks the build and hands you captures to review.",
+    "developerName": "tritonsan",
+    "category": "Creativity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Design a landing page for people who love Paterson and Nujabes",
+      "Restyle this site for its audience with Moûsa",
+      "Connect my Qloo API key to Moûsa"
+    ],
+    "brandColor": "#7855CF",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png",
+    "screenshots": []
+  },
+  "extensions": {
+    "com.openai": {
+      "onboardingSkill": "./skills/connect/SKILL.md"
+    }
+  }
+}

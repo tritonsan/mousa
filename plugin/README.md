@@ -157,6 +157,44 @@ A test checks the skills and agents against the code they describe:
 - that every link resolves, and every tool named and every argument in an example call exists;
 - that the question, recipe and method tables match the planner and the media.
 
+### Packages
+
+`npm run build:plugins` (`node scripts/build-plugins.mjs`) builds three folders under `plugins/` and a marketplace file for each host at the repository root. Each run empties the package folders first. Copied files are byte-identical to their sources, and the manifests are written by the script.
+
+| Package | Holds | Host settings |
+| --- | --- | --- |
+| `plugins/claude-code` | The server modules that `server/mousa.mjs` imports, `library/fonts`, the four skills, the two comparison agents, the write gate, the eval suite, a README and the licence | `.claude-plugin/plugin.json` asks for the Qloo key (sensitive) and endpoint as plugin settings. `.mcp.json` passes them with `MOUSA_PROJECT_DIR=${CLAUDE_PROJECT_DIR}` and `MOUSA_HOST=claude-code`. The gate runs on Write, Edit, MultiEdit and NotebookEdit |
+| `plugins/codex` | The same server, fonts and skills, each skill with its `agents/openai.yaml` and `evals/evals.json`, and the logo and icon | `.codex-plugin/plugin.json` carries the interface and names `connect` as the onboarding skill; there is no root `plugin.json`, which Codex would read first. `.mcp.json` sets `cwd: "."` and a 600-second tool timeout, and passes the Qloo key and Moûsa's settings by name in `env_vars`, because Codex starts a server with a bare environment. It also sets `mousa_open_project` to ask the person. The gate runs on `apply_patch`, which Codex also matches as Write and Edit |
+| `plugins/kiro` | A Kiro CLI agent template and its prompt | The template names the `mousa` entry and the two skills through a `MOUSA_PLUGIN_DIR` placeholder, and refuses writes to `.mousa/`, `.kiro/` and `.env` files |
+
+The marketplaces are `.claude-plugin/marketplace.json` for Claude Code and `.agents/plugins/marketplace.json` for Codex. Codex also reads the first as a legacy marketplace; with both present, `codex plugin list` showed it using its own.
+
+**The write gate** (`hooks/gate.mjs`) is a PreToolUse hook.
+- **What it reads.** Claude Code's `file_path`, or the files a Codex patch names (`*** Add File:`, `Update File:`, `Delete File:` and `Move to:`).
+- **What it holds.** It finds the nearest `.mousa/session.json` above each file. It holds the write while that session is at `predicted`, `measured`, `baseline` or `read`, that is, from the frozen prediction until a valid DNA, and says what to save first.
+- **What it always refuses.** A hand edit inside `.mousa/`.
+- **What it lets through.** Anything it cannot read. Shell commands are not gated.
+
+**Eval suites.** They are written and not yet run, because a run makes model calls on the person's account.
+- **Claude Code:** `evals/` holds four cases with mocks of five `mousa` tools: a site for a named audience, a routine fix, one open decision, and an ordinary request that must not start a comparison. Run them with `claude plugin eval plugins/claude-code`.
+- **Codex:** each skill's `evals/evals.json`.
+
+**Verified on 2026-10-13, with no model call:**
+- **Claude Code 2.1.284.**
+  - `claude plugin validate --strict` passes for the marketplace, the plugin, its skills and its agents.
+  - `claude --plugin-dir plugins/claude-code plugin details mousa` lists 4 skills, 2 agents, 1 hook and 1 MCP server. It projects about 790 tokens always on, and about 3.8k when `taste-brief` or `design` loads.
+- **Codex 0.162.0-alpha.17, in a temporary `CODEX_HOME`.** Codex adds the marketplace from the repository root, installs `plugins/codex` as 0.5.0, and reads its MCP server with its command, `env_vars`, `cwd` and timeouts.
+- **The tests:**
+  - build the packages into a temporary folder and compare every copied file with its source;
+  - start each packaged server in a bare environment. Each lists the twelve tools, reads its own 33 font families, and takes its project folder from `MOUSA_PROJECT_DIR` or from Codex's sandbox state;
+  - check the marketplaces, the Kiro template and the eval suites;
+  - fail when the committed packages differ from what the sources build.
+
+**Not verified yet.** These need a live session in each host, with approval:
+- that each host runs the gate (Codex asks the person to trust it in `/hooks`);
+- that the skills trigger as intended;
+- that Codex applies the per-tool approval.
+
 ## Portable configuration
 
 `mcp.json` uses `${PLUGIN_ROOT}` for plugin-aware clients. For Kiro or another generic stdio MCP client, use its supported MCP configuration location and substitute the absolute extracted plugin path:

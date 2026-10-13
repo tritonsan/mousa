@@ -1,0 +1,1033 @@
+{
+  "schemaVersion": "1.0",
+  "source": "Google Fonts families as Latin-subset WOFF2 files from Fontsource (https://fontsource.org); licence files from https://github.com/google/fonts.",
+  "license": "SIL Open Font License 1.1",
+  "retrievedAt": "2026-10-04T08:09:48.452Z",
+  "families": [
+    {
+      "id": "literata",
+      "family": "Literata",
+      "category": "book serif",
+      "character": [
+        "literary",
+        "warm",
+        "bookish"
+      ],
+      "similarTo": [
+        "Iowan Old Style",
+        "Charter"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "200 900",
+          "file": "literata-latin-wght-normal.woff2",
+          "bytes": 52496,
+          "sha256": "9adbeac5b167fe5ad6c49d9e29aa0c76e2f1bb3b46bf4ebf12a9eca7d3525384"
+        },
+        {
+          "style": "italic",
+          "weight": "200 900",
+          "file": "literata-latin-wght-italic.woff2",
+          "bytes": 53728,
+          "sha256": "ab198d6616c7cc966f26a4a5b28a3977dc47439640f09d9b3361226bd465c404"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "literata.OFL.txt",
+      "copyright": "Copyright 2017 The Literata Project Authors (https://github.com/googlefonts/literata)",
+      "version": "v40",
+      "source": "https://fonts.google.com/specimen/Literata"
+    },
+    {
+      "id": "eb-garamond",
+      "family": "EB Garamond",
+      "category": "old-style serif",
+      "character": [
+        "classical",
+        "elegant",
+        "literary"
+      ],
+      "similarTo": [
+        "Garamond"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400 800",
+          "file": "eb-garamond-latin-wght-normal.woff2",
+          "bytes": 44336,
+          "sha256": "88603384163d301aebd5bd769832a8bfe3c9004ec24178417b9817f0ad32c63b"
+        },
+        {
+          "style": "italic",
+          "weight": "400 800",
+          "file": "eb-garamond-latin-wght-italic.woff2",
+          "bytes": 47940,
+          "sha256": "c664773f7e1d42d36326aa457becf7674236168c74cf7d74e87e5778ef7640f9"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "eb-garamond.OFL.txt",
+      "copyright": "Copyright 2017 The EB Garamond Project Authors (https://github.com/octaviopardo/EBGaramond12)",
+      "version": "v33",
+      "source": "https://fonts.google.com/specimen/EB+Garamond"
+    },
+    {
+      "id": "baskervville",
+      "family": "Baskervville",
+      "category": "transitional serif",
+      "character": [
+        "refined",
+        "traditional",
+        "crisp"
+      ],
+      "similarTo": [
+        "Baskerville"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400 700",
+          "file": "baskervville-latin-wght-normal.woff2",
+          "bytes": 31444,
+          "sha256": "8c0e51d8126e7dd81456433141e24d347a82e8791843fab9b8e4773e255635c0"
+        },
+        {
+          "style": "italic",
+          "weight": "400 700",
+          "file": "baskervville-latin-wght-italic.woff2",
+          "bytes": 33492,
+          "sha256": "a47be511510fa169c99bccb0a16c3d83d194f30f9bef4b0eb2949f77a1af0ee2"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "baskervville.OFL.txt",
+      "copyright": "Copyright 2018 The Baskervville Project Authors (https://github.com/anrt-type/ANRT-Baskervville)",
+      "version": "v20",
+      "source": "https://fonts.google.com/specimen/Baskervville"
+    },
+    {
+      "id": "gelasio",
+      "family": "Gelasio",
+      "category": "transitional serif",
+      "character": [
+        "sturdy",
+        "familiar",
+        "plain"
+      ],
+      "similarTo": [
+        "Georgia"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400 700",
+          "file": "gelasio-latin-wght-normal.woff2",
+          "bytes": 34832,
+          "sha256": "ba5b902e472cfe3456eba6b2d8fcf2d237988ff181d8da3cb5cf839de989ab15"
+        },
+        {
+          "style": "italic",
+          "weight": "400 700",
+          "file": "gelasio-latin-wght-italic.woff2",
+          "bytes": 40068,
+          "sha256": "ed0963db68abeaf30b52fbadc14ecfe912fc0b247055f063da0d491d41072050"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "gelasio.OFL.txt",
+      "copyright": "Copyright 2022 The Gelasio Project Authors (https://github.com/SorkinType/Gelasio)",
+      "version": "v14",
+      "source": "https://fonts.google.com/specimen/Gelasio"
+    },
+    {
+      "id": "cormorant-garamond",
+      "family": "Cormorant Garamond",
+      "category": "display old-style serif",
+      "character": [
+        "delicate",
+        "luxurious",
+        "high-contrast"
+      ],
+      "similarTo": [
+        "Garamond Display"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "300 700",
+          "file": "cormorant-garamond-latin-wght-normal.woff2",
+          "bytes": 37640,
+          "sha256": "d80df8ff5aecd299a61549f9e29ab1ed0b9b05f4ea71d50fe978e07d5240b235"
+        },
+        {
+          "style": "italic",
+          "weight": "300 700",
+          "file": "cormorant-garamond-latin-wght-italic.woff2",
+          "bytes": 39260,
+          "sha256": "6f2f5c3b1abc3d0bb035a927f66a90ca873f94fc31c4966c8d024142c2036e55"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "cormorant-garamond.OFL.txt",
+      "copyright": "Copyright 2015 the Cormorant Project Authors (github.com/CatharsisFonts/Cormorant)",
+      "version": "v21",
+      "source": "https://fonts.google.com/specimen/Cormorant+Garamond"
+    },
+    {
+      "id": "prata",
+      "family": "Prata",
+      "category": "didone display serif",
+      "character": [
+        "dramatic",
+        "fashion",
+        "high-contrast"
+      ],
+      "similarTo": [
+        "Didot"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "prata-latin-400-normal.woff2",
+          "bytes": 19224,
+          "sha256": "1b85a8c794709747c9f689b791984c430a2d9716a5cf9440d955bd7d20dad9d0"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "prata.OFL.txt",
+      "copyright": "Copyright 2011 The Prata Project Authors (https://github.com/cyrealtype/Prata)",
+      "version": "v22",
+      "source": "https://fonts.google.com/specimen/Prata"
+    },
+    {
+      "id": "bodoni-moda",
+      "family": "Bodoni Moda",
+      "category": "didone serif",
+      "character": [
+        "luxurious",
+        "sharp",
+        "formal"
+      ],
+      "similarTo": [
+        "Bodoni"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400 900",
+          "file": "bodoni-moda-latin-wght-normal.woff2",
+          "bytes": 25884,
+          "sha256": "192ae876c21d9258d096a526dad5bddf37f0daa69cfe943cae5f6be5a52adda2"
+        },
+        {
+          "style": "italic",
+          "weight": "400 900",
+          "file": "bodoni-moda-latin-wght-italic.woff2",
+          "bytes": 30328,
+          "sha256": "e50a00b8431381bd33c7676c50ffb98fc95f4a06c707ea44d04a423266e211cd"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "bodoni-moda.OFL.txt",
+      "copyright": "Copyright 2020 The Bodoni Moda Project Authors (https://github.com/indestructible-type/Bodoni)",
+      "version": "v28",
+      "source": "https://fonts.google.com/specimen/Bodoni+Moda"
+    },
+    {
+      "id": "dm-serif-display",
+      "family": "DM Serif Display",
+      "category": "display serif",
+      "character": [
+        "bold",
+        "warm",
+        "editorial"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "dm-serif-display-latin-400-normal.woff2",
+          "bytes": 24744,
+          "sha256": "fdf61e20fd2c0108e0ea28da4daca0035205b4b7fc031a3974b865b704de160a"
+        },
+        {
+          "style": "italic",
+          "weight": "400",
+          "file": "dm-serif-display-latin-400-italic.woff2",
+          "bytes": 24572,
+          "sha256": "ed8b291611e32fa2d2900488dd48fc95faf0957b2ef7ddf1527e8d21dd9cf2df"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "dm-serif-display.OFL.txt",
+      "copyright": "Copyright 2014-2018 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'. All Rights Reserved. Source is a trademark of Adobe in the United States and/or other countries. Copyright 2019 Google LLC.",
+      "version": "v17",
+      "source": "https://fonts.google.com/specimen/DM+Serif+Display"
+    },
+    {
+      "id": "fraunces",
+      "family": "Fraunces",
+      "category": "soft display serif",
+      "character": [
+        "soft",
+        "retro",
+        "quirky"
+      ],
+      "similarTo": [
+        "Cooper Black",
+        "Windsor"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "100 900",
+          "file": "fraunces-latin-wght-normal.woff2",
+          "bytes": 36620,
+          "sha256": "7f9d191d999336d3b9790afa72e1358e50a13b06d4f289341e92a311967a80f9"
+        },
+        {
+          "style": "italic",
+          "weight": "100 900",
+          "file": "fraunces-latin-wght-italic.woff2",
+          "bytes": 45656,
+          "sha256": "bceec2ef4d549efbc8df0194a8d5280b6a64c3e399244dffccd9ea1bd9ad6db7"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "fraunces.OFL.txt",
+      "copyright": "Copyright 2018 The Fraunces Project Authors (https://github.com/undercasetype/Fraunces)",
+      "version": "v38",
+      "source": "https://fonts.google.com/specimen/Fraunces"
+    },
+    {
+      "id": "rozha-one",
+      "family": "Rozha One",
+      "category": "fat face display serif",
+      "character": [
+        "heavy",
+        "poster",
+        "theatrical"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "rozha-one-latin-400-normal.woff2",
+          "bytes": 18176,
+          "sha256": "a59c71d6d0228815b82ac65ea344a928cc80d684fc5aa74cf1088b4f1d869aff"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "rozha-one.OFL.txt",
+      "copyright": "Copyright (c) 2014, Indian Type Foundry (info@indiantypefoundry.com).",
+      "version": "v17",
+      "source": "https://fonts.google.com/specimen/Rozha+One"
+    },
+    {
+      "id": "instrument-serif",
+      "family": "Instrument Serif",
+      "category": "condensed display serif",
+      "character": [
+        "editorial",
+        "condensed",
+        "contemporary"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "instrument-serif-latin-400-normal.woff2",
+          "bytes": 21032,
+          "sha256": "5eb09b5ac0e28b67c2f041c8ba6d244604ca0c0980d65912ab2d47fed84ddc31"
+        },
+        {
+          "style": "italic",
+          "weight": "400",
+          "file": "instrument-serif-latin-400-italic.woff2",
+          "bytes": 22128,
+          "sha256": "5a51946dfffa82972bc98745359c46761515641fda557c25116459a9f83da4a7"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "instrument-serif.OFL.txt",
+      "copyright": "Copyright 2022 The Instrument Serif Project Authors (https://github.com/Instrument/instrument-serif)",
+      "version": "v5",
+      "source": "https://fonts.google.com/specimen/Instrument+Serif"
+    },
+    {
+      "id": "zilla-slab",
+      "family": "Zilla Slab",
+      "category": "slab serif",
+      "character": [
+        "solid",
+        "mechanical",
+        "friendly"
+      ],
+      "similarTo": [
+        "Rockwell"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "zilla-slab-latin-400-normal.woff2",
+          "bytes": 26468,
+          "sha256": "ab2607313bc04e82a53aca235853a0b83463e99b3ae88b17cc963e371f8fe91c"
+        },
+        {
+          "style": "normal",
+          "weight": "700",
+          "file": "zilla-slab-latin-700-normal.woff2",
+          "bytes": 26100,
+          "sha256": "896b6ebb8cd10aca90bdff88a5a1b648cbc0d50751740bd5a6d012007aef9ebe"
+        },
+        {
+          "style": "italic",
+          "weight": "400",
+          "file": "zilla-slab-latin-400-italic.woff2",
+          "bytes": 27516,
+          "sha256": "1285db803447f43de11d51677826b43cd0b9a4ddf76adc5a1c2514b8c0e6c00a"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "zilla-slab.OFL.txt",
+      "copyright": "Copyright 2017, The Mozilla Foundation",
+      "version": "v12",
+      "source": "https://fonts.google.com/specimen/Zilla+Slab"
+    },
+    {
+      "id": "jost",
+      "family": "Jost",
+      "category": "geometric sans",
+      "character": [
+        "geometric",
+        "modernist",
+        "clean"
+      ],
+      "similarTo": [
+        "Futura",
+        "Century Gothic"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "100 900",
+          "file": "jost-latin-wght-normal.woff2",
+          "bytes": 26576,
+          "sha256": "7726a5cd6f3c0e876c028ea2a643d45f7aad4b0f164b70966c669f4a4668f4b9"
+        },
+        {
+          "style": "italic",
+          "weight": "100 900",
+          "file": "jost-latin-wght-italic.woff2",
+          "bytes": 30700,
+          "sha256": "0cadc07f42c10553256ae8fd50fe5eb8b09afe79443f68f50a977fdfc8d25ea8"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "jost.OFL.txt",
+      "copyright": "Copyright 2020 The Jost Project Authors (https://github.com/indestructible-type)",
+      "version": "v20",
+      "source": "https://fonts.google.com/specimen/Jost"
+    },
+    {
+      "id": "league-spartan",
+      "family": "League Spartan",
+      "category": "geometric sans",
+      "character": [
+        "bold",
+        "constructivist",
+        "poster"
+      ],
+      "similarTo": [
+        "Futura Bold"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "100 900",
+          "file": "league-spartan-latin-wght-normal.woff2",
+          "bytes": 24020,
+          "sha256": "7d843a9fa4dcd050da68405d9093f8ab8298f8f60a97155e85ab84c9ed3040e2"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "league-spartan.OFL.txt",
+      "copyright": "Copyright 2020 The League Spartan Project Authors (https://github.com/theleagueof/league-spartan)",
+      "version": "v15",
+      "source": "https://fonts.google.com/specimen/League+Spartan"
+    },
+    {
+      "id": "cabin",
+      "family": "Cabin",
+      "category": "humanist sans",
+      "character": [
+        "humanist",
+        "warm",
+        "British"
+      ],
+      "similarTo": [
+        "Gill Sans",
+        "Johnston"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400 700",
+          "file": "cabin-latin-wght-normal.woff2",
+          "bytes": 28320,
+          "sha256": "f51448b0b7f024d139fb7598d21b4e06e8174268ac93fc26cc2d4196144cb672"
+        },
+        {
+          "style": "italic",
+          "weight": "400 700",
+          "file": "cabin-latin-wght-italic.woff2",
+          "bytes": 29844,
+          "sha256": "82314f3b37a525f4811cfafc1562711e41fc248e80b6b9a94ce7dbc758625acd"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "cabin.OFL.txt",
+      "copyright": "Copyright 2018 The Cabin Project Authors (https://github.com/impallari/Cabin.git)",
+      "version": "v35",
+      "source": "https://fonts.google.com/specimen/Cabin"
+    },
+    {
+      "id": "alegreya-sans",
+      "family": "Alegreya Sans",
+      "category": "humanist sans",
+      "character": [
+        "calligraphic",
+        "literary",
+        "friendly"
+      ],
+      "similarTo": [
+        "Optima",
+        "Myriad"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "alegreya-sans-latin-400-normal.woff2",
+          "bytes": 23708,
+          "sha256": "b2a5a35a2563a2f9bf9fb91939fc6ea6c115e9811cda5c4a37d02f623c7c4dbe"
+        },
+        {
+          "style": "normal",
+          "weight": "700",
+          "file": "alegreya-sans-latin-700-normal.woff2",
+          "bytes": 23976,
+          "sha256": "5acd19a588614d23e52b741a21dd8555178ab4932c3195c6d8fb4b296f84acae"
+        },
+        {
+          "style": "italic",
+          "weight": "400",
+          "file": "alegreya-sans-latin-400-italic.woff2",
+          "bytes": 24380,
+          "sha256": "5dd7c3e61cb1b6539d2c51ae3bea8898b60dd45cad07dcfbcd82dad4602747f1"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "alegreya-sans.OFL.txt",
+      "copyright": "Copyright 2013 The Alegreya Sans Project Authors (https://github.com/huertatipografica/Alegreya-Sans)",
+      "version": "v28",
+      "source": "https://fonts.google.com/specimen/Alegreya+Sans"
+    },
+    {
+      "id": "inter",
+      "family": "Inter",
+      "category": "neo-grotesque sans",
+      "character": [
+        "neutral",
+        "technical",
+        "contemporary"
+      ],
+      "similarTo": [
+        "Helvetica",
+        "Arial"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "100 900",
+          "file": "inter-latin-wght-normal.woff2",
+          "bytes": 48256,
+          "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+        },
+        {
+          "style": "italic",
+          "weight": "100 900",
+          "file": "inter-latin-wght-italic.woff2",
+          "bytes": 51832,
+          "sha256": "7291b5970da2237441273c03b424a504b70b18f09791473fab99687dcc314720"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "inter.OFL.txt",
+      "copyright": "Copyright 2020 The Inter Project Authors (https://github.com/rsms/inter)",
+      "version": "v20",
+      "source": "https://fonts.google.com/specimen/Inter"
+    },
+    {
+      "id": "libre-franklin",
+      "family": "Libre Franklin",
+      "category": "grotesque sans",
+      "character": [
+        "sturdy",
+        "editorial",
+        "American"
+      ],
+      "similarTo": [
+        "Franklin Gothic"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "100 900",
+          "file": "libre-franklin-latin-wght-normal.woff2",
+          "bytes": 29292,
+          "sha256": "52e605852c72cc2df1473df1fb7f26a3a0be58e31835bc8f33f29b1918c82cbd"
+        },
+        {
+          "style": "italic",
+          "weight": "100 900",
+          "file": "libre-franklin-latin-wght-italic.woff2",
+          "bytes": 32856,
+          "sha256": "c9fb9170f00060c83306219df8357a81a56c5ad142e25b3e3d9c21d2d47e2009"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "libre-franklin.OFL.txt",
+      "copyright": "Copyright 2020 The Libre Franklin Project Authors (https://github.com/googlefonts/Libre-Franklin)",
+      "version": "v20",
+      "source": "https://fonts.google.com/specimen/Libre+Franklin"
+    },
+    {
+      "id": "space-grotesk",
+      "family": "Space Grotesk",
+      "category": "grotesque sans",
+      "character": [
+        "quirky",
+        "technical",
+        "contemporary"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "300 700",
+          "file": "space-grotesk-latin-wght-normal.woff2",
+          "bytes": 22288,
+          "sha256": "0640890476fc1198ab4de571fb658de443c4d85b66466ec09534a8737ab1ce9d"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "space-grotesk.OFL.txt",
+      "copyright": "Copyright 2020 The Space Grotesk Project Authors (https://github.com/floriankarsten/space-grotesk)",
+      "version": "v22",
+      "source": "https://fonts.google.com/specimen/Space+Grotesk"
+    },
+    {
+      "id": "bricolage-grotesque",
+      "family": "Bricolage Grotesque",
+      "category": "expressive grotesque sans",
+      "character": [
+        "expressive",
+        "playful",
+        "contemporary"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "200 800",
+          "file": "bricolage-grotesque-latin-wght-normal.woff2",
+          "bytes": 41344,
+          "sha256": "a97804dc9fbe5fc972a08018c5eda4dab7ef2346f64c57e61419d05e6de4ea1c"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "bricolage-grotesque.OFL.txt",
+      "copyright": "Copyright 2022 The Bricolage Grotesque Project Authors (https://github.com/ateliertriay/bricolage)",
+      "version": "v9",
+      "source": "https://fonts.google.com/specimen/Bricolage+Grotesque"
+    },
+    {
+      "id": "oswald",
+      "family": "Oswald",
+      "category": "condensed gothic sans",
+      "character": [
+        "condensed",
+        "bold",
+        "poster"
+      ],
+      "similarTo": [
+        "Alternate Gothic",
+        "Impact"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "200 700",
+          "file": "oswald-latin-wght-normal.woff2",
+          "bytes": 28488,
+          "sha256": "bd73278ee0c50041b91b4c03d1229e35b501637f46b6409e7da2d3a758446ea5"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "oswald.OFL.txt",
+      "copyright": "Copyright 2016 The Oswald Project Authors (https://github.com/googlefonts/OswaldFont)",
+      "version": "v57",
+      "source": "https://fonts.google.com/specimen/Oswald"
+    },
+    {
+      "id": "bebas-neue",
+      "family": "Bebas Neue",
+      "category": "condensed capitals",
+      "character": [
+        "condensed",
+        "loud",
+        "headline"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "bebas-neue-latin-400-normal.woff2",
+          "bytes": 13768,
+          "sha256": "a7c90c89240c134f7fdd33d40c000ec90b79d675ea53e8cc5a6d423c073de412"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "bebas-neue.OFL.txt",
+      "copyright": "Copyright © 2010 by Dharma Type.",
+      "version": "v16",
+      "source": "https://fonts.google.com/specimen/Bebas+Neue"
+    },
+    {
+      "id": "big-shoulders-display",
+      "family": "Big Shoulders Display",
+      "category": "condensed display sans",
+      "character": [
+        "industrial",
+        "tall",
+        "civic"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "100 900",
+          "file": "big-shoulders-display-latin-wght-normal.woff2",
+          "bytes": 35504,
+          "sha256": "075292b13a638821b34726b33e49b3b711c4b9bee9b42f2bb68fa3b6ec888f2b"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "big-shoulders-display.OFL.txt",
+      "copyright": "Copyright 2019 The Big Shoulders Project Authors (https://github.com/xotypeco/big_shoulders)",
+      "version": "v21",
+      "source": "https://fonts.google.com/specimen/Big+Shoulders+Display"
+    },
+    {
+      "id": "syne",
+      "family": "Syne",
+      "category": "wide display sans",
+      "character": [
+        "artistic",
+        "wide",
+        "avant-garde"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400 800",
+          "file": "syne-latin-wght-normal.woff2",
+          "bytes": 34608,
+          "sha256": "68b623f0e45b905041b2edb9b2e4f563a505f13db1cd06b5f1946eb2e1f47048"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "syne.OFL.txt",
+      "copyright": "Copyright 2017 The Syne Project Authors (https://gitlab.com/bonjour-monde/fonderie/syne-typeface)",
+      "version": "v24",
+      "source": "https://fonts.google.com/specimen/Syne"
+    },
+    {
+      "id": "unbounded",
+      "family": "Unbounded",
+      "category": "wide geometric display sans",
+      "character": [
+        "wide",
+        "rounded",
+        "futurist"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "200 900",
+          "file": "unbounded-latin-wght-normal.woff2",
+          "bytes": 50904,
+          "sha256": "22f9b928aa3928a896340422b54d690fbb5875c30eae4c106f029c61f2289fd6"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "unbounded.OFL.txt",
+      "copyright": "Copyright 2022 The Unbounded Project Authors (https://github.com/googlefonts/unbounded)",
+      "version": "v12",
+      "source": "https://fonts.google.com/specimen/Unbounded"
+    },
+    {
+      "id": "poiret-one",
+      "family": "Poiret One",
+      "category": "art deco display sans",
+      "character": [
+        "art deco",
+        "elegant",
+        "light"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "poiret-one-latin-400-normal.woff2",
+          "bytes": 7824,
+          "sha256": "a6361b9b4bd84cd02407a4674e0158642a51d5f968f0366adf8a19302bec6c0c"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "poiret-one.OFL.txt",
+      "copyright": "Copyright 2011 The Poiret One Project Authors (https://github.com/alexeiva/poiretone)",
+      "version": "v18",
+      "source": "https://fonts.google.com/specimen/Poiret+One"
+    },
+    {
+      "id": "courier-prime",
+      "family": "Courier Prime",
+      "category": "typewriter monospace",
+      "character": [
+        "typewriter",
+        "screenplay",
+        "classic"
+      ],
+      "similarTo": [
+        "Courier New",
+        "Courier"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "courier-prime-latin-400-normal.woff2",
+          "bytes": 18640,
+          "sha256": "f09844e1f4fe9e67df2cc77474519e68756d559b4648278b9dd4f03c8ac9c31f"
+        },
+        {
+          "style": "normal",
+          "weight": "700",
+          "file": "courier-prime-latin-700-normal.woff2",
+          "bytes": 19348,
+          "sha256": "5c7ae1cc9aae183453565c836b74a1b988f5f2e52b65098decb909b3930957ec"
+        },
+        {
+          "style": "italic",
+          "weight": "400",
+          "file": "courier-prime-latin-400-italic.woff2",
+          "bytes": 21556,
+          "sha256": "84f91615090e8b84f5adfb7e5826a8ad137c7a13e3687e4bfa85c275149df60f"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "courier-prime.OFL.txt",
+      "copyright": "Copyright 2015 The Courier Prime Project Authors (https://github.com/quoteunquoteapps/CourierPrime).",
+      "version": "v11",
+      "source": "https://fonts.google.com/specimen/Courier+Prime"
+    },
+    {
+      "id": "cutive-mono",
+      "family": "Cutive Mono",
+      "category": "typewriter monospace",
+      "character": [
+        "typewriter",
+        "vintage",
+        "light"
+      ],
+      "similarTo": [
+        "American Typewriter"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "cutive-mono-latin-400-normal.woff2",
+          "bytes": 21824,
+          "sha256": "86bac2b356efacde8dbb66e5e931b660a78585c6142cf4a61567f313a9f16271"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "cutive-mono.OFL.txt",
+      "copyright": "Copyright 2012 The Cutive Project Authors (https://github.com/googlefonts/cutivemono)",
+      "version": "v23",
+      "source": "https://fonts.google.com/specimen/Cutive+Mono"
+    },
+    {
+      "id": "dm-mono",
+      "family": "DM Mono",
+      "category": "monospace",
+      "character": [
+        "engineered",
+        "technical",
+        "calm"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "dm-mono-latin-400-normal.woff2",
+          "bytes": 14820,
+          "sha256": "e1896b13b2b1bb112fac2f9571bd6c40e118746e77a4511edbf43fbb41bf3e1e"
+        },
+        {
+          "style": "normal",
+          "weight": "500",
+          "file": "dm-mono-latin-500-normal.woff2",
+          "bytes": 14988,
+          "sha256": "9964608a849396bd00c4bfd7034afe03486469dcf20b4f6b8cbdfdd310369951"
+        },
+        {
+          "style": "italic",
+          "weight": "400",
+          "file": "dm-mono-latin-400-italic.woff2",
+          "bytes": 16012,
+          "sha256": "350b68680c016cf06d06516eeaebf341979b250cd023b0d35a795e62f6f471fd"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "dm-mono.OFL.txt",
+      "copyright": "Copyright 2020 The DM Mono Project Authors (https://www.github.com/googlefonts/dm-mono)",
+      "version": "v16",
+      "source": "https://fonts.google.com/specimen/DM+Mono"
+    },
+    {
+      "id": "space-mono",
+      "family": "Space Mono",
+      "category": "geometric monospace",
+      "character": [
+        "retro-futurist",
+        "geometric",
+        "technical"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "space-mono-latin-400-normal.woff2",
+          "bytes": 16520,
+          "sha256": "fb4a81a2d0a893e5c38c394a7e716a1cef0b24610a0af49c96f6d529bd66bf2b"
+        },
+        {
+          "style": "normal",
+          "weight": "700",
+          "file": "space-mono-latin-700-normal.woff2",
+          "bytes": 16724,
+          "sha256": "2d46bd159b53f55c41167a4f1540a074649464194fd1e416f5b4694a6c0f282c"
+        },
+        {
+          "style": "italic",
+          "weight": "400",
+          "file": "space-mono-latin-400-italic.woff2",
+          "bytes": 18300,
+          "sha256": "a5fb49042e7305918585561ab5fbd587d708ce74b0f54b56751e2b1151922d19"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "space-mono.OFL.txt",
+      "copyright": "Copyright 2016 The Space Mono Project Authors (https://github.com/googlefonts/spacemono)",
+      "version": "v17",
+      "source": "https://fonts.google.com/specimen/Space+Mono"
+    },
+    {
+      "id": "caveat",
+      "family": "Caveat",
+      "category": "handwriting",
+      "character": [
+        "handwritten",
+        "casual",
+        "notebook"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400 700",
+          "file": "caveat-latin-wght-normal.woff2",
+          "bytes": 74932,
+          "sha256": "891951df5e8b5b0f0bc760d31375405e795c666b5add70437de12d4a6482b33f"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "caveat.OFL.txt",
+      "copyright": "Copyright 2014 The Caveat Project Authors (https://github.com/googlefonts/caveat)",
+      "version": "v23",
+      "source": "https://fonts.google.com/specimen/Caveat"
+    },
+    {
+      "id": "pinyon-script",
+      "family": "Pinyon Script",
+      "category": "formal script",
+      "character": [
+        "formal",
+        "calligraphic",
+        "elegant"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "pinyon-script-latin-400-normal.woff2",
+          "bytes": 39044,
+          "sha256": "3e1f69a201572cad4aabea7ccf720f093a7dbc005380b2a1b89e0b94476d3e42"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "pinyon-script.OFL.txt",
+      "copyright": "Copyright 2024 The Pinyon Project Authors (https://github.com/SorkinType/Pinyon)",
+      "version": "v24",
+      "source": "https://fonts.google.com/specimen/Pinyon+Script"
+    },
+    {
+      "id": "nunito",
+      "family": "Nunito",
+      "category": "rounded sans",
+      "character": [
+        "rounded",
+        "soft",
+        "friendly"
+      ],
+      "similarTo": [
+        "VAG Rounded"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "200 1000",
+          "file": "nunito-latin-wght-normal.woff2",
+          "bytes": 39128,
+          "sha256": "ba344451eab25b217a165363b1982048a5e5830a0daf36577973955a04cac793"
+        },
+        {
+          "style": "italic",
+          "weight": "200 1000",
+          "file": "nunito-latin-wght-italic.woff2",
+          "bytes": 41760,
+          "sha256": "6cfcc3786d5ba3b5c3a41797f95272e57f4290ccbd283a4bfd0033a3d857e64c"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "nunito.OFL.txt",
+      "copyright": "Copyright 2014 The Nunito Project Authors (https://github.com/googlefonts/nunito)",
+      "version": "v32",
+      "source": "https://fonts.google.com/specimen/Nunito"
+    }
+  ]
+}

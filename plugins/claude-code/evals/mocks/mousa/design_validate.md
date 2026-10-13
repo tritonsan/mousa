@@ -1,0 +1,1 @@
+{"status":"frozen","stage":"prediction","domains":["brand","movie","artist","book","tv_show","style","aesthetic","tone","qualities"],"entries":45,"frozenAt":"2026-10-13T10:00:00.000Z","next":"Call taste_profile without dryRun to measure the audience with Qloo."}

@@ -1,0 +1,31 @@
+{
+  "skill_name": "design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "The Taste Brief for Wax & Wane is measured. Build the landing page from it.",
+      "expected_output": "Save the reading, the Design DNA and the production plan with design_validate, fetch only the planned fonts, build in the project's design system, check, capture and review.",
+      "expectations": [
+        "Saves a reading of 2-4 clusters, citing entries by the names the brief lists, before the DNA",
+        "Saves a DNA whose palette and typography devices anchor to quality entries",
+        "Saves a production plan with one step per device and 2-6 review criteria",
+        "Fetches only the fonts the plan uses with materials fetch",
+        "Declares each palette colour and font in a CSS custom property used through var()",
+        "Calls design_check and repairs missing devices before design_capture",
+        "Judges every review criterion on a capture of the same round with design_validate stage review"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Restyle this game's character screen from the measured Taste Brief. The game is a Godot project with no HTML pages.",
+      "expected_output": "Use the generic medium: declare tokens as the source writes them, and review on the specimen board.",
+      "expectations": [
+        "Declares colours as they appear in the source, such as 0xFF3E5C6B or a hex string",
+        "Declares motion values in literals when they live in code",
+        "Captures the specimen board with design_capture specimen true for the review"
+      ],
+      "files": []
+    }
+  ]
+}
