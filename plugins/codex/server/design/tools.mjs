@@ -393,10 +393,13 @@ export function createDesignTools(context) {
       const { brief, subject, aspect } = buildImageBrief({ dna: dnaRecord.dna, names, device: args.device, subject: args.subject, aspect: args.aspect ?? 'landscape' });
       const saveAs = `${base}.png`;
       await writeState(root, 'images', { images: [...records, { device: args.device, n, subject, aspect, brief, saveAs, status: 'requested', requestedAt: stamp() }] });
+      // In a workspace the file goes into the workspace's folder, and register names it from there.
+      const file = args.workspace ? `${args.workspace}/${saveAs}` : saveAs;
+      const registerAs = `call image with action register, path ${saveAs}${args.workspace ? ` and workspace ${args.workspace}` : ''}`;
       const how = host === 'codex'
-        ? `Make the picture with your image generation tool from this brief. Save it in the project as ${saveAs} (copy it from where the tool saved it), then call image with action register and path ${saveAs}.`
-        : `Make the picture with this session's image tool from this brief, save it in the project as ${saveAs}, then call image with action register. If this session has no image tool, use the plan's fallback method instead.`;
-      return { status: 'requested', device: args.device, brief, saveAs, how, remaining: allowance.remaining - 1 };
+        ? `Make the picture with your image generation tool from this brief. Copy it from where the tool saved it (Codex keeps generated images under $CODEX_HOME/generated_images/) to ${file}, then ${registerAs}.`
+        : `Make the picture with this session's image tool from this brief, save it as ${file}, then ${registerAs}. If this session has no image tool, use the plan's fallback method instead.`;
+      return { status: 'requested', device: args.device, brief, saveAs, ...(args.workspace ? { file } : {}), how, remaining: allowance.remaining - 1 };
     }
     if (args.action === 'generate') {
       const providers = await images();

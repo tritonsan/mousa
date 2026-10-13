@@ -15,6 +15,7 @@ import { normalizeDesignSketch, normalizeDesignDna } from '../plugin/server/cult
 import { mediumProfile } from '../plugin/server/production/media.mjs';
 import { inspectBrowser, verifyBrowser, serveDirectory, captureViews } from '../plugin/server/production/capture.mjs';
 import { createMousaServer } from '../plugin/server/mcp/mousa.mjs';
+import { createDesignTools } from '../plugin/server/design/tools.mjs';
 import { createConnectionStore, plainProtector } from '../plugin/server/connections/store.mjs';
 import { normalizeCharacter } from '../game/src/format.js';
 import { gameExampleFiles, GAME_EXAMPLE_DIR } from '../scripts/build-game-example.mjs';
@@ -196,6 +197,21 @@ test('design_compare copies the starter into both arms, fonts included, and meas
     await rm(project, { recursive: true, force: true });
     await rm(config, { recursive: true, force: true });
   }
+});
+
+test('in a comparison arm, the picture brief names the file in the arm\'s folder and how to register it', async () => {
+  const project = await mkdtemp(path.join(os.tmpdir(), 'mousa-game-picture-'));
+  try {
+    const arm = path.join(project, 'compare', 'with-qloo');
+    await mkdir(path.join(arm, '.mousa', 'design'), { recursive: true });
+    const dna = { devices: [{ id: 'dna3', layer: 'imagery', device: 'Title-card portrait', anchors: [], translation: 'x', tokens: { colors: ['#3f5a4c', '#ffc29e'], fonts: [], css: [], ids: [], copy: [], images: ['generated/dna3-1.png'], keyframes: [], svg: [] } }] };
+    await writeFile(path.join(arm, '.mousa', 'design', 'dna.json'), JSON.stringify({ medium: 'game', dna }));
+    await writeFile(path.join(arm, '.mousa', 'design', 'plan.json'), JSON.stringify({ medium: 'game', plan: { steps: [{ device: 'dna3', method: 'generated-image', count: 1, fallback: 'source' }], uses: { generators: { image: { devices: { dna3: 1 } } } } } }));
+    const tools = createDesignTools({ host: 'codex', project: async (meta, workspace) => (workspace ? path.join(project, ...workspace.split('/')) : project) });
+    const asked = await tools.handle('image', { action: 'prompt', device: 'dna3', subject: 'A lamplighter in a moss cardigan, lantern raised at dusk', aspect: 'square', workspace: 'compare/with-qloo' });
+    assert.deepEqual([asked.saveAs, asked.file], ['generated/dna3-1.png', 'compare/with-qloo/generated/dna3-1.png']);
+    assert.match(asked.how, /\$CODEX_HOME\/generated_images\/\) to compare\/with-qloo\/generated\/dna3-1\.png, then call image with action register, path generated\/dna3-1\.png and workspace compare\/with-qloo\./u);
+  } finally { await rm(project, { recursive: true, force: true }); }
 });
 
 test('the title card shows the portrait a character names, and a capture waits for it', async t => {
