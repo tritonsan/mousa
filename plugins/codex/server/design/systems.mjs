@@ -11,7 +11,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { cssDeclarations, normalizeTasteName, fontFileName } from '../culture/taste.mjs';
 import { holdsColor } from './colors.mjs';
-import { usesTailwind, tailwindBindings } from './tailwind.mjs';
+import { usesTailwind, tailwindBindings, tailwindMotion } from './tailwind.mjs';
 
 export const PROJECT_FILE_LIMITS = Object.freeze({ files: 80, fileBytes: 200 * 1024, depth: 6 });
 const SKIP = new Set(['node_modules', 'dist', 'build', 'out', 'coverage', 'vendor', 'fonts', 'generated']);
@@ -194,9 +194,20 @@ export function checkCssVariables(dna, files, report) {
  * The Tailwind adapter: for palette and typography devices, each colour and family must be held by a theme entry, in
  * @theme or tailwind.config, that a class names, such as bg-mist or font-display. Reports the theme name behind each.
  */
+/** The @keyframes names the stylesheets and the pages' style elements define. */
+const keyframesIn = files => new Set(Object.entries(files).filter(([name, text]) => typeof text === 'string' && /\.(?:css|html?|vue|svelte|astro)$/iu.test(name))
+  .flatMap(([, text]) => [...text.matchAll(/@(?:-webkit-)?keyframes\s+(["']?)(-?[A-Za-z_][\w-]*)\1\s*\{/gu)].map(match => match[2])));
+
 export function checkTailwind(dna, files, report) {
   const model = variableModel(files);
   const { theme, bindings } = tailwindBindings(dna, files, { resolve: model.resolve, used: model.used });
+  // Motion the Tailwind way: a theme animation (--animate-drift, or theme.animation in a config) that a class names, and
+  // motion-reduce: or motion-safe: classes for those who want less. In a live session the agent defined its animation in
+  // @theme, the literal check found no animation using its keyframes, and the agent rewrote it as plain CSS.
+  const motion = tailwindMotion(files, { resolve: model.resolve, used: model.used });
+  const defined = keyframesIn(files);
+  const pauseControl = Object.values(files).some(text => typeof text === 'string' && /data-motion-toggle/u.test(text));
+  const runByTheme = name => motion.runs.has(name) && (defined.has(name) || motion.keyframes.has(name));
   const devices = report.devices.map(result => {
     const own = bindings.filter(binding => binding.device === result.id);
     // A value the theme holds is in the project, wherever it is written; whether a class names it is the theme check's.
@@ -205,11 +216,23 @@ export function checkTailwind(dna, files, report) {
       detail: binding.live ? `${binding.kind === 'font' ? 'font-' : ''}${binding.live}`
         : binding.names.length ? `the theme holds it as ${binding.names.join(' or ')}, but no class names it`
           : `no theme ${binding.kind} holds ${binding.value}; add it to @theme or tailwind.config and name it in a class` }));
-    return adjust(result, { recovered: item => recoveredBy(model)(item) || (['color', 'font'].includes(item.kind) && bound(item)), extra });
+    // An endless theme animation needs a way to pause it, as an endless CSS animation does.
+    const device = (dna.devices || []).find(item => item.id === result.id);
+    const endless = (device?.tokens?.keyframes || []).filter(name => runByTheme(name) && motion.runs.get(name).infinite);
+    if (endless.length && !pauseControl && !result.missing.some(item => item.kind === 'motion' && item.value === 'pause control')) {
+      extra.push({ kind: 'motion', value: 'pause control', present: false, detail: `${endless.map(name => motion.runs.get(name).via).join(', ')} loops forever; add a button with data-motion-toggle that pauses it` });
+    }
+    const recovered = item => recoveredBy(model)(item) || (['color', 'font'].includes(item.kind) && bound(item))
+      || (item.kind === 'keyframes' && runByTheme(item.value)) || (item.kind === 'motion' && item.value === 'reduced-motion fallback' && motion.reducedMotion);
+    return adjust(result, { recovered, extra });
   });
-  return rescored(report, devices, { name: 'tailwind', version: theme.version, sources: theme.sources, colors: theme.colors.size, fonts: theme.fonts.size,
+  const base = report.motion ? { ...report, motion: { ...report.motion, used: [...new Set([...report.motion.used, ...[...motion.runs.keys()].filter(runByTheme)])],
+    infinite: [...new Set([...report.motion.infinite, ...[...motion.runs].filter(([name, run]) => run.infinite && runByTheme(name)).map(([name]) => name)])],
+    reducedMotion: report.motion.reducedMotion || motion.reducedMotion } } : report;
+  return rescored(base, devices, { name: 'tailwind', version: theme.version, sources: theme.sources, colors: theme.colors.size, fonts: theme.fonts.size,
+    ...(motion.runs.size ? { animations: [...motion.runs].map(([keyframes, run]) => ({ keyframes, via: run.via, ...(run.infinite ? { infinite: true } : {}) })) } : {}),
     bindings: bindings.map(({ device, kind, value, names, live }) => ({ device, kind, value, ...(live ? { name: live } : names.length ? { declaredAs: names, used: false } : { name: null }) })) },
-    `${report.limitation} With Tailwind it also checks that each palette and typography value is held by the theme (@theme or tailwind.config) and named by a class.`);
+    `${report.limitation} With Tailwind it also checks that each palette and typography value is held by the theme (@theme or tailwind.config) and named by a class, and counts a theme animation a class names, and motion-reduce: or motion-safe: classes, as motion in use.`);
 }
 
 // A path from the site root is served from the project folder, or from public/ or static/, where Vite, Next.js, Astro

@@ -66,6 +66,12 @@ A theme value takes effect where a class names it, or where a stylesheet uses it
 
 - **Tailwind 3** keeps it in `tailwind.config.*`. The check reads string values of `theme.colors`, `theme.extend.colors` and `fontFamily`, nested (`mist: { DEFAULT, 500 }` gives `mist` and `mist-500`), through `hsl(var(--x))` to the variable's value. Values written as code, such as `require(...)`, are not read.
 - **Classes** count wherever they appear: in pages, JSX `className`, Vue or Svelte markup, scripts, and `@apply` in stylesheets, with variants such as `hover:` and `md:` and opacity such as `/80`.
+- **Motion.** Define an animation in the theme and run it with a class:
+  - **Tailwind 4:** `--animate-drift: drift 9s ease-in-out infinite` in `@theme`, with its `@keyframes drift` beside it.
+  - **Tailwind 3:** `animation` and `keyframes` in the config.
+  - **Running it:** use `animate-drift`, or an arbitrary `animate-[drift_9s_ease-in-out_infinite]`. The check counts the keyframes as in use.
+  - **Reduced motion:** add `motion-reduce:animate-none`, or run the animation only under `motion-safe:`.
+  - **Endless loops:** an endless animation still needs a pause button with `data-motion-toggle`.
 - **shadcn/ui** keeps its colours as variables, which the theme or the config names (`primary: 'hsl(var(--primary))'`, or `--color-primary: var(--primary)` in `@theme inline`). Change the variables' values to the DNA's colours, keep their names, and the components follow.
 
 ## Restyling an existing project

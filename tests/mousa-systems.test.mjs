@@ -104,6 +104,54 @@ test('a W3C design token file is found by its $value leaves, under any name', ()
   assert.equal(detectDesignSystem({ ...files, 'src/theme.tokens.json': '{}' }).tokensFile, 'src/theme.tokens.json');
 });
 
+test('Tailwind motion: a theme animation a class names runs its keyframes, and motion-reduce classes keep motion safe', () => {
+  const motionDevice = device('dna1', 'motion', { keyframes: ['light-arrival'] });
+  const dna = { devices: [motionDevice] };
+  const check = files => checkDesignSystem(dna, files, checkDnaConformance(dna, files), detectDesignSystem(files));
+  // As the live Codex session first wrote it: the animation in @theme, its keyframes beside it, and a class.
+  const css = '@import "tailwindcss";\n@theme {\n  --color-ink: #172e48;\n  --animate-light-arrival: light-arrival 1.4s ease-out both;\n  @keyframes light-arrival { from { opacity: 0 } to { opacity: 1 } }\n}\n';
+  const page = classes => ({ 'index.html': `<main class="text-ink"><h1 class="${classes}">Stay</h1></main>`, 'src/style.css': css });
+  const literal = checkDnaConformance(dna, page('animate-light-arrival'));
+  assert.deepEqual(statusOf(literal, 'dna1').missing.map(item => item.kind), ['keyframes', 'motion'], 'the literal check sees no animation and no reduced-motion rule');
+  const live = check(page('animate-light-arrival motion-reduce:animate-none'));
+  assert.equal(statusOf(live, 'dna1').status, 'present', JSON.stringify(statusOf(live, 'dna1').missing));
+  assert.deepEqual(live.system.animations, [{ keyframes: 'light-arrival', via: 'animate-light-arrival' }]);
+  assert.equal(live.motion.reducedMotion, true);
+  assert.deepEqual(statusOf(check(page('animate-light-arrival')), 'dna1').missing.map(item => item.value), ['reduced-motion fallback'], 'motion without a reduced-motion class or rule');
+  assert.deepEqual(statusOf(check(page('text-ink')), 'dna1').missing.map(item => item.kind), ['keyframes', 'motion'], 'a theme animation no class names is not in use');
+  // An arbitrary value names the keyframes itself, and an endless one needs a pause control.
+  const endless = check(page('animate-[light-arrival_6s_ease-in-out_infinite] motion-safe:animate-[light-arrival_6s_ease-in-out_infinite]'));
+  assert.deepEqual(statusOf(endless, 'dna1').missing.map(item => [item.kind, item.value]), [['motion', 'pause control']]);
+  assert.match(statusOf(endless, 'dna1').missing[0].detail, /animate-\[light-arrival_6s_ease-in-out_infinite\] loops forever/u);
+  const paused = { ...page('animate-[light-arrival_6s_ease-in-out_infinite] motion-reduce:animate-none'), 'src/main.js': 'document.querySelector("[data-motion-toggle]")' };
+  assert.equal(statusOf(check(paused), 'dna1').status, 'present');
+});
+
+test('Tailwind 3 motion: an animation and keyframes in the config, named by a page\'s classes', () => {
+  const config = `module.exports = { theme: { extend: {
+      animation: { drift: 'drift 9s ease-in-out infinite', rise: 'rise 1s ease-out both' },
+      keyframes: { drift: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-6px)' } }, rise: { from: { opacity: '0' }, to: { opacity: '1' } } },
+    } } };`;
+  const files = { 'tailwind.config.js': config, 'src/index.css': '@tailwind base;\n@tailwind utilities;',
+    'index.html': '<main class="motion-safe:animate-rise"><span class="motion-safe:animate-drift">~</span><button data-motion-toggle>Pause</button></main>' };
+  const theme = tailwindTheme(files);
+  assert.deepEqual([...theme.animations.keys(), ...theme.keyframes], ['drift', 'rise', 'drift', 'rise']);
+  const dna = { devices: [device('dna1', 'motion', { keyframes: ['drift', 'rise'] })] };
+  const detected = detectDesignSystem(files);
+  assert.deepEqual([detected.system, detected.medium], ['tailwind', 'web']);
+  const literal = checkDnaConformance(dna, files);
+  assert.equal(statusOf(literal, 'dna1').status, 'missing', 'no CSS defines or runs them');
+  const report = checkDesignSystem(dna, files, literal, detected);
+  assert.equal(statusOf(report, 'dna1').status, 'present', JSON.stringify(statusOf(report, 'dna1').missing));
+  assert.deepEqual(report.system.animations, [{ keyframes: 'drift', via: 'animate-drift', infinite: true }, { keyframes: 'rise', via: 'animate-rise' }]);
+  // Without the pause button, the endless drift asks for one.
+  const unpaused = { ...files, 'index.html': files['index.html'].replace('<button data-motion-toggle>Pause</button>', '') };
+  assert.deepEqual(statusOf(checkDesignSystem(dna, unpaused, checkDnaConformance(dna, unpaused), detected), 'dna1').missing.map(item => item.value), ['pause control']);
+  // Component sources are checked as text, which finds the names in the config already.
+  const jsx = { ...files, 'src/App.jsx': 'export default () => <main className="motion-safe:animate-rise" />;' };
+  assert.equal(statusOf(checkLiteralConformance(dna, jsx), 'dna1').status, 'present');
+});
+
 test('a font URL is followed from the stylesheet that holds it, and one that reaches no file is reported', async () => {
   assert.deepEqual(reachedPaths('fonts/a.woff2', 'src/style.css'), ['src/fonts/a.woff2']);
   assert.deepEqual(reachedPaths('../fonts/a.woff2?v=2', 'src/style.css'), ['fonts/a.woff2']);

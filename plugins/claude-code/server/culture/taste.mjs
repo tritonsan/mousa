@@ -1216,6 +1216,18 @@ function animationUse(text) {
   }
   return { used: [...used], infinite: [...infinite] };
 }
+/** The @keyframes names an animation value runs, such as "drift 6s ease-in-out infinite", and whether one loops forever. */
+export function animationValueNames(value) {
+  const names = [];
+  let infinite = false;
+  for (const part of String(value).split(',')) {
+    const words = part.replace(/[a-z-]+\([^)]*\)/giu, ' ').trim().split(/\s+/u).filter(Boolean);
+    const name = words.find(word => /^-?[A-Za-z_][\w-]*$/u.test(word) && !ANIMATION_WORDS.has(word.toLowerCase()));
+    if (name) names.push(name);
+    if (words.some(word => word.toLowerCase() === 'infinite')) infinite = true;
+  }
+  return { names, infinite };
+}
 /** Whether a prefers-reduced-motion media query changes animation, transitions or smooth scrolling. */
 function honorsReducedMotion(text) {
   for (const match of text.matchAll(/@media[^{]*prefers-reduced-motion[^{]*\{/giu)) {

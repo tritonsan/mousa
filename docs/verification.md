@@ -64,6 +64,25 @@ Findings from the Codex run, and what changed:
 
 Limits: one session per project, both on Windows. No Qloo off arm was run, and Claude Code's gate was again not exercised, because no write came early.
 
+**Lanterna in Codex again, with the fixes.** The same request, launcher and conditions ran again in a new copy, `D:/mousa-live/codex-lanterna-2/`. It ended normally after 5.1 minutes, and the plugin was removed afterwards.
+- **Measurement.** 13 requests returned the same 70 works and the same six required anchors as the first run.
+- **The design.** A blue-hour page: deep blue, citron and ember on paper, set in Cormorant Garamond and Libre Franklin, with an original window of evening light drawn as inline SVG.
+- **Fonts.** The agent fetched them with `directory: "public/fonts"` and `stylesheet: "src/style.css"`, and pasted the rules, which load `/fonts/…`, as they came. The fonts passed at the first check, and every URL reaches its file.
+- **In Tailwind's way.**
+  - **The theme.** It changed `brand` and `brand-dark` and added `ink`, `paper` and `ember`.
+  - **The styling.** Hand-written declarations went from 0 to 4, against 312 in the first run, and the classes from 195 to 346. No style note fired.
+- **Files.** It wrote them with `apply_patch`, so Moûsa's gate saw every write.
+- **Facts.** It kept every id `main.js` selects and every fact, and `src/screenings.js` is unchanged.
+- **Check and review.**
+  - **Check.** 0.917 at the first run, then 1.0.
+  - **Review.** One round, audited, with every criterion met. The agent also checked the filters and the form with a script of its own.
+- **One more gap.** At the first check, the motion device was partly met: "@keyframes light-arrival is defined but no animation uses it". The agent had defined the animation in Tailwind's `@theme` form, which the check did not read, and rewrote it as an `@utility`. Since fixed:
+  - **Theme animations.** The Tailwind adapter now reads the theme's animations: `--animate-*` in Tailwind 4, and `animation` and `keyframes` in a Tailwind 3 config.
+  - **Classes.** It counts a theme animation that an `animate-*` class or an arbitrary `animate-[…]` names.
+  - **Reduced motion.** It counts `motion-reduce:` and `motion-safe:` classes.
+  - **Endless loops.** An endless theme animation asks for a pause control.
+  - **The replay.** On this run's files, the theme form scores 1.0, and so does the form as built.
+
 ## Live Codex sessions with the packaged plugin — October 13, 2026
 
 [`scripts/run-codex-live.mjs`](../scripts/run-codex-live.mjs) ran the Claude Code session's brief in Codex (CLI 0.162.0-alpha.17.2, the default model).

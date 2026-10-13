@@ -215,6 +215,7 @@ The marketplaces are `.claude-plugin/marketplace.json` for Claude Code and `.age
 - **Restyles in the project's own system** (see [the record](../docs/verification.md#live-restyles-of-existing-projects--october-13-2026)).
   - **Claude Code on Ramble.** It changed the values of its design tokens in both token files and kept every name, id and fact. The check scored 1.0, and the second review round met all 5 criteria.
   - **Codex on the Tailwind example.** It changed and added `@theme` entries, ran the project's build in the sandbox, and reviewed the build. This run found that the font check read paths literally, and that the styling left Tailwind's classes; both are now checked.
+  - **Codex again, with those fixes.** The fonts passed at the first check, the styling stayed in the classes (4 hand-written declarations against 312), and every file was written with `apply_patch`. It also found that the check missed Tailwind's own animation form; the Tailwind adapter now reads theme animations and `motion-reduce:` classes.
 
 **Not verified yet:**
 - that Claude Code runs the gate (its agent never wrote early, and its stream shows no PreToolUse hook);

@@ -10,6 +10,8 @@ A static website in HTML, CSS and a little JavaScript. `design_check` reads ever
 - **keyframes**: an `@keyframes` rule that the styles define and an `animation` uses. With animation, it also checks:
   - an `@media (prefers-reduced-motion: reduce)` rule that stops or simplifies it;
   - for an endless loop, a pause control: a button with `data-motion-toggle`.
+
+  In a Tailwind project, a theme animation that a class names counts as the animation, and `motion-reduce:` or `motion-safe:` classes count as the reduced-motion rule (see [design-systems.md](design-systems.md#tailwind)).
 - **svg**: an inline `<svg id="...">` with at least eight drawn shapes.
 - **ids**: an element with that id.
 - **copy**: the line in the visible text, or in a JSON data island that the page's script renders.
