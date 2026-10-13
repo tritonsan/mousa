@@ -209,6 +209,9 @@ test('the image brief is the Codex prompt without its Codex instruction, and pro
   assert.deepEqual(inClaude.map(item => [item.id, item.status]), [['host-tool', 'depends'], ['codex-cli', 'available'], ['off', 'available']]);
   const hosted = await inspectImageProviders({ host: 'claude-code', environment: 'hosted', codex });
   assert.deepEqual(hosted.map(item => item.id), ['off']);
+  const switchedOff = await inspectImageProviders({ host: 'codex', env: { MOUSA_IMAGES: 'off' }, codex });
+  assert.deepEqual(switchedOff.map(item => item.id), ['off'], 'MOUSA_IMAGES=off turns off Codex\'s own image tool too');
+  assert.match(switchedOff[0].note, /MOUSA_IMAGES=off/u);
 });
 
 function testServer({ env = {}, dir, fetchImpl = qlooOk, browser = { available: true, label: 'Microsoft Edge' }, codex = { available: false, reason: 'No Codex CLI was found.' } } = {}) {

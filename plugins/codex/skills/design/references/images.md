@@ -10,7 +10,7 @@ Moûsa writes the image brief from the imagery device itself: its look, its colo
 | --- | --- | --- |
 | `host-tool` | Codex always has an image tool. Claude Code and other hosts have one only when the session does, such as an image MCP server | `image` prompt, then your own tool, then `image` register |
 | `codex-cli` | A signed-in Codex CLI on this machine, outside Codex | `image({ action: 'generate', ... })` |
-| `off` | No image tool, or a hosted server | The plan's fallback: an SVG drawing or CSS art |
+| `off` | No image tool, a hosted server, or `MOUSA_IMAGES=off` | The plan's fallback: an SVG drawing or CSS art |
 
 Plan `generated-image` only when you can really make a picture in this session. Otherwise plan `inline-svg` or `css-art` for the device.
 

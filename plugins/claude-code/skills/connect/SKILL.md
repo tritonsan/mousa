@@ -48,7 +48,7 @@ Moûsa's file tools read and write only inside that folder. Its records live in 
 
 ## 5. Pictures and captures
 
-- **images.** `host-tool` means the session's own image tool, which Codex always has. Claude Code has one only when an image tool is connected. `codex-cli` is a signed-in Codex CLI on this machine. `off` means the plans draw imagery in SVG or CSS instead.
+- **images.** `host-tool` means the session's own image tool, which Codex always has. Claude Code has one only when an image tool is connected. `codex-cli` is a signed-in Codex CLI on this machine. `off` means the plans draw imagery in SVG or CSS instead. `MOUSA_IMAGES=off` leaves only `off`, for a person who wants no picture made on their plan.
 - **capture.** Captures need a Chromium-based browser such as Edge or Chrome. `MOUSA_BROWSER` names another executable, and `MOUSA_CAPTURE=off` turns captures off.
 
 ## 6. Hooks in Codex

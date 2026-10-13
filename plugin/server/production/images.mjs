@@ -125,6 +125,8 @@ export const IMAGE_PROVIDERS = Object.freeze(['host-tool', 'codex-cli', 'off']);
 
 export async function inspectImageProviders({ host = 'unknown', environment = 'local', env = process.env, platform = process.platform, codex = null } = {}) {
   if (environment === 'hosted') return [{ id: 'off', status: 'available', note: 'A hosted server makes no pictures; plans use their fallback method.' }];
+  // The person's switch for every provider, the host's own tool included: Codex's image tool draws on their plan too.
+  if (String(env.MOUSA_IMAGES || '').trim().toLowerCase() === 'off') return [{ id: 'off', status: 'available', note: 'Pictures are turned off with MOUSA_IMAGES=off; plans use their fallback method, such as an SVG illustration or CSS art.' }];
   const hostTool = host === 'codex'
     ? { id: 'host-tool', status: 'available', note: 'Codex has a built-in image generator. Make the picture with it from the brief Moûsa writes, save it in the project and register it.' }
     : { id: 'host-tool', status: 'depends', note: 'Only if this session has an image generation tool, such as an image MCP server. Moûsa cannot see the session\'s tools.' };

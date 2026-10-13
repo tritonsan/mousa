@@ -245,13 +245,19 @@ test('a place Qloo does not recognise stops the measurement after its first empt
     const insights = sent.filter(item => item === '/v2/insights').length;
     assert.ok(insights <= 3, `${insights} Insights requests, not one per domain`);
     assert.ok(empty.cautions.some(line => /likely did not recognise that place/u.test(line)));
-    assert.match(empty.next, /^Plan again with the city or the neighbourhood alone, such as "Istanbul"\..*prediction stays frozen/u);
+    assert.match(empty.next, /^Plan again with the city or the neighbourhood alone, such as "Istanbul", or with no location if the place is fictional\..*prediction stays frozen.*remove: \["location"\]/u);
     // Planned again with the city alone, the plan keeps its references and medium, and the frozen prediction measures.
     const city = await call('taste_profile', { dryRun: true, location: 'Istanbul' });
     assert.equal(city.status, 'planned');
     assert.deepEqual(city.kept, ['medium', 'references']);
     assert.deepEqual(city.plan.signal.references.map(item => item.name), ['Paterson', 'Nujabes']);
     assert.equal(city.plan.signal.location, 'Istanbul');
+    // A fictional place is removed, not replaced: the plan drops it and the place domain it added.
+    const placeless = await call('taste_profile', { dryRun: true, remove: ['location', 'ages'] });
+    assert.deepEqual([placeless.removed, placeless.kept], [['location'], ['medium', 'references']], 'only a saved field is removed');
+    assert.equal(placeless.plan.signal.location, undefined);
+    assert.equal(placeless.status, 'needs-restart', 'the frozen prediction covers the place domain');
+    assert.equal((await call('taste_profile', { dryRun: true, location: 'Istanbul' })).status, 'planned');
     assert.equal((await call('taste_profile', {})).status, 'ok');
   } finally {
     await rm(project, { recursive: true, force: true });

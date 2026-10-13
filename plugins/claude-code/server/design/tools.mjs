@@ -172,7 +172,7 @@ export function createDesignTools(context) {
   async function imageAvailability() {
     const providers = await images();
     const usable = providers.find(item => item.id !== 'off' && ['available', 'depends'].includes(item.status));
-    return usable ? { available: true, provider: usable.id } : { available: false, reason: providers.find(item => item.id === 'codex-cli')?.reason || 'No image tool is available in this session.' };
+    return usable ? { available: true, provider: usable.id } : { available: false, reason: providers.find(item => item.id === 'codex-cli')?.reason || (providers.length === 1 && providers[0].note) || 'No image tool is available in this session.' };
   }
   const capabilitiesFor = async medium => standaloneCapabilities({ medium, environment, fonts: await fonts(), image: await imageAvailability(), browser: await browser(), imagesPerRun: perRun });
   const methodsByLayer = (capabilities, layers) => Object.fromEntries(layers.map(layer => [layer, capabilities.methods.filter(item => item.available && item.layers.includes(layer)).map(item => item.id)]));

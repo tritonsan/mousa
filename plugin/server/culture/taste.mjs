@@ -552,7 +552,7 @@ export async function buildTasteProfile({ client, references, domains = DEFAULT_
       if (placeAnswers.answered >= 2 && placeAnswers.empty === placeAnswers.answered) {
         placeAnswers.stopped = true;
         const parts = place.split(',').map(part => part.trim()).filter(Boolean);
-        limitations.push(`Qloo returned nothing for the first ${placeAnswers.answered} domains weighted by the place "${place}", so it likely did not recognise that place, and the other domains were not requested. Plan again with ${parts.length > 1 ? `the city or the neighbourhood alone, such as "${parts.at(-1)}"` : 'another name for the place, such as its city'}.`);
+        limitations.push(`Qloo returned nothing for the first ${placeAnswers.answered} domains weighted by the place "${place}", so it likely did not recognise that place, and the other domains were not requested. Plan again with ${parts.length > 1 ? `the city or the neighbourhood alone, such as "${parts.at(-1)}"` : 'another name for the place, such as its city'}, or with no location if the place is fictional.`);
       }
     }
     return { domain: request.domain, band: request.band, status: response.record.status || (entities.length ? 'ok' : 'empty'), evidenceId: response.evidenceId, entities };

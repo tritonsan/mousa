@@ -38,7 +38,7 @@ Qloo needs to know who the design is for, as things they love. Take it from the 
 
   Brand and canon references are known names, never seeds, so they are not reported back as surprises.
 - **segments**: up to three audience descriptions, such as "parents with young children". Moûsa looks them up as Qloo audience segments. They give a broader signal than named works, so add works when you can.
-- **location**: a city or neighbourhood. It weights what Qloo measures toward that place, and it is required for a physical place such as a café.
+- **location**: a real city or neighbourhood. It weights what Qloo measures toward that place, and it is required for a physical place such as a café. A fictional place is a fact of the design, not a location: leave it out.
 - **ages**: up to three of `24_and_younger`, `25_to_29`, `30_to_34`, `35_to_44`, `45_to_54`, `35_and_younger`, `36_to_55`, `55_and_older`, and only when the brief states them.
 - **decisions**: the layers or choices this design must settle, such as palette, motion, voice or music.
 
@@ -72,7 +72,7 @@ The plan returns:
 - `missing`: what to ask the person. A `needs-input` status means ask, then plan again.
 - `prediction`: the domains and the shape your prediction must have.
 
-Planning again with only some fields keeps the rest of the saved plan, so `taste_profile({ dryRun: true, location: 'Istanbul' })` changes only the place. The result lists what it `kept`.
+Planning again with only some fields keeps the rest of the saved plan, so `taste_profile({ dryRun: true, location: 'Istanbul' })` changes only the place, and `remove: ['location']` drops it. The result lists what it `kept`.
 
 A `needs-restart` status means an earlier session's prediction covers other domains. Write a prediction for this plan and save it with `restart: true`.
 

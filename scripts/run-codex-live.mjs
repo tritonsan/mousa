@@ -1,5 +1,5 @@
-// One live Codex design session with the packaged Moûsa plugin and the same brief as the Claude Code session.
-// Plan-only by default; --run starts the session.
+// One live Codex design session with the packaged Moûsa plugin, by default with the same brief as the Claude Code
+// session. Plan-only by default; --run starts the session.
 // - Codex has no per-session plugin folder, so --run installs the plugin from this repository's marketplace into the
 //   person's Codex, and removes the plugin and the marketplace again afterwards unless --keep.
 // - The session ignores the person's config.toml (--ignore-user-config), so their approval, sandbox and MCP server
@@ -8,9 +8,15 @@
 //   with the person's config ignored, Moûsa's is the only plugin and its gate the only hook).
 // - The Qloo key comes from this repository's .env into the environment Codex starts from, never onto a command line,
 //   and MOUSA_QLOO_BUDGET caps the project folder's Qloo requests (24 by default).
-// - It records Codex's event stream to session.jsonl and a summary to summary.json beside the project folder.
+// - Pictures are off (MOUSA_IMAGES=off): Codex's own image tool would draw on the person's ChatGPT plan, which a run asks
+//   for separately. --images keeps them on.
+// - --from restyles a copy of an existing project, --brief-file gives the request, and --install runs the copy's
+//   npm ci before the session, which reaches npm; the session's sandbox has no network.
+// - It records Codex's event stream to session.jsonl and a summary to summary.json beside the project folder, with the
+//   files the session added, changed or removed in a copied project.
 //
-//   node scripts/run-codex-live.mjs [--run] [--keep] [--folder <dir>] [--budget 24] [--windows-sandbox elevated]
+//   node scripts/run-codex-live.mjs [--run] [--keep] [--folder <dir>] [--from <project>] [--install] [--brief-file <file>]
+//     [--budget 24] [--images] [--windows-sandbox elevated]
 
 import fs from 'node:fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
@@ -19,7 +25,7 @@ import { spawn } from 'node:child_process';
 import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 import { loadDotEnv, rootDir } from '../src/config.mjs';
-import { BRIEF } from './run-claude-code-live.mjs';
+import { readBrief, copyProject, compareProjects } from './run-claude-code-live.mjs';
 
 const HOST_VARIABLES = /^(?:CLAUDECODE|CLAUDE_CODE_.*|CLAUDE_AGENT_SDK_.*|CLAUDE_PID|CLAUDE_EFFORT|CLAUDE_PREVIEW_.*|ANTHROPIC_.*|MOUSA_.*|QLOO_.*|KIRO_.*|CODEX_HOME)$/u;
 
@@ -52,6 +58,17 @@ function codexCommand(codex, args, env) {
   });
 }
 
+/** npm ci in the copied project, through the shell npm needs on Windows; its output is returned, never the environment. */
+function npmCi(project, env) {
+  return new Promise(resolve => {
+    const child = spawn('npm ci --no-audit --no-fund', { cwd: project, env, shell: true, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
+    let out = '';
+    child.stdout.on('data', chunk => { out += chunk; });
+    child.stderr.on('data', chunk => { out += chunk; });
+    child.on('close', code => resolve({ code, out: out.trim() }));
+  });
+}
+
 /** What Codex's event stream says: the Moûsa calls in order, file changes, commands, refusals, errors and usage. */
 export async function summarize(file) {
   const calls = [], changes = [], commands = [], errors = [], held = [], items = {};
@@ -81,11 +98,13 @@ export async function summarize(file) {
 }
 
 async function main() {
-  const run = process.argv.includes('--run'), keep = process.argv.includes('--keep');
+  const run = process.argv.includes('--run'), keep = process.argv.includes('--keep'), install = process.argv.includes('--install'), images = process.argv.includes('--images');
   const stamp = new Date().toISOString().replace(/[:.]/gu, '-');
   const folder = path.resolve(option('--folder', path.join(path.parse(rootDir).root, 'mousa-live', `codex-${stamp}`)));
   const project = path.join(folder, 'project');
   const budget = Number.parseInt(option('--budget', '24'), 10);
+  const from = option('--from', null);
+  const brief = await readBrief(option('--brief-file', null));
   const dotenv = {};
   loadDotEnv(path.join(rootDir, '.env'), dotenv);
   const codex = await codexPath();
@@ -99,32 +118,39 @@ async function main() {
     ...(process.platform === 'win32' ? ['-c', `windows.sandbox="${windowsSandbox}"`] : [])];
   const args = ['exec', '--ignore-user-config', '--ephemeral', '--json', '--skip-git-repo-check', '--sandbox', 'workspace-write', '-C', project, ...overrides,
     '--dangerously-bypass-hook-trust', '-o', path.join(folder, 'last-message.md'), '-'];
-  const plan = { folder, project, codex, install: ['plugin remove mousa@mousa (if present)', `plugin marketplace add ${rootDir}`, 'plugin add mousa@mousa'], args, brief: BRIEF,
-    environment: ['QLOO_API_KEY (from .env)', 'QLOO_BASE_URL (from QLOO_API_BASE_URL)', `MOUSA_QLOO_BUDGET=${budget}`], afterwards: keep ? 'keep the plugin installed' : 'plugin remove mousa@mousa; plugin marketplace remove mousa',
-    qlooKeyInDotEnv: Boolean(dotenv.QLOO_API_KEY), note: 'A full Codex session on your own sign-in, with pictures from Codex\'s image tool, and at most the budget in Qloo requests.' };
+  const plan = { folder, project, ...(from ? { from: path.resolve(from), packages: install ? 'npm ci in the copy, before the session' : 'as copied' } : {}), codex,
+    install: ['plugin remove mousa@mousa (if present)', `plugin marketplace add ${rootDir}`, 'plugin add mousa@mousa'], args, brief,
+    environment: ['QLOO_API_KEY (from .env)', 'QLOO_BASE_URL (from QLOO_API_BASE_URL)', `MOUSA_QLOO_BUDGET=${budget}`, ...(images ? [] : ['MOUSA_IMAGES=off'])], afterwards: keep ? 'keep the plugin installed' : 'plugin remove mousa@mousa; plugin marketplace remove mousa',
+    qlooKeyInDotEnv: Boolean(dotenv.QLOO_API_KEY), note: `A full Codex session on your own sign-in, ${images ? 'with pictures from Codex\'s image tool' : 'with no pictures'}, and at most ${budget} Qloo requests.` };
   if (!run) { console.log(JSON.stringify(plan, null, 2)); console.log('\nPlan only. Add --run to start the session.'); return; }
   if (!codex) throw new Error('No Codex CLI was found; set CODEX_CLI_PATH.');
   if (!dotenv.QLOO_API_KEY) throw new Error('No QLOO_API_KEY in .env.');
   if (path.resolve(project).toLowerCase().startsWith(path.resolve(rootDir).toLowerCase())) throw new Error('Run the session outside this repository.');
   await fs.mkdir(project, { recursive: true });
-  await fs.writeFile(path.join(folder, 'brief.md'), BRIEF);
+  if (from) await copyProject(from, project);
+  await fs.writeFile(path.join(folder, 'brief.md'), brief);
 
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !HOST_VARIABLES.test(name)));
-  const install = [];
-  install.push(await codexCommand(codex, ['plugin', 'remove', 'mousa@mousa'], env));
-  install.push(await codexCommand(codex, ['plugin', 'marketplace', 'add', rootDir], env));
-  install.push(await codexCommand(codex, ['plugin', 'add', 'mousa@mousa'], env));
-  await fs.writeFile(path.join(folder, 'install.log'), install.map(item => `exit ${item.code}\n${item.out}`).join('\n---\n'));
-  if (install.at(-1).code !== 0) throw new Error(`The plugin did not install: ${install.at(-1).out.slice(0, 300)}`);
+  if (from && install) {
+    const packages = await npmCi(project, env);
+    await fs.writeFile(path.join(folder, 'npm-ci.log'), `exit ${packages.code}\n${packages.out}`);
+    if (packages.code !== 0) throw new Error(`npm ci failed in the copy: ${packages.out.slice(-300)}`);
+  }
+  const installed = [];
+  installed.push(await codexCommand(codex, ['plugin', 'remove', 'mousa@mousa'], env));
+  installed.push(await codexCommand(codex, ['plugin', 'marketplace', 'add', rootDir], env));
+  installed.push(await codexCommand(codex, ['plugin', 'add', 'mousa@mousa'], env));
+  await fs.writeFile(path.join(folder, 'install.log'), installed.map(item => `exit ${item.code}\n${item.out}`).join('\n---\n'));
+  if (installed.at(-1).code !== 0) throw new Error(`The plugin did not install: ${installed.at(-1).out.slice(0, 300)}`);
 
-  Object.assign(env, { QLOO_API_KEY: dotenv.QLOO_API_KEY, MOUSA_QLOO_BUDGET: String(budget), ...(dotenv.QLOO_API_BASE_URL ? { QLOO_BASE_URL: dotenv.QLOO_API_BASE_URL } : {}) });
+  Object.assign(env, { QLOO_API_KEY: dotenv.QLOO_API_KEY, MOUSA_QLOO_BUDGET: String(budget), ...(images ? {} : { MOUSA_IMAGES: 'off' }), ...(dotenv.QLOO_API_BASE_URL ? { QLOO_BASE_URL: dotenv.QLOO_API_BASE_URL } : {}) });
   const stream = createWriteStream(path.join(folder, 'session.jsonl'));
   const stderr = createWriteStream(path.join(folder, 'session.stderr.log'));
   const started = Date.now();
   const child = spawn(codex, args, { cwd: project, env, stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true });
   child.stdout.pipe(stream);
   child.stderr.pipe(stderr);
-  child.stdin.end(BRIEF);
+  child.stdin.end(brief);
   const code = await new Promise(resolve => child.on('close', resolve));
   await new Promise(resolve => stream.end(resolve));
   await new Promise(resolve => stderr.end(resolve));
@@ -142,10 +168,11 @@ async function main() {
     files: (await fs.readdir(project).catch(() => [])).filter(name => !name.startsWith('.')),
     captures: (await fs.readdir(path.join(project, '.mousa', 'captures')).catch(() => [])),
     pictures: (await fs.readdir(path.join(project, 'generated')).catch(() => [])),
+    ...(from ? { projectChanges: await compareProjects(from, project) } : {}),
     cleanup: cleanup.map(item => item.code) };
   await fs.writeFile(path.join(folder, 'summary.json'), `${JSON.stringify(summary, null, 2)}\n`);
   console.log(JSON.stringify({ exitCode: code, minutes: summary.minutes, stage: summary.stage, counts: summary.counts, items: summary.items, held: summary.held.length, errors: summary.errors.length,
-    qlooRequests: summary.qlooRequests, files: summary.files, captures: summary.captures.length, pictures: summary.pictures, cleanup: summary.cleanup, folder }, null, 2));
+    qlooRequests: summary.qlooRequests, files: summary.files, changes: summary.projectChanges, captures: summary.captures.length, pictures: summary.pictures, cleanup: summary.cleanup, folder }, null, 2));
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

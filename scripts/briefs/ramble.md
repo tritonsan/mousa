@@ -1,0 +1,1 @@
+Redesign Ramble, the walking app in this folder, for visitors who love Studio Ghibli films, Khruangbin and the photographs of Vivian Maier. Use the Moûsa plugin, so the design rests on what this audience actually loves.

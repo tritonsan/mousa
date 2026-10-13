@@ -25,6 +25,8 @@ const ENTITY_KINDS = Object.freeze(['artist', 'book', 'brand', 'destination', 'm
 const QUESTION_IDS = Object.freeze(TASTE_QUESTIONS.map(question => question.id));
 // What a plan is made from; a plan made again keeps those it is not given.
 const PLAN_FIELDS = Object.freeze(['medium', 'references', 'segments', 'location', 'ages', 'decisions', 'deepCuts']);
+// The fields a plan can do without; medium and deepCuts have defaults, so giving them is how they change.
+const REMOVABLE_FIELDS = Object.freeze(['references', 'segments', 'location', 'ages', 'decisions']);
 const REFERENCE = { type: 'object', properties: {
   name: { type: 'string', minLength: 1, maxLength: 200 },
   role: { type: 'string', enum: ['audience', 'creator-inspiration', 'brand', 'world-canon'], description: 'audience (default): what the audience loves. brand and world-canon are fixed context, never seeds.' },
@@ -46,6 +48,7 @@ export const TASTE_TOOLS = Object.freeze([
       decisions: NAMES(1, 8, 'The layers or choices this design must settle, such as palette, motion, voice or music.'),
       deepCuts: { type: 'boolean', description: 'Also measure lesser-known brands and films (default true).' },
       refresh: { type: 'boolean', description: 'Ignore cached Qloo answers.' },
+      remove: { type: 'array', minItems: 1, maxItems: 5, items: { type: 'string', enum: REMOVABLE_FIELDS }, description: 'With dryRun: fields of the saved plan to drop, such as ["location"] for a fictional place.' },
       baseline: { type: 'boolean', description: 'Design without Qloo: after your prediction, take it as the taste input, with no request. For the baseline arm of a comparison, or when the person declines Qloo.' },
       workspace: WORKSPACE_FIELD,
     }, additionalProperties: false },
@@ -139,8 +142,11 @@ export function createTasteTools(context) {
     // the city" sent only the location, and the plan lost its references.
     const saved = await readState(root, 'taste/plan');
     const given = Object.fromEntries(PLAN_FIELDS.filter(key => args[key] !== undefined).map(key => [key, args[key]]));
-    const kept = saved?.args ? PLAN_FIELDS.filter(key => given[key] === undefined && saved.args[key] !== undefined) : [];
+    // A field given a value is set, not removed; remove drops a saved one, such as a fictional place.
+    const removed = REMOVABLE_FIELDS.filter(key => (args.remove || []).includes(key) && given[key] === undefined && saved?.args?.[key] !== undefined);
+    const kept = saved?.args ? PLAN_FIELDS.filter(key => given[key] === undefined && saved.args[key] !== undefined && !removed.includes(key)) : [];
     const input = { ...(saved?.args || {}), ...given };
+    for (const key of removed) delete input[key];
     const planned = planTaste({ ...input, deepCuts: input.deepCuts ?? true });
     const prediction = await readState(root, 'taste/prediction');
     // A plan for other domains is saved, and the frozen prediction it no longer fits waits for a new session.
@@ -151,7 +157,7 @@ export function createTasteTools(context) {
       : differs ? restartFor(prediction, planned)
         : prediction ? 'Your prediction stays frozen. Call taste_profile without dryRun to measure.'
           : 'Before any Qloo data, write your own prediction for each listed domain and the design you would make from it alone, then save it with design_validate({stage:"prediction", artifact}).';
-    return { status: planned.missing.length ? 'needs-input' : differs ? 'needs-restart' : 'planned', plan: planned, ...(kept.length ? { kept } : {}), next };
+    return { status: planned.missing.length ? 'needs-input' : differs ? 'needs-restart' : 'planned', plan: planned, ...(kept.length ? { kept } : {}), ...(removed.length ? { removed } : {}), next };
   }
   const samePlan = (prediction, planned) => prediction.domains.join() === planned.domains.join();
   const restartFor = (prediction, planned) => `Your frozen prediction covers ${prediction.domains.join(', ')}, and this plan measures ${planned.domains.join(', ')}. Start a new design session for this plan: write a prediction for its domains and save it with design_validate({stage:"prediction", artifact, restart:true}).`;
@@ -258,7 +264,7 @@ export function createTasteTools(context) {
     const unmatchedPlace = (profile.limitations || []).find(item => /likely did not recognise that place/u.test(item));
     return { ...brief, next: profile.status === 'ok'
       ? 'Read the brief, then design from it: group the refs that belong together, and anchor palette and type to look qualities, motion to pacing, illustration to surfaces and the copy to tone. Use taste_ask for later choices.'
-      : unmatchedPlace ? `${unmatchedPlace.replace(/^.*?(Plan again)/u, '$1')} Call taste_profile with dryRun and only that location (the rest of the plan is kept), then measure; your prediction stays frozen.`
+      : unmatchedPlace ? `${unmatchedPlace.replace(/^.*?(Plan again)/u, '$1')} Call taste_profile with dryRun and only that location (the rest of the plan is kept), then measure; your prediction stays frozen. For a fictional place, plan with remove: ["location"] instead.`
         : 'This profile is too thin to govern a design. Add a few named works the audience loves, plan again with taste_profile dryRun, then measure.' };
   }
 
