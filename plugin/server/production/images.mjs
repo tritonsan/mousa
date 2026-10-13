@@ -72,11 +72,12 @@ function withoutEntities(value, names) {
 }
 
 /**
- * The host prompt for one image: the agent supplies only the subject; the art direction comes from the saved DNA device.
- * `figure` ({heads, parts}) is a game character's declared figure, so a portrait shows the proportions and garments the
- * game draws.
+ * The image brief for one picture: the agent supplies only the subject; the art direction comes from the saved DNA
+ * device. `figure` ({heads, parts}) is a game character's declared figure, so a portrait shows the proportions and
+ * garments the game draws. The brief is what any image generator receives: Codex through buildImagePrompt, or the
+ * host's own image tool when the agent makes the picture itself.
  */
-export function buildImagePrompt({ dna, names = [], device: deviceId, subject, aspect = 'landscape', attempts = 0, figure = null } = {}) {
+export function buildImageBrief({ dna, names = [], device: deviceId, subject, aspect = 'landscape', attempts = 0, figure = null } = {}) {
   if (attempts >= IMAGE_LIMITS.perRun) fail(`This run already requested ${IMAGE_LIMITS.perRun} images, the limit.`);
   const devices = Array.isArray(dna?.devices) ? dna.devices : [];
   const imagery = devices.filter(item => item?.layer === 'imagery');
@@ -102,9 +103,39 @@ export function buildImagePrompt({ dna, names = [], device: deviceId, subject, a
   const heads = Number.isFinite(figure?.heads) && figure.heads >= 1.5 && figure.heads <= 12 ? figure.heads : null;
   const body = heads || parts.length ? `Figure: ${[heads ? `about ${heads} heads tall` : '', parts.length ? `with ${parts.join(', ')}` : ''].filter(Boolean).join(', ')}.` : '';
   const direction = [look ? `Art direction: ${look}.` : '', colors.length ? `Palette: ${colors.join(', ')}.` : '', qualities.length ? `Qualities: ${qualities.join(', ')}.` : '', body].filter(Boolean).join(' ');
-  const prompt = ['Use your built-in image generation tool to create exactly one image, then reply with one sentence describing what it shows. Do not write code, run commands or create files yourself.',
-    `Subject: ${text}`, direction, 'No text, letters, numbers, logos, brand marks, recognizable people or copyrighted characters.', IMAGE_ASPECTS[aspect]].filter(Boolean).join('\n');
-  return { device: device.id, subject: text, aspect, prompt };
+  const brief = [`Subject: ${text}`, direction, 'No text, letters, numbers, logos, brand marks, recognizable people or copyrighted characters.', IMAGE_ASPECTS[aspect]].filter(Boolean).join('\n');
+  return { device: device.id, subject: text, aspect, brief };
+}
+
+const CODEX_IMAGE_PREAMBLE = 'Use your built-in image generation tool to create exactly one image, then reply with one sentence describing what it shows. Do not write code, run commands or create files yourself.';
+
+/** The prompt for one non-interactive Codex turn: the brief behind an instruction to use Codex's own image tool. */
+export function buildImagePrompt(options = {}) {
+  const { device, subject, aspect, brief } = buildImageBrief(options);
+  return { device, subject, aspect, prompt: `${CODEX_IMAGE_PREAMBLE}\n${brief}` };
+}
+
+/**
+ * Who can make a picture in a plugin session. host-tool: the agent's own image tool (Codex has one built in; another
+ * host only if the session has an image tool, which the plugin cannot see), with the brief written here and the file
+ * registered afterwards. codex-cli: a signed-in Codex CLI on this machine, run as a separate turn; never offered inside
+ * Codex itself. off: no picture; plans use their fallback method. API providers can join this list later.
+ */
+export const IMAGE_PROVIDERS = Object.freeze(['host-tool', 'codex-cli', 'off']);
+
+export async function inspectImageProviders({ host = 'unknown', environment = 'local', env = process.env, platform = process.platform, codex = null } = {}) {
+  if (environment === 'hosted') return [{ id: 'off', status: 'available', note: 'A hosted server makes no pictures; plans use their fallback method.' }];
+  const hostTool = host === 'codex'
+    ? { id: 'host-tool', status: 'available', note: 'Codex has a built-in image generator. Make the picture with it from the brief Moûsa writes, save it in the project and register it.' }
+    : { id: 'host-tool', status: 'depends', note: 'Only if this session has an image generation tool, such as an image MCP server. Moûsa cannot see the session\'s tools.' };
+  let cli;
+  if (host === 'codex') cli = { id: 'codex-cli', status: 'unavailable', reason: 'Inside Codex, use Codex\'s own image tool instead of starting another Codex.' };
+  else {
+    const found = await (codex ? codex() : inspectCodex({ config: { codexImages: env.CODEX_IMAGES, codexCliPath: env.CODEX_CLI_PATH }, env, platform })).catch(() => ({ available: false, reason: 'Codex could not be checked on this machine.' }));
+    cli = found.available ? { id: 'codex-cli', status: 'available', version: found.version, note: 'A signed-in Codex CLI on this machine makes the picture in a separate turn.' }
+      : { id: 'codex-cli', status: 'unavailable', reason: found.reason };
+  }
+  return [hostTool, cli, { id: 'off', status: 'available', note: 'No picture: the plan\'s fallback method, such as an SVG illustration or CSS art.' }];
 }
 
 function parseVersion(output) {

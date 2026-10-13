@@ -10,6 +10,48 @@ Successful standalone Qloo replies receive an `evidence.id` beginning with `cult
 
 Set `QLOO_API_KEY` in the MCP process environment or the host's secret environment facility. The default base URL is `https://hackathon.api.qloo.com`. Do not put a credential into this plugin, client configuration examples, artifacts, browser code, or logs. Without a key, tool discovery works and a Qloo tool returns an explicit `QLOO_KEY_MISSING` error. Set `QLOO_BASE_URL` only when using a credential issued for another documented Qloo environment.
 
+## The mousa entry (0.5.0, in progress)
+
+`server/mousa.mjs` starts the server that the Claude Code and Codex packages will run. The server is named `mousa`, and its surface is built to be cheap to load:
+- Instructions stay under 2,048 characters, because Claude Code cuts server instructions there.
+- Each result is one compact text object, because Codex drops images from a result that also carries `structuredContent`.
+- Records stay in the project's `.mousa/` folder instead of being passed back and forth.
+
+`server/index.mjs` keeps the standalone surface described below for Studio's `/mcp` endpoint and the Kiro example. The two entries share the same engine.
+
+It offers three setup tools so far.
+
+- **`mousa_status`.** Call it first. It reports:
+  - whether Qloo is connected, and from where;
+  - the project folder;
+  - which image generators the session can use;
+  - whether review captures work;
+  - one-line fixes for anything missing, worded for the host named in `MOUSA_HOST` (`claude-code`, `codex` or `kiro`).
+
+  It makes no network request unless `check: true` asks it to test the key with one search.
+- **`mousa_connect`.** Opens a one-time page on `127.0.0.1`, behind a random path. The person pastes their own Qloo API key there, so the key never passes through the chat. The page:
+  - accepts requests only for its own host and origin;
+  - tests the key with one Qloo search before saving it;
+  - stores the key in the person's connections file (`%APPDATA%\mousa\connections.json` on Windows, `~/.config/mousa/connections.json` elsewhere; `MOUSA_CONFIG_DIR` moves it);
+  - closes after a save, or after ten minutes.
+
+  On Windows the key is encrypted for the current user with DPAPI through Windows PowerShell. Elsewhere the file is readable by its owner only.
+- **`mousa_open_project`.** Sets the project folder from an absolute path the person names. Drive roots and the home folder itself are refused.
+
+**Qloo key.** A key in `QLOO_API_KEY` wins over a saved one. A value the host left unfilled, such as `${user_config.qloo_api_key}`, counts as unset, so a key saved on the page still works.
+
+**Project folder.** Moûsa takes the first of these that is set:
+1. `MOUSA_PROJECT_DIR` (the Claude Code package fills it from `${CLAUDE_PROJECT_DIR}`).
+2. The folder Codex reports with each call. The server advertises `codex/sandbox-state-meta` and reads only `sandboxCwd` from that state.
+3. A folder the person approved through `mousa_open_project`.
+
+**Pictures.** The plugin itself writes the image brief from the Design DNA. Three sources can make the picture:
+- `host-tool`: the agent's own image tool. Codex has one built in; another host has one only if its session does.
+- `codex-cli`: a signed-in Codex CLI on the machine. It is never offered from inside Codex.
+- `off`: no picture; plans fall back to SVG or CSS.
+
+Providers that take an API key can be added to the same list later.
+
 ## Portable configuration
 
 `mcp.json` uses `${PLUGIN_ROOT}` for plugin-aware clients. For Kiro or another generic stdio MCP client, use its supported MCP configuration location and substitute the absolute extracted plugin path:

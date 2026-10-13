@@ -4,8 +4,12 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
+import { fileURLToPath } from 'node:url';
 
 export const STATE_DIR = '.mousa';
+// The request _meta key under which Codex sends its sandbox state to a server that advertises the same capability.
+export const CODEX_SANDBOX_META = 'codex/sandbox-state-meta';
 const BLOCKED = new Set(['.git', '.env', '.aws', '.ssh', '.codex', '.agents', '.kiro', 'node_modules']);
 const TEXT_TYPES = /\.(?:html?|css|m?js|jsx|tsx?|json|svg|md|txt|xml|ya?ml|swift|kt|kts|dart|java|vue|svelte|astro)$/iu;
 export const PROJECT_LIMITS = Object.freeze({ files: 20, fileBytes: 200 * 1024 });
@@ -22,6 +26,50 @@ export async function projectRoot(env = process.env) {
   const stat = root ? await fs.stat(root).catch(() => null) : null;
   if (!stat?.isDirectory()) throw new ProjectScopeError('MOUSA_PROJECT_DIR does not name an existing folder.', 'PROJECT_DIR_MISSING');
   return root;
+}
+
+const unfilled = value => typeof value !== 'string' || !value.trim() || /^\$\{[^}]*\}$/u.test(value.trim()) || /^%[A-Za-z_][A-Za-z0-9_]*%$/u.test(value.trim());
+
+/**
+ * The working folder a host reports with a tool call. Codex sends its sandbox state under CODEX_SANDBOX_META to a
+ * server that advertises that capability; sandboxCwd is a file URI such as file:///D:/Projects/site. Only the folder
+ * is read; the rest of the state is not interpreted.
+ */
+export function sandboxCwdFromMeta(meta) {
+  const state = meta && typeof meta === 'object' ? meta[CODEX_SANDBOX_META] : null;
+  const value = state && typeof state === 'object' ? state.sandboxCwd : null;
+  if (typeof value !== 'string' || !value.trim()) return null;
+  try { return value.startsWith('file:') ? fileURLToPath(value) : path.isAbsolute(value) ? value : null; } catch { return null; }
+}
+
+/**
+ * An existing folder the plugin may treat as a project: resolved through links, not a drive or filesystem root and
+ * not the home folder itself, which would hand every personal file to the file tools.
+ */
+export async function checkProjectFolder(value) {
+  if (typeof value !== 'string' || !value.trim() || !path.isAbsolute(value.trim())) throw new ProjectScopeError('Give the project folder as an absolute path.', 'PROJECT_DIR_INVALID');
+  const root = await fs.realpath(path.resolve(value.trim())).catch(() => null);
+  const stat = root ? await fs.stat(root).catch(() => null) : null;
+  if (!stat?.isDirectory()) throw new ProjectScopeError('That project folder does not exist.', 'PROJECT_DIR_INVALID');
+  if (path.parse(root).root === root) throw new ProjectScopeError('A drive or filesystem root is too broad for a project folder.', 'PROJECT_DIR_INVALID');
+  const home = await fs.realpath(os.homedir()).catch(() => os.homedir());
+  if (root.toLowerCase() === home.toLowerCase()) throw new ProjectScopeError('The home folder is too broad for a project folder; name the project inside it.', 'PROJECT_DIR_INVALID');
+  return root;
+}
+
+/**
+ * The project folder of a plugin session and where it came from: MOUSA_PROJECT_DIR (Claude Code fills it from
+ * ${CLAUDE_PROJECT_DIR}), else the folder the host reports with the call (Codex), else the one the person approved
+ * with mousa_open_project (`session.root`). The person still decides: a host setting or an approved call names it.
+ */
+export async function resolveProjectRoot({ env = process.env, meta = null, session = null } = {}) {
+  if (!unfilled(env.MOUSA_PROJECT_DIR)) return { root: await projectRoot(env), source: 'environment' };
+  const reported = sandboxCwdFromMeta(meta);
+  if (reported) {
+    try { return { root: await checkProjectFolder(reported), source: 'host' }; } catch { /* Fall through to an approved folder. */ }
+  }
+  if (session?.root) return { root: session.root, source: 'approved' };
+  throw new ProjectScopeError('No project folder is set. Ask the person which folder to design in, then call mousa_open_project with it.', 'PROJECT_DIR_MISSING');
 }
 
 /**
