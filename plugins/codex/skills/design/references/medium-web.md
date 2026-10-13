@@ -47,4 +47,5 @@ A static website in HTML, CSS and a little JavaScript. `design_check` reads ever
   - `target: 'section-id'` scrolls the views to a section.
   - `full: true` takes the whole page.
   - `entry` names another page.
+  - `root` serves a built folder, such as `dist`, after the project's own build.
 - **Reach.** The browser reaches only the project's own files, so a page that depends on the network renders without it.

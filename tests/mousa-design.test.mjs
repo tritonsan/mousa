@@ -24,8 +24,8 @@ test('the design system is read from the project: custom properties, tokens, com
   const react = { 'src/App.jsx': 'export default () => null', 'src/index.css': '@tailwind base;' };
   const detected = detectDesignSystem(react);
   assert.equal(detected.medium, 'generic');
-  assert.equal(detected.system, 'text');
-  assert.ok(detected.notes.some(note => /Tailwind/u.test(note)) && detected.notes.some(note => /Component sources/u.test(note)));
+  assert.equal(detected.system, 'tailwind');
+  assert.ok(detected.notes.some(note => /Tailwind found: palette and type are checked in its theme/u.test(note)) && detected.notes.some(note => /Component sources/u.test(note)));
   assert.match(mergedPages(site)['index.html'], /About/u);
   assert.equal(mergedPages({ 'index.html': '<p>x</p>' })['index.html'], '<p>x</p>');
 });

@@ -97,7 +97,8 @@ The methods of each medium and the review rules are in [references/production.md
 ## 5. Build to the DNA
 
 - **Every device, with its exact tokens.** Make each one by the method its step names, and do not fall back to a default look where a device says otherwise.
-- **In the project's own design system.** On a site with CSS custom properties, each palette colour and font lives in a custom property that the styles use through `var()`. See [references/design-systems.md](references/design-systems.md).
+- **In the project's own design system.** Each palette colour and font lives where the project keeps its values: in a custom property the styles use through `var()`, or in a Tailwind theme entry that a class names. Keep the project's own colour notation, such as `oklch()` or shadcn/ui's HSL triplets. See [references/design-systems.md](references/design-systems.md).
+- **In an existing project, restyle in place.** Change the values of its tokens, variables or theme, and keep their names, its content, its data and its scripts' hooks. Add no parallel stylesheet that overrides them.
 - **Keep the product.** Keep its facts, its protected files and its accessibility. Visitor-facing text never mentions Qloo, agents or APIs, and nothing copies a work's logo, artwork, lyrics, characters or trade dress.
 - **Invent no fact.** The copy states only what the brief or the project says. Add no price or "free", no amenity, offer, schedule, award, review or claim that they do not state, however well it fits the voice. A detail the voice wants and the brief lacks is left out, or asked about. In the first live session a voice device added "free, no sign-up" and "two pairs of headphones" that no brief said.
 
@@ -112,6 +113,7 @@ The methods of each medium and the review rules are in [references/production.md
 - `target: 'element-id'` scrolls to an element.
 - `full: true` takes the whole height.
 - `entry: 'about.html'` captures another page.
+- `root: 'dist'` serves a built folder: for a Tailwind, Vite or other framework project, after you run its own build.
 - `specimen: true` captures the **specimen board**: the DNA drawn on one page with its palette, type, motion, drawings, pictures and lines. It serves a design a browser cannot open, and judging the system itself.
 
 A round holds six captures, and a session has two rounds.

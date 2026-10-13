@@ -1,12 +1,17 @@
-// The project's own design system. detectDesignSystem reads what kind of project it is and where its values live; the
-// CSS variable adapter then checks, beyond the literal conformance check, that each palette and typography value of
-// the Design DNA is the value of a custom property the styles actually use through var(), names the property that
-// carries it, and resolves var() chains so a CSS token written as letter-spacing: var(--tracking) still counts.
-// Projects without custom properties are checked as text, and the specimen board shows any design for review.
+// The project's own design system. detectDesignSystem reads what kind of project it is and where its values live, and
+// an adapter then checks, beyond the literal conformance check, where each palette and typography value of the Design
+// DNA is bound:
+// - CSS custom properties: the value of a property the styles use through var(), with var() chains resolved, so a CSS
+//   token written as letter-spacing: var(--tracking) still counts.
+// - Tailwind: the value of a theme entry (Tailwind 4's @theme, or Tailwind 3's config) that a class names.
+// Every check accepts a colour in another notation, such as oklch() or shadcn/ui's bare HSL triplets. Other projects are
+// checked as text, and the specimen board shows any design for review.
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { cssDeclarations, colorsIn, normalizeTasteName } from '../culture/taste.mjs';
+import { cssDeclarations, normalizeTasteName } from '../culture/taste.mjs';
+import { holdsColor } from './colors.mjs';
+import { usesTailwind, tailwindBindings } from './tailwind.mjs';
 
 export const PROJECT_FILE_LIMITS = Object.freeze({ files: 80, fileBytes: 200 * 1024, depth: 6 });
 const SKIP = new Set(['node_modules', 'dist', 'build', 'out', 'coverage', 'vendor', 'fonts', 'generated']);
@@ -47,16 +52,16 @@ export function detectDesignSystem(files) {
   const names = Object.keys(files);
   const pages = names.filter(name => /\.html?$/iu.test(name));
   const components = names.some(name => COMPONENTS.test(name));
-  const tokensFile = names.find(name => /(?:^|\/)tokens\.json$/iu.test(name)) || null;
+  // A design token file: tokens.json, a *.tokens.json, or any JSON file with W3C (DTCG) $value leaves.
+  const tokensFile = names.find(name => /(?:^|\/)(?:[\w-]+[.-])?tokens\.json$/iu.test(name)) || names.find(name => /\.json$/iu.test(name) && /"\$value"\s*:/u.test(files[name])) || null;
   const custom = new Set(cssDeclarations(files).filter(rule => rule.property.startsWith('--')).map(rule => rule.property));
-  const tailwind = names.some(name => /(?:^|\/)tailwind\.config\.(?:js|cjs|mjs|ts)$/iu.test(name))
-    || Object.entries(files).some(([name, text]) => /\.css$/iu.test(name) && /@tailwind\b|@import\s+["']tailwindcss|@theme\b/u.test(text));
-  const medium = tokensFile && custom.size ? 'app-ui' : pages.length && !components ? 'web' : 'generic';
+  const tailwind = usesTailwind(files);
+  const medium = components ? 'generic' : tokensFile && custom.size ? 'app-ui' : pages.length ? 'web' : 'generic';
   const notes = [];
-  if (tailwind) notes.push('Tailwind found: there is no Tailwind adapter yet, so its values are checked as text and shown on the specimen board.');
+  if (tailwind) notes.push('Tailwind found: palette and type are checked in its theme (@theme or tailwind.config) and in the classes that name them. The check reads the source; capture a built page with design_capture and root, such as dist.');
   if (components) notes.push('Component sources found (JSX, Vue, Svelte or Astro): the project is checked as source text; the specimen board shows the design.');
   if (!pages.length && !components) notes.push('No page found: the specimen board is the visual review.');
-  return { system: custom.size >= 3 ? 'css-vars' : 'text', medium, entry: pages.includes('index.html') ? 'index.html' : pages[0] || null, pages: pages.length,
+  return { system: tailwind ? 'tailwind' : custom.size >= 3 ? 'css-vars' : 'text', medium, entry: pages.includes('index.html') ? 'index.html' : pages[0] || null, pages: pages.length,
     customProperties: custom.size, ...(tokensFile ? { tokensFile } : {}), ...(notes.length ? { notes } : {}) };
 }
 
@@ -93,31 +98,42 @@ function variableModel(files) {
   return { rules, declared, used, resolve };
 }
 
+/** A device's result with some of its missing checks found after all and some checks added, scored again. */
+function adjust(result, { recovered = () => false, extra = [] } = {}) {
+  const kept = result.missing.filter(item => !recovered(item));
+  const tokens = result.tokens + extra.length, found = result.found + (result.missing.length - kept.length) + extra.filter(item => item.present).length;
+  const status = !tokens ? 'missing' : found === tokens ? 'present' : found ? 'partial' : 'missing';
+  return { ...result, status, tokens, found, missing: [...kept, ...extra.filter(item => !item.present).map(({ kind, value, detail }) => ({ kind, value, detail }))] };
+}
+function rescored(report, devices, system, limitation) {
+  const present = devices.filter(device => device.status === 'present').length, partial = devices.filter(device => device.status === 'partial').length;
+  const score = devices.length ? Number(((present + partial / 2) / devices.length).toFixed(3)) : 0;
+  return { ...report, devices, present, partial, missing: devices.length - present - partial, score, meetsThreshold: score >= report.threshold, ...(system ? { system } : {}), limitation };
+}
+/** A CSS value the literal check missed counts when var() resolves to it. */
+function viaVariable(model, item) {
+  const index = item.value.indexOf(':'), property = item.value.slice(0, index).trim(), wanted = compactValue(item.value.slice(index + 1));
+  return model.rules.some(rule => rule.property === property && /var\(/u.test(rule.value) && compactValue(model.resolve(rule.value)).includes(wanted));
+}
+/** A colour the literal check missed counts when a stylesheet holds it in another notation, such as oklch(). */
+const colorHeld = (model, value) => model.rules.some(rule => holdsColor(model.resolve(rule.value), value));
+const recoveredBy = model => item => (item.kind === 'css' && viaVariable(model, item)) || (item.kind === 'color' && colorHeld(model, item.value));
+
 /**
- * The CSS variable adapter on top of a web conformance report: for palette and typography devices, each color and font
- * must be the value of a custom property that is used through var(), directly or through another custom property. A
- * CSS token the literal check missed counts when var() resolves to it. Reports which property carries each value.
+ * The CSS variable adapter on top of a conformance report: for palette and typography devices, each color and font
+ * must be the value of a custom property that is used through var(), directly or through another custom property.
+ * Reports which property carries each value.
  */
 export function checkCssVariables(dna, files, report) {
   const model = variableModel(files);
   const holders = (value, kind) => [...model.declared.entries()].filter(([, values]) => values.some(raw => {
     const resolved = model.resolve(raw);
-    return kind === 'color' ? colorsIn(resolved).includes(value.toLowerCase())
-      : resolved.split(',').some(part => normalizeTasteName(part.replace(/["']/gu, '')) === normalizeTasteName(value));
+    return kind === 'color' ? holdsColor(resolved, value) : resolved.split(',').some(part => normalizeTasteName(part.replace(/["']/gu, '')) === normalizeTasteName(value));
   })).map(([name]) => name);
   const bindings = [];
   const devices = report.devices.map(result => {
     const device = dna.devices.find(item => item.id === result.id);
     if (!device) return result;
-    let { found, tokens } = result;
-    // A CSS value written through var() is the same value.
-    const missing = result.missing.filter(item => {
-      if (item.kind !== 'css') return true;
-      const index = item.value.indexOf(':'), property = item.value.slice(0, index).trim(), wanted = compactValue(item.value.slice(index + 1));
-      const resolved = model.rules.some(rule => rule.property === property && /var\(/u.test(rule.value) && compactValue(model.resolve(rule.value)).includes(wanted));
-      if (resolved) found++;
-      return !resolved;
-    });
     const extra = [];
     if (['palette', 'typography'].includes(device.layer)) {
       for (const [kind, values] of [['color', device.tokens.colors || []], ['font', device.tokens.fonts || []]]) for (const value of values) {
@@ -127,14 +143,38 @@ export function checkCssVariables(dna, files, report) {
           detail: live ? `--${live}` : names.length ? `${names.map(name => `--${name}`).join(' or ')} holds it but nothing uses it through var()` : `no custom property holds ${value}; declare it as one and use it through var()` });
       }
     }
-    tokens += extra.length;
-    found += extra.filter(item => item.present).length;
-    const status = !tokens ? 'missing' : found === tokens ? 'present' : found ? 'partial' : 'missing';
-    return { ...result, status, tokens, found, missing: [...missing, ...extra.filter(item => !item.present).map(({ kind, value, detail }) => ({ kind, value, detail }))] };
+    return adjust(result, { recovered: recoveredBy(model), extra });
   });
-  const present = devices.filter(device => device.status === 'present').length, partial = devices.filter(device => device.status === 'partial').length;
-  const score = devices.length ? Number(((present + partial / 2) / devices.length).toFixed(3)) : 0;
-  return { ...report, devices, present, partial, missing: devices.length - present - partial, score, meetsThreshold: score >= report.threshold,
-    system: { name: 'css-vars', customProperties: model.declared.size, used: [...model.declared.keys()].filter(name => model.used.has(name)).length, bindings },
-    limitation: `${report.limitation} With CSS custom properties it also checks that each palette and typography value is held by a custom property the styles use through var().` };
+  return rescored(report, devices, { name: 'css-vars', customProperties: model.declared.size, used: [...model.declared.keys()].filter(name => model.used.has(name)).length, bindings },
+    `${report.limitation} With CSS custom properties it also checks that each palette and typography value is held by a custom property the styles use through var().`);
+}
+
+/**
+ * The Tailwind adapter: for palette and typography devices, each colour and family must be held by a theme entry, in
+ * @theme or tailwind.config, that a class names, such as bg-mist or font-display. Reports the theme name behind each.
+ */
+export function checkTailwind(dna, files, report) {
+  const model = variableModel(files);
+  const { theme, bindings } = tailwindBindings(dna, files, { resolve: model.resolve, used: model.used });
+  const devices = report.devices.map(result => {
+    const own = bindings.filter(binding => binding.device === result.id);
+    // A value the theme holds is in the project, wherever it is written; whether a class names it is the theme check's.
+    const bound = item => own.some(binding => binding.kind === item.kind && binding.value === item.value && binding.names.length);
+    const extra = own.map(binding => ({ kind: 'theme', value: binding.value, present: Boolean(binding.live),
+      detail: binding.live ? `${binding.kind === 'font' ? 'font-' : ''}${binding.live}`
+        : binding.names.length ? `the theme holds it as ${binding.names.join(' or ')}, but no class names it`
+          : `no theme ${binding.kind} holds ${binding.value}; add it to @theme or tailwind.config and name it in a class` }));
+    return adjust(result, { recovered: item => recoveredBy(model)(item) || (['color', 'font'].includes(item.kind) && bound(item)), extra });
+  });
+  return rescored(report, devices, { name: 'tailwind', version: theme.version, sources: theme.sources, colors: theme.colors.size, fonts: theme.fonts.size,
+    bindings: bindings.map(({ device, kind, value, names, live }) => ({ device, kind, value, ...(live ? { name: live } : names.length ? { declaredAs: names, used: false } : { name: null }) })) },
+    `${report.limitation} With Tailwind it also checks that each palette and typography value is held by the theme (@theme or tailwind.config) and named by a class.`);
+}
+
+/** The adapter for the project's design system, or, for any other project, the colours written in another notation. */
+export function checkDesignSystem(dna, files, report, detected) {
+  if (detected?.system === 'tailwind') return checkTailwind(dna, files, report);
+  if (detected?.system === 'css-vars') return checkCssVariables(dna, files, report);
+  const model = variableModel(files);
+  return rescored(report, report.devices.map(result => adjust(result, { recovered: recoveredBy(model) })), report.system, report.limitation);
 }

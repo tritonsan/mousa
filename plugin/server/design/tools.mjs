@@ -19,7 +19,7 @@ import { pngSize, jpegSize, imagePalette, colorDistance, scalePng } from '../pro
 import { fontsForDna } from '../production/fonts.mjs';
 import { readState, writeState, resolveInProject, relativePath, readProjectFiles, STATE_DIR, WORKSPACE_FIELD } from '../production/project-files.mjs';
 import { tasteInputArgument } from '../production/tools.mjs';
-import { collectProjectFiles, detectDesignSystem, mergedPages, checkCssVariables } from './systems.mjs';
+import { collectProjectFiles, detectDesignSystem, mergedPages, checkDesignSystem } from './systems.mjs';
 import { buildSpecimen } from './specimen.mjs';
 
 export const PRODUCTION_MEDIA = Object.freeze(listMedia().map(medium => medium.id).filter(id => ['web', 'app-ui', 'generic'].includes(id)));
@@ -55,11 +55,12 @@ export const DESIGN_TOOLS = Object.freeze([
   },
   {
     name: 'design_capture',
-    description: 'Capture the result for your review and see it: the pictures come back in this result. By default the project\'s entry page at each view of its medium (desktop and mobile for a site); target scrolls to an element id, full takes the whole height. specimen:true captures the specimen board instead: the DNA drawn on one page (palette, type in its fonts, motion, drawings, pictures and voice), for designs a browser cannot open or to judge the system itself. Rounds hold 6 captures each; review each round with design_validate stage review.',
+    description: 'Capture the result for your review and see it: the pictures come back in this result. By default the project\'s entry page at each view of its medium (desktop and mobile for a site); target scrolls to an element id, full takes the whole height, and root serves a built folder such as dist. specimen:true captures the specimen board instead: the DNA drawn on one page (palette, type in its fonts, motion, drawings, pictures and voice), for designs a browser cannot open or to judge the system itself. Rounds hold 6 captures each; review each round with design_validate stage review.',
     inputSchema: { type: 'object', properties: {
       specimen: { type: 'boolean' }, entry: { type: 'string', minLength: 1, maxLength: 200 },
       views: { type: 'array', minItems: 1, maxItems: 4, items: { type: 'string', minLength: 1, maxLength: 30 } },
       target: { type: 'string', minLength: 1, maxLength: 60 }, full: { type: 'boolean' },
+      root: { type: 'string', minLength: 1, maxLength: 120, description: 'A folder inside the project to serve as the site, such as dist or build after the project\'s own build step. Default: the project folder.' },
       round: { type: 'integer', minimum: 1, maximum: CAPTURE_LIMITS.rounds }, workspace: WORKSPACE_FIELD,
     }, additionalProperties: false },
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
@@ -269,7 +270,9 @@ export function createDesignTools(context) {
     const options = { ...(library ? { fonts: fontsForDna(library) } : {}), ...(detected.tokensFile ? { tokensFile: detected.tokensFile } : {}) };
     const checked = profile.id === 'web' ? mergedPages(files) : files;
     let report = profile.checkConformance(profile.dnaForCheck(record.dna), checked, options);
-    if (profile.id === 'web' && detected.system === 'css-vars') report = checkCssVariables(record.dna, checked, report);
+    // The project's own design system: custom properties, a Tailwind theme, or colours in any notation. App screens keep
+    // their token check.
+    if (profile.id !== 'app-ui') report = checkDesignSystem(record.dna, checked, report, detected);
     await writeState(root, 'design/check', { checkedAt: stamp(), medium: profile.id, system: detected.system, score: report.score, devices: report.devices });
     await session(root, 'checked');
     return { status: 'checked', medium: profile.id, system: detected.system, score: report.score, meetsThreshold: report.meetsThreshold,
@@ -301,11 +304,15 @@ export function createDesignTools(context) {
         const files = await collectProjectFiles(root);
         const detected = detectDesignSystem(files);
         const medium = mediumProfile((await readState(root, 'design/dna'))?.medium || detected.medium);
-        const entry = relativePath(args.entry || detected.entry || medium.entry || 'index.html', { name: 'entry' });
-        if (!/\.html?$/iu.test(entry) || !Object.hasOwn(files, entry)) refuse('CAPTURE_INVALID', `entry: name an HTML page of the project${detected.entry ? `, such as ${detected.entry}` : ''}. A design without pages is reviewed with specimen:true.`);
+        // A framework project is captured from its own build output, which the file reader leaves out.
+        const site = args.root ? (await resolveInProject(root, args.root, { name: 'root' })).file : root;
+        if (args.root && !(await fs.stat(site).then(stat => stat.isDirectory(), () => false))) refuse('CAPTURE_INVALID', `root: ${args.root} is not a folder of the project. Run the project's build first.`);
+        const entry = relativePath(args.entry || (args.root ? 'index.html' : detected.entry) || medium.entry || 'index.html', { name: 'entry' });
+        const present = args.root ? await fs.stat(path.join(site, ...entry.split('/'))).then(stat => stat.isFile(), () => false) : Object.hasOwn(files, entry);
+        if (!/\.html?$/iu.test(entry) || !present) refuse('CAPTURE_INVALID', `entry: name an HTML page ${args.root ? `in ${args.root}` : 'of the project'}${!args.root && detected.entry ? `, such as ${detected.entry}` : ''}. A design without pages is reviewed with specimen:true.`);
         const views = args.views === undefined ? medium.views : args.views.map(id => medium.views.find(view => view.id === id) || refuse('CAPTURE_INVALID', `views: use ${medium.views.map(view => view.id).join(', ')}.`));
         if (taken + views.length > CAPTURE_LIMITS.perRound) refuse('CAPTURE_LIMIT', `Round ${round} allows ${CAPTURE_LIMITS.perRound} captures and ${taken} were taken.`);
-        served = await serveDirectory(root, { entry });
+        served = await serveDirectory(site, { entry });
         shots = await (capture || captureViews)({ browser: found, baseUrl: served.url, entry, views, target: args.target, full: args.full === true, outDir: out.file, prefix: `r${round}`, env });
       }
     } catch (error) {

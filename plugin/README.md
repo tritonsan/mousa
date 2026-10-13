@@ -123,9 +123,13 @@ The design tools take the work from the Taste Brief to a checked and captured re
    - `generate` uses a signed-in Codex CLI, and is offered only outside Codex.
 4. **Check.** `design_check` checks the build against the saved DNA, reading the project's pages, styles and scripts.
    - A project with three or more CSS custom properties is checked as a design system as well. Each palette colour and font must be held by a custom property that the styles use through `var()`. `var()` chains are followed, `#abc` matches `#aabbcc`, and every page and `<style>` block is read. The result names the property that holds each value and reports a value that is declared but never used.
-   - Other projects, such as Tailwind, component or native code, are checked by finding each token as written, and the result says so.
+   - **A Tailwind project** (`tailwind.config.*`, `@import "tailwindcss"`, `@tailwind` or `@theme`) is checked in its theme instead. Each palette colour and family must be held by a Tailwind 4 `@theme` entry or a Tailwind 3 config entry (`colors`, `extend.colors`, `fontFamily`, nested and through `hsl(var(--x))`), and named by a class in markup, JSX, scripts or `@apply`, with variants and opacity. The result names the theme entry behind each value.
+   - **Colour notations.** Every check accepts the DNA's hex colours in another notation within ΔE 2.5: `rgb()`, `hsl()`, `oklch()`, `oklab()` and shadcn/ui's bare HSL triplets.
+   - **Token files.** A design token file is found under any name with W3C `$value` leaves.
+   - **Other projects,** such as component or native code, are checked by finding each token as written, and the result says so.
 5. **Capture.** `design_capture` renders the project in a headless browser that can reach only the project. The pictures come back in the result itself, scaled to at most 1,568 pixels on the longer side. The result has no `structuredContent` copy, so Codex keeps the pictures.
    - `specimen:true` captures the specimen board instead: one page that draws the DNA with its palette, its type in the library fonts, keyframes, SVG drawings, pictures, copy lines and landmark ids. It serves designs a browser cannot open, such as a game or a native app, and judging the system itself.
+   - `root: 'dist'` serves a built folder, for a framework project after its own build.
    - A round holds six captures; a session has two rounds.
 6. **Review.** `design_validate({stage:'review'})` checks the agent's verdict on each planned criterion against the captures of its round. Captures returned in a result count as seen, so the review is marked as audited.
 7. **Compare.** `design_compare` gives a heuristic distance between two designs in folders of the project, such as one made with Qloo and one made without. When both folders are design workspaces, it also reports:

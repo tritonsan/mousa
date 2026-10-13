@@ -1,0 +1,132 @@
+// The design-system adapters on small projects of each kind: Tailwind 4 with an @theme, Tailwind 3 with a config and
+// JSX, shadcn/ui's HSL-triplet variables, oklch() colours, a W3C token file and a built folder to capture.
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import os from 'node:os';
+import path from 'node:path';
+import { mkdtemp, rm, mkdir, writeFile } from 'node:fs/promises';
+import { checkDnaConformance } from '../plugin/server/culture/taste.mjs';
+import { checkLiteralConformance } from '../plugin/server/production/media.mjs';
+import { detectDesignSystem, checkDesignSystem } from '../plugin/server/design/systems.mjs';
+import { tailwindTheme, utilityNames } from '../plugin/server/design/tailwind.mjs';
+import { colorValues, holdsColor } from '../plugin/server/design/colors.mjs';
+import { createDesignTools } from '../plugin/server/design/tools.mjs';
+import { encodePng } from '../plugin/server/production/image-files.mjs';
+
+const device = (id, layer, tokens) => ({ id, layer, device: `${layer} device`, tokens: { colors: [], fonts: [], css: [], ids: [], copy: [], images: [], keyframes: [], svg: [], ...tokens } });
+const statusOf = (report, id) => report.devices.find(item => item.id === id);
+
+test('colours are read in every notation a design system writes, and matched within what the eye can tell', () => {
+  assert.deepEqual(colorValues('oklch(20.8% 0.042 265.755)'), ['#0f172b'], 'Tailwind 4 slate-900');
+  assert.ok(holdsColor('oklch(0.208 0.042 265.755)', '#0f172a'), 'its Tailwind 3 hex is the same colour');
+  assert.ok(holdsColor('222.2 47.4% 11.2%', '#0f172a'), 'a shadcn/ui HSL triplet');
+  assert.ok(holdsColor('hsl(222.2 47.4% 11.2% / 0.8)', '#0f172a'));
+  assert.ok(holdsColor('rgb(15 23 42)', '#0f172a') && holdsColor('#0F172A', '#0f172a'));
+  assert.ok(!holdsColor('oklch(62.8% 0.2577 29.23)', '#0f172a'), 'red is not slate');
+  assert.deepEqual(colorValues('oklab(1 0 0)'), ['#ffffff']);
+});
+
+test('Tailwind 4: a DNA colour or family is bound when the @theme holds it and a class names it', () => {
+  const files = {
+    'index.html': '<body class="bg-mist text-ink"><h1 class="font-display md:hover:text-mist/80">Hi</h1><p class="border-moss">x</p></body>',
+    'styles.css': '@import "tailwindcss";\n@theme {\n  --color-mist: oklch(43.6% 0.043 230.6);\n  --color-ink: #1d2a33;\n  --color-sand: #e9dcc4;\n  --font-display: "Jost", sans-serif;\n  @keyframes drift { from { opacity: 0 } to { opacity: 1 } }\n}\n',
+  };
+  const theme = tailwindTheme(files);
+  assert.equal(theme.version, 4);
+  assert.deepEqual([...theme.colors.keys()], ['mist', 'ink', 'sand']);
+  assert.deepEqual([...theme.fonts.keys()], ['display']);
+  assert.ok(utilityNames(files).colors.has('mist') && utilityNames(files).fonts.has('display'));
+  const dna = { devices: [device('dna1', 'palette', { colors: ['#3e5c6b', '#1d2a33', '#e9dcc4'] }), device('dna2', 'typography', { fonts: ['Jost'] })] };
+  const detected = detectDesignSystem(files);
+  assert.equal(detected.system, 'tailwind');
+  const report = checkDesignSystem(dna, files, checkDnaConformance(dna, files), detected);
+  assert.equal(statusOf(report, 'dna2').status, 'present');
+  const palette = statusOf(report, 'dna1');
+  assert.equal(palette.status, 'partial', 'sand is in the theme, but no class names it');
+  assert.deepEqual(palette.missing.map(item => [item.kind, item.value]), [['theme', '#e9dcc4']]);
+  assert.match(palette.missing[0].detail, /the theme holds it as sand, but no class names it/u);
+  assert.deepEqual(report.system.bindings.map(item => [item.value, item.name ?? item.declaredAs]), [['#3e5c6b', 'mist'], ['#1d2a33', 'ink'], ['#e9dcc4', ['sand']], ['Jost', 'display']]);
+  assert.match(report.limitation, /named by a class/u);
+});
+
+test('Tailwind 3: the config\'s colours and families, and shadcn/ui\'s variables behind hsl(var()), bind through JSX classes', () => {
+  const files = {
+    'tailwind.config.js': `/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ['./src/**/*.{js,jsx}'],
+  theme: {
+    extend: {
+      colors: {
+        mist: { DEFAULT: '#3e5c6b', 500: "#8fb0a9" }, // the lake
+        primary: 'hsl(var(--primary) / <alpha-value>)',
+        brand: require('./brand').accent,
+      },
+      fontFamily: { display: ['Jost', 'sans-serif'], body: 'Literata, Georgia, serif' },
+    },
+  },
+  plugins: [require('@tailwindcss/typography')],
+};`,
+    'src/index.css': '@tailwind base;\n@tailwind components;\n:root { --primary: 222.2 47.4% 11.2%; }\n.card { @apply text-mist-500; }',
+    'src/App.jsx': 'export default function App() { return <main className="bg-mist font-display hover:bg-primary/90"><p className={`font-body ${x}`}>Hi</p></main>; }',
+  };
+  const theme = tailwindTheme(files, { resolve: value => value.replace('var(--primary)', '222.2 47.4% 11.2%') });
+  assert.equal(theme.version, 3);
+  assert.deepEqual(Object.fromEntries(theme.colors), { mist: '#3e5c6b', 'mist-500': '#8fb0a9', primary: 'hsl(222.2 47.4% 11.2% / <alpha-value>)' }, 'an expression it cannot read is left out');
+  assert.deepEqual(Object.fromEntries(theme.fonts), { display: 'Jost, sans-serif', body: 'Literata, Georgia, serif' });
+  const dna = { devices: [device('dna1', 'palette', { colors: ['#3e5c6b', '#8fb0a9', '#0f172a'] }), device('dna2', 'typography', { fonts: ['Jost', 'Literata'] })] };
+  const detected = detectDesignSystem(files);
+  assert.deepEqual([detected.system, detected.medium], ['tailwind', 'generic']);
+  const report = checkDesignSystem(dna, files, checkLiteralConformance(dna, files), detected);
+  assert.equal(statusOf(report, 'dna1').status, 'present', JSON.stringify(statusOf(report, 'dna1').missing));
+  assert.equal(statusOf(report, 'dna2').status, 'present', JSON.stringify(statusOf(report, 'dna2').missing));
+  const named = Object.fromEntries(report.system.bindings.map(item => [item.value, item.name]));
+  assert.deepEqual(named, { '#3e5c6b': 'mist', '#8fb0a9': 'mist-500', '#0f172a': 'primary', Jost: 'display', Literata: 'body' });
+});
+
+test('shadcn/ui variables without Tailwind, and oklch colours in a plain stylesheet, are the DNA\'s colours', () => {
+  const shadcn = { 'index.html': '<p>Hi</p>', 'styles.css': ':root { --primary: 222.2 47.4% 11.2%; --background: 0 0% 100%; --radius: .5rem; }\nbody { color: hsl(var(--primary)); background: hsl(var(--background)); }' };
+  const dna = { devices: [device('dna1', 'palette', { colors: ['#0f172a', '#ffffff'] })] };
+  const detected = detectDesignSystem(shadcn);
+  assert.equal(detected.system, 'css-vars');
+  const report = checkDesignSystem(dna, shadcn, checkDnaConformance(dna, shadcn), detected);
+  assert.equal(statusOf(report, 'dna1').status, 'present', JSON.stringify(statusOf(report, 'dna1').missing));
+  assert.deepEqual(report.system.bindings.map(item => item.property), ['--primary', '--background']);
+  const plain = { 'index.html': '<p>Hi</p>', 'styles.css': 'body { color: oklch(20.8% 0.042 265.755); }' };
+  const oneColour = { devices: [device('dna1', 'palette', { colors: ['#0f172a'] })] };
+  const literal = checkDnaConformance(oneColour, plain);
+  assert.equal(statusOf(literal, 'dna1').status, 'missing', 'the literal check alone looks for the hex');
+  assert.equal(statusOf(checkDesignSystem(oneColour, plain, literal, detectDesignSystem(plain)), 'dna1').status, 'present');
+});
+
+test('a W3C design token file is found by its $value leaves, under any name', () => {
+  const files = { 'index.html': '<p>x</p>', 'design/brand.json': JSON.stringify({ color: { mist: { $type: 'color', $value: '#3e5c6b' } } }), 'tokens.css': ':root{--color-mist:#3e5c6b;--a:1;--b:2}' };
+  assert.equal(detectDesignSystem(files).tokensFile, 'design/brand.json');
+  assert.equal(detectDesignSystem({ ...files, 'src/theme.tokens.json': '{}' }).tokensFile, 'src/theme.tokens.json');
+});
+
+test('a framework project is captured from its own build folder', async () => {
+  const project = await mkdtemp(path.join(os.tmpdir(), 'mousa-root-'));
+  try {
+    await mkdir(path.join(project, 'dist', 'assets'), { recursive: true });
+    await mkdir(path.join(project, 'src'), { recursive: true });
+    await writeFile(path.join(project, 'src', 'App.jsx'), 'export default () => <main className="bg-mist" />;');
+    await writeFile(path.join(project, 'dist', 'index.html'), '<!doctype html><main>Built</main>');
+    const served = [];
+    const tools = createDesignTools({ project: async () => project, browser: async () => ({ available: true }), capture: async ({ baseUrl, views, outDir, prefix }) => {
+      served.push(baseUrl);
+      return views.map(view => {
+        const file = path.join(outDir, `${prefix}-${view.id}.png`);
+        return { id: `${prefix}-${view.id}`, view: view.id, width: view.width, height: 20, bytes: 1, file };
+      });
+    } });
+    // The capture stand-in writes no PNG, so the pictures are written beside it.
+    const write = async () => { for (const view of ['desktop', 'mobile']) await writeFile(path.join(project, '.mousa', 'captures', `r1-${view}.png`), encodePng(2, 2, Buffer.alloc(16, 200))); };
+    await mkdir(path.join(project, '.mousa', 'captures'), { recursive: true });
+    await write();
+    await assert.rejects(tools.handle('design_capture', {}), error => error.code === 'CAPTURE_INVALID' && /specimen:true/u.test(error.message), 'a JSX project has no page of its own');
+    await assert.rejects(tools.handle('design_capture', { root: 'build' }), error => error.code === 'CAPTURE_INVALID' && /Run the project's build first/u.test(error.message));
+    const result = await tools.handle('design_capture', { root: 'dist' });
+    assert.equal(result.content.filter(item => item.type === 'image').length, 2);
+    assert.equal(served.length, 1);
+  } finally { await rm(project, { recursive: true, force: true }); }
+});
