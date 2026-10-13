@@ -45,6 +45,26 @@ What happened:
 
 Limits: one pair per host. The skill's own report says a single pair shows differences, not quality or preference; repeated pairs would be needed to isolate Qloo's effect.
 
+**The same comparison in Codex, with portraits.** The request also asked each version for a title-card portrait made with Codex's image tool (`scripts/briefs/long-dusk-compare-portrait-codex.md`). It took 8.1 minutes, and the record is in `D:/mousa-live/codex-long-dusk-compare-2/`.
+- **The flow.** It went as before:
+  1. prepare;
+  2. identical plans and one frozen prediction;
+  3. the baseline arm locked and built first;
+  4. one measurement of 16 requests, then the Qloo arm.
+- **Pictures, made in the plugin's flow for the first time.** Each arm planned a `generated-image` step for its portrait. Codex's image tool was not exercised in the plugin before.
+  1. Moûsa wrote the brief from the device: the subject, the device's art direction and palette, and no text, logos or copyrighted characters.
+  2. Codex made the picture.
+  3. The agent copied it from `$CODEX_HOME/generated_images/` into its arm's `generated/`.
+  4. `image register` checked it: a 1254×1254 PNG in each arm, whose main colours fit the device's palette (2 of 5, and 3 of 6, within ΔE 22).
+  5. The character file names it as `portrait`, and the captures of `index.html` show it on the title card.
+  - **Codex's picture budget:** 2 pictures.
+- **Baseline arm.** A pointed teal hood, a wind-worn split cape and an amber cage lantern. Its portrait shows the same figure above the cloud sea.
+- **Qloo arm.** A low rounded plum hood with an open face, a coral wrap over a patched work coat and an ice-blue lantern. Its portrait shows the same figure on the cliff road under a violet dusk.
+  - All 5 devices rest on surprises.
+- **Distance:** 0.576 (palette 0.187, part ids 0.936, words 0.843).
+- **Reviews.** Both arms met their criteria after repairs.
+- **Before the run.** The picture brief in a workspace now names the file from the project root, says where Codex keeps its pictures, and says to register with the same workspace (commit ce34915).
+
 ## Live game character sessions in both hosts — October 13, 2026
 
 The Studio's game test ran through the packaged plugins, one session per host. Both sessions started at the same time, each on a copy of the new example, `examples/long-dusk`.

@@ -218,13 +218,13 @@ The marketplaces are `.claude-plugin/marketplace.json` for Claude Code and `.age
 - **Restyles in the project's own system** (see [the record](../docs/verification.md#live-restyles-of-existing-projects--october-13-2026)).
   - **Claude Code on Ramble.** It changed the values of its design tokens in both token files and kept every name, id and fact. The check scored 1.0, and the second review round met all 5 criteria.
   - **Codex on the Tailwind example.** It changed and added `@theme` entries, ran the project's build in the sandbox, and reviewed the build. This run found that the font check read paths literally, and that the styling left Tailwind's classes; both are now checked.
+  - **Pictures in Codex.** In a second Codex comparison, each arm made a title-card portrait with Codex's image tool from Moûsa's brief, copied it into its folder and registered it; both fitted their palettes.
   - **The game comparison in both hosts** (see [the record](../docs/verification.md#live-game-comparisons-in-both-hosts--october-13-2026)). The `compare` skill built Ilo with Qloo and without it from one frozen prediction. Claude Code used its two subagents in parallel, and Codex built the arms one after the other. Each host measured once, with 16 requests, and found a distance of 0.53 and 0.57. Every device of both Qloo arms rests on a surprise.
   - **The game character in both hosts** (see [the record](../docs/verification.md#live-game-character-sessions-in-both-hosts--october-13-2026)). On copies of `examples/long-dusk`, both designed Ilo in the game medium. Each wrote only the character file, which the game's own validator accepts. Both checks scored 1.0, and both reviewed the game's own review views by capture target.
   - **Codex again, with those fixes.** The fonts passed at the first check, the styling stayed in the classes (4 hand-written declarations against 312), and every file was written with `apply_patch`. It also found that the check missed Tailwind's own animation form; the Tailwind adapter now reads theme animations and `motion-reduce:` classes.
 
 **Not verified yet:**
 - that Claude Code runs the gate (its agent never wrote early, and its stream shows no PreToolUse hook);
-- Codex's image tool, because no plan chose a generated picture;
 - that Codex honours the package's own `approval_mode` for `mousa_open_project`;
 - the eval suites.
 
