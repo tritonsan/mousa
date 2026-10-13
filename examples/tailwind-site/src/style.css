@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* The site's theme: its brand colours and display family. Everything else is Tailwind's default theme. */
+@theme {
+  --color-brand: oklch(51.1% 0.262 276.966);
+  --color-brand-dark: oklch(45.7% 0.24 277.023);
+  --font-display: ui-sans-serif, system-ui, sans-serif;
+}

@@ -1,0 +1,18 @@
+{
+  "name": "lanterna-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "The website of Lanterna, a fictional independent cinema in Lisbon: a Vite and Tailwind CSS 4 proof project for the Moûsa plugin.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.4"
+  }
+}
