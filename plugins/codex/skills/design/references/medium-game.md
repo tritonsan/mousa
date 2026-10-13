@@ -26,6 +26,8 @@ Taste changes how the character or world looks, moves and speaks. It never chang
 
 Palette, motion and voice are required. The sketch you freeze before the measurement may name no font, and a structural device departs from it with a part id it did not name. Never copy a character, costume, logo or trade dress of an anchor work.
 
+**Pictures.** A game's own picture slot, such as a portrait on its title card, can show a picture from the `image` tool. Plan a `generated-image` step for an imagery device, and list its `generated/<device>-<n>.png` in the device's `images`. Name the file in the slot as the game's format asks. The picture shows the same character as the drawing: its palette, its silhouette and its light.
+
 ## Review
 
 A game draws its views itself. When the project has a review page, capture it by its views: the page reads the view from the URL fragment, and `target` sets it.

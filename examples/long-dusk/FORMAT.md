@@ -218,6 +218,10 @@ The original dusk is `{"sky": ["#19213a","#80a99d"], "sun": "#efe7d6", "clouds":
 
 A render device anchored to an art style draws in the preset that art style's name names, by the words above: Pixel Art and HD-2D name `pixel`, Cel-Shaded and Anime-Style name `cel`, Watercolor and Painterly name `watercolor`. An art style that names none, such as Stylized or 3D, leaves the choice to you.
 
+## Portrait
+
+`portrait` is optional: a picture of Ilo that the play page shows above the title, `{"src": "generated/<name>.png", "alt": "what it shows"}`. The picture is a PNG or JPEG in the game folder, square works best, and `alt` describes it in 10 to 200 characters. It shows the same character as the drawing: its palette, its silhouette and its light. Leave the field out for no portrait.
+
 ## Fixed fields and limits
 
 `schemaVersion` "1.0", `id` (lowercase), `name` "Ilo", `role` "Lamplighter" and `description` (20 to 400 characters of plain text) are required, and so are `scene` and `render`. The file is at most 98,304 bytes, and the drawn character, props included, stands 60 to 280 units tall. Text never contains angle brackets.

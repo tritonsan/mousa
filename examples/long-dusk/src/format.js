@@ -425,7 +425,7 @@ export function normalizeCharacter(input, { canon = null, strict = false, npc = 
     if (raw.length > LIMITS.bytes) fail('character', `The file exceeds ${LIMITS.bytes} bytes.`);
     try { raw = JSON.parse(raw); } catch { fail('character', 'The file must contain valid JSON.'); }
   } else if (JSON.stringify(raw ?? null).length > LIMITS.bytes) fail('character', `The file exceeds ${LIMITS.bytes} bytes.`);
-  object(raw, 'character', ['schemaVersion', 'id', 'name', 'role', 'description', 'palette', 'style', 'skeleton', 'parts', 'cloth', 'light', 'motion', 'clips', 'effects', 'lines', 'scene', 'render', 'music', 'skin'],
+  object(raw, 'character', ['schemaVersion', 'id', 'name', 'role', 'description', 'palette', 'style', 'skeleton', 'parts', 'cloth', 'light', 'motion', 'clips', 'effects', 'lines', 'scene', 'render', 'music', 'skin', 'portrait'],
     ['schemaVersion', 'id', 'name', 'role', 'description', 'palette', 'skeleton', 'parts', 'motion', ...(npc ? [] : ['light', 'clips', 'lines']),
       ...(artDirection && !npc ? ['scene', 'render'] : []), ...(tracks && !npc ? ['music'] : [])]);
   if (raw.schemaVersion !== CHARACTER_SCHEMA_VERSION) fail('character.schemaVersion', `Use "${CHARACTER_SCHEMA_VERSION}".`);
@@ -519,9 +519,17 @@ export function normalizeCharacter(input, { canon = null, strict = false, npc = 
     music = { track: raw.music.track, volume: raw.music.volume === undefined ? 0.6 : number(raw.music.volume, 'music.volume', [0.1, 1]) };
   }
   const skin = raw.skin === undefined ? null : normalizeSkin(raw.skin, cloth);
+  // A portrait of the character for the title card: a picture in the game folder, with its description.
+  let portrait = null;
+  if (raw.portrait !== undefined) {
+    object(raw.portrait, 'portrait', ['src', 'alt'], ['src', 'alt']);
+    if (typeof raw.portrait.src !== 'string' || !PORTRAIT_SOURCE.test(raw.portrait.src)) fail('portrait.src', 'Use a PNG or JPEG in the game folder, such as generated/portrait-1.png.');
+    portrait = { src: raw.portrait.src, alt: text(raw.portrait.alt, 'portrait.alt', { min: 10, max: 200 }) };
+  }
   return { schemaVersion: CHARACTER_SCHEMA_VERSION, id: ident(raw.id, 'character.id'), name, role, description: text(raw.description, 'character.description', { min: 20, max: 400 }),
-    palette, style, skeleton, parts, cloth, light, motion, clips, effects, lines, bounds, npc, scene, render, music, skin };
+    palette, style, skeleton, parts, cloth, light, motion, clips, effects, lines, bounds, npc, scene, render, music, skin, ...(portrait ? { portrait } : {}) };
 }
+export const PORTRAIT_SOURCE = /^(?:generated|runs\/[a-z0-9-]{1,60})\/[a-z0-9_-]{1,80}\.(?:png|jpe?g)$/u;
 
 /** Counts that later measures compare between two characters. */
 export function characterStats(character) {

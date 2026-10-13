@@ -11,10 +11,24 @@ const stage = document.getElementById('stage');
 const titleCard = document.getElementById('title-card');
 const pause = document.getElementById('pause');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// A capture waits for this page through window.captureReady. The page loads its data with an await, which the window's
+// load event does not wait for, so the promise is set here, before the first await, and settled once the page is drawn.
+let ready;
+window.captureReady = new Promise((resolve, reject) => { ready = { resolve, reject }; });
+window.captureReady.catch(() => {});
 
 try {
   const { canon, keeper, characters: [character] } = await loadScene([characterPath]);
   document.getElementById('premise').textContent = canon.premise;
+  // The character's portrait, when it names one, above the title; the page is ready once it has loaded.
+  const portrait = document.getElementById('title-portrait');
+  const portraitLoaded = !character.portrait ? Promise.resolve() : new Promise((resolve, reject) => {
+    portrait.addEventListener('load', resolve, { once: true });
+    portrait.addEventListener('error', () => reject(new Error(`The portrait ${character.portrait.src} could not be loaded.`)), { once: true });
+    portrait.alt = character.portrait.alt;
+    portrait.src = character.portrait.src;
+    portrait.hidden = false;
+  });
   const canvas = document.getElementById('view');
   canvas.setAttribute('aria-label', `${canon.scene.summary} ${character.name} the ${character.role.toLowerCase()}: ${character.description}`);
   const game = new Game({ stage, canvas, character, keeper, canon, reducedMotion, start: 'title' });
@@ -69,8 +83,11 @@ try {
   };
   requestAnimationFrame(frame);
   window.longDusk = debug;
+  // The page is drawn once the portrait has loaded and two frames have run.
+  portraitLoaded.then(() => requestAnimationFrame(() => requestAnimationFrame(() => ready.resolve(true))), ready.reject);
 } catch (error) {
   titleCard.hidden = true;
   showLoadError(document.getElementById('load-error'), error);
   console.error(error);
+  ready.reject(error);
 }

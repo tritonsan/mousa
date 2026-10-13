@@ -49,7 +49,16 @@ ${music ? `
 ` : ''}`;
 }
 
-export function formatGuide({ canon, keeperHeight, artDirection = false, music = false }) {
+/** The title card's portrait: a picture in the game folder, which the play page shows above the title. */
+function portraitGuide(canon) {
+  return `
+## Portrait
+
+\`portrait\` is optional: a picture of ${canon.character.name} that the play page shows above the title, \`{"src": "generated/<name>.png", "alt": "what it shows"}\`. The picture is a PNG or JPEG in the game folder, square works best, and \`alt\` describes it in 10 to 200 characters. It shows the same character as the drawing: its palette, its silhouette and its light. Leave the field out for no portrait.
+`;
+}
+
+export function formatGuide({ canon, keeperHeight, artDirection = false, music = false, portrait = false }) {
   const walk = table(Object.entries(MOTION_RANGES.walk).map(([key, bounds]) => [`walk.${key}`, range(bounds), MOTION_UNITS.walk[key]]), ['Parameter', 'Range', 'Meaning']);
   const idle = table(Object.entries(MOTION_RANGES.idle).map(([key, bounds]) => [`idle.${key}`, range(bounds), MOTION_UNITS.idle[key]]), ['Parameter', 'Range', 'Meaning']);
   return `# Character format ${'1.0'} for The Long Dusk
@@ -195,7 +204,7 @@ Easings are ${EASING_NAMES.map(name => `\`${name}\``).join(', ')} or a cubic-bez
 - \`greet\`: ${canon.character.name}'s answer to ${canon.keeper.name}: "${canon.script.keeperGreeting}" She then says: "${canon.script.keeperRequest}"
 - \`kindle\`: spoken as the signature move plays.
 - \`after\`: ${canon.character.name}'s answer to "${canon.script.keeperAfter}"
-${artDirection ? artDirectionGuide({ music }) : ''}
+${artDirection ? artDirectionGuide({ music }) : ''}${portrait ? portraitGuide(canon) : ''}
 ## Fixed fields and limits
 
 \`schemaVersion\` "1.0", \`id\` (lowercase), \`name\` "${canon.character.name}", \`role\` "${canon.character.role}" and \`description\` (20 to 400 characters of plain text) are required${artDirection ? `, and so are ${music ? '`scene`, `render` and `music`' : '`scene` and `render`'}` : ''}. The file is at most ${LIMITS.bytes.toLocaleString('en-US')} bytes, and the drawn character, props included, stands 60 to 280 units tall. Text never contains angle brackets.

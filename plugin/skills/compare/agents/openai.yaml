@@ -1,6 +1,6 @@
 interface:
   display_name: "Moûsa Compare"
   short_description: "Build a design with Qloo and without, then compare"
-  default_prompt: "Use $compare to build this design with Qloo and without it from one prediction, then compare the two."
+  default_prompt: "Use $mousa:compare to build this design with Qloo and without it from one prediction, then compare the two."
 policy:
   allow_implicit_invocation: false

@@ -19,7 +19,9 @@ A comparison shows what measured taste changed. Both arms get the same brief, th
 | With Qloo | `compare/with-qloo` | `taste_profile({ workspace })` |
 | Without Qloo | `compare/without-qloo` | `taste_profile({ baseline: true, workspace })` |
 
-Each workspace holds its arm's files and its own `.mousa/` records. Pass the arm's `workspace` to every Moûsa call of that arm, and build its files inside its folder. When the design restyles an existing project, first copy the starter files, unchanged, into both folders.
+Each workspace holds its arm's files and its own `.mousa/` records. Pass the arm's `workspace` to every Moûsa call of that arm, and build its files inside its folder.
+
+When the design restyles an existing project, copy the starter files, unchanged, into both folders before either arm is built. `design_compare({ a: 'compare/with-qloo', b: 'compare/without-qloo', prepare: true })` copies them, binary files such as fonts included.
 
 ## Steps
 
@@ -36,7 +38,7 @@ Each workspace holds its arm's files and its own `.mousa/` records. Pass the arm
    - **Codex and other hosts.** Build the baseline arm first, in this session, before measuring, so it is built before any Qloo data is seen. Then measure and build the Qloo arm. Say in the report that the Qloo arm was built after the baseline. For a cleaner pair, build each arm in a session of its own.
 6. **Compare.** Call `design_compare({ a: 'compare/with-qloo', b: 'compare/without-qloo' })`.
 7. **Report:**
-   - the distance, overall and by palette, type, sections and CSS features;
+   - the distance, overall and by its parts: palette, type, sections and CSS features for a website; palette, part ids and the words of the text for a game, read from the files the two arms changed differently;
    - `samePrediction`;
    - the Qloo arm's headline: how many devices rest on what the prediction did not contain;
    - each arm's review verdicts and repairs;
@@ -51,5 +53,5 @@ Each workspace holds its arm's files and its own `.mousa/` records. Pass the arm
 ## Limits to report
 
 - One pair is one sample. Model variance alone makes two designs differ, so a single distance does not isolate Qloo's effect. Repeat the pair before calling a difference the data's effect.
-- The distance compares palettes, type classes, landmark sections and CSS features. It does not measure quality or what people prefer.
+- The distance compares palettes, type classes, landmark sections and CSS features, or a game's palettes, part ids and words. It does not measure quality or what people prefer.
 - The headline counts devices anchored to surprises. It shows that the data changed the specification, not that the result is better.

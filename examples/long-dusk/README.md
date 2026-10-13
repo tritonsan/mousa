@@ -40,6 +40,8 @@ Then open `http://127.0.0.1:8795/index.html`, press Begin, walk with A and D or 
 
 The page sets `window.captureReady` once it has drawn. If `characters/ilo.json` is not valid, the page shows the game's message, which names the first field to fix.
 
+The play page's title card shows Ilo's portrait when the character file names one, a picture in the game folder such as `generated/portrait-1.png` (see `FORMAT.md`). Capture it with `design_capture({ entry: 'index.html' })`.
+
 With the Moûsa plugin, plan the taste with the `game` medium and capture a view with `design_capture({ entry: 'capture.html', target: 'walk' })`.
 
 ## Credits

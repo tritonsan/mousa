@@ -72,6 +72,8 @@ for (const name of SKILLS) {
     const yaml = await readFile(path.join(dir, 'agents', 'openai.yaml'), 'utf8');
     assert.match(yaml, /^interface:\n {2}display_name: "Moûsa [^"]+"\n {2}short_description: "[^"]{10,64}"\n/u);
     assert.match(yaml, new RegExp(`\\n {2}allow_implicit_invocation: ${!EXPLICIT.has(name)}\\n`, 'u'), 'Codex invocation policy matches');
+    // Codex names a plugin's skills with the plugin's namespace, and a prompt mentions one as $plugin:skill.
+    if (/default_prompt/u.test(yaml)) assert.match(yaml, new RegExp(`default_prompt: "[^"]*\\$mousa:${name}\\b`, 'u'), `${name}'s prompt mentions $mousa:${name}`);
 
     for (const file of await markdownFiles(dir)) {
       const body = (await readFile(file, 'utf8')).replaceAll('\r\n', '\n');

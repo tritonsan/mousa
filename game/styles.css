@@ -90,6 +90,8 @@ kbd {
   background: radial-gradient(closest-side, rgba(12, 15, 26, 0.62), rgba(12, 15, 26, 0.42) 62%, rgba(12, 15, 26, 0));
   text-shadow: 0 1px 14px rgba(8, 10, 18, 0.7);
 }
+.title-portrait { display: block; width: clamp(110px, 15vw, 180px); aspect-ratio: 1; object-fit: cover; margin: 0 auto 1rem; border-radius: 4px; border: 1px solid var(--line); box-shadow: 0 6px 30px rgba(8, 10, 18, 0.6); }
+.title-portrait[hidden] { display: none; }
 .title-card h1 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(3rem, 8.5vw, 6.4rem); line-height: 0.95; letter-spacing: -0.01em; }
 .title-scene { margin: 0.5rem 0 0; font-family: var(--serif); font-style: italic; font-size: clamp(1.15rem, 2.3vw, 1.5rem); color: var(--verdigris); }
 .title-premise { margin: 1.4rem auto 0; max-width: 34ch; font-family: var(--serif); font-size: clamp(1.05rem, 1.7vw, 1.22rem); line-height: 1.6; color: var(--pewter); text-shadow: 0 0 3px rgba(8, 10, 18, 0.95), 0 1px 12px rgba(8, 10, 18, 0.9); }

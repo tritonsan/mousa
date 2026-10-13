@@ -1,6 +1,6 @@
 interface:
   display_name: "Moûsa Taste Brief"
   short_description: "Ask Qloo what an audience loves before you design"
-  default_prompt: "Use $taste-brief to measure what this audience loves with Qloo before designing for it."
+  default_prompt: "Use $mousa:taste-brief to measure what this audience loves with Qloo before designing for it."
 policy:
   allow_implicit_invocation: true

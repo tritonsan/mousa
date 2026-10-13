@@ -21,6 +21,7 @@ import { readState, writeState, resolveInProject, relativePath, readProjectFiles
 import { tasteInputArgument } from '../production/tools.mjs';
 import { collectProjectFiles, detectDesignSystem, mergedPages, checkDesignSystem, checkFontFiles, styleFootprint, styleNotes } from './systems.mjs';
 import { buildSpecimen } from './specimen.mjs';
+import { dataFingerprint, compareDataFingerprints, differingFiles } from './distance.mjs';
 
 export const PRODUCTION_MEDIA = Object.freeze(listMedia().map(medium => medium.id).filter(id => ['web', 'app-ui', 'game', 'generic'].includes(id)));
 // What a taste recipe usually makes when the project itself does not say: pages for a site, a place or a brand, an
@@ -32,6 +33,8 @@ const CAPTURE_READY = 'Promise.resolve(window.captureReady).then(value => value 
 // Captures handed to a model are scaled to this longer side, which models reduce larger pictures to anyway.
 export const INLINE_CAPTURE_MAX_SIDE = 1568;
 const SPECIMEN_VIEW = Object.freeze({ id: 'board', width: 1440, height: 900 });
+// What design_compare copies into both arms' folders at most: a starter, not a repository.
+const COMPARE_LIMITS = Object.freeze({ files: 400, bytes: 40 * 1024 * 1024 });
 const PALETTE_FIT_DELTA_E = 22;
 
 const STAGES = ['prediction', 'reading', 'dna', 'plan', 'review'];
@@ -96,9 +99,10 @@ export const DESIGN_TOOLS = Object.freeze([
   },
   {
     name: 'design_compare',
-    description: 'A heuristic distance between two designs in folders of the project, such as a design made with Qloo and one made without: palette, type classes, landmark sections and CSS features. When the folders are design workspaces, it also reports where the taste of each came from, how many DNA devices rest on what the prediction did not contain, and whether both started from the same frozen prediction. One distance is not a quality or preference measure.',
-    inputSchema: { type: 'object', properties: { a: { type: 'string', minLength: 1, maxLength: 200 }, b: { type: 'string', minLength: 1, maxLength: 200 } }, required: ['a', 'b'], additionalProperties: false },
-    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    description: 'A heuristic distance between two designs in folders of the project, such as a design made with Qloo and one made without: palette, type classes, landmark sections and CSS features, or, for game and other source designs, the colours, part ids and words of the files that differ. When the folders are design workspaces, it also reports where the taste of each came from, how many DNA devices rest on what the prediction did not contain, and whether both started from the same frozen prediction. One distance is not a quality or preference measure. prepare:true instead copies the project\'s files, unchanged, into both folders before the arms are built, binary files included.',
+    inputSchema: { type: 'object', properties: { a: { type: 'string', minLength: 1, maxLength: 200 }, b: { type: 'string', minLength: 1, maxLength: 200 },
+      prepare: { type: 'boolean', description: 'Copy the project\'s files into both folders, which hold nothing yet but their .mousa records. Dot folders, node_modules, build output and the folders\' own parent are left out.' } }, required: ['a', 'b'], additionalProperties: false },
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   },
 ]);
 
@@ -472,9 +476,46 @@ export function createDesignTools(context) {
       note: `Paste the @font-face rules into ${stylesheet || 'a stylesheet at the project root'} as they are: their URLs are written from it${served ? ', and the site serves this folder from its root' : ''}. Keep the licence files beside the fonts.` };
   }
 
+  /**
+   * The project's files, unchanged, in both arms' folders, so a comparison restyles the same starter twice. A shell
+   * copies binary files such as fonts, and a host without one cannot, so the plugin copies them.
+   */
+  async function prepareArms(root, folders) {
+    const skipped = new Set(folders.map(folder => folder.split('/')[0]));
+    for (const folder of folders) {
+      const { file } = await resolveInProject(root, folder);
+      const held = (await fs.readdir(file).catch(() => [])).filter(name => !name.startsWith('.'));
+      if (held.length) refuse('COMPARE_NOT_EMPTY', `${folder} already holds ${held.slice(0, 3).join(', ')}; prepare copies the starter into folders that hold nothing yet but their .mousa records.`);
+    }
+    const files = [];
+    let bytes = 0;
+    async function walk(dir, relative) {
+      for (const entry of await fs.readdir(dir, { withFileTypes: true })) {
+        const name = relative ? `${relative}/${entry.name}` : entry.name;
+        if (entry.name.startsWith('.') || ['node_modules', 'dist', 'build'].includes(entry.name.toLowerCase()) || (!relative && skipped.has(entry.name))) continue;
+        if (entry.isDirectory()) await walk(path.join(dir, entry.name), name);
+        else if (entry.isFile()) {
+          bytes += (await fs.stat(path.join(dir, entry.name))).size;
+          files.push(name);
+          if (files.length > COMPARE_LIMITS.files || bytes > COMPARE_LIMITS.bytes) refuse('COMPARE_TOO_LARGE', `The project holds more than ${COMPARE_LIMITS.files} files or ${COMPARE_LIMITS.bytes / 1024 / 1024} MB to copy; copy the starter into both folders yourself.`);
+        }
+      }
+    }
+    await walk(root, '');
+    for (const folder of folders) for (const name of files) {
+      const target = path.join(root, ...folder.split('/'), ...name.split('/'));
+      await fs.mkdir(path.dirname(target), { recursive: true });
+      await fs.copyFile(path.join(root, ...name.split('/')), target);
+    }
+    return { status: 'prepared', a: folders[0], b: folders[1], copied: files.length,
+      next: 'Both folders hold the starter now. Build each arm inside its own folder, passing its workspace to every Moûsa call.' };
+  }
+
   async function compare(args, meta) {
     const root = await project(meta);
     const folders = [args.a, args.b].map(value => relativePath(value, { name: 'folder' }));
+    if (folders[0] === folders[1]) refuse('TOOL_INPUT_INVALID', 'a and b must be two different folders.');
+    if (args.prepare) return prepareArms(root, folders);
     const sets = [];
     for (const folder of folders) {
       const { file } = await resolveInProject(root, folder);
@@ -482,12 +523,14 @@ export function createDesignTools(context) {
       if (!Object.keys(files).length) refuse('PROJECT_EMPTY', `${folder} holds no pages, styles or scripts.`);
       sets.push(files);
     }
-    const [a, b] = sets.map(designFingerprint);
     const arms = [];
     for (const folder of folders) arms.push(await armRecord(root, folder));
     const both = arms.every(Boolean);
     const same = both && arms[0].prediction && arms[0].prediction === arms[1].prediction;
-    return { status: 'compared', a: folders[0], b: folders[1], distance: compareDesignFingerprints(a, b),
+    // Two game or source designs keep their look in data, which pages and stylesheets do not show.
+    const data = both && arms.every(arm => ['game', 'generic'].includes(arm.medium));
+    const distance = data ? compareDataFingerprints(...differingFiles(...sets).map(dataFingerprint)) : compareDesignFingerprints(...sets.map(designFingerprint));
+    return { status: 'compared', a: folders[0], b: folders[1], distance,
       ...(arms.some(Boolean) ? { arms: { a: arms[0]?.summary || null, b: arms[1]?.summary || null } } : {}),
       ...(both ? { samePrediction: Boolean(same) } : {}),
       limitation: `A heuristic distance from palette, type classes, landmark sections and CSS features.${both && !same ? ' The two designs did not start from the same frozen prediction, so their difference mixes the taste source with two different starting points.' : ''} Repeat the comparison under the same conditions before calling a difference the taste data's effect; it says nothing about quality.` };
@@ -503,6 +546,7 @@ export function createDesignTools(context) {
     const stats = dnaRecord?.dna?.stats;
     const source = input?.source === 'qloo-profile' ? 'qloo' : input?.source === 'model-assumption' ? 'own prediction' : 'unknown';
     return {
+      medium: dnaRecord?.medium || null,
       prediction: prediction ? JSON.stringify({ entries: (prediction.entries || []).map(entry => [entry.domain, normalizeTasteName(entry.name)]), sketch: prediction.designSketch || null }) : null,
       summary: { taste: source, ...(stats ? { devices: stats.devices, layers: stats.layers, qualityAnchoredDevices: stats.qualityAnchoredDevices,
         ...(source === 'qloo' ? { surpriseAnchoredDevices: stats.surpriseAnchoredDevices, headline: `${stats.surpriseAnchoredDevices} of ${stats.devices} devices rest on what the prediction did not contain.` } : {}),

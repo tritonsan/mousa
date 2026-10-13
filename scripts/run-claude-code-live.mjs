@@ -7,6 +7,8 @@
 // - The session starts outside this repository with a clean environment: the variables a Claude Code host gives its
 //   own tools are removed, so the session is a plain CLI run on the person's own login.
 // - --from restyles a copy of an existing project instead of an empty folder, and --brief-file gives the request.
+// - A request that starts with a slash command, such as /mousa:compare, is passed on the command line. The session
+//   runs in dontAsk mode with the tools below, Agent included for the compare skill's subagents, which run in front.
 // - It records the session's stream to session.jsonl and a summary to summary.json beside the project folder, with the
 //   files the session added, changed or removed in a copied project.
 //
@@ -33,7 +35,8 @@ Facts to keep exactly:
 
 Build it as static HTML and CSS in this folder, with a small script only if the design needs one. Write all copy in English.
 `;
-export const ALLOWED_TOOLS = Object.freeze(['Read', 'Write', 'Edit', 'Glob', 'Grep', 'Skill', 'mcp__plugin_mousa_mousa']);
+// Agent lets the compare skill give its arms to the plugin's two subagents, which use the same tools.
+export const ALLOWED_TOOLS = Object.freeze(['Read', 'Write', 'Edit', 'Glob', 'Grep', 'Skill', 'Agent', 'mcp__plugin_mousa_mousa']);
 // What a Claude Code host gives the tools it starts: its session, its messaging socket and its proxy. A test session
 // started from inside a host must not inherit them.
 const HOST_VARIABLES = /^(?:CLAUDECODE|CLAUDE_CODE_.*|CLAUDE_AGENT_SDK_.*|CLAUDE_PID|CLAUDE_EFFORT|CLAUDE_PREVIEW_.*|ANTHROPIC_.*|MOUSA_.*|QLOO_.*|KIRO_.*)$/u;
@@ -137,9 +140,13 @@ async function main() {
   const dotenv = {};
   loadDotEnv(path.join(rootDir, '.env'), dotenv);
   const claude = await claudePath();
-  const args = ['-p', '--plugin-dir', plugin, '--output-format', 'stream-json', '--verbose', '--max-turns', String(maxTurns), '--allowedTools', ALLOWED_TOOLS.join(','), ...(model ? ['--model', model] : [])];
+  // A request that starts with a slash command, such as /mousa:compare, goes on the command line, which expands it;
+  // before the flags, since --allowedTools takes several values. Any other request goes on stdin.
+  const command = brief.trimStart().startsWith('/');
+  const args = ['-p', ...(command ? [brief.trim()] : []), '--plugin-dir', plugin, '--output-format', 'stream-json', '--verbose', '--max-turns', String(maxTurns),
+    '--permission-mode', 'dontAsk', '--allowedTools', ALLOWED_TOOLS.join(','), ...(model ? ['--model', model] : [])];
   const plan = { folder, project, ...(from ? { from: path.resolve(from) } : {}), plugin, claude, args, brief,
-    environment: ['QLOO_API_KEY (from .env)', 'QLOO_BASE_URL (from QLOO_API_BASE_URL)', `MOUSA_QLOO_BUDGET=${budget}`, 'MOUSA_IMAGES=off', 'CODEX_IMAGES=off'],
+    environment: ['QLOO_API_KEY (from .env)', 'QLOO_BASE_URL (from QLOO_API_BASE_URL)', `MOUSA_QLOO_BUDGET=${budget}`, 'MOUSA_IMAGES=off', 'CODEX_IMAGES=off', 'CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1'],
     qlooKeyInDotEnv: Boolean(dotenv.QLOO_API_KEY), note: `Each run is a full Claude Code session on your own login, and at most ${budget} Qloo requests.` };
   if (!run) { console.log(JSON.stringify(plan, null, 2)); console.log('\nPlan only. Add --run to start the session.'); return; }
   if (!claude) throw new Error('The claude CLI was not found on PATH.');
@@ -150,7 +157,8 @@ async function main() {
   await fs.writeFile(path.join(folder, 'brief.md'), brief);
 
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !HOST_VARIABLES.test(name)));
-  Object.assign(env, { QLOO_API_KEY: dotenv.QLOO_API_KEY, MOUSA_QLOO_BUDGET: String(budget), MOUSA_IMAGES: 'off', CODEX_IMAGES: 'off',
+  // Subagents run in the foreground, so a print-mode session waits for the arms it gave them.
+  Object.assign(env, { QLOO_API_KEY: dotenv.QLOO_API_KEY, MOUSA_QLOO_BUDGET: String(budget), MOUSA_IMAGES: 'off', CODEX_IMAGES: 'off', CLAUDE_CODE_DISABLE_BACKGROUND_TASKS: '1',
     ...(dotenv.QLOO_API_BASE_URL ? { QLOO_BASE_URL: dotenv.QLOO_API_BASE_URL } : {}) });
   const stream = createWriteStream(path.join(folder, 'session.jsonl'));
   const stderr = createWriteStream(path.join(folder, 'session.stderr.log'));
@@ -158,7 +166,7 @@ async function main() {
   const child = spawn(claude, args, { cwd: project, env, stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true });
   child.stdout.pipe(stream);
   child.stderr.pipe(stderr);
-  child.stdin.end(brief);
+  child.stdin.end(command ? '' : brief);
   const code = await new Promise(resolve => child.on('close', resolve));
   await new Promise(resolve => stream.end(resolve));
   await new Promise(resolve => stderr.end(resolve));

@@ -9,6 +9,8 @@ import assert from 'node:assert/strict';
 import os from 'node:os';
 import path from 'node:path';
 import { mkdtemp, rm, readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
+import { dataFingerprint, compareDataFingerprints, differingFiles } from '../plugin/server/design/distance.mjs';
 import { normalizeDesignSketch, normalizeDesignDna } from '../plugin/server/culture/taste.mjs';
 import { mediumProfile } from '../plugin/server/production/media.mjs';
 import { inspectBrowser, verifyBrowser, serveDirectory, captureViews } from '../plugin/server/production/capture.mjs';
@@ -135,5 +137,92 @@ test('the example\'s review page draws each view in a real browser, and names an
   } finally {
     await rm(out, { recursive: true, force: true });
     await rm(copy, { recursive: true, force: true });
+  }
+});
+
+test('a character may name a portrait for the title card, a picture in the game folder', () => {
+  const canon = JSON.parse(readFileSync(path.join(GAME_EXAMPLE_DIR, 'world', 'canon.json'), 'utf8'));
+  const ilo = JSON.parse(readFileSync(path.join(GAME_EXAMPLE_DIR, 'characters', 'ilo.json'), 'utf8'));
+  assert.equal(normalizeCharacter(ilo, { canon }).portrait, undefined, 'no portrait, no field');
+  const portrait = { src: 'generated/dna5-1.png', alt: 'Ilo in a moss cardigan, lantern raised, at dusk.' };
+  assert.deepEqual(normalizeCharacter({ ...ilo, portrait }, { canon }).portrait, portrait);
+  assert.throws(() => normalizeCharacter({ ...ilo, portrait: { ...portrait, src: 'https://example.com/a.png' } }, { canon }), /portrait\.src: Use a PNG or JPEG in the game folder/u);
+  assert.throws(() => normalizeCharacter({ ...ilo, portrait: { src: portrait.src } }, { canon }), /portrait/u);
+});
+
+test('design_compare copies the starter into both arms, fonts included, and measures game arms by the files they changed', async () => {
+  const project = await mkdtemp(path.join(os.tmpdir(), 'mousa-compare-game-'));
+  const config = await mkdtemp(path.join(os.tmpdir(), 'mousa-compare-game-config-'));
+  const server = createMousaServer({ env: { MOUSA_PROJECT_DIR: project }, store: createConnectionStore({ env: { MOUSA_CONFIG_DIR: config }, protector: plainProtector }),
+    inspect: { browser: async () => ({ available: false, reason: 'Not in tests.' }), codex: async () => ({ available: false, reason: 'Not in tests.' }), fonts: async () => FONTS } });
+  const call = async (name, args) => parse(await server.callTool(name, args));
+  const font = Buffer.from([0x77, 0x4f, 0x46, 0x32, 0x00, 0xff, 0x10]);
+  try {
+    await mkdir(path.join(project, 'fonts'), { recursive: true });
+    await mkdir(path.join(project, 'characters'), { recursive: true });
+    await mkdir(path.join(project, 'node_modules', 'x'), { recursive: true });
+    await writeFile(path.join(project, 'index.html'), '<canvas id="view"></canvas>');
+    await writeFile(path.join(project, 'fonts', 'face.woff2'), font);
+    await writeFile(path.join(project, 'characters', 'maren.json'), '{"palette":{"coat":"#5b6b55"},"parts":[{"id":"coat"}]}');
+    await writeFile(path.join(project, 'node_modules', 'x', 'index.js'), 'skip');
+    const arms = { a: 'compare/with-qloo', b: 'compare/without-qloo' };
+    // Planning both arms first leaves only their records in the folders, which prepare allows.
+    await mkdir(path.join(project, 'compare', 'with-qloo', '.mousa'), { recursive: true });
+    const prepared = await call('design_compare', { ...arms, prepare: true });
+    assert.deepEqual([prepared.status, prepared.copied], ['prepared', 3], JSON.stringify(prepared));
+    for (const arm of Object.values(arms)) {
+      assert.ok((await readFile(path.join(project, ...arm.split('/'), 'fonts', 'face.woff2'))).equals(font), `${arm} has the font, byte for byte`);
+      await assert.rejects(readFile(path.join(project, ...arm.split('/'), 'node_modules', 'x', 'index.js')));
+    }
+    assert.equal((await call('design_compare', { ...arms, prepare: true })).error.code, 'COMPARE_NOT_EMPTY', 'never over an arm\'s work');
+
+    // Each arm designs its own Ilo; the shared keeper and page cannot tell them apart.
+    const write = async (arm, character) => {
+      await writeFile(path.join(project, ...arm.split('/'), 'characters', 'ilo.json'), JSON.stringify(character, null, 2));
+      await mkdir(path.join(project, ...arm.split('/'), '.mousa', 'design'), { recursive: true });
+      await writeFile(path.join(project, ...arm.split('/'), '.mousa', 'design', 'dna.json'), JSON.stringify({ medium: 'game', dna: { devices: [] } }));
+    };
+    await write(arms.a, { palette: { knit: '#3f5a4c', glass: '#ffc29e' }, parts: [{ id: 'knit-cap' }, { id: 'lamp-pole' }], lines: { greet: 'I nearly did too. The bridge sways under me.' } });
+    await write(arms.b, { palette: { cloak: '#1c1f3a', glass: '#ffd27a' }, parts: [{ id: 'hood' }, { id: 'lamp-pole' }], lines: { greet: 'Rest now, keeper. I will carry the light.' } });
+    const compared = await call('design_compare', arms);
+    assert.equal(compared.status, 'compared', JSON.stringify(compared));
+    assert.match(compared.distance.method, /files that differ/u);
+    assert.ok(compared.distance.palette > 0.1 && compared.distance.structure > 0.5 && compared.distance.voice > 0.5, JSON.stringify(compared.distance));
+    // Two identical designs are no distance apart.
+    const same = dataFingerprint({ 'a.json': '{"palette":{"x":"#112233"},"parts":[{"id":"hood"}]}' });
+    assert.equal(compareDataFingerprints(same, same).overall, 0);
+    assert.deepEqual(differingFiles({ 'x.json': '1', 'y.json': '2' }, { 'x.json': '1', 'y.json': '3' }), [{ 'y.json': '2' }, { 'y.json': '3' }]);
+  } finally {
+    await rm(project, { recursive: true, force: true });
+    await rm(config, { recursive: true, force: true });
+  }
+});
+
+test('the title card shows the portrait a character names, and a capture waits for it', async t => {
+  const browser = await verifyBrowser(await inspectBrowser({}));
+  if (!browser.available) { t.skip(browser.reason); return; }
+  const READY = 'Promise.resolve(window.captureReady).then(value => value === undefined ? true : value, error => String(error && error.message || error))';
+  const copy = await mkdtemp(path.join(os.tmpdir(), 'mousa-game-portrait-'));
+  const out = await mkdtemp(path.join(os.tmpdir(), 'mousa-game-portrait-shots-'));
+  try {
+    for (const [name, content] of await gameExampleFiles()) {
+      await mkdir(path.dirname(path.join(copy, name)), { recursive: true });
+      await writeFile(path.join(copy, name), content);
+    }
+    const file = path.join(copy, 'characters', 'ilo.json');
+    const ilo = JSON.parse(await readFile(file, 'utf8'));
+    await writeFile(file, JSON.stringify({ ...ilo, portrait: { src: 'generated/portrait-1.png', alt: 'A grey placeholder of Ilo with a lantern.' } }));
+    const served = await serveDirectory(copy);
+    try {
+      await assert.rejects(captureViews({ browser, baseUrl: served.url, entry: 'index.html', views: [{ id: 'frame', width: 960, height: 540 }], outDir: out, prefix: 'm', ready: READY }),
+        /The portrait generated\/portrait-1\.png could not be loaded/u, 'a portrait the folder lacks fails the capture');
+      await mkdir(path.join(copy, 'generated'), { recursive: true });
+      await writeFile(path.join(copy, 'generated', 'portrait-1.png'), png(64, 64, ['#3f5a4c', '#ffc29e']));
+      const [shot] = await captureViews({ browser, baseUrl: served.url, entry: 'index.html', views: [{ id: 'frame', width: 960, height: 540 }], outDir: out, prefix: 'p', ready: READY });
+      assert.ok(shot.bytes > 5000);
+    } finally { await served.close(); }
+  } finally {
+    await rm(copy, { recursive: true, force: true });
+    await rm(out, { recursive: true, force: true });
   }
 });

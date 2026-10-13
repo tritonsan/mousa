@@ -3,8 +3,8 @@
 //   character, characters/ilo.json, is the one both pages load; the review page also takes its view from the URL
 //   fragment, so a capture can ask for #pose, #walk, #scene or #kindle; and the play page has no comparison link.
 // - Ilo starts as the game's plain grey mannequin, so the design comes from the brief and the measured taste.
-// - FORMAT.md is the character format guide the game's validator is written from, with art direction and without
-//   music, which this copy does not carry.
+// - FORMAT.md is the character format guide the game's validator is written from, with art direction and the title
+//   card's portrait, and without music, which this copy does not carry.
 // - The two typefaces of the game's interface are copied into fonts/ with their licences.
 // README.md is written by hand and left as it is.
 //
@@ -96,7 +96,7 @@ export async function gameExampleFiles() {
   normalizeCharacter(starter, { canon });
   files.set('characters/ilo.json', `${JSON.stringify(starter, null, 2)}\n`);
   const keeper = normalizeCharacter(JSON.parse(keeperText), { npc: true });
-  let guide = formatGuide({ canon, keeperHeight: measureCharacter(keeper).figureHeight, artDirection: true, music: false });
+  let guide = formatGuide({ canon, keeperHeight: measureCharacter(keeper).figureHeight, artDirection: true, music: false, portrait: true });
   for (const [pattern, to] of GUIDE_EDITS) {
     if (!pattern.test(guide)) throw new Error(`The format guide no longer contains the text the example changes: ${pattern.source.slice(0, 80)}`);
     guide = guide.replace(pattern, to);
