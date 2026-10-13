@@ -200,10 +200,18 @@ The marketplaces are `.claude-plugin/marketplace.json` for Claude Code and `.age
   - check the marketplaces, the Kiro template and the eval suites;
   - fail when the committed packages differ from what the sources build.
 
-**Not verified yet.** These need a live session in each host, with approval:
-- that each host runs the gate (Codex asks the person to trust it in `/hooks`);
-- that the skills trigger as intended;
-- that Codex applies the per-tool approval.
+**Verified live on 2026-10-13** (see [the verification record](../docs/verification.md#live-codex-sessions-with-the-packaged-plugin--october-13-2026)):
+- **Full sessions.** One session per host, on the same brief, ran from the brief to an audited review.
+  - Claude Code loaded `taste-brief` through its Skill tool, and Codex read both skills with shell commands.
+  - Both measured the same audience to the same result.
+  - Both checks scored 1.0.
+- **The gate in Codex.** It refused an `apply_patch` at stage "measured", and no file was written.
+
+**Not verified yet:**
+- that Claude Code runs the gate (its agent never wrote early, and its stream shows no PreToolUse hook);
+- Codex's image tool, because no plan chose a generated picture;
+- that Codex honours the package's own `approval_mode` for `mousa_open_project`;
+- the eval suites.
 
 ## Portable configuration
 

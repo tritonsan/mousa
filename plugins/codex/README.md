@@ -11,6 +11,8 @@ codex plugin add mousa@mousa
 
 The `connect` skill opens on install. The agent gives you a link to Moûsa's local key page (`mousa_connect`), or you set `QLOO_API_KEY` in the environment Codex starts from. Trust Moûsa's write gate with `/hooks`. The project folder is the folder of the Codex session.
 
+Codex asks you to approve each Moûsa tool that reaches the network, such as `taste_profile`. `codex exec` cannot ask, so approve them for that run with `-c 'plugins={ "mousa@mousa" = { enabled = true, mcp_servers = { mousa = { default_tools_approval_mode = "approve" } } } }'`, and cap Qloo with `MOUSA_QLOO_BUDGET`. On Windows, with `--ignore-user-config`, also pass your sandbox mode, such as `-c windows.sandbox="elevated"`.
+
 ## What it holds
 
 - **The `mousa` MCP server** has twelve tools: setup (`mousa_status`, `mousa_connect`, `mousa_open_project`), taste (`taste_profile`, `taste_ask`, `qloo_query`) and design (`design_validate`, `design_check`, `design_capture`, `image`, `materials`, `design_compare`).

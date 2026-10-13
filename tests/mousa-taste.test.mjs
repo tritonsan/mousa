@@ -246,8 +246,12 @@ test('a place Qloo does not recognise stops the measurement after its first empt
     assert.ok(insights <= 3, `${insights} Insights requests, not one per domain`);
     assert.ok(empty.cautions.some(line => /likely did not recognise that place/u.test(line)));
     assert.match(empty.next, /^Plan again with the city or the neighbourhood alone, such as "Istanbul"\..*prediction stays frozen/u);
-    // The same frozen prediction measures once the place is the city alone.
-    assert.equal((await call('taste_profile', { dryRun: true, medium: 'web', references, location: 'Istanbul' })).status, 'planned');
+    // Planned again with the city alone, the plan keeps its references and medium, and the frozen prediction measures.
+    const city = await call('taste_profile', { dryRun: true, location: 'Istanbul' });
+    assert.equal(city.status, 'planned');
+    assert.deepEqual(city.kept, ['medium', 'references']);
+    assert.deepEqual(city.plan.signal.references.map(item => item.name), ['Paterson', 'Nujabes']);
+    assert.equal(city.plan.signal.location, 'Istanbul');
     assert.equal((await call('taste_profile', {})).status, 'ok');
   } finally {
     await rm(project, { recursive: true, force: true });

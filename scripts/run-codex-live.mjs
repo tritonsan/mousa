@@ -10,7 +10,7 @@
 //   and MOUSA_QLOO_BUDGET caps the project folder's Qloo requests (24 by default).
 // - It records Codex's event stream to session.jsonl and a summary to summary.json beside the project folder.
 //
-//   node scripts/run-codex-live.mjs [--run] [--keep] [--folder <dir>] [--budget 24]
+//   node scripts/run-codex-live.mjs [--run] [--keep] [--folder <dir>] [--budget 24] [--windows-sandbox elevated]
 
 import fs from 'node:fs/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
@@ -89,8 +89,14 @@ async function main() {
   const dotenv = {};
   loadDotEnv(path.join(rootDir, '.env'), dotenv);
   const codex = await codexPath();
-  // Only Moûsa's marketplace and plugin, as inline tables: the person's config.toml is not loaded.
-  const overrides = ['-c', `marketplaces={ mousa = { source_type = "local", source = '${rootDir}' } }`, '-c', 'plugins={ "mousa@mousa" = { enabled = true } }'];
+  // Only Moûsa's marketplace and plugin, as inline tables: the person's config.toml is not loaded. A run without a
+  // person cannot answer approvals, and Codex asks one for every tool that reaches the network, so Moûsa's tools are
+  // approved for this run, as the person approves them in the app; MOUSA_QLOO_BUDGET still caps Qloo. On Windows the
+  // sandbox mode comes back by name too, because without it Codex cannot sandbox a command and refuses every one: the
+  // first session could not even read its skills.
+  const windowsSandbox = option('--windows-sandbox', 'elevated');
+  const overrides = ['-c', `marketplaces={ mousa = { source_type = "local", source = '${rootDir}' } }`, '-c', 'plugins={ "mousa@mousa" = { enabled = true, mcp_servers = { mousa = { default_tools_approval_mode = "approve" } } } }',
+    ...(process.platform === 'win32' ? ['-c', `windows.sandbox="${windowsSandbox}"`] : [])];
   const args = ['exec', '--ignore-user-config', '--ephemeral', '--json', '--skip-git-repo-check', '--sandbox', 'workspace-write', '-C', project, ...overrides,
     '--dangerously-bypass-hook-trust', '-o', path.join(folder, 'last-message.md'), '-'];
   const plan = { folder, project, codex, install: ['plugin remove mousa@mousa (if present)', `plugin marketplace add ${rootDir}`, 'plugin add mousa@mousa'], args, brief: BRIEF,

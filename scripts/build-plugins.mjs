@@ -171,6 +171,7 @@ function packageReadme(host, version) {
   return [`# Moûsa ${version} for Codex`, '', 'Moûsa grounds design work in measured cultural taste from Qloo: what an audience loves, what those works share, and what that means for palette, type, imagery, motion, voice and structure.', '',
     '## Install', '', '```', 'codex plugin marketplace add <this repository or its folder>', 'codex plugin add mousa@mousa', '```', '',
     'The `connect` skill opens on install. The agent gives you a link to Moûsa\'s local key page (`mousa_connect`), or you set `QLOO_API_KEY` in the environment Codex starts from. Trust Moûsa\'s write gate with `/hooks`. The project folder is the folder of the Codex session.', '',
+    'Codex asks you to approve each Moûsa tool that reaches the network, such as `taste_profile`. `codex exec` cannot ask, so approve them for that run with `-c \'plugins={ "mousa@mousa" = { enabled = true, mcp_servers = { mousa = { default_tools_approval_mode = "approve" } } } }\'`, and cap Qloo with `MOUSA_QLOO_BUDGET`. On Windows, with `--ignore-user-config`, also pass your sandbox mode, such as `-c windows.sandbox="elevated"`.', '',
     ...shared, ''].join('\n');
 }
 

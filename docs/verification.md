@@ -2,6 +2,40 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Live Codex sessions with the packaged plugin — October 13, 2026
+
+[`scripts/run-codex-live.mjs`](../scripts/run-codex-live.mjs) ran the Claude Code session's brief in Codex (CLI 0.162.0-alpha.17.2, the default model).
+- **The plugin.** It was installed from this repository's marketplace for the run and removed afterwards.
+- **The session.** Each run used `codex exec`:
+  - with the person's `config.toml` ignored, and only Moûsa's marketplace and plugin named with `-c`;
+  - with a workspace-write sandbox, and Moûsa's write gate trusted for that run only;
+  - with the Qloo key from `.env` and `MOUSA_QLOO_BUDGET=24`.
+- **The records.** They are in `D:/mousa-live/codex-wax-and-wane-1/` to `-3/` and `D:/mousa-live/codex-gate-check/`.
+
+1. **No sandbox.** With the person's config ignored, Codex had no Windows sandbox mode, so it refused every shell command. Codex reads skills with a shell command, so the skills did not load, and the agent stopped and said why. No Qloo request was made. The script now passes the person's sandbox mode by name (`windows.sandbox="elevated"`).
+2. **No approval.** Codex asks a person to approve each Moûsa tool that reaches the network, and `codex exec` cannot ask, so `taste_profile` was refused. The agent then asked whether to enable the tool or design without measurement, rather than go on alone. No Qloo request was made. The script now approves Moûsa's tools for the run, and the Codex package's README says how.
+3. **The full session,** 5.1 minutes:
+   - **Skills and setup.** It read `taste-brief`, `design` and the DNA reference with shell commands, checked the setup, planned, and froze its prediction.
+   - **First measurement.** It measured with "Moda, Istanbul". The new early stop held this to 5 requests, and the brief said to try "Istanbul".
+   - **A re-plan that lost its references.** It planned again with only the location, the plan lost its references, and the next measurement was refused before any request. Since fixed: a plan made again keeps the fields it is not given.
+   - **Second measurement.** With "Istanbul" it made 11 new requests. They returned the same 80 works, 18 qualities and six required anchors as the Claude Code session: Intimate, Emotional, Friendship, Pretty Boys, Leonard Cohen and Fleabag. The prediction had named 1 of the 80 works.
+   - **Qloo in total:** 16 requests, within the budget of 24.
+   - **Reading and DNA.**
+     - The reading was valid at the first save, with 3 clusters.
+     - The DNA was valid at the second save: 7 devices, all anchored to surprises and 6 to qualities.
+     - Against the sketch it brought 2 new colours, Fraunces and Libre Franklin, and 3 new section ids.
+   - **The plan:** 7 steps and no generated picture. The imagery was drawn as inline SVG, so Codex's image tool was not exercised.
+   - **The build.** It was written with `apply_patch` after the plan. The check scored 1.0 at the first run.
+   - **The review.** 3 captures came back in the result, and all three criteria were met in round 1.
+   - **Facts.** All six facts were kept and no claim was invented. This run's skills already had the invent-no-fact rule.
+4. **The gate.** A project at stage "measured" was asked to create `index.html` with `apply_patch`. Codex answered "Command blocked by PreToolUse hook: Moûsa: the design in this project is at stage "measured", before a valid Design DNA, so its files wait…", and no file was written. Moûsa's gate runs in Codex and reads the absolute paths a patch names.
+
+**The two hosts.** Both measured the same audience to the same result, and they designed it differently:
+- **Claude Code** built a dark, lamp-lit page in a condensed serif, with close-up record crops.
+- **Codex** built a light, peach-paper page in plum ink, set in Fraunces, with drawn sleeves.
+
+Both anchor the palette and the type to the measured qualities. With one session per host, this shows that the plugin works in both, not which design is better.
+
 ## Live Claude Code session with the packaged plugin — October 13, 2026
 
 [`scripts/run-claude-code-live.mjs`](../scripts/run-claude-code-live.mjs) ran one headless Claude Code session (2.1.284, claude-opus-5-5) with `plugins/claude-code` loaded for that session only, through `--plugin-dir`.

@@ -72,6 +72,8 @@ The plan returns:
 - `missing`: what to ask the person. A `needs-input` status means ask, then plan again.
 - `prediction`: the domains and the shape your prediction must have.
 
+Planning again with only some fields keeps the rest of the saved plan, so `taste_profile({ dryRun: true, location: 'Istanbul' })` changes only the place. The result lists what it `kept`.
+
 A `needs-restart` status means an earlier session's prediction covers other domains. Write a prediction for this plan and save it with `restart: true`.
 
 [references/taste-questions.md](references/taste-questions.md) explains each question and each recipe.
