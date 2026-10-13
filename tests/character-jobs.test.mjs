@@ -27,7 +27,9 @@ async function setup(t, { characterRunner = dryRun, overrides = {}, browser = nu
   return { studio, config, directory };
 }
 async function finished(studio, id) {
-  for (let i = 0; i < 600; i++) {
+  // A painted dry-run pair finishes in a few seconds alone, and can take several times as long while the rest of the
+  // suite starts browsers and servers beside it, so the wait is bounded by time rather than by a short count.
+  for (const deadline = Date.now() + 60000; Date.now() < deadline;) {
     const job = studio.manager.publicJob(studio.manager.get(id));
     const done = status => ['completed', 'failed', 'cancelled'].includes(status);
     if (done(job.status) && job.runs.every(run => done(run.status)) && !studio.manager.characterControllers.has(id)) return job;

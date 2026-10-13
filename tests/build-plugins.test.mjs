@@ -103,12 +103,32 @@ async function startPackaged(name, extra) {
   const bare = Object.fromEntries(['PATH', 'Path', 'PATHEXT', 'SYSTEMROOT', 'SystemRoot', 'WINDIR', 'USERPROFILE', 'APPDATA', 'LOCALAPPDATA', 'TEMP', 'TMP', 'HOME', 'TMPDIR']
     .filter(key => process.env[key] !== undefined).map(key => [key, process.env[key]]));
   const child = spawn(process.execPath, [pkg(name, 'server', 'mousa.mjs')], { cwd: pkg(name), env: { ...bare, MOUSA_CAPTURE: 'off', ...extra }, stdio: ['pipe', 'pipe', 'pipe'] });
+  // A pipe that breaks while the server closes must not end the test process.
+  for (const stream of [child.stdin, child.stdout, child.stderr]) stream.on('error', () => {});
+  child.stderr.resume();
+  const exited = new Promise(resolve => child.once('exit', resolve));
   const lines = createInterface({ input: child.stdout });
   const pending = new Map();
-  lines.on('line', line => { const message = JSON.parse(line); pending.get(message.id)?.(message); });
+  lines.on('line', line => {
+    let message;
+    try { message = JSON.parse(line); } catch { return; }
+    pending.get(message.id)?.(message);
+  });
   let id = 0;
-  const request = (method, params) => new Promise(resolve => { id += 1; pending.set(id, resolve); child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id, method, params })}\n`); });
-  return { request, stop: () => { child.stdin.end(); child.kill(); } };
+  const request = (method, params) => new Promise((resolve, reject) => {
+    id += 1;
+    const timer = setTimeout(() => reject(new Error(`${name}: no answer to ${method}`)), 30000);
+    pending.set(id, message => { clearTimeout(timer); resolve(message); });
+    child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id, method, params })}\n`);
+  });
+  // The server ends when its input closes; it is stopped only if it does not.
+  const stop = async () => {
+    child.stdin.end();
+    const late = setTimeout(() => child.kill(), 5000);
+    await exited;
+    clearTimeout(late);
+  };
+  return { request, stop };
 }
 
 test('each packaged server starts on its own in a bare environment and finds its own fonts', async () => {
@@ -130,7 +150,7 @@ test('each packaged server starts on its own in a bare environment and finds its
         assert.equal(status.project.folder, await import('node:fs/promises').then(fs => fs.realpath(project)));
         assert.equal(status.project.source, name === 'codex' ? 'host' : 'environment');
         assert.equal(status.qloo.connected, false, 'no key in a bare environment and an empty connections folder');
-      } finally { server.stop(); }
+      } finally { await server.stop(); }
     }
   } finally {
     await rm(config, { recursive: true, force: true });

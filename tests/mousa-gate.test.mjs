@@ -26,6 +26,7 @@ function run(event) {
     child.stdout.on('data', chunk => { out += chunk; });
     child.on('error', reject);
     child.on('close', code => resolve({ code, out }));
+    for (const stream of [child.stdin, child.stdout, child.stderr]) stream.on('error', () => {});
     child.stdin.end(typeof event === 'string' ? event : JSON.stringify(event));
   });
 }
