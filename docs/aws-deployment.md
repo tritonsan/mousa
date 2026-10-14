@@ -236,4 +236,21 @@ On 2026-10-14, for the site and the live try:
 - **The image.** It now also copies the try's two folder starters, `examples/mobile-app` and `examples/long-dusk`; the allowlist leaves out their `.kiro` and `.mousa` folders. It records `MOUSA_COMMIT` and checks `/api/health` itself.
 - **The imports.** The server's imports reach only `src/`, `plugin/` and `game/`, all three in the allowlist.
 - **The entrypoint.** Its syntax checks pass, with LF line endings. It also reads `SITE_SECRET_FILE` and `TRY_ACCESS_CODE_FILE`.
-- **Not run.** Docker Desktop's engine was not running, so the image was not built and Kiro and Chromium did not run in it.
+- **Not run at first.** Docker Desktop's engine was not running, so the image was not built then.
+
+Later the same day the image was built locally (Docker Desktop 4.76, engine 29.5.2).
+- **The image.** 729 MB. The stable channel installed kiro-cli 2.31.0; the local live try ran 2.24.0.
+- **A smoke test.** It started as Compose would, with throwaway secrets and no Kiro or Qloo key:
+  - it ran as UID 1000 with a read-only root;
+  - Ramble's `data/` was there, with no dot entries in the starters, and `MOUSA_COMMIT` was recorded;
+  - `/api/health` answered, and `/api/health/deep` named what the try lacks.
+- **The gallery in the container.** It was exported with `--gallery` (10 entries, scanned clean) and copied into the volume. Then:
+  - `scripts/verify-site.mjs` passed all 18 pages;
+  - a design played from the preview origin under the sandboxed policy;
+  - the vote issued a ballot, and `/try/` showed its pending page.
+- **Review captures.** By default Chromium's sandbox could not start, as expected. The test capture passed in two other ways:
+  - with `MOUSA_CAPTURE_NO_SANDBOX=1`;
+  - with Chromium's sandbox kept under `--security-opt seccomp=unconfined`.
+
+  So on this kernel only Docker's default seccomp profile blocks the sandbox. A profile that adds the namespace calls to the default should keep it, but it has not been written or tested.
+- **Not run in the container:** Kiro with an API key, and a try.

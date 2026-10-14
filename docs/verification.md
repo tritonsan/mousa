@@ -2,6 +2,25 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Live Kiro try in real Kiro (L1–L3) — October 14, 2026
+
+One try ran with `node scripts/run-try.mjs --starter blank-site --references "Paterson; Nujabes" --pair`.
+- **Setup.** kiro-cli 2.24.0 with the local sign-in and no API key, `claude-opus-5.5` at medium effort, Chrome for the review captures.
+- **The agent file loaded.** It loaded with the V2 tool settings and the V3 `permissions` block side by side, the absolute `file://` skill resources (whose path holds a space) and the MCP server's environment. Kiro's only message was `[warn] failed to set model … Method not found`, which is harmless: the agent file's model was used.
+- **Step one: 35 seconds.**
+  - The prediction session took 28.6 seconds and made three Moûsa calls: the plan, the font library and the frozen prediction, 48 entries across nine domains. It used no built-in tool.
+  - The host then measured with 12 Qloo requests: 68 of the 69 measured works were not in the prediction.
+- **Step two: 6.4 minutes.**
+  - Both arms ran at once through every stage (reading, DNA, plan, check, captures, review rounds and report), in 25 and 23 calls of about six minutes each.
+  - The distance was 0.60 (palette 0.41, type 0.88, sections 0.93, CSS features 0.26), with the same frozen prediction in both arms.
+  - With Qloo, 7 of 7 devices rest on what the prediction did not contain. The design without Qloo kept the frozen sketch's notebook look; the one with Qloo left it for a dark, lamp-lit shop.
+  - The try sent 12 Qloo requests in all. The arm with Qloo read the measurement again from the cache and asked nothing more.
+- **Audit of the private streams.**
+  - Every built-in read and write each arm made stayed in its own folder: two reads and five writes with Qloo, two reads and six writes without. Nothing was refused.
+  - The streams came to 1.5 and 2.7 MB.
+
+**Not shown:** Kiro 2.31.0, which the image installs, the API-key sign-in, and a try on the server.
+
 ## Live Kiro try — October 14, 2026
 
 `/try/` runs a juror's request in Kiro on the server, in two steps, behind `TRY_ACCESS_CODE`.
