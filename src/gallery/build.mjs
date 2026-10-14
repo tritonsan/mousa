@@ -129,7 +129,7 @@ export async function buildEntry({ entry, run, dir, repo, runsDir, library, brow
   const saved = {
     schemaVersion: GALLERY_SCHEMA_VERSION, id: entry.id, kind: run.kind, title: entry.title.trim(), ...(entry.summary ? { summary: entry.summary.trim() } : {}),
     host: run.host, hostVersion: entry.hostVersion || run.hostVersion || null, model: entry.model || run.model || null, surfaceVersion: run.surfaceVersion,
-    ...(run.legacy ? { surface: 'earlier tool surface (0.4)' } : {}), ...(run.origin === 'try' ? { origin: 'try' } : {}), medium: record.medium || null, startedAt: run.startedAt, minutes: run.minutes, turns: run.turns,
+    ...(run.legacy ? { surface: 'earlier tool surface (0.4)' } : {}), ...(run.origin === 'try' ? { origin: 'try', tryBy: run.tryBy } : {}), medium: record.medium || null, startedAt: run.startedAt, minutes: run.minutes, turns: run.turns,
     qlooRequests: run.qlooRequests, pictures: entry.images ? 'Codex image generation' : 'none: imagery drawn in SVG or CSS',
     brief: scrubText(run.brief, { user }), headline: record.headline, ...(record.kind === 'comparison' ? { distance: record.distance, samePrediction: record.samePrediction, arms } : {}),
     play, ...(before ? { before } : {}),

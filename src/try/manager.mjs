@@ -489,12 +489,15 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
       return run;
     },
 
-    /** The juror's consent to publish a finished try in the gallery, or its withdrawal. */
-    async publish(id, consent) {
+    /**
+     * The consent to publish a finished try in the gallery, or its withdrawal: the juror's on the site, or the
+     * operator's for a try run with scripts/run-try.mjs (`by: 'operator'`), so the gallery says who ran it.
+     */
+    async publish(id, consent, { by = 'juror' } = {}) {
       const run = get(id);
       // A gallery entry has designs to play, so only a finished pair is published.
       if (!run.pair || !['done', 'partial'].includes(run.pair.status) || !run.pair.report) throw new TryError(409, 'Only a try whose pair is finished can be published.');
-      run.consent = consent ? { publish: true, at: stamp() } : null;
+      run.consent = consent ? { publish: true, at: stamp(), by: by === 'operator' ? 'operator' : 'juror' } : null;
       await save(run);
       return run;
     },

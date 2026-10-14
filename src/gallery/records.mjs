@@ -120,7 +120,8 @@ export async function publishedTries(dir, { starters = {} } = {}) {
     if (run?.id !== name || !finishedPair(run)) continue;
     const source = starters[run.input?.starter]?.source;
     entries.push({ id: `try-${name.slice(0, 8)}`, try: name, title: `${run.title || 'A live try'}, for people who love ${listText(run.input?.references || [])}`,
-      summary: 'A juror ran this pair in the live try on the hosted server and agreed to publish it.', ...(source ? { before: { repo: source } } : {}) });
+      summary: run.consent.by === 'operator' ? 'Recorded with the live try\'s own runner: the same prompts, agent files and Kiro sessions the hosted try runs for a juror.'
+        : 'A juror ran this pair in the live try on the hosted server and agreed to publish it.', ...(source ? { before: { repo: source } } : {}) });
   }
   return entries;
 }
@@ -146,13 +147,18 @@ export async function readTryRun(folder, { repo }) {
   const commit = run.commit || await commitAt(repo, startedAt);
   const sessions = [{ id: 'predict', label: 'The prediction session', calls: run.quick?.session?.calls },
     { id: 'with-qloo', label: 'The arm with Qloo', calls: run.pair.arms?.['with-qloo']?.session?.calls }, { id: 'without-qloo', label: 'The arm without Qloo', calls: run.pair.arms?.['without-qloo']?.session?.calls }];
+  // The same request again, through the runner that takes the try's own steps without the site.
+  const quoted = value => `"${String(value).replaceAll('"', '\\"')}"`;
+  const input = run.input || {};
+  const command = ['node scripts/run-try.mjs', `--starter ${input.starter}`, `--references ${quoted((input.references || []).join('; '))}`,
+    ...(input.place ? [`--place ${quoted(input.place)}`] : []), ...(input.ages?.length ? [`--ages ${input.ages.join(',')}`] : []), '--pair'].join(' ');
   return {
-    name: `try-${run.id.slice(0, 8)}`, host: 'kiro', kind: 'comparison', origin: 'try', root, project, arms,
+    name: `try-${run.id.slice(0, 8)}`, host: 'kiro', kind: 'comparison', origin: 'try', tryBy: run.consent.by === 'operator' ? 'operator' : 'juror', root, project, arms,
     startedAt, minutes: Math.round((stepMinutes(run.quick) + stepMinutes(run.pair)) / 6000) / 10, exitCode: null,
     model: run.model || null, hostVersion: run.hostVersion || null, surfaceVersion: run.surfaceVersion || null, turns: null,
     brief: run.brief || '', briefFile: null, qlooRequests: run.pair.qlooRequests ?? run.quick?.measured?.qlooRequests ?? null, commit,
     timeline: tryTimeline(sessions),
-    reproduce: { commit, command: 'node src/server.mjs  # with TRY_ACCESS_CODE set; then open /try/ and give the same starter and audience',
+    reproduce: { commit, command,
       needs: ['Your own Qloo API key as QLOO_API_KEY in this repository\'s .env.', `Kiro CLI${run.hostVersion ? ` ${run.hostVersion}` : ''}, signed in or with KIRO_API_KEY.`, 'A Chromium-based browser for the review captures (MOUSA_BROWSER names one).'],
       note: 'A try runs the same prompts each time; the model reaches its own prediction and design, and the measurement and the comparison are made the same way.' },
   };

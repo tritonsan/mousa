@@ -3,8 +3,10 @@
 // hosted /try page runs, into DATA_DIR/try (or --data). Step one always runs; --pair builds the pair after it, and
 // --publish records the operator's consent, so build-gallery adds the pair to the gallery and the vote. Each run calls
 // Kiro and Qloo for real: one prediction session, and with --pair two design sessions; at most TRY_QLOO_BUDGET requests.
+// --publish-run records the operator's consent for a try that already finished, and makes no request.
 //
 //   node scripts/run-try.mjs --starter ramble --references "Paterson; Nujabes" [--place Moda] [--ages 25_to_29,30_to_34] [--pair] [--publish] [--data <folder>]
+//   node scripts/run-try.mjs --publish-run <try id> [--data <folder>]
 
 import path from 'node:path';
 import { loadDotEnv, getConfig } from '../src/config.mjs';
@@ -13,10 +15,11 @@ import { createTryManager, QUICK_ACTIVE, PAIR_ACTIVE, TRY_ARMS } from '../src/tr
 import { STARTERS } from '../src/try/starters.mjs';
 
 function parseArgs(argv) {
-  const args = { starter: null, references: '', place: '', ages: [], pair: false, publish: false, data: null };
+  const args = { starter: null, references: '', place: '', ages: [], pair: false, publish: false, publishRun: null, data: null };
   for (let index = 0; index < argv.length; index++) {
     const value = argv[index];
-    if (value === '--starter') args.starter = argv[++index];
+    if (value === '--publish-run') args.publishRun = argv[++index];
+    else if (value === '--starter') args.starter = argv[++index];
     else if (value === '--references') args.references = argv[++index];
     else if (value === '--place') args.place = argv[++index];
     else if (value === '--ages') args.ages = String(argv[++index] || '').split(',').map(item => item.trim()).filter(Boolean);
@@ -25,6 +28,7 @@ function parseArgs(argv) {
     else if (value === '--data') args.data = argv[++index];
     else throw new Error(`Unknown argument: ${value}`);
   }
+  if (args.publishRun) return args;
   if (!args.starter) throw new Error(`Name a starter: --starter ${Object.keys(STARTERS).join(' | ')}`);
   if (args.publish && !args.pair) throw new Error('--publish needs --pair: only a finished pair is published.');
   return args;
@@ -52,6 +56,14 @@ async function main() {
   loadDotEnv();
   const args = parseArgs(process.argv.slice(2));
   const config = getConfig({ ...process.env, ...(args.data ? { DATA_DIR: path.resolve(args.data) } : {}) });
+  if (args.publishRun) {
+    const manager = createTryManager({ config, kiro: {}, requireAccess: false });
+    await manager.initialize();
+    const run = await manager.publish(args.publishRun, true, { by: 'operator' });
+    console.log(`Consent recorded for try ${run.id}: build-gallery adds its pair to the gallery and the vote.`);
+    await manager.close();
+    return;
+  }
   const kiro = await inspectKiro(config);
   const manager = createTryManager({ config, kiro, requireAccess: false });
   const ready = manager.readiness();
@@ -76,7 +88,7 @@ async function main() {
     }
     if (!['done', 'partial'].includes(paired.pair.status)) throw new Error(`Step two ${paired.pair.status}: ${paired.pair.problem || ''}`);
     console.log(`Step two: distance ${paired.pair.report?.distance ?? '?'}; ${paired.pair.qlooRequests ?? 0} Qloo requests in all.`);
-    if (args.publish) { await manager.publish(created.id, true); console.log('Consent recorded: build-gallery adds this pair to the gallery and the vote.'); }
+    if (args.publish) { await manager.publish(created.id, true, { by: 'operator' }); console.log('Consent recorded: build-gallery adds this pair to the gallery and the vote.'); }
   } finally {
     await manager.close();
   }

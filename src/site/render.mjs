@@ -150,7 +150,7 @@ const downloads = (entry, base) => `<section class="mr-section" id="files"><div 
 export function entryPage({ entry, previewBase, families = [], repository = '' }) {
   const base = `/gallery/${entry.id}/`;
   const body = `<div class="site-page"><nav class="site-crumbs" aria-label="Breadcrumb"><a href="/gallery/">Evidence</a> <span aria-hidden="true">/</span> <span>${escape(entry.title)}</span></nav>
-<header class="site-entry-head"><p class="mr-kicker">${entry.origin === 'try' ? 'A juror\'s live try' : 'Recorded'} ${escape(day(entry.startedAt))} · ${escape(HOSTS[entry.host] || entry.host)}</p><h1>${escape(entry.title)}</h1>${entry.summary ? `<p class="site-lede">${escape(entry.summary)}</p>` : ''}${factsBlock(entry)}</header>
+<header class="site-entry-head"><p class="mr-kicker">${entry.origin === 'try' ? (entry.tryBy === 'juror' ? 'A juror\'s live try' : 'A live try, recorded') : 'Recorded'} ${escape(day(entry.startedAt))} · ${escape(HOSTS[entry.host] || entry.host)}</p><h1>${escape(entry.title)}</h1>${entry.summary ? `<p class="site-lede">${escape(entry.summary)}</p>` : ''}${factsBlock(entry)}</header>
 ${playBlock(entry, previewBase)}
 <div class="site-report">${renderBody(entry.record, { base: `${base}report/`, fonts: families })}</div>
 ${timelineBlock(entry.timeline)}${reproduceBlock(entry)}${downloads(entry, base)}</div>`;

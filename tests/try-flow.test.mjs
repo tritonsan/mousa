@@ -178,8 +178,9 @@ test('step two builds both arms from the one frozen prediction, keeps the key in
   assert.equal(await manager.armFile(run.id, 'f'.repeat(48), 'with-qloo', 'index.html'), null);
   assert.equal(await manager.armFile(run.id, run.previewToken, 'with-qloo', '.mousa/taste/profile.json'), null);
 
-  // Publishing needs the juror's consent, and a finished try.
-  assert.equal((await manager.publish(run.id, true)).consent.publish, true);
+  // Publishing needs the juror's consent, and a finished try; the operator's consent says it is the operator's.
+  assert.deepEqual([(await manager.publish(run.id, true)).consent.publish, run.consent.by], [true, 'juror']);
+  assert.equal((await manager.publish(run.id, true, { by: 'operator' })).consent.by, 'operator');
   assert.equal((await manager.publish(run.id, false)).consent, null);
 });
 
@@ -323,7 +324,9 @@ test('a finished pair its juror agreed to publish joins the gallery as a Kiro co
   assert.equal(entry.surface, undefined, 'a try runs the current surface');
   assert.deepEqual(entry.timeline.lanes.map(lane => lane.label), ['The prediction session', 'The arm with Qloo', 'The arm without Qloo']);
   assert.ok(entry.timeline.totals.mousa > 0 && entry.timeline.totals.writes > 0);
-  assert.match(entry.reproduce.command, /TRY_ACCESS_CODE/u);
+  assert.equal(entry.reproduce.command, 'node scripts/run-try.mjs --starter fixture-shop --references "Paterson; Nujabes" --pair');
+  assert.equal(entry.tryBy, 'juror', 'consent given on the site is the juror\'s');
+  assert.match(entries[0].summary, /A juror ran this pair/u);
   assert.deepEqual(entry.play.map(item => item.path), ['out/with-qloo/index.html', 'out/without-qloo/index.html']);
   assert.ok(Number.isInteger(entry.qlooRequests) && entry.qlooRequests > 0);
   const index = await readJson(path.join(out, 'gallery.json'));
