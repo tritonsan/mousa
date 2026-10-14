@@ -54,6 +54,8 @@ export function getConfig(env = process.env) {
     environment: env.MOUSA_ENVIRONMENT || 'local',
     // Taste-led builds can request generated images from Codex when it is signed in with ChatGPT; off disables the tool in both arms.
     codexImages: env.CODEX_IMAGES || 'auto', codexCliPath: env.CODEX_CLI_PATH || '',
+    // The public repository the site links to, once there is one.
+    siteRepository: /^https:\/\/[^\s"'<>]+$/u.test(env.SITE_REPOSITORY_URL || '') ? env.SITE_REPOSITORY_URL : '',
     // Stored jobs, including finished ones; a local study can raise it without archiving earlier work.
     maxJobs: number('MAX_JOBS', 30, 1, 200), maxFiles: 30, maxFileBytes: 160000,
     maxProjectBytes: 1500000, maxBriefLength: 3500,

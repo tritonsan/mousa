@@ -20,6 +20,9 @@ import { MUSIC_PATH, loadMusicLibrary, musicLibraryFile, sendLibraryFile } from 
 import { PREVIEW_CSP, CAPTURE_ID, REVIEW_DIR, createSiteCapture } from './site-production.mjs';
 import { inspectBrowser, verifyBrowser } from '../plugin/server/production/capture.mjs';
 import { loadShowcase, isShowcaseJob, showcaseAppFile, SHOWCASE_APP_CSP } from './showcase.mjs';
+import { loadGallery, galleryFile, armRecord } from './gallery.mjs';
+import { landingPage, galleryPage, entryPage, armPage, missingPage, tryPendingPage } from './site/render.mjs';
+import { reportStylesheet } from '../plugin/server/design/report.mjs';
 
 const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.json': 'application/json; charset=utf-8', '.txt': 'text/plain; charset=utf-8' };
 // The app shows generated-image thumbnails from the separate preview origin, which is added to img-src per response.
@@ -32,6 +35,11 @@ const gameCsp = "default-src 'none'; script-src 'self'; style-src 'self'; img-sr
 const GAME_FILES = /^(?:index\.html|compare\.html|styles\.css|src\/[a-z-]{1,40}\.js|world\/canon\.json|characters\/maren\.json)$/u;
 // A painted arm adds its pieces and its standing figure, which run-pair.mjs publishes beside the arm's character file.
 const PAIR_FILES = /^(?:pair\.json|qloo-(?:off|on|swap)\.json|qloo-(?:off|on|swap)-portrait-[12]\.(?:jpg|png)|qloo-(?:off|on|swap)-skin-(?:layer|strip|tip)-[a-z0-9-]{1,50}\.png|qloo-(?:off|on|swap)-figure\.png|qloo-(?:off|on|swap)-review-r[1-3]-(?:pose|walk|scene|kindle)\.png)$/u;
+// The public site's pages run no script and load only this origin's styles, pictures and fonts; a session page frames
+// the recorded design from the preview origin.
+const siteCsp = origin => `default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; frame-src ${origin}; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`;
+// A report's own files: its page runs no script and carries its fonts inline.
+const reportCsp = "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
 
 export function tokenMatches(actual, expected) {
   if (typeof actual !== 'string' || typeof expected !== 'string') return false;
@@ -69,6 +77,12 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
   // The recorded work a reviewer sees first, readable without the access token; read once at start.
   const showcase = await loadShowcase({ dataDir: config.dataDir, jobs: manager.jobs });
   for (const note of showcase.notes) console.warn(`Showcase: ${note}`);
+  // The public gallery of recorded sessions, also read once at start; with one, the plain address opens the site.
+  const gallery = await loadGallery({ dataDir: config.dataDir });
+  for (const note of gallery.notes) console.warn(`Gallery: ${note}`);
+  const hasGallery = () => Boolean(gallery.index?.entries.length);
+  let siteStyles = null;
+  const fontFamilies = async () => ((await loadFontLibrary(config.rootDir))?.families || []).map(family => family.family);
   let previewBaseUrl = config.previewBaseUrl;
   // A network client of /mcp gets the validators and the font catalog, but no file, image or capture tool: those act on
   // this machine, so the endpoint reports them as a hosted server would.
@@ -111,6 +125,27 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         const pairFile = requested.match(/^runs\/([a-z0-9-]{1,60})\/([a-z0-9-]+\.[a-z]+)$/u);
         if (pairFile && pairFile[1] === job.pairId && PAIR_FILES.test(pairFile[2])) return await serve(path.join(config.dataDir, job.id, job.pairId, pairFile[2]), mime[path.extname(pairFile[2])]);
         throw new HttpError(404, 'Not found.');
+      }
+      // A gallery entry's design and its starter, the model's own code, sandboxed like the showcased app. A game's music
+      // comes from the open music library, as the Studio's character pairs play it.
+      const galleryMatch = url.pathname.match(/^\/gallery\/([a-z0-9][a-z0-9-]{2,60})\/(out|before)\/(.+)$/u);
+      if (galleryMatch) {
+        const entry = gallery.entries.get(galleryMatch[1]);
+        if (!entry) throw new HttpError(404, 'Not found.');
+        let relative;
+        try { relative = decodeURIComponent(galleryMatch[3]); } catch { throw new HttpError(404, 'Not found.'); }
+        const headers = { 'Content-Security-Policy': SHOWCASE_APP_CSP, 'Access-Control-Allow-Origin': '*' };
+        const music = relative.replace(/^[a-z0-9-]{1,60}\//u, '');
+        if (galleryMatch[2] === 'out' && entry.medium === 'game' && MUSIC_PATH.test(music)) {
+          const track = musicLibraryFile(config.rootDir, await loadMusicLibrary(config.rootDir), music);
+          if (!track) throw new HttpError(404, 'Track not found.');
+          return await sendLibraryFile(req, res, track, { ...headers, 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer' })
+            .catch(error => { if (res.headersSent) { res.destroy(); return; } throw error.code === 'ENOENT' ? new HttpError(404, 'Track not found.') : error; });
+        }
+        const found = galleryFile({ dataDir: config.dataDir, id: entry.id, part: galleryMatch[2], relative });
+        if (!found) throw new HttpError(404, 'Not found.');
+        const body = await fs.readFile(found.file).catch(() => { throw new HttpError(404, 'Not found.'); });
+        return send(res, 200, body, { 'Content-Type': found.type, ...headers, 'Cache-Control': 'public, max-age=600' });
       }
       // The showcased app run: the starter as it was, the redesign and the review captures, sandboxed like a site preview.
       const appMatch = url.pathname.match(/^\/showcase\/app\/([a-z0-9-]{3,61})\/(.+)$/u);
@@ -310,8 +345,43 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         if (!template) throw new HttpError(404, 'Starter site not found.');
         return send(res, 200, template.files[templateMatch[2]], { 'Content-Type': mime[path.extname(templateMatch[2])], 'Content-Security-Policy': previewCsp });
       }
-      if (req.method === 'GET' && ['/', '/index.html', '/app.js', '/game.js', '/showcase.js', '/styles.css', '/brand.css', '/assets/mousa-logo.png'].includes(pathname)) {
-        const name = pathname === '/' ? 'index.html' : pathname.slice(1);
+      // The public site: with a gallery, the plain address opens its landing page, and the Studio moves to /studio.
+      if (req.method === 'GET' && hasGallery()) {
+        const page = (html, status = 200) => send(res, status, html, { 'Content-Type': mime['.html'], 'Content-Security-Policy': siteCsp(new URL(previewBaseUrl).origin) });
+        const repository = config.siteRepository || '';
+        if (pathname === '/') return page(landingPage({ gallery, repository }));
+        if (pathname === '/gallery' || pathname === '/gallery/') return page(galleryPage({ gallery, repository }));
+        if (pathname === '/try' || pathname === '/try/') return page(tryPendingPage({ repository }));
+        const entryMatch = pathname.match(/^\/gallery\/([a-z0-9][a-z0-9-]{2,60})\/(?:arms\/([a-z0-9][a-z0-9-]{0,60})\/)?$/u);
+        if (entryMatch) {
+          const entry = gallery.entries.get(entryMatch[1]);
+          if (!entry) return page(missingPage({ repository }), 404);
+          const previewBase = new URL(previewBaseUrl).origin, families = await fontFamilies();
+          if (!entryMatch[2]) return page(entryPage({ entry, previewBase, families, repository }));
+          const record = await armRecord({ dataDir: config.dataDir, id: entry.id, arm: entryMatch[2] });
+          return record ? page(armPage({ entry, arm: entryMatch[2], record, previewBase, families, repository })) : page(missingPage({ repository }), 404);
+        }
+        // A report's own files, its pictures and its record, readable from the app origin; never a design's code.
+        const reportMatch = pathname.match(/^\/gallery\/([a-z0-9][a-z0-9-]{2,60})\/report\/(.+)$/u);
+        if (reportMatch && gallery.entries.has(reportMatch[1])) {
+          let relative;
+          try { relative = decodeURIComponent(reportMatch[2]); } catch { throw new HttpError(404, 'Not found.'); }
+          const found = galleryFile({ dataDir: config.dataDir, id: reportMatch[1], part: 'report', relative });
+          if (!found) throw new HttpError(404, 'Not found.');
+          const body = await fs.readFile(found.file).catch(() => { throw new HttpError(404, 'Not found.'); });
+          return send(res, 200, body, { 'Content-Type': found.type, 'Content-Security-Policy': reportCsp, 'Cache-Control': 'public, max-age=600' });
+        }
+        if (pathname === '/api/gallery') return send(res, 200, gallery.index);
+      }
+      if (req.method === 'GET' && pathname === '/site/site.css') {
+        return send(res, 200, await fs.readFile(path.join(config.rootDir, 'web', 'site', 'site.css')), { 'Content-Type': mime['.css'], 'Cache-Control': 'public, max-age=600' });
+      }
+      if (req.method === 'GET' && pathname === '/site/report.css') {
+        siteStyles ||= reportStylesheet(await loadFontLibrary(config.rootDir), { url: '/library/' });
+        return send(res, 200, siteStyles, { 'Content-Type': mime['.css'], 'Cache-Control': 'public, max-age=600' });
+      }
+      if (req.method === 'GET' && ['/', '/studio', '/index.html', '/app.js', '/game.js', '/showcase.js', '/styles.css', '/brand.css', '/assets/mousa-logo.png'].includes(pathname)) {
+        const name = ['/', '/studio'].includes(pathname) ? 'index.html' : pathname.slice(1);
         const content = await fs.readFile(path.join(config.rootDir, 'web', name));
         return send(res, 200, content, { 'Content-Type': mime[path.extname(name)], 'Content-Security-Policy': appCsp(new URL(previewBaseUrl).origin) });
       }

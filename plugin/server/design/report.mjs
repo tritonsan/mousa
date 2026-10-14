@@ -702,9 +702,22 @@ export function renderCard(record, { base = '', fontCss = '' } = {}) {
 <p class="mr-cardbig">${escape(record.headline?.value)}</p><p class="mr-cardline">${escape(record.headline?.text)}</p><p class="mr-cardfoot">${escape(foot)}</p></div><div class="mr-cardvisual">${visual}</div></div></body></html>`;
 }
 
+/** The sections of a session's or a comparison's record, for a page that sets them inside its own. */
+export const renderBody = (record, options = {}) => record.kind === 'comparison' ? comparisonSections(record, options) : renderSections(record, options);
+
+/**
+ * A stylesheet for pages that show reports from a server: @font-face rules for the library's families at `url` (where
+ * the server serves fonts/<file>), loaded only by the text that uses them, and the report's own styles.
+ */
+export function reportStylesheet(library, { url = '/library/' } = {}) {
+  const rules = (library?.families || []).flatMap(family => family.faces.map(face =>
+    `@font-face{font-family:'${cssName(family.family)}';src:url('${url}${face.path}') format('woff2');font-weight:${face.weight};font-style:${face.style};font-display:swap}`));
+  return `${rules.join('\n')}\n${REPORT_CSS}\n`;
+}
+
 /** The page of a session or a comparison record. */
 export function renderReport(record, { base = '', fontCss = '', fonts = [] } = {}) {
-  const body = record.kind === 'comparison' ? comparisonSections(record, { base, fonts }) : renderSections(record, { base, fonts });
+  const body = renderBody(record, { base, fonts });
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(record.title)} · Moûsa</title>
 <style>${fontCss}\nbody{margin:0;background:#f7f7fc}\n${REPORT_CSS}</style></head><body class="mr"><main class="mr-page">
 ${body}

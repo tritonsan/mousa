@@ -219,6 +219,41 @@ On a completed website, select a section to inspect its sources and request a sc
 
 A public bind requires a `DEMO_ACCESS_TOKEN` of at least 24 characters and a `PUBLIC_PREVIEW_BASE_URL` on a different origin from the application. The reviewer code is held only in browser memory. Each preview uses a temporary access URL without account credentials. Visitor pages do not place real business orders, process payments, or send invitations; the starter interactions are local demos.
 
+## Public site and gallery
+
+When `DATA_DIR/gallery` holds a gallery, the plain address opens Moûsa's public site and the Studio moves to `/studio`. The site has:
+- a landing page with the idea and a featured comparison, the four steps of a session in that session's own data, and the three agents;
+- `/gallery/`, with one page per recorded session and one per arm of a comparison.
+
+**A session page** shows the design to play and its Taste Provenance report. It also shows what the agent did, step by step, and the commit and command that run it again.
+
+**Security:**
+- No page runs a script. A policy with `default-src 'none'` and no `script-src` serves them, and only the preview origin may be framed.
+- The designs themselves are the models' own code. They play only from the preview origin, sandboxed.
+- A report's files come from the app origin. A design's files never do.
+
+[`scripts/build-gallery.mjs`](scripts/build-gallery.mjs) builds the gallery from the recorded runs [`scripts/gallery.config.json`](scripts/gallery.config.json) lists, and makes no request:
+
+```sh
+node scripts/build-gallery.mjs --runs D:/mousa-live
+node scripts/build-gallery.mjs --check
+```
+
+**What each entry gets:**
+- its report, and for a comparison each arm's report too;
+- the report's page and card pictures, when a browser can run (`MOUSA_BROWSER` names one);
+- the design's playable web files, and the starter as it was at the run's commit for a restyle;
+- `entry.json`: the host and its version, the model, the Moûsa version, the time, the request and the Qloo requests. It also holds a timeline of tool names, stages and outcomes, and the command that runs the session again.
+
+**What stays out:**
+- the session streams and tool inputs and outputs;
+- Moûsa's private records, including the 0.4 surface's `culture-*.json`;
+- dependencies and build configuration.
+
+**The scan.** Every text file is then scanned for local paths, the run folder, the user's name, this deployment's secrets, token-shaped strings and Qloo ids or tag URNs. With any finding, `gallery.json` is not written and the script fails. `--check` scans a built gallery again, as a deployment should before it serves one. Restart the Studio after a build.
+
+A built site's root-relative URLs to its own files, such as Vite's `/assets/…`, are made relative so it plays from its gallery folder. [`scripts/verify-site.mjs`](scripts/verify-site.mjs) checks a running site. It fetches every page for its status, its policy and the absence of a script, then captures each page at 1440 and 390 pixels and each design from the preview origin.
+
 ## Showcase
 
 A reviewer who opens the Studio sees recorded work first, without the access token: a website comparison in the Websites view, an app run in the App interface view and, once one is chosen, a character pair in the Game character view. The showcase is read-only. The server serves these records and the files they play from to anyone, while every other record, the pair list, the workspaces and every new job still need the token, and nothing in the API changes a completed record. The showcased comparison opens outside its workspace, so new work from it starts a workspace of its own; New workspace returns to the empty form, and a link to another job or pair opens that instead.

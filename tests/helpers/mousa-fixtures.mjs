@@ -1,7 +1,10 @@
 // Shared stand-ins for the mousa plugin tests: Qloo over HTTP with typed tags, a prediction and a small font library.
 import assert from 'node:assert/strict';
-import { stat } from 'node:fs/promises';
+import path from 'node:path';
+import { stat, readFile, writeFile, mkdir } from 'node:fs/promises';
 import { encodePng } from '../../plugin/server/production/image-files.mjs';
+import { createMousaServer } from '../../plugin/server/mcp/mousa.mjs';
+import { createConnectionStore, plainProtector } from '../../plugin/server/connections/store.mjs';
 
 export const json = value => new Response(JSON.stringify(value), { headers: { 'Content-Type': 'application/json' } });
 export const slug = name => name.toLowerCase().replace(/[^a-z0-9]+/gu, '_').replace(/^_|_$/gu, '');
@@ -202,4 +205,61 @@ export function baselineDesign(input) {
   for (const name of required) assert.ok(dna.devices.some(device => device.anchors.includes(name)), `${name} is used`);
   void ref;
   return { reading, dna };
+}
+
+export const PLAN = { dryRun: true, medium: 'web', references: [{ name: 'Paterson' }, { name: 'Nujabes' }] };
+const readJson = async file => JSON.parse(await readFile(file, 'utf8'));
+
+/** Captures as the browser would write them: one small PNG per view. */
+export async function fakeCapture({ views, outDir, prefix, full }) {
+  const shots = [];
+  for (const view of views) {
+    const id = `${prefix}-${view.id}${full ? '-full' : ''}`, file = path.join(outDir, `${id}.png`);
+    await writeFile(file, png(view.width, 40, ['#3e5c6b', '#8fb0a9']));
+    shots.push({ id, view: view.id, ...(full ? { full: true } : {}), width: view.width, height: 40, bytes: 1, file });
+  }
+  return shots;
+}
+
+/** The report's pictures as a browser would take them, recording what it was asked for. */
+export function fakeShoot(asked = []) {
+  return async ({ shots }) => {
+    asked.push(...shots);
+    for (const shot of shots) await writeFile(shot.out, png(shot.width, 20, ['#f7f7fc']));
+    return shots.map(shot => ({ file: shot.out, width: shot.width, height: shot.full ? 6000 : shot.height, bytes: 1 }));
+  };
+}
+
+export function reportServer(project, config, fetchImpl, { browser = { available: true, label: 'Test browser' }, shoot = fakeShoot() } = {}) {
+  return createMousaServer({ env: { MOUSA_PROJECT_DIR: project, QLOO_API_KEY: 'fixture-key-123', MOUSA_HOST: 'claude-code' }, fetchImpl, capture: fakeCapture, shoot,
+    store: createConnectionStore({ env: { MOUSA_CONFIG_DIR: config }, protector: plainProtector }),
+    inspect: { browser: async () => browser, codex: async () => ({ available: false, reason: 'Not in tests.' }) } });
+}
+
+/** A measured design from the plan to its first review, in the project or a workspace, with one registered picture. */
+export async function measuredSession(call, project, workspace) {
+  const at = workspace ? { workspace } : {};
+  const folder = workspace ? path.join(project, ...workspace.split('/')) : project;
+  await call('taste_profile', { ...PLAN, ...at });
+  assert.equal((await call('design_validate', { stage: 'prediction', artifact: prediction(), ...at })).status, 'frozen');
+  assert.equal((await call('taste_profile', { ...at })).status, 'ok');
+  const input = await readJson(path.join(folder, '.mousa', 'taste', 'input.json'));
+  const { reading, dna, plan } = designFor(input);
+  for (const [stage, artifact] of [['reading', byName(reading, input)], ['dna', byName(dna, input)], ['plan', plan]]) {
+    const saved = await call('design_validate', { stage, artifact, ...at });
+    assert.equal(saved.status, 'valid', JSON.stringify(saved));
+  }
+  const fetched = await call('materials', { action: 'fetch', fonts: ['Jost'], ...at });
+  await call('image', { action: 'prompt', device: 'dna4', subject: 'Stepped stone terraces under low mist at dawn', aspect: 'landscape', ...at });
+  await mkdir(path.join(folder, 'generated'), { recursive: true });
+  await writeFile(path.join(folder, 'generated', 'dna4-1.png'), png(64, 64, ['#3e5c6b', '#8fb0a9']));
+  assert.equal((await call('image', { action: 'register', device: 'dna4', path: 'generated/dna4-1.png', ...at })).status, 'registered');
+  for (const [name, content] of Object.entries(siteFiles(fetched.fontFace))) await writeFile(path.join(folder, name), content);
+  assert.equal((await call('design_check', { ...at })).score, 1);
+  await call('design_capture', { ...at });
+  assert.equal((await call('design_validate', { stage: 'review', artifact: { schemaVersion: '1.0', round: 1, criteria: [
+    { id: 'r1', capture: 'r1-desktop', verdict: 'met', observed: 'The first screen is mist blue on sea glass, with no white ground.' },
+    { id: 'r2', capture: 'r1-mobile', verdict: 'partly', observed: 'The headline wraps onto two lines at phone width.', repair: 'Shorten the headline size at phone width.' },
+  ], summary: 'The palette lands; the headline needs a smaller size on phones.' }, ...at })).status, 'valid');
+  return input;
 }

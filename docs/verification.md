@@ -2,6 +2,54 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Public site and gallery — October 14, 2026
+
+[`scripts/build-gallery.mjs`](../scripts/build-gallery.mjs) built `data/gallery/` from the ten entries of [`scripts/gallery.config.json`](../scripts/gallery.config.json):
+- three Long Dusk comparisons;
+- Wax & Wane in Claude Code and in Codex;
+- the Ramble and Lanterna restyles;
+- the two single Long Dusk sessions;
+- the October 6 Kiro Ramble run.
+
+Codex's first Lanterna try, superseded by its second, was left out. The gallery is 89.5 MB, and no request was made.
+
+**The scan.**
+- **The first build was refused.** The Kiro run's copy carried its 0.4 records (`culture-dna.json`, `culture-reading.json`, `culture-taste.json`), which hold Qloo ids and tag URNs. The scan found six of them, so `gallery.json` was not written. Those files are now left out of every copy.
+- **The second build was clean,** and so was `--check` afterwards.
+
+**A Studio on that data** was started as `site-gallery-scratch` on port 8797. [`scripts/verify-site.mjs`](../scripts/verify-site.mjs) then checked 18 pages: the landing page, the gallery, ten session pages and six arm pages.
+- **Every page passed:** status 200, no script tag, a policy with `default-src 'none'` and no `script-src`, and no local path.
+- **Pictures.** It captured them at 1440 and 390 pixels with Chrome. It also captured the 13 playable designs from the preview origin: the games with their title cards (the Codex portraits among them), both Wax & Wane sites, both Ramble apps and Lanterna.
+
+**Seen in the captures and fixed:**
+- **Lanterna.** It played without its styles or fonts: Vite writes `/assets/…`, and its public fonts sit at `/fonts/…`, which miss when it plays from a gallery folder. Root-relative URLs to a copy's own files are now made relative. Lanterna then played as built.
+- **The gallery's cards.** They were lazy-loaded, so the full-page picture showed them blank. They now use a 640-pixel copy of each card, loaded at once.
+- **Text.** The install and reproduce commands were cut off, and they now wrap. The commit label showed the hash in capitals.
+
+**The session pages** frame each design from the preview origin. They show the report, and the timeline shows what the agent did, lane by lane. In the Claude Code Long Dusk comparison, the timeline shows:
+- the two subagents starting six seconds apart;
+- a `design_validate dna` the validator refused (`TASTE_PROTOCOL_INVALID`) and the save that followed;
+- the closing `design_compare` at 11:28.
+
+**Automated:**
+- Five tests in `tests/gallery.test.mjs`:
+  - the timeline keeps no path, command or model text from a Claude Code, Codex or Kiro stream;
+  - copies keep web types only, and root URLs are rebased;
+  - the scan's patterns;
+  - a fixture run built into an entry, and the same run with a local path blocked;
+  - gallery URLs that step out.
+- Three tests in `tests/site-routes.test.mjs`:
+  - the landing page at `/` and the Studio at `/studio`;
+  - script-free pages and their policies;
+  - report files from the app origin and the design only from the preview origin;
+  - the Studio at `/` without a gallery.
+- Suite 473/473 with Chrome.
+
+Limits:
+- Windows and Chrome only.
+- The site was not served through Caddy or on two real domains.
+- `/vote/` is not built yet, and `/try/` says the live try is not open yet.
+
 ## Taste Provenance reports — October 14, 2026
 
 The surface is now 0.6.0, with a thirteenth tool, `design_report`. It writes one page from a design's records, which a reader can follow without the JSON:

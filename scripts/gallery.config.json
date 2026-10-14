@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "1.0",
+  "featured": "long-dusk-compare-claude-code",
+  "vote": ["long-dusk-compare-claude-code", "long-dusk-compare-codex", "long-dusk-portraits-codex"],
+  "entries": [
+    {
+      "id": "long-dusk-compare-claude-code",
+      "run": "claude-code-long-dusk-compare-1",
+      "title": "Ilo, with Qloo and without: Claude Code",
+      "summary": "One frozen prediction and two arms, built at the same time by two subagents. With Qloo, the lamplighter became a grown person holding a rose-gold cup-lamp close; without it, a masked wanderer with an amber lantern on a pole.",
+      "from": "examples/long-dusk"
+    },
+    {
+      "id": "long-dusk-compare-codex",
+      "run": "codex-long-dusk-compare-1",
+      "title": "Ilo, with Qloo and without: Codex",
+      "summary": "The same game and brief in Codex, one arm after the other in one session: the baseline was built before any Qloo data was seen.",
+      "from": "examples/long-dusk",
+      "model": "the Codex CLI's default model"
+    },
+    {
+      "id": "long-dusk-portraits-codex",
+      "run": "codex-long-dusk-compare-2",
+      "title": "Ilo with title-card portraits: Codex",
+      "summary": "The comparison again, with Codex's own image tool allowed: each arm painted a portrait for its title card from Moûsa's brief, and Moûsa checked each against the arm's palette.",
+      "from": "examples/long-dusk",
+      "images": true,
+      "model": "the Codex CLI's default model"
+    },
+    {
+      "id": "wax-and-wane-claude-code",
+      "run": "claude-code-wax-and-wane-1",
+      "title": "Wax & Wane, a record shop: Claude Code",
+      "summary": "A website from an empty folder for an audience that loves Paterson and Nujabes."
+    },
+    {
+      "id": "wax-and-wane-codex",
+      "run": "codex-wax-and-wane-3",
+      "title": "Wax & Wane, a record shop: Codex",
+      "summary": "The same request in Codex, from an empty folder.",
+      "model": "the Codex CLI's default model"
+    },
+    {
+      "id": "ramble-claude-code",
+      "run": "claude-code-ramble-1",
+      "title": "Ramble, a walking app, restyled: Claude Code",
+      "summary": "An existing app restyled through its own design tokens, with its walks and its data kept as they were.",
+      "from": "examples/mobile-app",
+      "before": { "repo": "examples/mobile-app" }
+    },
+    {
+      "id": "lanterna-codex",
+      "run": "codex-lanterna-2",
+      "title": "Lanterna, a Tailwind cinema site, restyled: Codex",
+      "summary": "A Vite and Tailwind CSS 4 site restyled through its theme and its own classes, then built with its own build.",
+      "from": "examples/tailwind-site",
+      "install": true,
+      "play": "dist",
+      "before": { "folder": "tailwind-lock/dist" },
+      "model": "the Codex CLI's default model"
+    },
+    {
+      "id": "long-dusk-claude-code",
+      "run": "claude-code-long-dusk-1",
+      "title": "Ilo, the lamplighter: Claude Code",
+      "summary": "The game's character designed once, with Qloo, in Claude Code.",
+      "from": "examples/long-dusk",
+      "before": { "repo": "examples/long-dusk" }
+    },
+    {
+      "id": "long-dusk-codex",
+      "run": "codex-long-dusk-1",
+      "title": "Ilo, the lamplighter: Codex",
+      "summary": "The same character brief in Codex.",
+      "from": "examples/long-dusk",
+      "before": { "repo": "examples/long-dusk" },
+      "model": "the Codex CLI's default model"
+    },
+    {
+      "id": "ramble-kiro",
+      "kiro": { "record": "output/mobile-app-run/2026-10-06T10-20-02-669Z/run.json", "project": "examples/mobile-app-run-2026-10-06T10-20-02-669Z" },
+      "title": "Ramble, a walking app, redesigned: Kiro",
+      "summary": "The example's own Kiro agent with the earlier 0.4 tool surface, outside the Studio.",
+      "before": { "repo": "examples/mobile-app" }
+    }
+  ]
+}
