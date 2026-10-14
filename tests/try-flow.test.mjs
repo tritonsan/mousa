@@ -136,6 +136,7 @@ test('step two builds both arms from the one frozen prediction, keeps the key in
   // The key only where Qloo is used, and the same tools, limits and stages otherwise.
   const arms = Object.fromEntries(['qloo', 'baseline'].map(kind => [kind, seen.find(item => item.kind === kind)]));
   assert.equal(arms.qloo.agent.mcpServers.mousa.env.QLOO_API_KEY, 'fixture-key-123');
+  for (const arm of TRY_ARMS) assert.ok(!(await exists(path.join(data, 'try', run.id, 'kiro', arm.id, 'agents', 'mousa-try.json'))), 'no agent file, with its key, outlives its session');
   assert.equal(arms.qloo.env.QLOO_API_KEY, 'fixture-key-123');
   assert.equal(arms.baseline.agent.mcpServers.mousa.env.QLOO_API_KEY, undefined);
   assert.equal(arms.baseline.env.QLOO_API_KEY, undefined);

@@ -10,6 +10,82 @@ This is an engineering choice for the current application, not a claim that Lamb
 
 ECS on Fargate is a later option for running the same container. Before adding multiple workers, move job dispatch to SQS and job metadata/artifacts to shared storage such as DynamoDB/S3. The in-process queue is not distributed or durable. Two instances must not share a job directory and independently process the same jobs. Completed job metadata and previews reload after a restart; interrupted jobs are marked failed rather than resumed. Horizontal scaling, an SQS consumer, S3 export, and automatic resumption are not implemented by these files.
 
+## The public site and the live try
+
+The jury's server shows four things:
+- the public site: the landing page, the gallery of recorded sessions and the blind vote;
+- the live try at `/try/`, behind `TRY_ACCESS_CODE`;
+- the recorded Studio jobs, readable;
+- the Studio itself, whose own paid job runs are closed with `LEGACY_JOBS=off`, the Compose default.
+
+It needs two HTTPS names, one for the app and one for the preview origin the designs play from. Nothing here creates them.
+
+**The host.**
+- One x86-64 EC2 instance with an Elastic IP: about 2 vCPU and 8 GB, such as t3.large, on Amazon Linux 2023, with a 40 GB encrypted gp3 volume.
+- The security group admits 443, and 80 for the certificate's HTTP challenge. It admits nothing else; administer through Systems Manager.
+- The container gets 2 CPUs and 6 GB, since a pair runs two Kiro sessions, each with Moûsa's server and its captures, beside up to two first steps.
+
+**The proxy.** Caddy terminates TLS for both names and forwards to the loopback ports:
+
+```
+app.example.org {
+	reverse_proxy 127.0.0.1:8787
+}
+preview.example.org {
+	reverse_proxy 127.0.0.1:8788
+}
+```
+
+Caddy sets `X-Forwarded-For`, which the app reads only with `TRUST_PROXY=1`, as Compose sets it. Caddy writes no access log unless one is configured, so leave it off.
+- A try's page and its designs' URLs carry the try's id and preview token.
+- The vote's picture URLs carry sealed ballots.
+- `PUBLIC_PREVIEW_BASE_URL` is `https://preview.example.org`.
+
+**The private environment file**, such as `/etc/mousa/demo.env` with mode 600, lives outside the checkout. Beyond the Studio's variables, it holds:
+- `SITE_SECRET` (`openssl rand -hex 32`), which seals the vote's ballots and signs the try's access cookie;
+- `TRY_ACCESS_CODE`, 12 characters or more, given to the jury with the submission;
+- `SITE_REPOSITORY_URL` once the repository is public;
+- `TRY_ARMS_PARALLEL` and `TRY_QLOO_BUDGET`, if the defaults (on, 24) change;
+- `MOUSA_COMMIT=$(git rev-parse --short HEAD)` at build time, so each try records the commit the image was built from.
+
+`SITE_SECRET_FILE` and `TRY_ACCESS_CODE_FILE` read them from mounted files instead.
+
+**The data** in the volume's `DATA_DIR` (`/data/jobs`):
+
+| Folder | Holds | Public |
+| --- | --- | --- |
+| `gallery/` | The public gallery | Yes |
+| `votes/` | The sealed vote records | No |
+| `try/<id>/` | One live try: `meta.json` and `project/` with its reports and both arms | Only after the juror's consent and a gallery build |
+| `try/<id>/kiro/` | Each session's Kiro home | Never |
+| `try/<id>/sessions/` | Each session's stream and error log, for the operator | Never |
+
+Each session's agent file names the Qloo key for the arm that measures. The file is removed when its session ends. Still, restrict the volume and its snapshots to the operator.
+
+**Moving the gallery to the server.** Build and scan it on the machine that holds the recorded runs, then export it with the showcase:
+
+```sh
+node scripts/build-gallery.mjs --runs D:/mousa-live
+node scripts/export-hosted-jobs.mjs --out ../hosted --gallery --showcase
+```
+
+`--gallery` scans the gallery again before copying it and stops at any finding. Copy the folder into the volume as shown in [Recorded local work](#recorded-local-work-on-the-hosted-server), then restart the app, which reads the gallery once at start.
+- **Tries that become public.** A try whose juror agreed to publish it joins the gallery the next time it is built where its folder is. Either build on the server from `DATA_DIR/try`, or copy the try's folder back first.
+
+**Operating it.**
+- **Health.** `/api/health` is public, for an uptime monitor.
+- **The detailed check.** `/api/health/deep`, behind `X-Demo-Token: <DEMO_ACCESS_TOKEN>`, says whether the try is open and what it lacks. It also reports Kiro's version and sign-in, the capture browser, the free disk, the try's queues and the gallery's size, and names no secret.
+- **Pausing.** `docker compose exec app touch /data/jobs/try/PAUSED` stops new tries without a restart, and removing the file resumes them. Running steps finish.
+- **Restarts.** A restart marks an interrupted step as such. The juror starts it again.
+- **The judging period (2 to 16 November).**
+  - Build the image once, inspect it, and deploy it by digest. Do not rebuild while judging runs.
+  - Take a daily snapshot of the volume.
+- **After the judging period:**
+  - rotate the Qloo and Kiro keys, `SITE_SECRET`, `TRY_ACCESS_CODE` and `DEMO_ACCESS_TOKEN`;
+  - then decide what of the volume to keep.
+
+None of this has run on AWS. The Linux image and the Linux Kiro runtime have not been built or run either; see the checklist below.
+
 ## Runtime boundary
 
 - Node.js 22 starts `src/server.mjs`; the application has no npm runtime dependencies.
@@ -56,6 +132,14 @@ For a repeatable AWS demo, build once, inspect the version record, and deploy th
 | `MOUSA_CAPTURE` | `auto` uses the image's Chromium once it has captured a test page at start; `off` leaves the review out |
 | `MOUSA_BROWSER` | Container: `/usr/bin/chromium` |
 | `MOUSA_CAPTURE_NO_SANDBOX` | Empty by default. `1` runs Chromium without its own sandbox; read [Review captures in the container](#review-captures-in-the-container) first |
+| `SITE_SECRET` | Seals the vote's ballots and signs the try's access cookie; required by Compose |
+| `TRUST_PROXY` | Compose: `1`, so the client address comes from the proxy's `X-Forwarded-For` |
+| `SITE_REPOSITORY_URL` | The public repository the site links to (https only); optional |
+| `TRY_ACCESS_CODE` | The jury's code for `/try/`, 12 characters or more; empty keeps the try closed |
+| `TRY_ARMS_PARALLEL` | `on` runs a pair's two Kiro sessions at once, `off` one after the other |
+| `TRY_QLOO_BUDGET` | Qloo requests one try may send in all; default `24` |
+| `LEGACY_JOBS` | Compose: `off`, so the Studio's own job runs take no new work; `on` locally |
+| `MOUSA_COMMIT` | Build argument and variable: the commit the image is built from, which each try records |
 | `DEMO_PORT` | Compose host port, default `8787`; host mapping stays loopback |
 | `DEMO_PREVIEW_PORT` | Compose preview host port, default `8788`; host mapping stays loopback |
 
@@ -146,3 +230,10 @@ For ECR, tag/push the verified image using the operator's approved AWS account/r
 Verification status for the deployment files: Compose configuration validation and entrypoint shell syntax checks passed; the entrypoint uses LF line endings. Docker Desktop's Linux engine was unavailable during these checks, so the image build and Linux Kiro runtime have not been executed. These deployment checks performed no inference, account authentication, AWS provisioning, or public deployment. Local application generation is a separate verification step and does not establish that the Linux deployment works.
 
 On 2026-10-06 the Compose file was validated again with placeholder values, and the files the image copies (by the `.dockerignore` allowlist) were started on Windows as a hosted Studio without Kiro, a Qloo key or `.env`: it reported no image generator with the hosted reason, captured its test page with Edge, and served two exported recorded jobs (a website comparison with 14 Codex pictures and a character pair with 2 portraits), their previews, pictures and game pages, with the recorded-pictures labels. The earlier allowlist lacked `game/` and `library/`, which the server imports and serves; it would not have started. Chromium in the Linux container, its sandbox failure and the test capture that detects it, and the three routes above have not been run here.
+
+On 2026-10-14, for the site and the live try:
+- **Compose.** The file was validated again with placeholder values: 2 CPUs, 6 GB, 1,024 processes, a 1 GB `/tmp` and 512 MB of shared memory, `TRUST_PROXY=1` and `LEGACY_JOBS=off`.
+- **The image.** It now also copies the try's two folder starters, `examples/mobile-app` and `examples/long-dusk`; the allowlist leaves out their `.kiro` and `.mousa` folders. It records `MOUSA_COMMIT` and checks `/api/health` itself.
+- **The imports.** The server's imports reach only `src/`, `plugin/` and `game/`, all three in the allowlist.
+- **The entrypoint.** Its syntax checks pass, with LF line endings. It also reads `SITE_SECRET_FILE` and `TRY_ACCESS_CODE_FILE`.
+- **Not run.** Docker Desktop's engine was not running, so the image was not built and Kiro and Chromium did not run in it.

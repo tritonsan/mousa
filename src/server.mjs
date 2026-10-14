@@ -252,6 +252,17 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
       const url = new URL(req.url, 'http://localhost');
       const pathname = url.pathname;
       if (req.method === 'GET' && pathname === '/api/health') return send(res, 200, { status: 'ok' });
+      // What the operator checks before and during the judging: Kiro, the capture browser, the disk, the try's queues
+      // and the gallery, behind the Studio's access token. It names no secret.
+      if (req.method === 'GET' && pathname === '/api/health/deep') {
+        requireAuth(req, config);
+        const disk = await fs.statfs(config.dataDir).then(stats => ({ freeBytes: stats.bavail * stats.bsize, totalBytes: stats.blocks * stats.bsize }), () => null);
+        const tryView = trial.readiness();
+        return send(res, 200, { status: tryView.open && disk && disk.freeBytes > 2 * 1024 ** 3 ? 'ok' : 'degraded', checkedAt: new Date().toISOString(),
+          kiro: { available: Boolean(kiro.available), authenticated: Boolean(kiro.authenticated), version: kiro.version || null, model: config.model || kiro.defaultModel || null },
+          capture: manager.captureStatus(), disk, try: { ...tryView, paused: await trial.paused(), ...trial.queues() },
+          gallery: { entries: gallery.index?.entries.length ?? 0, vote: votePairs.length }, legacyJobs: Boolean(config.legacyJobs), commit: config.commit || null });
+      }
       if (req.method === 'GET' && pathname === '/api/status') {
         if (url.searchParams.get('refresh') === '1' && authorized(req, config)) kiro = await inspect(config);
         return send(res, 200, { kiro, qloo: { configured: Boolean(config.qlooKey) }, images: manager.imageStatus(), capture: manager.captureStatus(),
@@ -316,6 +327,8 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
       }
       if (pathname === '/api/jobs' && req.method === 'POST') {
         requireAuth(req, config); checkOrigin(req);
+        // On the jury's server the Studio's own paid runs are closed: the live try runs Moûsa, and the records stay readable.
+        if (!config.legacyJobs) throw new HttpError(403, 'This server takes no new Studio jobs. The live try is at /try/.');
         const job = await manager.create(await readJson(req, 100000));
         return send(res, 202, { id: job.id });
       }

@@ -17,6 +17,14 @@ game/tests
 game/tests/**
 !library/
 !library/**
+# The live try's starters, without their agent folders or design records.
+!examples/
+!examples/mobile-app/
+!examples/mobile-app/**
+!examples/long-dusk/
+!examples/long-dusk/**
+**/.kiro
+**/.mousa
 !deploy/
 !deploy/Dockerfile
 !deploy/Dockerfile.dockerignore

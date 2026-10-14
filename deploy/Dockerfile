@@ -4,6 +4,8 @@ FROM node:22-bookworm-slim
 ARG KIRO_RELEASE_CHANNEL=stable
 # Optional drift guard, not an installer version selector. See docs/aws-deployment.md.
 ARG KIRO_EXPECTED_VERSION=""
+# The commit the image is built from (git rev-parse --short HEAD), which each live try records: the image has no git.
+ARG MOUSA_COMMIT=""
 
 USER root
 # Chromium captures each design for the designing model's self-review. Its sandbox needs user namespaces, which the
@@ -43,6 +45,9 @@ COPY --chown=root:root plugin/ ./plugin/
 # The game's pages and harness (its recorded runs and tests stay out) and the font, photo and music libraries.
 COPY --chown=root:root game/ ./game/
 COPY --chown=root:root library/ ./library/
+# The live try's two starters that are copied from a folder (Wax & Wane starts from an empty one); their .kiro stays out.
+COPY --chown=root:root examples/mobile-app/ ./examples/mobile-app/
+COPY --chown=root:root examples/long-dusk/ ./examples/long-dusk/
 COPY --chown=root:root deploy/entrypoint.sh /usr/local/bin/qloo-demo-entrypoint
 RUN chmod 0555 /usr/local/bin/qloo-demo-entrypoint
 
@@ -58,10 +63,14 @@ ENV NODE_ENV=production \
     KIRO_EFFORT=medium \
     QLOO_API_BASE_URL=https://hackathon.api.qloo.com \
     MOUSA_ENVIRONMENT=hosted \
-    MOUSA_BROWSER=/usr/bin/chromium
+    MOUSA_BROWSER=/usr/bin/chromium \
+    MOUSA_COMMIT=$MOUSA_COMMIT
 
 USER node
 EXPOSE 8787 8788
 VOLUME ["/data"]
+# The public health route answers once the Studio listens; /api/health/deep, behind the access token, says more.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:' + (process.env.PORT || 8787) + '/api/health').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
 ENTRYPOINT ["/usr/local/bin/qloo-demo-entrypoint"]
 CMD ["node", "src/server.mjs"]

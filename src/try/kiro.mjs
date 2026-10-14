@@ -124,6 +124,7 @@ export async function runTrySession({ config, kind, home, project, starter, prom
       stdio: ['pipe', 'pipe', 'pipe'], shell: false, windowsHide: true, detached: platform === 'win32' });
   } catch {
     await stream?.close().catch(() => {});
+    await fs.rm(path.join(home, 'agents', `${TRY_AGENT}.json`), { force: true }).catch(() => {});
     return { kind, exitCode: null, error: 'The Kiro process could not be started.', durationMs: 0, stopped: null, refused: 0, finished: [], calls: [], stderr: '' };
   }
   const calls = new Map(), finished = [];
@@ -160,6 +161,8 @@ export async function runTrySession({ config, kind, home, project, starter, prom
       settled = true; clearTimeout(timer); signal?.removeEventListener('abort', abort);
       await writing;
       await stream?.close().catch(() => {});
+      // The arm with Qloo's agent file holds the key for its server, so no agent file outlives its session.
+      await fs.rm(path.join(home, 'agents', `${TRY_AGENT}.json`), { force: true }).catch(() => {});
       resolve({ ...result, kind, durationMs: Date.now() - started, stopped, refused, finished, calls: [...calls.values()].filter(call => call.tool),
         stderr: stderr.replace(/\x1B\[[0-9;]*m/gu, '').trim().slice(-1500) });
     };

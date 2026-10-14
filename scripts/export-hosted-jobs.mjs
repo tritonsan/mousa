@@ -3,13 +3,19 @@
 // generated pictures and review captures; a character job keeps its record and its pair's published files. Kiro homes,
 // agent configurations and pair work folders stay here: they hold the design sessions and each run's bridge token.
 // With --showcase it also carries the showcase (scripts/build-showcase.mjs): showcase.json, the jobs it names and the
-// app run's folder, only the files the Studio serves from it. It makes no request and changes nothing in DATA_DIR.
+// app run's folder, only the files the Studio serves from it. With --gallery it carries the public gallery
+// (scripts/build-gallery.mjs) after scanning it again; a finding stops the export. It makes no request and changes
+// nothing in DATA_DIR.
 //
 //   node scripts/export-hosted-jobs.mjs --list
-//   node scripts/export-hosted-jobs.mjs --out ../hosted-jobs [<job-id> ...] [--showcase] [--force]
+//   node scripts/export-hosted-jobs.mjs --out ../hosted-jobs [<job-id> ...] [--showcase] [--gallery] [--force]
 
 import fs from 'node:fs/promises';
+import os from 'node:os';
 import path from 'node:path';
+import { checkGallery } from '../src/gallery/build.mjs';
+import { GALLERY_DIR } from '../src/gallery.mjs';
+import { TRY_DIR } from '../src/try/manager.mjs';
 import { loadDotEnv, getConfig } from '../src/config.mjs';
 import { CHARACTER_KIND, PAIR_ID, pairPictures } from '../src/character-jobs.mjs';
 import { CAPTURE_ID, REVIEW_DIR } from '../src/site-production.mjs';
@@ -65,9 +71,9 @@ if (args.includes('--list')) {
   console.log(`${jobs.length} completed jobs in ${config.dataDir}.`);
   process.exit(0);
 }
-const withShowcase = args.includes('--showcase');
-if (!out || (!ids.length && !withShowcase)) {
-  console.log('Usage: node scripts/export-hosted-jobs.mjs --out <folder> [<job-id> ...] [--showcase] [--force], or --list to see the completed jobs. Makes no request.');
+const withShowcase = args.includes('--showcase'), withGallery = args.includes('--gallery');
+if (!out || (!ids.length && !withShowcase && !withGallery)) {
+  console.log('Usage: node scripts/export-hosted-jobs.mjs --out <folder> [<job-id> ...] [--showcase] [--gallery] [--force], or --list to see the completed jobs. Makes no request.');
   process.exit(1);
 }
 
@@ -149,5 +155,21 @@ if (showcase) {
   await fs.writeFile(path.join(outDir, SHOWCASE_FILE), `${JSON.stringify(showcase, null, 2)}\n`);
   add({ files: 1, bytes: (await fs.stat(path.join(outDir, SHOWCASE_FILE))).size });
   console.log(`The showcase: websites ${showcase.sites || 'none'}, character pair ${showcase.game || 'none'}, app run ${showcase.app || 'none'}. A hosted Studio serves these records and the app run without the access token.`);
+}
+if (withGallery) {
+  // The gallery is public, so it is scanned again here, as build-gallery scanned it, before it leaves this machine.
+  const from = path.join(dataDir, GALLERY_DIR), to = path.join(outDir, GALLERY_DIR);
+  if (!await exists(path.join(from, 'gallery.json'))) throw new Error('--gallery: DATA_DIR has no gallery.json; build it with scripts/build-gallery.mjs.');
+  const user = (() => { try { return os.userInfo().username; } catch { return null; } })();
+  const secrets = ['QLOO_API_KEY', 'KIRO_API_KEY', 'DEMO_ACCESS_TOKEN', 'SITE_SECRET', 'TRY_ACCESS_CODE', 'ANTHROPIC_API_KEY', 'OPENAI_API_KEY'].map(name => process.env[name]).filter(Boolean);
+  const findings = await checkGallery(from, { user, runsDir: 'D:/mousa-live', folders: [path.join(dataDir, TRY_DIR)], secrets });
+  if (findings.length) throw new Error(`--gallery: the scan found ${findings.length} thing${findings.length === 1 ? '' : 's'} not to publish, such as ${findings[0].entry}/${findings[0].file} (${findings[0].pattern}). Build the gallery again.`);
+  if (await exists(to)) {
+    if (!args.includes('--force')) throw new Error(`${to} exists. Pass --force to replace it.`);
+    await fs.rm(to, { recursive: true, force: true });
+  }
+  const copied = await copyFolder(from, to, name => !name.startsWith('.'), { deep: true });
+  add(copied);
+  console.log(`The gallery: ${JSON.parse(await fs.readFile(path.join(from, 'gallery.json'), 'utf8')).entries.length} entries, scanned clean (${copied.files} files).`);
 }
 console.log(`Exported ${new Set(ids).size} jobs (${total.files} files, ${(total.bytes / 1048576).toFixed(1)} MB) to ${outDir}. Copy its contents into the hosted Studio's DATA_DIR and restart the Studio; docs/aws-deployment.md shows the Docker commands.`);

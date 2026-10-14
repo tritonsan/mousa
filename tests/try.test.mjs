@@ -198,9 +198,9 @@ test('the try\'s pages run no script and sit behind the access code; a try runs 
   assert.equal((await request(`${app}/try/${'a'.repeat(32)}/`, { cookie })).status, 404);
 });
 
-test('a Studio without the try\'s code shows what the try will be, and its API says it is closed', async t => {
+test('a Studio without the try\'s code shows what the try will be, and its API says it is closed; LEGACY_JOBS=off closes the Studio\'s own runs', async t => {
   const data = await fs.mkdtemp(path.join(os.tmpdir(), 'mousa-try-closed-'));
-  const studio = await createStudio({ config: getConfig({ HOST: '127.0.0.1', PORT: '0', PREVIEW_PORT: '0', DATA_DIR: data }), inspect: readyKiro });
+  const studio = await createStudio({ config: getConfig({ HOST: '127.0.0.1', PORT: '0', PREVIEW_PORT: '0', DATA_DIR: data, LEGACY_JOBS: 'off', MOUSA_COMMIT: 'abc1234' }), inspect: readyKiro });
   t.after(async () => { await studio.close(); await fs.rm(data, { recursive: true, force: true }); });
   const pending = await request(`${studio.appUrl}/try/`);
   assert.equal(pending.status, 200);
@@ -208,4 +208,12 @@ test('a Studio without the try\'s code shows what the try will be, and its API s
   noScript(pending, 'the pending page');
   assert.equal(JSON.parse((await request(`${studio.appUrl}/api/try/starters`)).body).open, false);
   assert.equal((await request(`${studio.appUrl}/try/access`, { method: 'POST', form: { code: 'anything-at-all' } })).status, 503);
+  const job = await fetch(`${studio.appUrl}/api/jobs`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ templateId: 'shop', brief: 'A shop.' }) });
+  assert.equal(job.status, 403);
+  assert.match((await job.json()).error, /no new Studio jobs/u);
+  const health = JSON.parse((await request(`${studio.appUrl}/api/health/deep`)).body);
+  assert.equal(health.status, 'degraded', 'a closed try is not ready');
+  assert.deepEqual([health.try.open, health.try.missing, health.legacyJobs, health.commit], [false, ['TRY_ACCESS_CODE is not set.', 'QLOO_API_KEY is not set.'], false, 'abc1234']);
+  assert.ok(health.disk.freeBytes > 0 && Number.isInteger(health.try.quick.waiting));
+  assert.doesNotMatch(JSON.stringify(health), /fixture-key|access-code/u);
 });

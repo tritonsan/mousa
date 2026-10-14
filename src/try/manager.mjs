@@ -342,6 +342,8 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
   return {
     get,
     readiness, paused,
+    /** How many steps work and wait in each lane, and how many runs are kept. */
+    queues: () => ({ runs: runs.size, quick: { working: lanes.quick.running.size, waiting: lanes.quick.waiting.length }, pair: { working: lanes.pair.running.size, waiting: lanes.pair.waiting.length } }),
     starters: () => Object.values(starters).map(({ id, title, medium, summary }) => ({ id, title, medium, summary })),
 
     /** Read the runs kept in DATA_DIR/try; a step a restart interrupted is marked as such. */

@@ -8,6 +8,7 @@ services:
       args:
         KIRO_RELEASE_CHANNEL: ${KIRO_RELEASE_CHANNEL:-stable}
         KIRO_EXPECTED_VERSION: ${KIRO_EXPECTED_VERSION:-}
+        MOUSA_COMMIT: ${MOUSA_COMMIT:-}
     image: qloo-design-demo:local
     platform: linux/amd64
     init: true
@@ -38,21 +39,33 @@ services:
       # Empty keeps Chromium's own sandbox, which this container's default profile blocks, so the review is left out.
       # Read docs/aws-deployment.md before setting 1: the container is then the only boundary around the captured pages.
       MOUSA_CAPTURE_NO_SANDBOX: ${MOUSA_CAPTURE_NO_SANDBOX:-}
+      # The public site: the vote's ballots and the try's access are signed with SITE_SECRET. Caddy is the proxy in
+      # front, so the client's address comes from X-Forwarded-For.
+      SITE_SECRET: ${SITE_SECRET:?Set a long random SITE_SECRET for the vote and the try}
+      TRUST_PROXY: "1"
+      SITE_REPOSITORY_URL: ${SITE_REPOSITORY_URL:-}
+      # The jury's live try; empty keeps it closed. Two first steps and one pair (two Kiro sessions) run at a time.
+      TRY_ACCESS_CODE: ${TRY_ACCESS_CODE:-}
+      TRY_ARMS_PARALLEL: ${TRY_ARMS_PARALLEL:-on}
+      TRY_QLOO_BUDGET: ${TRY_QLOO_BUDGET:-24}
+      # The Studio's own paid job runs take no new work here; their recorded jobs stay readable.
+      LEGACY_JOBS: ${LEGACY_JOBS:-off}
     volumes:
       - demo-data:/data
     read_only: true
     tmpfs:
-      - /tmp:rw,noexec,nosuid,size=512m,uid=1000,gid=1000
-    # Chromium's renderer uses shared memory beyond Docker's 64 MB default.
-    shm_size: 256m
+      - /tmp:rw,noexec,nosuid,size=1g,uid=1000,gid=1000
+    # Chromium's renderer uses shared memory beyond Docker's 64 MB default; two arms may capture at once.
+    shm_size: 512m
     cap_drop:
       - ALL
     security_opt:
       - no-new-privileges:true
-    # Threads count toward this limit; a headless Chromium alone runs well over a hundred.
-    pids_limit: 512
-    mem_limit: 2g
-    cpus: 1.0
+    # Threads count toward this limit: a headless Chromium alone runs well over a hundred, and a pair runs two Kiro
+    # sessions, each with Moûsa's server and its captures, beside two first steps.
+    pids_limit: 1024
+    mem_limit: 6g
+    cpus: 2.0
     stop_grace_period: 20s
 
 volumes:
