@@ -60,7 +60,9 @@ export async function checkProjectFolder(value) {
 /**
  * The project folder of a plugin session and where it came from: MOUSA_PROJECT_DIR (Claude Code fills it from
  * ${CLAUDE_PROJECT_DIR}), else the folder the host reports with the call (Codex), else the one the person approved
- * with mousa_open_project (`session.root`). The person still decides: a host setting or an approved call names it.
+ * with mousa_open_project (`session.root`), else the first folder the client listed as its roots
+ * (`session.clientRoot`, as Kiro may for a power whose server starts in the power's own folder). The person still
+ * decides: a host setting, an approved call or the folder they opened names it.
  */
 export async function resolveProjectRoot({ env = process.env, meta = null, session = null } = {}) {
   if (!unfilled(env.MOUSA_PROJECT_DIR)) return { root: await projectRoot(env), source: 'environment' };
@@ -69,6 +71,7 @@ export async function resolveProjectRoot({ env = process.env, meta = null, sessi
     try { return { root: await checkProjectFolder(reported), source: 'host' }; } catch { /* Fall through to an approved folder. */ }
   }
   if (session?.root) return { root: session.root, source: 'approved' };
+  if (session?.clientRoot) return { root: session.clientRoot, source: 'client' };
   throw new ProjectScopeError('No project folder is set. Ask the person which folder to design in, then call mousa_open_project with it.', 'PROJECT_DIR_MISSING');
 }
 

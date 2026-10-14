@@ -2,6 +2,35 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Kiro power package — October 14, 2026
+
+`plugins/kiro` is now a Kiro power in the Agent Plugins 1.0.0 format, where it was a CLI agent template. It holds:
+- `plugin.json`, with only the closed schema's fields, `name` `mousa`, version 0.6.0 and seven keywords;
+- `mcp.json`: a stdio server, `node ${PLUGIN_ROOT}/server/mousa.mjs`, with `${VAR}` references for the key, the endpoint, the project folder and the budget;
+- the server, the four skills, the font library, the licence and a README;
+- `PRIVACY.md`, linked from the README beside a support line, as the power registry asks;
+- the CLI agent and its prompt.
+
+A power runs no hook, so there is no gate.
+
+**The project folder.** The server starts in the power's own folder, so it could not tell the project.
+- **Roots.** It now reads the folders the client opened, over MCP `roots/list`, when the client declares roots. A folder the person names with `mousa_open_project` comes before them.
+- **The stdio loop.** It still answers the client's requests in order. It now takes the answers to its own requests at once, since the tool call that asks for the roots waits inside the loop.
+
+**The CLI agent.** It keeps the 2.x fields that ran on kiro-cli 2.24.0. It adds the V3 `permissions` block (MCP allowed; `.env`, `.kiro/` and `.mousa/` writes denied; shell denied), since V3 skips a 2.x agent without one.
+
+**Automated.**
+- Two tests in `tests/build-plugins.test.mjs`:
+  - the power's manifest and name rule, its MCP server, its skills' names, its privacy and support lines, and the agent's two sets of fields;
+  - the power's server started as Kiro would start it, with unset `${VAR}` references. It took its project from the root it was given, asked once and again after `notifications/roots/list_changed`, and gave way to a folder the person named.
+- The Kiro package is now compared file by file with its sources like the other two.
+- The suite is 478/478 with Chrome.
+
+**Not shown yet** (live check L1, which needs approval):
+- that Kiro's IDE or CLI loads the power;
+- that either one sends roots;
+- that V3 accepts the agent's `permissions` block as written.
+
 ## Blind vote — October 14, 2026
 
 The site's `/vote/` page shows the two designs of one comparison as Left and Right, two captures each, and asks one question per medium. The pool is the three Long Dusk comparisons named in `gallery.config.json`.

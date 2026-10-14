@@ -91,15 +91,15 @@ test('every path a manifest names starts with ./, stays in its package and exist
 test('every copied file is its source, byte for byte, and the server holds only what mousa.mjs imports', async () => {
   const modules = await serverModules();
   assert.ok(modules.includes('mousa.mjs') && modules.includes('mcp/mousa.mjs') && !modules.includes('index.mjs'), 'the older standalone entry stays out');
-  for (const name of ['claude-code', 'codex']) {
+  for (const name of ['claude-code', 'codex', 'kiro']) {
     assert.deepEqual((await filesUnder(pkg(name, 'server'))), modules, `${name} server`);
     for (const { from, to } of built.packages[name].copied) assert.ok((await readFile(from)).equals(await readFile(pkg(name, ...to.split('/')))), `${name}/${to}`);
     assert.ok(await exists(pkg(name, 'library', 'fonts', 'fonts.json')));
   }
 });
 
-/** The packaged server as a host starts it, over stdio, in a bare environment. */
-async function startPackaged(name, extra) {
+/** The packaged server as a host starts it, over stdio, in a bare environment; `answer` replies to the server's own requests. */
+async function startPackaged(name, extra, { answer = null } = {}) {
   const bare = Object.fromEntries(['PATH', 'Path', 'PATHEXT', 'SYSTEMROOT', 'SystemRoot', 'WINDIR', 'USERPROFILE', 'APPDATA', 'LOCALAPPDATA', 'TEMP', 'TMP', 'HOME', 'TMPDIR']
     .filter(key => process.env[key] !== undefined).map(key => [key, process.env[key]]));
   const child = spawn(process.execPath, [pkg(name, 'server', 'mousa.mjs')], { cwd: pkg(name), env: { ...bare, MOUSA_CAPTURE: 'off', ...extra }, stdio: ['pipe', 'pipe', 'pipe'] });
@@ -112,6 +112,10 @@ async function startPackaged(name, extra) {
   lines.on('line', line => {
     let message;
     try { message = JSON.parse(line); } catch { return; }
+    if (typeof message.method === 'string' && Object.hasOwn(message, 'id')) {
+      if (answer) child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id: message.id, result: answer(message) })}\n`);
+      return;
+    }
     pending.get(message.id)?.(message);
   });
   let id = 0;
@@ -128,7 +132,8 @@ async function startPackaged(name, extra) {
     await exited;
     clearTimeout(late);
   };
-  return { request, stop };
+  const notify = (method, params) => child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', method, ...(params ? { params } : {}) })}\n`);
+  return { request, notify, stop };
 }
 
 test('each packaged server starts on its own in a bare environment and finds its own fonts', async () => {
@@ -168,13 +173,71 @@ test('the marketplaces point each host at its own package', async () => {
   assert.ok(codex.plugins[0].category);
 });
 
-test('the Kiro template runs the mousa entry with the two skills and keeps writes out of .mousa', async () => {
-  const agent = await read(pkg('kiro', 'mousa-designer.json'));
+test('the Kiro package is a power in the Agent Plugins format: its closed manifest, its server and its skills', async () => {
+  const manifest = await read(pkg('kiro', 'plugin.json'));
+  assert.equal(manifest.$schema, 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json');
+  const allowed = new Set(['$schema', 'name', 'version', 'description', 'author', 'homepage', 'repository', 'license', 'keywords', 'extensions']);
+  for (const key of Object.keys(manifest)) assert.ok(allowed.has(key), `${key} is outside the format's closed schema`);
+  assert.match(manifest.name, /^[a-z0-9](?:[a-z0-9.-]{0,62}[a-z0-9])?$/u);
+  assert.ok(!/--|\.\./u.test(manifest.name));
+  assert.equal(manifest.version, MOUSA_SERVER_VERSION);
+  assert.deepEqual(manifest.author, { name: 'tritonsan' });
+  assert.ok(manifest.keywords.length >= 5 && manifest.keywords.length <= 7, 'five to seven specific keywords, as Kiro advises');
+  const mcp = await read(pkg('kiro', 'mcp.json'));
+  assert.equal(mcp.$schema, 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json');
+  const server = mcp.mcpServers.mousa;
+  assert.deepEqual([server.type, server.command, server.args], ['stdio', 'node', ['${PLUGIN_ROOT}/server/mousa.mjs']], 'a single-token command and the root in args');
+  assert.equal(server.cwd, undefined, 'the server starts in the power\'s own folder');
+  assert.equal(server.env.MOUSA_HOST, 'kiro');
+  for (const skill of SKILLS) {
+    const text = await readFile(pkg('kiro', 'skills', skill, 'SKILL.md'), 'utf8');
+    assert.equal(/^name:\s*(.+)$/mu.exec(text)?.[1].trim(), skill, `${skill}: Kiro needs the folder's own name`);
+    assert.match(text, /^description:\s*\S/mu);
+    assert.ok(!(await exists(pkg('kiro', 'skills', skill, 'agents'))) && !(await exists(pkg('kiro', 'skills', skill, 'evals'))));
+  }
+  assert.ok(!(await exists(pkg('kiro', 'hooks'))), 'a power runs no hook');
+  const readme = await readFile(pkg('kiro', 'README.md'), 'utf8');
+  assert.match(readme, /\[Privacy policy\]\(PRIVACY\.md\)/u, 'the registry asks for a privacy policy link');
+  assert.match(readme, /\*\*Support\.\*\*/u, 'and a support contact');
+  assert.match(await readFile(pkg('kiro', 'PRIVACY.md'), 'utf8'), /sends only|Only requests to the Qloo API/u);
+  const agent = await read(pkg('kiro', 'agents', 'mousa-designer.json'));
   assert.deepEqual(agent.mcpServers.mousa.args, ['MOUSA_PLUGIN_DIR/server/mousa.mjs']);
-  assert.equal(agent.mcpServers.mousa.env.MOUSA_HOST, 'kiro');
   assert.deepEqual(agent.resources, ['file://MOUSA_PLUGIN_DIR/skills/taste-brief/SKILL.md', 'file://MOUSA_PLUGIN_DIR/skills/design/SKILL.md']);
-  assert.ok(agent.toolsSettings.write.deniedPaths.includes('.mousa/**'));
+  assert.ok(agent.toolsSettings.write.deniedPaths.includes('.mousa/**'), 'the 2.x fields');
+  assert.ok(agent.permissions.rules.some(rule => rule.capability === 'fs_write' && rule.effect === 'deny' && rule.match.includes('.mousa/**')), 'and their V3 permissions');
+  assert.ok(agent.permissions.rules.some(rule => rule.capability === 'shell' && rule.effect === 'deny'));
   assert.match(await readFile(pkg('kiro', 'prompts', 'mousa-designer.md'), 'utf8'), /mousa_status/u);
+});
+
+test('the power\'s server learns the project from the folders Kiro lists as roots, until the person names another', async () => {
+  const config = await mkdtemp(path.join(os.tmpdir(), 'mousa-build-config-'));
+  const first = await mkdtemp(path.join(os.tmpdir(), 'mousa-build-root-a-')), second = await mkdtemp(path.join(os.tmpdir(), 'mousa-build-root-b-'));
+  const chosen = await mkdtemp(path.join(os.tmpdir(), 'mousa-build-chosen-'));
+  let listed = first, asked = 0;
+  // Kiro passes an unset ${VAR} reference through as written.
+  const server = await startPackaged('kiro', { MOUSA_HOST: 'kiro', MOUSA_PROJECT_DIR: '${MOUSA_PROJECT_DIR}', QLOO_API_KEY: '${QLOO_API_KEY}', MOUSA_CONFIG_DIR: config },
+    { answer: message => { assert.equal(message.method, 'roots/list'); asked += 1; return { roots: [{ uri: pathToFileURL(listed).href, name: 'workspace' }] }; } });
+  const status = async () => JSON.parse((await server.request('tools/call', { name: 'mousa_status', arguments: {} })).result.content[0].text);
+  const real = folder => import('node:fs/promises').then(fs => fs.realpath(folder));
+  try {
+    await server.request('initialize', { protocolVersion: '2025-06-18', capabilities: { roots: { listChanged: true } }, clientInfo: { name: 'kiro-test', version: '0' } });
+    const opened = await status();
+    assert.equal(opened.host, 'kiro');
+    assert.deepEqual([opened.project.folder, opened.project.source], [await real(first), 'client']);
+    assert.equal(opened.qloo.connected, false, 'an unset key reference is no key');
+    assert.equal(opened.materials.fonts, 33, 'the power reads the font library it carries');
+    await status();
+    assert.equal(asked, 1, 'the roots are asked once');
+    listed = second;
+    server.notify('notifications/roots/list_changed');
+    assert.equal((await status()).project.folder, await real(second), 'and again after the client says they changed');
+    const named = JSON.parse((await server.request('tools/call', { name: 'mousa_open_project', arguments: { path: chosen } })).result.content[0].text);
+    assert.deepEqual([named.status, named.source], ['opened', 'approved']);
+    assert.deepEqual([(await status()).project.folder, (await status()).project.source], [await real(chosen), 'approved'], 'a folder the person names comes first');
+  } finally {
+    await server.stop();
+    for (const folder of [config, first, second, chosen]) await rm(folder, { recursive: true, force: true });
+  }
 });
 
 test('the eval suites name only tools, skills and fields that exist', async () => {

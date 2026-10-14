@@ -40,6 +40,43 @@
       ]
     }
   },
+  "permissions": {
+    "rules": [
+      {
+        "capability": "mcp",
+        "match": [
+          "mousa/*"
+        ],
+        "effect": "allow"
+      },
+      {
+        "capability": "fs_read",
+        "match": [
+          "**/.env",
+          "**/.env.*"
+        ],
+        "effect": "deny"
+      },
+      {
+        "capability": "fs_write",
+        "match": [
+          "**/.env",
+          "**/.env.*",
+          ".kiro/**",
+          ".mousa/**",
+          "**/.mousa/**"
+        ],
+        "effect": "deny"
+      },
+      {
+        "capability": "shell",
+        "match": [
+          "**"
+        ],
+        "effect": "deny"
+      }
+    ]
+  },
   "resources": [
     "file://MOUSA_PLUGIN_DIR/skills/taste-brief/SKILL.md",
     "file://MOUSA_PLUGIN_DIR/skills/design/SKILL.md"

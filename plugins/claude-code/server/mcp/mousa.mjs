@@ -4,6 +4,7 @@
 // the project's .mousa folder rather than passed back and forth. The older standalone surface of index.mjs stays as
 // it is for Studio's /mcp endpoint, the Kiro example and their tests.
 
+import { fileURLToPath } from 'node:url';
 import { createConnectionStore, ConnectionStoreError } from '../connections/store.mjs';
 import { resolveQlooConnection, hostName, testQlooKey } from '../connections/config.mjs';
 import { createConnectionPage } from '../connections/page.mjs';
@@ -109,7 +110,9 @@ function setupHints({ host, qloo, project, images, capture }) {
   if (!qloo.connected) {
     hints.push(host === 'claude-code'
       ? 'Qloo is not connected: run /plugin configure mousa@mousa and enter the Qloo API key, or call mousa_connect for a local page.'
-      : 'Qloo is not connected: call mousa_connect and give the person the link; they enter their Qloo API key on a page on this computer.');
+      : host === 'kiro'
+        ? 'Qloo is not connected: call mousa_connect and give the person the link, or they set QLOO_API_KEY in the environment Kiro starts from and restart it.'
+        : 'Qloo is not connected: call mousa_connect and give the person the link; they enter their Qloo API key on a page on this computer.');
   }
   if (qloo.problem) hints.push(qloo.problem);
   if (!project.folder) hints.push('No project folder is set: ask the person which folder to design in, then call mousa_open_project with its absolute path.');
@@ -131,7 +134,9 @@ export function createMousaServer({ env = process.env, platform = process.platfo
   const environment = env.MOUSA_ENVIRONMENT === 'hosted' ? 'hosted' : 'local';
   const connections = store || createConnectionStore({ env, platform });
   const connectPage = page || createConnectionPage({ store: connections, ...(fetchImpl ? { fetchImpl } : {}) });
-  const session = { root: null };
+  const session = { root: null, clientRoot: undefined, rootsChanged: false };
+  // The client's side of the session: its declared capabilities and, over stdio, a way to ask it, such as roots/list.
+  const client = { capabilities: {}, request: null };
   let browser = null, images = null, fonts = null;
   const browserStatus = () => browser ||= (inspect.browser ? inspect.browser() : inspectBrowser({ env, platform }).then(found => verifyBrowser(found, { env })))
     .catch(() => ({ available: false, reason: 'The browser could not be checked on this machine.' }));
@@ -139,12 +144,26 @@ export function createMousaServer({ env = process.env, platform = process.platfo
     .catch(() => [{ id: 'off', status: 'available', note: 'No picture: the plan\'s fallback method.' }]);
   const fontStatus = () => fonts ||= (inspect.fonts ? inspect.fonts() : fontLibraryRoot({ env }).then(root => root ? loadFontLibrary(root) : null)).catch(() => null);
 
+  /**
+   * The first folder the client lists as its roots, asked once and again after it says the list changed. A server a
+   * client starts in its own folder, as Kiro starts a power's, learns the project this way; a client without roots,
+   * or one that does not answer, leaves the project to the environment, the host or mousa_open_project.
+   */
+  async function clientRoot() {
+    if (!client.request || !client.capabilities?.roots || (session.clientRoot !== undefined && !session.rootsChanged)) return;
+    session.rootsChanged = false;
+    try {
+      const listed = await client.request('roots/list');
+      const uri = (Array.isArray(listed?.roots) ? listed.roots : []).map(root => root?.uri).find(value => typeof value === 'string' && value.startsWith('file:'));
+      session.clientRoot = uri ? await checkProjectFolder(fileURLToPath(uri)) : null;
+    } catch { session.clientRoot = null; }
+  }
   async function projectStatus(meta) {
-    try { const { root, source } = await resolveProjectRoot({ env, meta, session }); return { folder: root, source }; }
+    try { await clientRoot(); const { root, source } = await resolveProjectRoot({ env, meta, session }); return { folder: root, source }; }
     catch (error) { return { folder: null, problem: error instanceof ProjectScopeError ? error.message : 'The project folder could not be checked.' }; }
   }
   // A tool's workspace, when it names one, is a folder inside the project with its own .mousa records.
-  const projectFolder = async (meta, workspace) => workspaceRoot((await resolveProjectRoot({ env, meta, session })).root, workspace);
+  const projectFolder = async (meta, workspace) => { await clientRoot(); return workspaceRoot((await resolveProjectRoot({ env, meta, session })).root, workspace); };
   const taste = createTasteTools({ env, connections, fetchImpl, fonts: fontStatus, project: projectFolder });
   const design = createDesignTools({ env, host, version: MOUSA_SERVER_VERSION, project: projectFolder, fonts: fontStatus, images: imageStatus, browser: browserStatus, generate, capture, shoot });
   const tools = [...MOUSA_SETUP_TOOLS, ...taste.definitions, ...design.definitions];
@@ -223,6 +242,7 @@ export function createMousaServer({ env = process.env, platform = process.platfo
 
   function initialize(params = {}) {
     const requested = params.protocolVersion;
+    client.capabilities = params.capabilities && typeof params.capabilities === 'object' ? params.capabilities : {};
     return {
       protocolVersion: MOUSA_PROTOCOL_VERSIONS.includes(requested) ? requested : MOUSA_PROTOCOL_VERSIONS[0],
       // The Codex capability asks Codex to send its sandbox state, whose working folder names the project.
@@ -232,5 +252,9 @@ export function createMousaServer({ env = process.env, platform = process.platfo
     };
   }
 
-  return { initialize, listTools: () => structuredClone(tools), callTool, session, host, connections, page: connectPage };
+  // The stdio loop hands over its way to ask the client; a client that changes its roots says so in a notification.
+  const attach = ({ request }) => { client.request = typeof request === 'function' ? request : null; };
+  const notify = method => { if (method === 'notifications/roots/list_changed') session.rootsChanged = true; };
+
+  return { initialize, listTools: () => structuredClone(tools), callTool, attach, notify, session, host, connections, page: connectPage };
 }

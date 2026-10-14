@@ -278,7 +278,7 @@ Each job must be a completed record of its kind. `--app` builds `DATA_DIR/showca
 
 ### Claude Code and Codex plugins (0.6.0)
 
-Moûsa ships as two plugins built from `plugin/`: `plugins/claude-code` and `plugins/codex`, with a Kiro agent template in `plugins/kiro`. Each plugin carries the `mousa` MCP server, the font library, four skills and a write gate. The four skills are `taste-brief`, `design`, `compare` and `connect`. The gate holds a design's file writes between the frozen prediction and a valid Design DNA. The repository root holds a marketplace for each host:
+Moûsa ships as two plugins built from `plugin/`, `plugins/claude-code` and `plugins/codex`, and as a Kiro power in `plugins/kiro`. The power is in the Agent Plugins format and is installed from that folder: in the IDE through **Add Custom Power**, or with `kiro-cli powers install plugins/kiro` on the V3 engine. Each plugin carries the `mousa` MCP server, the font library, four skills and a write gate. The four skills are `taste-brief`, `design`, `compare` and `connect`. The gate holds a design's file writes between the frozen prediction and a valid Design DNA. The repository root holds a marketplace for each host:
 
 ```sh
 # Claude Code

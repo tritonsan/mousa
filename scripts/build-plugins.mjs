@@ -1,7 +1,7 @@
-// Builds the Moûsa plugin packages from plugin/: one for Claude Code, one for Codex and a Kiro agent template, plus
-// the marketplace files that point at them. Each run empties the package folders and copies only what the mousa
-// server imports, the font library, the four skills, the comparison agents and the write gate, so a package is
-// self-contained and every copied file is byte-identical to its source. The manifests are written here.
+// Builds the Moûsa plugin packages from plugin/: one for Claude Code, one for Codex and a Kiro power, plus the
+// marketplace files that point at the first two. Each run empties the package folders and copies only what the mousa
+// server imports, the font library, the four skills, the comparison agents and the write gate where its host runs one,
+// so a package is self-contained and every copied file is byte-identical to its source. The manifests are written here.
 //
 //   node scripts/build-plugins.mjs [--root <folder>]
 //
@@ -75,8 +75,8 @@ function packageWriter(folder) {
   };
 }
 
-/** What every package carries: the server modules, the font library, the skills, the gate and the licence. */
-async function copyShared(writer, { source, host }) {
+/** What every package carries: the server modules, the font library, the skills, the gate (where the host runs it) and the licence. */
+async function copyShared(writer, { source, host, gate = true }) {
   for (const module of await serverModules(source)) await writer.copy(path.join(source, 'plugin', 'server', ...module.split('/')), `server/${module}`);
   const fonts = path.join(source, 'library', 'fonts');
   for (const file of await filesUnder(fonts)) await writer.copy(path.join(fonts, ...file.split('/')), `library/fonts/${file}`);
@@ -87,7 +87,7 @@ async function copyShared(writer, { source, host }) {
       await writer.copy(path.join(folder, ...file.split('/')), `skills/${skill}/${file}`);
     }
   }
-  await writer.copy(path.join(source, 'plugin', 'hooks', 'gate.mjs'), 'hooks/gate.mjs');
+  if (gate) await writer.copy(path.join(source, 'plugin', 'hooks', 'gate.mjs'), 'hooks/gate.mjs');
   await writer.copy(path.join(source, 'LICENSE'), 'LICENSE');
 }
 
@@ -175,6 +175,20 @@ function packageReadme(host, version) {
     ...shared, ''].join('\n');
 }
 
+// The Kiro power, in the Agent Plugins format Kiro reads: plugin.json, mcp.json and skills/. The manifest holds only
+// the fields of that format's closed schema, and its keywords decide when Kiro loads the power. Kiro starts the server
+// in the power's own folder, so the project comes from MOUSA_PROJECT_DIR, the folders Kiro lists as the workspace's
+// roots, or the folder the person names (mousa_open_project). Kiro expands ${PLUGIN_ROOT} and ${VAR} references;
+// a reference left unset reaches the server as written, which Moûsa reads as unset.
+export const KIRO_KEYWORDS = Object.freeze(['qloo', 'taste', 'audience', 'redesign', 'restyle', 'design system', 'brand identity']);
+const kiroManifest = version => ({ $schema: 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json', name: 'mousa', version, description: DESCRIPTION, author: AUTHOR,
+  keywords: [...KIRO_KEYWORDS], license: LICENSE });
+const kiroMcp = () => ({ $schema: 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json', mcpServers: { mousa: { type: 'stdio', command: 'node', args: ['${PLUGIN_ROOT}/server/mousa.mjs'],
+  env: { MOUSA_HOST: 'kiro', MOUSA_PROJECT_DIR: '${MOUSA_PROJECT_DIR}', QLOO_API_KEY: '${QLOO_API_KEY}', QLOO_BASE_URL: '${QLOO_BASE_URL}', MOUSA_QLOO_BUDGET: '${MOUSA_QLOO_BUDGET}' } } } });
+
+// A Kiro CLI agent for the same server, started from the project folder. The 2.x fields (allowedTools, toolsSettings)
+// ran on kiro-cli 2.24.0; Kiro's V3 engine skips an agent with those fields unless it has a permissions block, which
+// follows Kiro's V3 documentation here.
 const kiroAgent = () => ({
   name: 'mousa-designer',
   description: 'Designs for an audience from what Qloo measures it loves, through Moûsa\'s checked stages.',
@@ -186,6 +200,12 @@ const kiroAgent = () => ({
     read: { deniedPaths: ['**/.env', '**/.env.*'] },
     write: { deniedPaths: ['**/.env', '**/.env.*', '.kiro/**', '.mousa/**', '**/.mousa/**'] },
   },
+  permissions: { rules: [
+    { capability: 'mcp', match: ['mousa/*'], effect: 'allow' },
+    { capability: 'fs_read', match: ['**/.env', '**/.env.*'], effect: 'deny' },
+    { capability: 'fs_write', match: ['**/.env', '**/.env.*', '.kiro/**', '.mousa/**', '**/.mousa/**'], effect: 'deny' },
+    { capability: 'shell', match: ['**'], effect: 'deny' },
+  ] },
   resources: ['file://MOUSA_PLUGIN_DIR/skills/taste-brief/SKILL.md', 'file://MOUSA_PLUGIN_DIR/skills/design/SKILL.md'],
   includeMcpJson: false,
 });
@@ -197,15 +217,75 @@ Start with mousa_status. If Qloo is not connected, call mousa_connect and give t
 Write the saved records in English; the design's own copy follows the brief's language. Never write into .mousa/, and never open a .env file.
 `;
 
-const KIRO_README = `# Moûsa agent for Kiro
+const kiroReadme = version => `# Moûsa ${version} for Kiro
 
-A Kiro CLI agent that runs Moûsa's \`mousa\` server and attaches its two skills.
+Moûsa grounds design work in measured cultural taste from Qloo: what an audience loves, what those works share, and what that means for palette, type, imagery, motion, voice and structure. This folder is a Kiro power in the Agent Plugins format.
 
-1. Copy \`mousa-designer.json\` into your project's \`.kiro/agents/\`, and \`prompts/mousa-designer.md\` into \`.kiro/prompts/\`.
-2. Replace every \`MOUSA_PLUGIN_DIR\` with the absolute path of a Moûsa package folder that holds \`server/\`, \`skills/\` and \`library/\`, such as this repository's \`plugins/codex\`. Use forward slashes.
-3. Start the agent from the project folder: \`kiro-cli chat --agent mousa-designer\`. The first call, \`mousa_status\`, says what is missing.
+## Install
 
-The agent may use Moûsa's tools without asking, and it may not write \`.mousa/\`, \`.kiro/\` or \`.env\` files. Kiro has no write gate, so the skills' order is the agent's to keep.
+- **Kiro IDE.** Open the Powers panel, choose **Add Custom Power**, then **Import power from a folder**, and pick this folder. From GitHub, import the repository and choose this folder.
+- **Kiro CLI (V3).** \`kiro-cli powers install <this folder>\`.
+
+Kiro loads the power when a conversation is about an audience's taste or a redesign; its keywords are ${KIRO_KEYWORDS.map(word => `\`${word}\``).join(', ')}.
+
+## Your Qloo key
+
+Moûsa uses your own Qloo API key. Set \`QLOO_API_KEY\` in the environment Kiro starts from, or let the agent open Moûsa's local key page (\`mousa_connect\`): you paste the key on a page on this computer, and it never passes through the chat. \`MOUSA_QLOO_BUDGET\` caps the Qloo requests of a project.
+
+## The project folder
+
+Moûsa reads and writes only inside one project folder. It is \`MOUSA_PROJECT_DIR\` when that is set; otherwise the folder you name when the agent asks (\`mousa_open_project\`); otherwise the first folder Kiro lists as the workspace's roots.
+
+## A Kiro CLI agent
+
+\`agents/mousa-designer.json\` runs the same server from a project folder without the power:
+1. Copy it to the project's \`.kiro/agents/\`, and \`prompts/mousa-designer.md\` to \`.kiro/prompts/\`.
+2. Replace every \`MOUSA_PLUGIN_DIR\` with the absolute path of this folder, with forward slashes.
+3. Run \`kiro-cli chat --agent mousa-designer\` from the project folder.
+
+The agent may use Moûsa's tools without asking. It may not write \`.mousa/\`, \`.kiro/\` or \`.env\` files, and it has no shell. Its 2.x fields ran on kiro-cli 2.24.0; its \`permissions\` block, which Kiro's V3 engine requires, follows Kiro's V3 documentation.
+
+## What it holds
+
+- **The \`mousa\` MCP server**, with thirteen tools: setup (\`mousa_status\`, \`mousa_connect\`, \`mousa_open_project\`), taste (\`taste_profile\`, \`taste_ask\`, \`qloo_query\`) and design (\`design_validate\`, \`design_check\`, \`design_capture\`, \`image\`, \`materials\`, \`design_compare\`, \`design_report\`).
+- **Skills.** \`taste-brief\` (what to ask Qloo and how to read the answer), \`design\` (from the Taste Brief to a checked, captured design and its Taste Provenance report), \`compare\` (a design with Qloo and without) and \`connect\` (setup).
+- **The open-licence font library** (SIL OFL 1.1) that designs load their type from.
+
+Kiro has no write gate for a power, so the skills' order is the agent's to keep. It needs Node.js 22 or newer and, for review captures, a Chromium-based browser such as Chrome or Edge.
+
+## Privacy and support
+
+- [Privacy policy](PRIVACY.md): Moûsa runs on your computer and sends only Qloo requests, with your key.
+- **Support.** Open an issue in the Moûsa repository on GitHub, the one this power came from.
+
+Licence: MIT.
+`;
+
+const KIRO_PRIVACY = `# Moûsa privacy policy
+
+Moûsa is a local MCP server and a set of skills. It has no account, no telemetry and no server of its own, and it sends nothing to its authors.
+
+## What leaves your computer
+
+Only requests to the Qloo API, sent with your own key. They carry:
+- the audience's signal you or the agent give: names of works, brands, places or audience descriptions;
+- a location and age bands, when you give them.
+
+Qloo's own terms and privacy policy apply to those requests.
+
+## What Moûsa keeps, and where
+
+- **Qloo's answers and the design's records.** These are the prediction, the taste profile, the design stages, the captures and the reports. They stay in the project's \`.mousa/\` folder on your computer, and the Qloo cache there carries its own \`.gitignore\`.
+- **Your Qloo key.** It stays in your environment or in your user's Moûsa connections file. That file is encrypted for your Windows user with DPAPI, and elsewhere only your user can read it.
+
+## Pictures and captures
+
+- **Captures.** A browser on your computer takes them, and it can reach only a local server for the project.
+- **Pictures.** Only the image tool of the agent you run makes them, under that tool's own terms.
+
+## Contact
+
+Open an issue in the Moûsa repository on GitHub.
 `;
 
 /** Builds every package and marketplace file. Returns what each package holds. */
@@ -236,10 +316,15 @@ export async function buildPlugins({ root = SOURCE, source = SOURCE } = {}) {
   await codex.write('README.md', packageReadme('codex', version));
   summary.codex = codex;
 
+  // A power runs no hook, so the Kiro package carries no gate.
   const kiro = packageWriter(path.join(out, PACKAGES.kiro));
-  await kiro.write('mousa-designer.json', json(kiroAgent()));
+  await copyShared(kiro, { source, host: 'kiro', gate: false });
+  await kiro.write('plugin.json', json(kiroManifest(version)));
+  await kiro.write('mcp.json', json(kiroMcp()));
+  await kiro.write('agents/mousa-designer.json', json(kiroAgent()));
   await kiro.write('prompts/mousa-designer.md', KIRO_PROMPT);
-  await kiro.write('README.md', KIRO_README);
+  await kiro.write('README.md', kiroReadme(version));
+  await kiro.write('PRIVACY.md', KIRO_PRIVACY);
   summary.kiro = kiro;
 
   const marketplaces = [

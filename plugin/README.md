@@ -190,7 +190,7 @@ A test checks the skills and agents against the code they describe:
 | --- | --- | --- |
 | `plugins/claude-code` | The server modules that `server/mousa.mjs` imports, `library/fonts`, the four skills, the two comparison agents, the write gate, the eval suite, a README and the licence | `.claude-plugin/plugin.json` asks for the Qloo key (sensitive) and endpoint as plugin settings. `.mcp.json` passes them with `MOUSA_PROJECT_DIR=${CLAUDE_PROJECT_DIR}` and `MOUSA_HOST=claude-code`. The gate runs on Write, Edit, MultiEdit and NotebookEdit |
 | `plugins/codex` | The same server, fonts and skills, each skill with its `agents/openai.yaml` and `evals/evals.json`, and the logo and icon | `.codex-plugin/plugin.json` carries the interface and names `connect` as the onboarding skill; there is no root `plugin.json`, which Codex would read first. `.mcp.json` sets `cwd: "."` and a 600-second tool timeout, and passes the Qloo key and Moûsa's settings by name in `env_vars`, because Codex starts a server with a bare environment. It also sets `mousa_open_project` to ask the person. The gate runs on `apply_patch`, which Codex also matches as Write and Edit |
-| `plugins/kiro` | A Kiro CLI agent template and its prompt | The template names the `mousa` entry and the two skills through a `MOUSA_PLUGIN_DIR` placeholder, and refuses writes to `.mousa/`, `.kiro/` and `.env` files |
+| `plugins/kiro` | A Kiro power in the Agent Plugins format: `plugin.json`, `mcp.json`, the server, the skills, the font library, a privacy policy, and a Kiro CLI agent with its prompt | The manifest holds only the fields of the format's closed schema, with seven keywords for activation. The server starts in the power's folder and learns the project from `MOUSA_PROJECT_DIR`, a folder the person names, or the first folder Kiro lists as the workspace's roots (MCP `roots/list`, asked again after `notifications/roots/list_changed`). The agent has the 2.x fields that ran on kiro-cli 2.24.0 and the V3 `permissions` block Kiro's documentation asks for; it refuses writes to `.mousa/`, `.kiro/` and `.env` files and has no shell. A power runs no hook, so there is no gate |
 
 The marketplaces are `.claude-plugin/marketplace.json` for Claude Code and `.agents/plugins/marketplace.json` for Codex. Codex also reads the first as a legacy marketplace; with both present, `codex plugin list` showed it using its own.
 
@@ -214,6 +214,11 @@ The marketplaces are `.claude-plugin/marketplace.json` for Claude Code and `.age
   - start each packaged server in a bare environment. Each lists the twelve tools, reads its own 33 font families, and takes its project folder from `MOUSA_PROJECT_DIR` or from Codex's sandbox state;
   - check the marketplaces, the Kiro template and the eval suites;
   - fail when the committed packages differ from what the sources build.
+
+**Added on 2026-10-14, with no Kiro run yet:**
+- The surface's thirteenth tool, `design_report`.
+- The Kiro power. A test checks its manifest against the closed schema and its name rule, its `mcp.json`, its skills' names and its privacy and support lines. It starts the power's server as Kiro would, with unset `${VAR}` references, and answers its `roots/list`. The project then comes from the listed root, again after a `roots/list_changed` notification, and from a folder the person names once they name one.
+- Whether Kiro's IDE and CLI send roots and load the power are the first live check (L1).
 
 **Verified live on 2026-10-13** (see [the verification record](../docs/verification.md#live-codex-sessions-with-the-packaged-plugin--october-13-2026)):
 - **Full sessions.** One session per host, on the same brief, ran from the brief to an audited review.
