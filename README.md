@@ -252,6 +252,11 @@ node scripts/build-gallery.mjs --check
 
 **The scan.** Every text file is then scanned for local paths, the run folder, the user's name, this deployment's secrets, token-shaped strings and Qloo ids or tag URNs. With any finding, `gallery.json` is not written and the script fails. `--check` scans a built gallery again, as a deployment should before it serves one. Restart the Studio after a build.
 
+**The blind vote** (`/vote/`) shows the two designs of one comparison from the gallery's vote pool as Left and Right, with one question such as "Which character would this audience rather play?". After the vote it says which side was made with Qloo.
+- **Ballots.** A ballot is sealed with AES-GCM under a key derived from `SITE_SECRET`, so neither the page nor its picture URLs say which side is which. It expires after two hours and counts once.
+- **Voters.** A vote is kept with a keyed hash of the voter's address for the day, never the address. Each address votes once a day on a pair and at most 30 times an hour. Behind a proxy, `TRUST_PROXY=1` reads `X-Forwarded-For`.
+- **Results.** `/vote/results/` and `/api/vote/results` give each pair's share for the Qloo design with a 95% Wilson interval, and the limits of a self-selected vote.
+
 A built site's root-relative URLs to its own files, such as Vite's `/assets/…`, are made relative so it plays from its gallery folder. [`scripts/verify-site.mjs`](scripts/verify-site.mjs) checks a running site. It fetches every page for its status, its policy and the absence of a script, then captures each page at 1440 and 390 pixels and each design from the preview origin.
 
 ## Showcase

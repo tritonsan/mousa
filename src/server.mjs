@@ -22,6 +22,8 @@ import { inspectBrowser, verifyBrowser } from '../plugin/server/production/captu
 import { loadShowcase, isShowcaseJob, showcaseAppFile, SHOWCASE_APP_CSP } from './showcase.mjs';
 import { loadGallery, galleryFile, armRecord } from './gallery.mjs';
 import { landingPage, galleryPage, entryPage, armPage, missingPage, tryPendingPage } from './site/render.mjs';
+import { votePage, voteThanksPage, voteProblemPage, voteResultsPage, ballotViews } from './site/vote-pages.mjs';
+import { createVoteBox, voterAddress, VoteError } from './votes.mjs';
 import { reportStylesheet } from '../plugin/server/design/report.mjs';
 
 const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.json': 'application/json; charset=utf-8', '.txt': 'text/plain; charset=utf-8' };
@@ -57,6 +59,12 @@ async function readJson(req, limit = 200000) {
   for await (const chunk of req) { size += chunk.length; if (size > limit) throw new HttpError(413, 'Request size limit exceeded.'); chunks.push(chunk); }
   try { return JSON.parse(Buffer.concat(chunks).toString()); } catch { throw new HttpError(400, 'Valid JSON is required.'); }
 }
+/** A small form body as text, within `limit` bytes. */
+async function readBody(req, limit) {
+  let size = 0; const chunks = [];
+  for await (const chunk of req) { size += chunk.length; if (size > limit) throw new HttpError(413, 'Request size limit exceeded.'); chunks.push(chunk); }
+  return Buffer.concat(chunks).toString('utf8');
+}
 function authorized(req, config) {
   if (!config.accessToken) return true;
   return tokenMatches(req.headers['x-demo-token'], config.accessToken) || tokenMatches(req.headers.authorization?.replace(/^Bearer /i, ''), config.accessToken);
@@ -83,6 +91,11 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
   const hasGallery = () => Boolean(gallery.index?.entries.length);
   let siteStyles = null;
   const fontFamilies = async () => ((await loadFontLibrary(config.rootDir))?.families || []).map(family => family.family);
+  // The blind vote's pool: the comparisons the gallery names for it whose arms have pictures to show side by side.
+  const votePairs = (gallery.index?.vote || []).map(id => gallery.entries.get(id)).filter(entry => entry?.kind === 'comparison' && ballotViews(entry.record).length)
+    .map(entry => ({ id: entry.id, arms: entry.record.arms || [] }));
+  if (votePairs.length && !config.siteSecret) console.warn('Vote: SITE_SECRET is not set, so ballots last only as long as this process.');
+  const voteBox = votePairs.length ? await createVoteBox({ dataDir: config.dataDir, secret: config.siteSecret, pairs: votePairs }) : null;
   let previewBaseUrl = config.previewBaseUrl;
   // A network client of /mcp gets the validators and the font catalog, but no file, image or capture tool: those act on
   // this machine, so the endpoint reports them as a hosted server would.
@@ -344,6 +357,45 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         const template = templates.find(t => t.id === templateMatch[1]);
         if (!template) throw new HttpError(404, 'Starter site not found.');
         return send(res, 200, template.files[templateMatch[2]], { 'Content-Type': mime[path.extname(templateMatch[2])], 'Content-Security-Policy': previewCsp });
+      }
+      // The blind vote: a ballot, its pictures by sealed token, a vote cast with the form, and the results.
+      if (hasGallery() && /^\/(?:vote(?:\/|$)|api\/vote\/)/u.test(pathname)) {
+        const page = (html, status = 200) => send(res, status, html, { 'Content-Type': mime['.html'], 'Content-Security-Policy': siteCsp(new URL(previewBaseUrl).origin) });
+        const repository = config.siteRepository || '';
+        const address = voterAddress(req, config.trustProxy);
+        if (req.method === 'GET' && (pathname === '/api/vote/results' || pathname === '/vote/results' || pathname === '/vote/results/')) {
+          const results = voteBox ? voteBox.results() : [];
+          return pathname.startsWith('/api/') ? send(res, 200, { pairs: results.map(result => ({ ...result, title: gallery.entries.get(result.pair)?.title })) })
+            : page(voteResultsPage({ results, entries: gallery.entries, repository }));
+        }
+        const imageMatch = pathname.match(/^\/vote\/image\/([A-Za-z0-9_-]{20,400})\/(left|right)\/([01])$/u);
+        if (req.method === 'GET' && imageMatch) {
+          const shown = voteBox?.side(imageMatch[1], imageMatch[2]);
+          const view = shown ? ballotViews(gallery.entries.get(shown.pair)?.record)[Number(imageMatch[3])] : null;
+          const capture = view ? (shown.arm === 0 ? view.a : view.b) : null;
+          const found = capture ? galleryFile({ dataDir: config.dataDir, id: shown.pair, part: 'report', relative: capture.file }) : null;
+          if (!found) throw new HttpError(404, 'Not found.');
+          return send(res, 200, await fs.readFile(found.file).catch(() => { throw new HttpError(404, 'Not found.'); }), { 'Content-Type': found.type, 'Cache-Control': 'private, max-age=7200' });
+        }
+        if (pathname === '/vote' || pathname === '/vote/') {
+          if (!voteBox) return page(voteProblemPage({ message: 'There is no pair to vote on yet.', status: 404, repository }), 404);
+          try {
+            if (req.method === 'GET') {
+              const ballot = voteBox.issue(address);
+              return page(votePage({ entry: gallery.entries.get(ballot.pair), ballot, repository }));
+            }
+            if (req.method === 'POST') {
+              checkOrigin(req);
+              const form = new URLSearchParams(await readBody(req, 2048));
+              const outcome = await voteBox.cast({ token: form.get('ballot'), choice: form.get('choice'), address });
+              return page(voteThanksPage({ entry: gallery.entries.get(outcome.pair), outcome, result: voteBox.results().find(item => item.pair === outcome.pair), repository }));
+            }
+            return send(res, 405, 'Method not allowed.', { Allow: 'GET, POST' });
+          } catch (error) {
+            if (error instanceof VoteError) return page(voteProblemPage({ message: error.message, status: error.status, repository }), error.status);
+            throw error;
+          }
+        }
       }
       // The public site: with a gallery, the plain address opens its landing page, and the Studio moves to /studio.
       if (req.method === 'GET' && hasGallery()) {

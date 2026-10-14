@@ -2,6 +2,34 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Blind vote — October 14, 2026
+
+The site's `/vote/` page shows the two designs of one comparison as Left and Right, two captures each, and asks one question per medium. The pool is the three Long Dusk comparisons named in `gallery.config.json`.
+
+The local Studio was started on `data/`. Its ballot page asked "Which character would this audience rather play?" for the Hollow Knight, Spirited Away, Sigur Rós, Nujabes and Paterson audience. It showed the pose and walk captures of both arms, with no script.
+
+**Automated.** Four tests in `tests/votes.test.mjs`:
+- **Sealing.** An altered token, one sealed under another key and an expired one open nothing. The token holds nothing readable.
+- **Counting.**
+  - a ballot counts once, also after a restart;
+  - an address votes once a day on a pair and 30 times an hour, and draws at most 240 ballots an hour;
+  - the least-voted pair comes first;
+  - the record keeps no address.
+- **Arithmetic.** The address comes from `X-Forwarded-For` only when trusted, and the Wilson interval matches its formula.
+- **The pages on a Studio.**
+  - a blind page that names no capture file;
+  - two pictures by sealed token that differ;
+  - a vote from another origin refused;
+  - the page after the vote naming the side that was made with Qloo;
+  - a second cast refused, and the results counted.
+
+The suite is 477/477 with Chrome.
+
+Limits:
+- No vote has been cast by anyone yet.
+- Both designs are public in the gallery, so a voter who looks them up first is not blind.
+- The results page says so.
+
 ## Public site and gallery — October 14, 2026
 
 [`scripts/build-gallery.mjs`](../scripts/build-gallery.mjs) built `data/gallery/` from the ten entries of [`scripts/gallery.config.json`](../scripts/gallery.config.json):
@@ -17,7 +45,7 @@ Codex's first Lanterna try, superseded by its second, was left out. The gallery 
 - **The first build was refused.** The Kiro run's copy carried its 0.4 records (`culture-dna.json`, `culture-reading.json`, `culture-taste.json`), which hold Qloo ids and tag URNs. The scan found six of them, so `gallery.json` was not written. Those files are now left out of every copy.
 - **The second build was clean,** and so was `--check` afterwards.
 
-**A Studio on that data** was started as `site-gallery-scratch` on port 8797. [`scripts/verify-site.mjs`](../scripts/verify-site.mjs) then checked 18 pages: the landing page, the gallery, ten session pages and six arm pages.
+**A Studio on that data** was started on port 8797. [`scripts/verify-site.mjs`](../scripts/verify-site.mjs) then checked 18 pages: the landing page, the gallery, ten session pages and six arm pages.
 - **Every page passed:** status 200, no script tag, a policy with `default-src 'none'` and no `script-src`, and no local path.
 - **Pictures.** It captured them at 1440 and 390 pixels with Chrome. It also captured the 13 playable designs from the preview origin: the games with their title cards (the Codex portraits among them), both Wax & Wane sites, both Ramble apps and Lanterna.
 
@@ -48,7 +76,7 @@ Codex's first Lanterna try, superseded by its second, was left out. The gallery 
 Limits:
 - Windows and Chrome only.
 - The site was not served through Caddy or on two real domains.
-- `/vote/` is not built yet, and `/try/` says the live try is not open yet.
+- `/try/` says the live try is not open yet.
 
 ## Taste Provenance reports — October 14, 2026
 

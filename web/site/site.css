@@ -102,6 +102,20 @@ main#main { max-width: 1180px; margin: 0 auto; padding: 0 40px 72px; }
 .site-files { display: flex; flex-wrap: wrap; gap: 10px 22px; }
 .site-back { margin-top: 40px; }
 
+.vote-form { margin-top: 28px; }
+.vote-sides { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.vote-side { margin: 0; display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
+.vote-side figcaption { font: 600 22px/1 var(--display); }
+.vote-side img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); }
+.vote-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; margin: 24px 0 0; }
+.vote-buttons .site-button { border: 0; cursor: pointer; font: 600 16px/1 var(--text); padding: 14px 28px; }
+.vote-buttons .site-button.quiet { border: 1px solid var(--violet-line); }
+.vote-note { margin-top: 18px; text-align: center; }
+.vote-table { margin-top: 28px; overflow-x: auto; }
+.vote-table table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; font-size: 14.5px; }
+.vote-table th, .vote-table td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.vote-table thead th { font: 600 11.5px/1.3 var(--text); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
 .site-foot { max-width: 1180px; margin: 0 auto; padding: 28px 40px 48px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); }
 .site-foot p { margin: 0 0 8px; }
 
@@ -116,7 +130,7 @@ main#main { max-width: 1180px; margin: 0 auto; padding: 0 40px 72px; }
   .site-hero h1 { font-size: 36px; }
   .site-hero.small h1, .site-entry-head h1 { font-size: 30px; }
   .site-lede { font-size: 17px; }
-  .site-pair, .site-steps, .site-grid.two, .site-frames { grid-template-columns: 1fr; --columns: 1; }
+  .site-pair, .site-steps, .site-grid.two, .site-frames, .vote-sides { grid-template-columns: 1fr; --columns: 1; }
   .site-foot { padding: 24px 16px 40px; }
 }
 @media (prefers-reduced-motion: reduce) { .site-card { transition: none; } .site-card:hover { transform: none; } }
