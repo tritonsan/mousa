@@ -106,6 +106,25 @@ export function kiroTimeline(calls) {
   return summarize([lane]);
 }
 
+/**
+ * A live try's sessions, one lane each, from the calls its run kept: the tool by name, when, and how it ended (a
+ * Moûsa refusal with its code). The run never kept a title, an input or an output, so there is none to leave out.
+ */
+export function tryTimeline(sessions) {
+  const lanes = [];
+  for (const session of Array.isArray(sessions) ? sessions : []) {
+    const lane = { id: safe(session?.id) || `lane-${lanes.length + 1}`, label: safe(session?.label) || 'Kiro session', steps: [] };
+    for (const call of Array.isArray(session?.calls) ? session.calls : []) {
+      const tool = /^(?:mousa:[a-z_]{1,40}|read|write|other tool)$/u.test(call?.tool || '') ? call.tool : null;
+      if (!tool) continue;
+      const status = call.status === 'refused' ? 'refused' : ['failed', 'blocked'].includes(call.status) ? 'error' : 'ok';
+      push(lane, { at: Number.isFinite(call.at) ? call.at : null, tool, status, ...(status === 'refused' && safe(call.code) ? { code: call.code } : {}) });
+    }
+    lanes.push(lane);
+  }
+  return summarize(lanes);
+}
+
 /** Parse a JSON-lines stream, skipping lines that are not JSON. */
 export function jsonLines(text) {
   return String(text || '').split(/\r?\n/u).filter(Boolean).map(line => { try { return JSON.parse(line); } catch { return null; } }).filter(Boolean);

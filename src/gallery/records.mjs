@@ -8,8 +8,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { readRecords } from '../../plugin/server/design/report.mjs';
-import { claudeCodeTimeline, codexTimeline, kiroTimeline, jsonLines } from './timeline.mjs';
+import { readRecords, listText } from '../../plugin/server/design/report.mjs';
+import { claudeCodeTimeline, codexTimeline, kiroTimeline, tryTimeline, jsonLines } from './timeline.mjs';
 
 const run = promisify(execFile);
 const ARMS = Object.freeze(['compare/with-qloo', 'compare/without-qloo']);
@@ -100,7 +100,60 @@ export async function readKiroRun({ record, project, repo }) {
     startedAt: saved.startedAt || null, minutes: Number.isFinite(saved.durationMs) ? Math.round(saved.durationMs / 6000) / 10 : null, exitCode: saved.exitCode ?? null,
     model: saved.model || null, hostVersion: /chat-cli-(\d+\.\d+\.\d+)/u.exec(saved.kiro || '')?.[1] || null, surfaceVersion: '0.4.0', turns: null,
     // The earlier surface kept no count of its Qloo requests.
-    brief: typeof saved.request === 'string' ? saved.request : '', briefFile: null, qlooRequests: null,
+    brief: typeof saved.request === 'string' ? saved.request : '', briefFile: null, qlooRequests: null, legacy: true,
     commit: await commitAt(repo, saved.startedAt), timeline: kiroTimeline(saved.calls),
+  };
+}
+
+const RUN_ID = /^[a-f0-9]{32}$/u;
+const finishedPair = run => Boolean(run?.consent?.publish && ['done', 'partial'].includes(run.pair?.status) && run.pair.report);
+const stepMinutes = step => { const ms = Date.parse(step?.endedAt) - Date.parse(step?.startedAt); return Number.isFinite(ms) && ms > 0 ? ms : 0; };
+
+/**
+ * The live tries of a server's DATA_DIR/try that their jurors agreed to publish, with a finished pair each, as entries
+ * for the gallery's config: try-<first eight of the id>, titled by the starter and the audience.
+ */
+export async function publishedTries(dir, { starters = {} } = {}) {
+  const entries = [];
+  for (const name of (await fs.readdir(dir).catch(() => [])).filter(item => RUN_ID.test(item)).sort()) {
+    const run = await readJson(path.join(dir, name, 'meta.json'));
+    if (run?.id !== name || !finishedPair(run)) continue;
+    const source = starters[run.input?.starter]?.source;
+    entries.push({ id: `try-${name.slice(0, 8)}`, try: name, title: `${run.title || 'A live try'}, for people who love ${listText(run.input?.references || [])}`,
+      summary: 'A juror ran this pair in the live try on the hosted server and agreed to publish it.', ...(source ? { before: { repo: source } } : {}) });
+  }
+  return entries;
+}
+
+/**
+ * One live try: its run record (meta.json) beside its project, whose arms the report reads as a plugin comparison's.
+ * Only a try whose juror agreed to publish it, with a finished pair, is read. Its sessions' calls make the timeline,
+ * one lane each.
+ */
+export async function readTryRun(folder, { repo }) {
+  const root = await fs.realpath(folder);
+  const run = await readJson(path.join(root, 'meta.json'));
+  if (!run?.id || !RUN_ID.test(run.id)) throw new Error(`${path.basename(root)} holds no try record.`);
+  if (!finishedPair(run)) throw new Error(`try ${run.id.slice(0, 8)}: only a finished pair its juror agreed to publish is read.`);
+  const project = path.join(root, 'project');
+  const arms = [];
+  for (const arm of ARMS) {
+    const records = await readRecords(path.join(project, ...arm.split('/'))).catch(() => null);
+    if (records?.input) arms.push({ folder: arm, records });
+  }
+  if (arms.length !== 2) throw new Error(`try ${run.id.slice(0, 8)}: both arms need their design records.`);
+  const startedAt = run.quick?.startedAt || run.createdAt || null;
+  const commit = run.commit || await commitAt(repo, startedAt);
+  const sessions = [{ id: 'predict', label: 'The prediction session', calls: run.quick?.session?.calls },
+    { id: 'with-qloo', label: 'The arm with Qloo', calls: run.pair.arms?.['with-qloo']?.session?.calls }, { id: 'without-qloo', label: 'The arm without Qloo', calls: run.pair.arms?.['without-qloo']?.session?.calls }];
+  return {
+    name: `try-${run.id.slice(0, 8)}`, host: 'kiro', kind: 'comparison', origin: 'try', root, project, arms,
+    startedAt, minutes: Math.round((stepMinutes(run.quick) + stepMinutes(run.pair)) / 6000) / 10, exitCode: null,
+    model: run.model || null, hostVersion: run.hostVersion || null, surfaceVersion: run.surfaceVersion || null, turns: null,
+    brief: run.brief || '', briefFile: null, qlooRequests: run.pair.qlooRequests ?? run.quick?.measured?.qlooRequests ?? null, commit,
+    timeline: tryTimeline(sessions),
+    reproduce: { commit, command: 'node src/server.mjs  # with TRY_ACCESS_CODE set; then open /try/ and give the same starter and audience',
+      needs: ['Your own Qloo API key as QLOO_API_KEY in this repository\'s .env.', `Kiro CLI${run.hostVersion ? ` ${run.hostVersion}` : ''}, signed in or with KIRO_API_KEY.`, 'A Chromium-based browser for the review captures (MOUSA_BROWSER names one).'],
+      note: 'A try runs the same prompts each time; the model reaches its own prediction and design, and the measurement and the comparison are made the same way.' },
   };
 }

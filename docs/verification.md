@@ -2,6 +2,41 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Live Kiro try — October 14, 2026
+
+`/try/` runs a juror's request in Kiro on the server, in two steps, behind `TRY_ACCESS_CODE`.
+- **Step one.** The server plans the taste questions. A Kiro session with only Moûsa's tools and no Qloo key freezes the prediction. The server measures and writes the measurement report.
+- **Step two.** Two arms get the same frozen prediction. One is locked to the measurement, read again from step one's cache, and the other to the prediction alone. A session designs in each, protected files are put back, and the comparison report is written.
+
+**How the runs are kept.**
+- A run lives in `DATA_DIR/try/<id>/` in the plugin comparisons' layout, so the reports and the gallery read it unchanged.
+- Kiro's homes and the session streams stay in the run's private folders. The run's own record keeps each call by tool and outcome only.
+- `scripts/run-try.mjs` runs the same steps without the site, and `build-gallery` adds a finished pair its juror agreed to publish.
+
+**Automated, on a fake Kiro** that reads each agent file the try writes and serves Moûsa from that file's own environment, with the Qloo fixture (`tests/try-flow.test.mjs`, `tests/try.test.mjs`, 12 tests):
+- **Step one end to end.** The prediction session has only Moûsa's tools and no Qloo key, in its server or in Kiro's environment. Every Qloo request is counted within the budget, and the report is a measurement's. The run keeps no tool title, key or code.
+- **Step two end to end.** Both arms hold the one frozen prediction. The arm with Qloo made no new request and is the only one with the key. A tampered protected file is put back and an added one removed. The comparison has the same prediction in both arms.
+- **A meddling prediction session.** One that planned again had the juror's plan put back. One that set the baseline had it set aside. One that froze nothing failed with that reason.
+- **The run's limits.**
+  - The hourly limit per address, a paused try and a closed try (no code) are refused.
+  - Cancelling works both while a step waits and while it works.
+  - After a restart, an interrupted step is marked as such.
+- **The guard's patterns** for the three starters.
+- **The pages and files.**
+  - No script on any page, and the access cookie (signed, HttpOnly, SameSite=Lax, twelve hours, ended by a new code, ten wrong codes an hour).
+  - Posts from another site are refused.
+  - Report files come only from the run's report folders. The designs play only from the preview origin by the run's token, never a hidden file.
+  - The API never gives the token.
+- **Publishing.** Only a finished pair is published, only with consent. It joins the gallery as a Kiro comparison with its three sessions as lanes. The scan blocks a path to the tries' folder.
+- Six parallel runs of both files passed, after the run's saves were made sequential: two arms saving at once had failed a rename on Windows once.
+- The full suite is 490/490 with Chrome.
+- The pages were captured at 1440 and 390 pixels through a cookie proxy and read: the request page, step one's measurement, a pair at work (arms first, step one folded) and a finished pair.
+
+**Not shown yet** (L1–L3, each needs approval):
+- that real kiro-cli 2.24 loads the try's agent file: the V2 tool settings with their V3 permissions, the absolute `file://` skill resources and the MCP server's environment;
+- the time and credits of a real prediction session and of a real pair;
+- a container's Kiro and browser (phase E).
+
 ## Kiro power package — October 14, 2026
 
 `plugins/kiro` is now a Kiro power in the Agent Plugins 1.0.0 format, where it was a CLI agent template. It holds:

@@ -42,6 +42,7 @@ export function createTryAccess({ code, secret = '', now = Date.now, limits = AC
       if (recent.length >= limits.attempts) throw new AccessError(429, 'Too many wrong codes from this address. Try again in an hour.');
       if (!code || !crypto.timingSafeEqual(digest(given ?? ''), digest(code))) {
         failures.set(address, [...recent, at]);
+        if (failures.size > 2000) for (const [key, list] of failures) if (at - list.at(-1) >= limits.windowMs) failures.delete(key);
         throw new AccessError(403, 'That is not the access code.');
       }
       failures.delete(address);

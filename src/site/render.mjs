@@ -32,7 +32,7 @@ const qlooRecord = record => record?.kind === 'comparison' ? (record.records || 
 const swatches = colors => `<span class="site-swatches">${(colors || []).map(hex).filter(Boolean).slice(0, 7).map(color => `<i style="background:${color}"></i>`).join('')}</span>`;
 const chip = (item, small = '') => `<span class="mr-chip" data-mark="${escape(item.mark)}">${escape(item.name)}${small ? ` <small>${escape(small)}</small>` : ''}</span>`;
 const card = (entry, base = '/gallery/') => `<a class="site-card" href="${base}${escape(entry.id)}/"><span class="site-card-image">${entry.card ? `<img src="/gallery/${escape(entry.id)}/${escape(entry.card)}" alt="" width="1200" height="630">` : ''}</span>
-<span class="site-card-text"><span class="site-tags"><span>${escape(HOSTS[entry.host] || entry.host)}</span><span>${escape(MEDIA[entry.medium] || entry.medium || '')}</span>${entry.kind === 'comparison' ? '<span>Comparison</span>' : ''}${entry.surface ? '<span>0.4 surface</span>' : ''}</span>
+<span class="site-card-text"><span class="site-tags"><span>${escape(HOSTS[entry.host] || entry.host)}</span><span>${escape(MEDIA[entry.medium] || entry.medium || '')}</span>${entry.kind === 'comparison' ? '<span>Comparison</span>' : ''}${entry.origin === 'try' ? '<span>Live try</span>' : ''}${entry.surface ? '<span>0.4 surface</span>' : ''}</span>
 <b>${escape(entry.title)}</b><span>${escape(entry.headline?.sentence || '')}</span></span></a>`;
 
 /** The steps of the featured session, in its own data: what the model guessed, what Qloo found and what the design rests on. */
@@ -150,7 +150,7 @@ const downloads = (entry, base) => `<section class="mr-section" id="files"><div 
 export function entryPage({ entry, previewBase, families = [], repository = '' }) {
   const base = `/gallery/${entry.id}/`;
   const body = `<div class="site-page"><nav class="site-crumbs" aria-label="Breadcrumb"><a href="/gallery/">Evidence</a> <span aria-hidden="true">/</span> <span>${escape(entry.title)}</span></nav>
-<header class="site-entry-head"><p class="mr-kicker">Recorded ${escape(day(entry.startedAt))} · ${escape(HOSTS[entry.host] || entry.host)}</p><h1>${escape(entry.title)}</h1>${entry.summary ? `<p class="site-lede">${escape(entry.summary)}</p>` : ''}${factsBlock(entry)}</header>
+<header class="site-entry-head"><p class="mr-kicker">${entry.origin === 'try' ? 'A juror\'s live try' : 'Recorded'} ${escape(day(entry.startedAt))} · ${escape(HOSTS[entry.host] || entry.host)}</p><h1>${escape(entry.title)}</h1>${entry.summary ? `<p class="site-lede">${escape(entry.summary)}</p>` : ''}${factsBlock(entry)}</header>
 ${playBlock(entry, previewBase)}
 <div class="site-report">${renderBody(entry.record, { base: `${base}report/`, fonts: families })}</div>
 ${timelineBlock(entry.timeline)}${reproduceBlock(entry)}${downloads(entry, base)}</div>`;

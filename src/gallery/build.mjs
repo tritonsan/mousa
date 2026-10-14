@@ -12,7 +12,7 @@ import { writeSessionReport, writeComparisonReport, captureReport, scrubText } f
 import { scalePng } from '../../plugin/server/production/image-files.mjs';
 import { pairDistance } from '../../plugin/server/design/pair.mjs';
 import { MOUSA_SERVER_VERSION } from '../../plugin/server/mcp/mousa.mjs';
-import { readPluginRun, readKiroRun } from './records.mjs';
+import { readPluginRun, readKiroRun, readTryRun } from './records.mjs';
 import { copyPublic, rebaseRootUrls, leakPatterns, leakScan, PUBLIC_TYPES, PUBLIC_LIMITS, PublishError } from './sanitize.mjs';
 
 const exec = promisify(execFile);
@@ -22,14 +22,14 @@ const ARMS = Object.freeze(['compare/with-qloo', 'compare/without-qloo']);
 const CARD_SMALL = 640;
 const RUNNERS = Object.freeze({ 'claude-code': 'scripts/run-claude-code-live.mjs', codex: 'scripts/run-codex-live.mjs', kiro: 'scripts/run-mobile-example-live.mjs' });
 
-/** The config's entries, checked: unique ids, a run or a Kiro record each, and a featured entry and vote pool among them. */
+/** The config's entries, checked: unique ids, one source each (a run, a Kiro record or a try), and a featured entry and vote pool among them. */
 export function checkConfig(config) {
   if (!config || !Array.isArray(config.entries) || !config.entries.length) throw new Error('The gallery config lists no entries.');
   const ids = new Set();
   for (const entry of config.entries) {
     if (!ENTRY_ID.test(entry.id || '') || ids.has(entry.id)) throw new Error(`Entry ${entry.id || '(no id)'} needs a unique id of lowercase letters, digits and hyphens.`);
     ids.add(entry.id);
-    if (!entry.run === !entry.kiro) throw new Error(`Entry ${entry.id} names either a run folder or a Kiro record.`);
+    if (['run', 'kiro', 'try'].filter(key => entry[key]).length !== 1) throw new Error(`Entry ${entry.id} names one source: a run folder, a Kiro record or a live try.`);
     if (typeof entry.title !== 'string' || !entry.title.trim()) throw new Error(`Entry ${entry.id} needs a title.`);
   }
   for (const id of [config.featured, ...(config.vote || [])].filter(Boolean)) if (!ids.has(id)) throw new Error(`${id} is named but is not an entry.`);
@@ -56,6 +56,7 @@ async function starterAt(repo, commit, source, to, budget) {
 
 /** The command that runs the session again, with what it needs; the result will differ, since models vary. */
 function reproduceOf(run, entry) {
+  if (run.reproduce) return run.reproduce;
   const flags = ['--run', ...(entry.from ? [`--from ${entry.from}`] : []), ...(entry.install ? ['--install'] : []), ...(run.briefFile ? [`--brief-file ${run.briefFile}`] : []),
     ...(entry.images ? ['--images'] : [])];
   const kiro = run.host === 'kiro';
@@ -128,7 +129,7 @@ export async function buildEntry({ entry, run, dir, repo, runsDir, library, brow
   const saved = {
     schemaVersion: GALLERY_SCHEMA_VERSION, id: entry.id, kind: run.kind, title: entry.title.trim(), ...(entry.summary ? { summary: entry.summary.trim() } : {}),
     host: run.host, hostVersion: entry.hostVersion || run.hostVersion || null, model: entry.model || run.model || null, surfaceVersion: run.surfaceVersion,
-    ...(run.host === 'kiro' ? { surface: 'earlier tool surface (0.4)' } : {}), medium: record.medium || null, startedAt: run.startedAt, minutes: run.minutes, turns: run.turns,
+    ...(run.legacy ? { surface: 'earlier tool surface (0.4)' } : {}), ...(run.origin === 'try' ? { origin: 'try' } : {}), medium: record.medium || null, startedAt: run.startedAt, minutes: run.minutes, turns: run.turns,
     qlooRequests: run.qlooRequests, pictures: entry.images ? 'Codex image generation' : 'none: imagery drawn in SVG or CSS',
     brief: scrubText(run.brief, { user }), headline: record.headline, ...(record.kind === 'comparison' ? { distance: record.distance, samePrediction: record.samePrediction, arms } : {}),
     play, ...(before ? { before } : {}),
@@ -144,33 +145,35 @@ export async function buildEntry({ entry, run, dir, repo, runsDir, library, brow
  * Build the gallery into `out` from `config`: every entry, then the scan. Returns {entries, findings, written}; the
  * gallery.json index is written only when nothing was found.
  */
-export async function buildGallery({ config, runsDir, repo, out, library = null, browser = null, env = process.env, now = Date.now, user = null, secrets = [], shoot, log = () => {} }) {
+export async function buildGallery({ config, runsDir, triesDir = null, repo, out, library = null, browser = null, env = process.env, now = Date.now, user = null, secrets = [], shoot, log = () => {} }) {
   checkConfig(config);
   await fs.mkdir(out, { recursive: true });
   const entries = [];
   for (const entry of config.entries) {
-    const run = entry.kiro
-      ? await readKiroRun({ record: path.resolve(repo, entry.kiro.record), project: path.resolve(repo, entry.kiro.project), repo })
-      : await readPluginRun(path.resolve(runsDir, entry.run), { repo });
+    if (entry.try && !triesDir) throw new Error(`${entry.id} is a live try, and no folder of tries was given.`);
+    const run = entry.try ? await readTryRun(path.join(triesDir, entry.try), { repo })
+      : entry.kiro ? await readKiroRun({ record: path.resolve(repo, entry.kiro.record), project: path.resolve(repo, entry.kiro.project), repo })
+        : await readPluginRun(path.resolve(runsDir, entry.run), { repo });
     const built = await buildEntry({ entry, run, dir: path.join(out, entry.id), repo, runsDir, library, browser, env, now, user, shoot });
     log(`${entry.id}: ${built.saved.headline?.sentence || built.saved.headline?.value}${built.pictures ? '' : ' (no pictures)'}`);
     entries.push(built.saved);
   }
-  const patterns = leakPatterns({ user, runsDir, secrets });
+  const patterns = leakPatterns({ user, runsDir, folders: triesDir ? [triesDir] : [], secrets });
   const findings = [];
   for (const entry of entries) for (const finding of await leakScan(path.join(out, entry.id), patterns)) findings.push({ entry: entry.id, ...finding });
   const index = { schemaVersion: GALLERY_SCHEMA_VERSION, builtAt: new Date(now()).toISOString(), featured: config.featured || entries[0]?.id || null, vote: config.vote || [],
     entries: entries.map(entry => ({ id: entry.id, kind: entry.kind, title: entry.title, host: entry.host, medium: entry.medium, startedAt: entry.startedAt,
-      headline: entry.headline, ...(entry.distance ? { distance: entry.distance.overall } : {}), card: entry.report.cardSmall || entry.report.card, ...(entry.surface ? { surface: entry.surface } : {}) })) };
+      headline: entry.headline, ...(entry.distance ? { distance: entry.distance.overall } : {}), card: entry.report.cardSmall || entry.report.card,
+      ...(entry.surface ? { surface: entry.surface } : {}), ...(entry.origin ? { origin: entry.origin } : {}) })) };
   if (!findings.length) await fs.writeFile(path.join(out, 'gallery.json'), `${JSON.stringify(index, null, 2)}\n`);
   else await fs.rm(path.join(out, 'gallery.json'), { force: true });
   return { entries, findings, written: !findings.length };
 }
 
 /** Scan a built gallery again, as a deployment does before it serves it. */
-export async function checkGallery(out, { user = null, runsDir = null, secrets = [] } = {}) {
+export async function checkGallery(out, { user = null, runsDir = null, folders = [], secrets = [] } = {}) {
   const findings = [];
-  const patterns = leakPatterns({ user, runsDir, secrets });
+  const patterns = leakPatterns({ user, runsDir, folders, secrets });
   for (const entry of await fs.readdir(out, { withFileTypes: true })) {
     if (entry.isDirectory()) for (const finding of await leakScan(path.join(out, entry.name), patterns)) findings.push({ entry: entry.name, ...finding });
   }

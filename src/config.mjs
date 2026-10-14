@@ -64,6 +64,8 @@ export function getConfig(env = process.env) {
     tryAccessCode: env.TRY_ACCESS_CODE || '', tryArmsParallel: (env.TRY_ARMS_PARALLEL || 'on') === 'on', tryQlooBudget: number('TRY_QLOO_BUDGET', 24, 1, 60),
     // The browser the try's sessions capture their designs with, when the machine's default one cannot run headless.
     captureBrowser: env.MOUSA_BROWSER || '', captureNoSandbox: env.MOUSA_CAPTURE_NO_SANDBOX === '1',
+    // The commit a deployment was built from, which an image without git cannot look up; each try records it.
+    commit: /^[0-9a-f]{7,40}$/u.test(env.MOUSA_COMMIT || '') ? env.MOUSA_COMMIT.slice(0, 12) : '',
     // Stored jobs, including finished ones; a local study can raise it without archiving earlier work.
     maxJobs: number('MAX_JOBS', 30, 1, 200), maxFiles: 30, maxFileBytes: 160000,
     maxProjectBytes: 1500000, maxBriefLength: 3500,

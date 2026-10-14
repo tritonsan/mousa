@@ -10,6 +10,9 @@ import fs from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { getConfig } from '../src/config.mjs';
 import { createTryManager, TRY_ARMS, guardArm, matchesPattern, designFile } from '../src/try/manager.mjs';
+import { publishedTries } from '../src/gallery/records.mjs';
+import { buildGallery } from '../src/gallery/build.mjs';
+import { loadFontLibrary } from '../plugin/server/production/fonts.mjs';
 import { qlooFixture, prediction } from './helpers/mousa-fixtures.mjs';
 import { fakeKiro, predictScript, qlooArmScript, baselineArmScript } from './helpers/fake-kiro.mjs';
 
@@ -235,6 +238,40 @@ test('the try takes a run only when it is open, within each address\'s hourly li
   assert.match(after.pair.problem, /restarted/u);
   assert.equal(after.quick.status, 'done');
   await closed.close(); await restarted.close();
+});
+
+test('a finished pair its juror agreed to publish joins the gallery as a Kiro comparison, with its three sessions, and nothing of the server', async t => {
+  const { manager, data } = await setup(t);
+  const runs = await fs.mkdtemp(path.join(os.tmpdir(), 'mousa-try-gallery-runs-'));
+  t.after(() => fs.rm(runs, { recursive: true, force: true }));
+  const shared = await manager.create({ starter: 'fixture-shop', references: ['Paterson', 'Nujabes'] }, { address: '192.0.2.1' });
+  const kept = await manager.create({ starter: 'fixture-shop', references: ['Paterson'] }, { address: '192.0.2.2' });
+  for (const id of [shared.id, kept.id]) await settled(manager, id, 'quick');
+  await assert.rejects(manager.publish(shared.id, true), error => error.status === 409, 'a measurement alone is not published');
+  for (const id of [shared.id, kept.id]) { await manager.design(id, { address: '192.0.2.3' }); await settled(manager, id, 'pair'); }
+  await manager.publish(shared.id, true);
+
+  const tries = path.join(data, 'try');
+  const entries = await publishedTries(tries);
+  assert.deepEqual(entries.map(entry => [entry.id, entry.try]), [[`try-${shared.id.slice(0, 8)}`, shared.id]], 'only the try its juror agreed to publish');
+  assert.equal(entries[0].title, 'A test-only shop, for people who love Paterson and Nujabes');
+  const out = path.join(data, 'gallery');
+  const built = await buildGallery({ config: { entries, featured: entries[0].id, vote: [entries[0].id] }, runsDir: runs, triesDir: tries, repo, out, library: await loadFontLibrary(repo) });
+  assert.equal(built.written, true, JSON.stringify(built.findings));
+  const entry = await readJson(path.join(out, entries[0].id, 'entry.json'));
+  assert.deepEqual([entry.kind, entry.host, entry.origin, entry.surfaceVersion, entry.model], ['comparison', 'kiro', 'try', '0.6.0', 'fixed-test-model']);
+  assert.equal(entry.surface, undefined, 'a try runs the current surface');
+  assert.deepEqual(entry.timeline.lanes.map(lane => lane.label), ['The prediction session', 'The arm with Qloo', 'The arm without Qloo']);
+  assert.ok(entry.timeline.totals.mousa > 0 && entry.timeline.totals.writes > 0);
+  assert.match(entry.reproduce.command, /TRY_ACCESS_CODE/u);
+  assert.deepEqual(entry.play.map(item => item.path), ['out/with-qloo/index.html', 'out/without-qloo/index.html']);
+  assert.ok(Number.isInteger(entry.qlooRequests) && entry.qlooRequests > 0);
+  const index = await readJson(path.join(out, 'gallery.json'));
+  assert.equal(index.entries[0].origin, 'try');
+  // The scan knows the folder the tries were kept in: a path to it blocks the gallery.
+  await fs.writeFile(path.join(out, entries[0].id, 'report', 'leak.html'), `<p>${path.join(tries, shared.id)}</p>`);
+  const { checkGallery } = await import('../src/gallery/build.mjs');
+  assert.ok((await checkGallery(out, { folders: [tries] })).some(finding => finding.pattern === 'run folder'));
 });
 
 test('the guard knows what each starter lets a design change', async () => {

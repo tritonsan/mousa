@@ -9,7 +9,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { createMousaServer } from '../../plugin/server/mcp/mousa.mjs';
+import { createMousaServer, MOUSA_SERVER_VERSION } from '../../plugin/server/mcp/mousa.mjs';
 import { collectProjectFiles, styleFootprint } from '../../plugin/server/design/systems.mjs';
 import { readQlooUsage } from '../../plugin/server/taste/cache.mjs';
 import { STARTERS, checkTryInput, tryBrief, tryPlan } from './starters.mjs';
@@ -114,10 +114,11 @@ const sessionSummary = session => ({ durationMs: session.durationMs, exitCode: s
   calls: session.calls.map(call => ({ at: call.at, tool: call.tool, status: call.status, ...(call.code ? { code: call.code } : {}) })) });
 
 /**
- * The try's manager. `kiro` is the Studio's Kiro inspection; `starters`, `limits`, `runSession`, `spawnImpl`,
- * `fetchImpl` and `now` replace the real ones in tests.
+ * The try's manager. `kiro` is the Studio's Kiro inspection (or a function that gives it); `requireAccess: false`
+ * lets a run start without TRY_ACCESS_CODE, as scripts/run-try.mjs does on the operator's own machine. `starters`,
+ * `limits`, `runSession`, `spawnImpl`, `fetchImpl` and `now` replace the real ones in tests.
  */
-export function createTryManager({ config, kiro = {}, starters = STARTERS, limits = TRY_LIMITS, runSession = runTrySession, spawnImpl, fetchImpl, now = Date.now, log = console }) {
+export function createTryManager({ config, kiro = {}, requireAccess = true, starters = STARTERS, limits = TRY_LIMITS, runSession = runTrySession, spawnImpl, fetchImpl, now = Date.now, log = console }) {
   const base = path.join(config.dataDir, TRY_DIR);
   const runs = new Map(), controllers = new Map(), live = new Map(), tasks = new Set(), recent = new Map();
   const lanes = { quick: { slots: limits.quickSlots, running: new Set(), waiting: [] }, pair: { slots: limits.pairSlots, running: new Set(), waiting: [] } };
@@ -134,7 +135,7 @@ export function createTryManager({ config, kiro = {}, starters = STARTERS, limit
   /** Why the try cannot take a run here, if it cannot: what the server lacks, never a secret. */
   function readiness() {
     const missing = [];
-    if (!config.tryAccessCode) missing.push('TRY_ACCESS_CODE is not set.');
+    if (requireAccess && !config.tryAccessCode) missing.push('TRY_ACCESS_CODE is not set.');
     if (!status().available) missing.push('Kiro CLI is not available.');
     else if (!status().authenticated) missing.push('Kiro is not signed in and has no KIRO_API_KEY.');
     if (!model()) missing.push('No Kiro model is set.');
@@ -317,6 +318,8 @@ export function createTryManager({ config, kiro = {}, starters = STARTERS, limit
     if (times.length >= limits.perHour) throw new TryError(429, `This address started ${limits.perHour} tries in the last hour. The next one can start in ${Math.max(1, Math.ceil((HOUR - (at - times[0])) / 60000))} minutes.`);
     times.push(at);
     recent.set(address, times);
+    // Addresses whose last run is over an hour old are forgotten, so a long-running server keeps a small table.
+    if (recent.size > 2000) for (const [key, list] of recent) if (at - list.at(-1) >= HOUR) recent.delete(key);
   }
   async function admissible(address) {
     if (closed) throw new TryError(503, 'The server is stopping.');
@@ -366,6 +369,7 @@ export function createTryManager({ config, kiro = {}, starters = STARTERS, limit
       const starter = starters[input.starter];
       const run = { schemaVersion: TRY_SCHEMA_VERSION, id, createdAt: stamp(), updatedAt: stamp(), input, title: starter.title, medium: starter.medium, brief: tryBrief(input, starters), promptsVersion: TRY_PROMPTS_VERSION,
         host: 'kiro', hostVersion: /(\d+\.\d+\.\d+)/u.exec(status().version || '')?.[1] || null, model: model(), effort: config.effort || 'medium', qlooBudget: budget,
+        surfaceVersion: MOUSA_SERVER_VERSION, ...(config.commit ? { commit: config.commit } : {}),
         previewToken: crypto.randomBytes(24).toString('hex'), quick: { status: 'queued', queuedAt: stamp() }, pair: null, consent: null };
       await fs.mkdir(path.join(folderOf(id), 'project'), { recursive: true });
       runs.set(id, run);

@@ -4,8 +4,10 @@
 // gallery is then scanned for local paths, the user's name, this deployment's secrets, tokens and Qloo ids; with any
 // finding, gallery.json is not written and the script fails. --check scans a built gallery again without building.
 // It makes no request. Pictures need a browser that can run here (MOUSA_BROWSER names one); restart the Studio after.
+// The live tries in DATA_DIR/try (or --tries) whose jurors agreed to publish a finished pair join after the listed
+// entries, and their pairs join the blind vote; --no-tries leaves them out.
 //
-//   node scripts/build-gallery.mjs [--runs D:/mousa-live] [--out <folder>] [--config <file>] [--no-picture]
+//   node scripts/build-gallery.mjs [--runs D:/mousa-live] [--tries <folder> | --no-tries] [--out <folder>] [--config <file>] [--no-picture]
 //   node scripts/build-gallery.mjs --check [--out <folder>]
 
 import fs from 'node:fs/promises';
@@ -14,7 +16,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadDotEnv, getConfig } from '../src/config.mjs';
 import { buildGallery, checkGallery } from '../src/gallery/build.mjs';
+import { publishedTries } from '../src/gallery/records.mjs';
 import { GALLERY_DIR } from '../src/gallery.mjs';
+import { TRY_DIR } from '../src/try/manager.mjs';
+import { STARTERS } from '../src/try/starters.mjs';
 import { loadFontLibrary } from '../plugin/server/production/fonts.mjs';
 import { inspectBrowser, verifyBrowser } from '../plugin/server/production/capture.mjs';
 
@@ -22,10 +27,12 @@ const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SECRETS = ['QLOO_API_KEY', 'KIRO_API_KEY', 'DEMO_ACCESS_TOKEN', 'SITE_SECRET', 'TRY_ACCESS_CODE', 'ANTHROPIC_API_KEY', 'OPENAI_API_KEY'];
 
 function parseArgs(argv) {
-  const args = { runs: 'D:/mousa-live', out: null, config: path.join(repo, 'scripts', 'gallery.config.json'), picture: true, check: false };
+  const args = { runs: 'D:/mousa-live', tries: null, out: null, config: path.join(repo, 'scripts', 'gallery.config.json'), picture: true, check: false };
   for (let index = 0; index < argv.length; index++) {
     const value = argv[index];
     if (value === '--runs') args.runs = argv[++index];
+    else if (value === '--tries') args.tries = argv[++index];
+    else if (value === '--no-tries') args.tries = false;
     else if (value === '--out') args.out = argv[++index];
     else if (value === '--config') args.config = argv[++index];
     else if (value === '--no-picture') args.picture = false;
@@ -39,19 +46,26 @@ async function main() {
   loadDotEnv();
   const args = parseArgs(process.argv.slice(2));
   const out = path.resolve(args.out || path.join(getConfig().dataDir, GALLERY_DIR));
+  const triesDir = args.tries === false ? null : path.resolve(args.tries || path.join(getConfig().dataDir, TRY_DIR));
   const user = (() => { try { return os.userInfo().username; } catch { return null; } })();
   const secrets = SECRETS.map(name => process.env[name]).filter(Boolean);
   if (args.check) {
-    const findings = await checkGallery(out, { user, runsDir: path.resolve(args.runs), secrets });
+    const findings = await checkGallery(out, { user, runsDir: path.resolve(args.runs), folders: triesDir ? [triesDir] : [], secrets });
     for (const finding of findings) console.error(`${finding.entry}/${finding.file}: ${finding.pattern}: …${finding.sample}…`);
     console.log(findings.length ? `${findings.length} finding${findings.length === 1 ? '' : 's'} in ${out}.` : `Clean: ${out}`);
     if (findings.length) process.exitCode = 1;
     return;
   }
   const config = JSON.parse(await fs.readFile(args.config, 'utf8'));
+  const tries = triesDir ? await publishedTries(triesDir, { starters: STARTERS }) : [];
+  if (tries.length) {
+    config.entries = [...config.entries, ...tries];
+    config.vote = [...new Set([...(config.vote || []), ...tries.map(entry => entry.id)])];
+    console.log(`${tries.length} published tr${tries.length === 1 ? 'y joins' : 'ies join'} the gallery and the vote.`);
+  }
   const browser = args.picture ? await verifyBrowser(await inspectBrowser()) : null;
   if (browser && !browser.available) console.warn(`No pictures: ${browser.reason}`);
-  const result = await buildGallery({ config, runsDir: path.resolve(args.runs), repo, out, library: await loadFontLibrary(repo), browser, user, secrets, log: line => console.log(line) });
+  const result = await buildGallery({ config, runsDir: path.resolve(args.runs), triesDir, repo, out, library: await loadFontLibrary(repo), browser, user, secrets, log: line => console.log(line) });
   for (const finding of result.findings) console.error(`${finding.entry}/${finding.file}: ${finding.pattern}: …${finding.sample}…`);
   if (!result.written) { console.error(`${result.findings.length} finding${result.findings.length === 1 ? '' : 's'}: gallery.json was not written.`); process.exitCode = 1; return; }
   console.log(`${result.entries.length} entries in ${out}. Restart the Studio to show them.`);

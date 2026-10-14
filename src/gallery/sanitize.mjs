@@ -77,7 +77,7 @@ export async function rebaseRootUrls(dir, copied) {
  * the deployment's secrets, token-shaped strings and Qloo's ids and tag URNs. `user`, `runsDir` and `secrets` are this
  * machine's own; each pattern carries the name a finding reports.
  */
-export function leakPatterns({ user = null, runsDir = null, secrets = [] } = {}) {
+export function leakPatterns({ user = null, runsDir = null, folders = [], secrets = [] } = {}) {
   const patterns = [
     ['local path', /\b[A-Za-z]:[\\/](?:Users|mousa-live|Qloo Hackathon|Program Files|ProgramData|Windows)\b/iu],
     ['home path', /(?<![\w.-])\/(?:home|Users|root)\/[A-Za-z0-9._-]+/u],
@@ -87,7 +87,10 @@ export function leakPatterns({ user = null, runsDir = null, secrets = [] } = {})
     ['token', /\b(?:sk|pk|rk)-[A-Za-z0-9_-]{16,}|\bgh[pousr]_[A-Za-z0-9]{20,}|\bgithub_pat_[A-Za-z0-9_]{20,}|\bksk_[A-Za-z0-9_-]{8,}|\bAKIA[0-9A-Z]{16}\b|Bearer\s+[A-Za-z0-9._-]{16,}/u],
   ];
   if (typeof user === 'string' && user.length >= 3) patterns.push(['user name', new RegExp(`\\b${escapeRegExp(user)}\\b`, 'iu')]);
-  if (typeof runsDir === 'string' && runsDir.length >= 4) patterns.push(['run folder', new RegExp(escapeRegExp(runsDir.replaceAll('\\', '/')).replaceAll('/', '[\\\\/]'), 'iu')]);
+  // The folders runs were kept in, such as a server's DATA_DIR/try: the path of one never belongs in what is published.
+  for (const folder of [runsDir, ...folders]) {
+    if (typeof folder === 'string' && folder.length >= 4) patterns.push(['run folder', new RegExp(escapeRegExp(folder.replaceAll('\\', '/')).replaceAll('/', '[\\\\/]'), 'iu')]);
+  }
   for (const secret of secrets) if (typeof secret === 'string' && secret.length >= 8) patterns.push(['secret', new RegExp(escapeRegExp(secret), 'u')]);
   return patterns;
 }

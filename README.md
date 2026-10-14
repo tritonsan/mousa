@@ -257,6 +257,20 @@ node scripts/build-gallery.mjs --check
 - **Voters.** A vote is kept with a keyed hash of the voter's address for the day, never the address. Each address votes once a day on a pair and at most 30 times an hour. Behind a proxy, `TRUST_PROXY=1` reads `X-Forwarded-For`.
 - **Results.** `/vote/results/` and `/api/vote/results` give each pair's share for the Qloo design with a 95% Wilson interval, and the limits of a self-selected vote.
 
+**The live try** (`/try/`) runs Moûsa in Kiro on the server for the jury, behind `TRY_ACCESS_CODE`. A juror picks a starter (the Wax & Wane website from an empty folder, the Ramble app or the Long Dusk character) and names what the audience loves, and where and how old they are.
+- **Step one, about two minutes.** A Kiro session with only Moûsa's tools and no Qloo key freezes the model's own prediction. The server then measures the audience and the page sets the guess beside the measurement, in the report's own sections.
+- **Step two, fifteen to thirty minutes, queued.** The starter is copied into two arms with that one prediction. One arm is locked to the measurement, read again from step one's cache, and the other to the prediction alone. A Kiro session designs in each; only the arm with Qloo holds the key. Whatever the starter protects is put back afterwards, and the comparison report is written.
+- **Each session's agent** is written into its own `KIRO_HOME`: Moûsa's server for that arm's folder, hosted and without pictures, with the skills as resources, write permissions for the design's files only and no shell. A run keeps each call by tool and outcome only.
+- **The pages** run no script. A signed, HttpOnly cookie carries the access code, and wrong codes are limited per address. Forms are answered with redirects, and a working step's page refreshes itself. The designs play only from the preview origin, by the run's token.
+- **Limits.** One try sends at most `TRY_QLOO_BUDGET` Qloo requests (24). Two first steps and one pair run at a time, each address starts ten tries an hour, and a `PAUSED` file in `DATA_DIR/try` stops new ones without a restart.
+- **Publishing.** Nothing of a try is public until its juror agrees. `build-gallery` then adds the finished pair to the gallery and the vote.
+
+[`scripts/run-try.mjs`](scripts/run-try.mjs) runs the same two steps on the operator's machine, without the site, for recorded Kiro pairs:
+
+```sh
+node scripts/run-try.mjs --starter ramble --references "Paterson; Nujabes" --pair --publish
+```
+
 A built site's root-relative URLs to its own files, such as Vite's `/assets/…`, are made relative so it plays from its gallery folder. [`scripts/verify-site.mjs`](scripts/verify-site.mjs) checks a running site. It fetches every page for its status, its policy and the absence of a script, then captures each page at 1440 and 390 pixels and each design from the preview origin.
 
 ## Showcase
