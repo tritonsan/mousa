@@ -13,9 +13,11 @@ services:
     platform: linux/amd64
     init: true
     restart: unless-stopped
+    # Loopback by default, for Caddy on the same host. Behind CloudFront with no domain, DEMO_BIND=0.0.0.0 lets it reach
+    # the ports, and the instance's security group admits only CloudFront's origin-facing addresses.
     ports:
-      - "127.0.0.1:${DEMO_PORT:-8787}:8787"
-      - "127.0.0.1:${DEMO_PREVIEW_PORT:-8788}:8788"
+      - "${DEMO_BIND:-127.0.0.1}:${DEMO_PORT:-8787}:8787"
+      - "${DEMO_BIND:-127.0.0.1}:${DEMO_PREVIEW_PORT:-8788}:8788"
     environment:
       HOST: 0.0.0.0
       PORT: "8787"
@@ -39,10 +41,13 @@ services:
       # Empty keeps Chromium's own sandbox, which the seccomp profile below lets it start. Read docs/aws-deployment.md
       # before setting 1: the container is then the only boundary around the captured pages.
       MOUSA_CAPTURE_NO_SANDBOX: ${MOUSA_CAPTURE_NO_SANDBOX:-}
-      # The public site: the vote's ballots and the try's access are signed with SITE_SECRET. Caddy is the proxy in
-      # front, so the client's address comes from X-Forwarded-For.
+      # The public site: the vote's ballots and the try's access are signed with SITE_SECRET. One proxy stands in
+      # front (CloudFront or Caddy), so the client's address is the last one in X-Forwarded-For; 2 for both.
       SITE_SECRET: ${SITE_SECRET:?Set a long random SITE_SECRET for the vote and the try}
-      TRUST_PROXY: "1"
+      TRUST_PROXY: ${TRUST_PROXY:-1}
+      # The app's public address, such as https://d111111abcdef8.cloudfront.net, which forms may post from when the
+      # proxy sends its own Host.
+      PUBLIC_APP_BASE_URL: ${PUBLIC_APP_BASE_URL:-}
       SITE_REPOSITORY_URL: ${SITE_REPOSITORY_URL:-}
       # The jury's live try; empty keeps it closed. Two first steps and one pair (two Kiro sessions) run at a time.
       TRY_ACCESS_CODE: ${TRY_ACCESS_CODE:-}

@@ -87,9 +87,13 @@ test('a visitor draws a limited number of ballots an hour, the address comes fro
     clock.advance(60 * 60 * 1000 + 1);
     assert.ok(box.issue('203.0.113.9').token, 'the limit is per hour');
   } finally { await fs.rm(data, { recursive: true, force: true }); }
-  const req = { headers: { 'x-forwarded-for': '198.51.100.1, 10.0.0.2' }, socket: { remoteAddress: '10.0.0.2' } };
-  assert.equal(voterAddress(req, false), '10.0.0.2');
-  assert.equal(voterAddress(req, true), '198.51.100.1');
+  // A client can send its own X-Forwarded-For; each trusted proxy appends the address it saw (CloudFront, Caddy).
+  const req = { headers: { 'x-forwarded-for': '203.0.113.66, 198.51.100.1' }, socket: { remoteAddress: '10.0.0.2' } };
+  assert.equal(voterAddress(req, 0), '10.0.0.2', 'without a trusted proxy, the socket\'s address');
+  assert.equal(voterAddress(req, 1), '198.51.100.1', 'one proxy: the address it saw, not the one the client wrote');
+  const twice = { headers: { 'x-forwarded-for': '203.0.113.66, 198.51.100.1, 10.0.0.9' }, socket: { remoteAddress: '10.0.0.2' } };
+  assert.equal(voterAddress(twice, 2), '198.51.100.1', 'CloudFront, then Caddy');
+  assert.equal(voterAddress({ headers: {}, socket: { remoteAddress: '10.0.0.2' } }, 1), '10.0.0.2');
   assert.equal(wilson(0, 0), null);
   const [low, high] = wilson(5, 10);
   assert.ok(Math.abs(low - 0.2366) < 0.001 && Math.abs(high - 0.7634) < 0.001, `${low} ${high}`);

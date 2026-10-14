@@ -75,10 +75,11 @@ function authorized(req, config) {
   return tokenMatches(req.headers['x-demo-token'], config.accessToken) || tokenMatches(req.headers.authorization?.replace(/^Bearer /i, ''), config.accessToken);
 }
 function requireAuth(req, config) { if (!authorized(req, config)) throw new HttpError(401, 'A valid reviewer access code is required.'); }
-function checkOrigin(req) {
+/** A post from this site only: its Origin names the Host it was sent to, or the app's public address behind a proxy. */
+function checkOrigin(req, config = {}) {
   if (!req.headers.origin) return;
   let origin; try { origin = new URL(req.headers.origin); } catch { throw new HttpError(403, 'Request origin rejected.'); }
-  if (origin.host !== req.headers.host) throw new HttpError(403, 'Generation requests from another site are not accepted.');
+  if (origin.host !== req.headers.host && origin.origin !== config.appBaseUrl) throw new HttpError(403, 'Generation requests from another site are not accepted.');
 }
 
 export async function createStudio({ config = getConfig(), inspect = inspectKiro, runner, characterRunner, qlooClientFactory, imageGenerator = null, siteCapture = null, browser = null, tryOptions = {} } = {}) {
@@ -273,7 +274,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
       if (pathname === '/api/workspaces') {
         requireAuth(req, config);
         if (req.method === 'GET') return send(res, 200, workspaces.list());
-        if (req.method === 'POST') { checkOrigin(req); try { return send(res, 201, await workspaces.upsert(await readJson(req, 100000))); } catch (error) { throw new HttpError(error.status || 400, error.message); } }
+        if (req.method === 'POST') { checkOrigin(req, config); try { return send(res, 201, await workspaces.upsert(await readJson(req, 100000))); } catch (error) { throw new HttpError(error.status || 400, error.message); } }
       }
       const workspaceMatch = pathname.match(/^\/api\/workspaces\/([a-f0-9-]{36})(?:\/(export|select))?$/);
       if (workspaceMatch) {
@@ -283,9 +284,9 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
           .flatMap(job => job.runs.filter(run => run.status === 'completed').map(run => ({ jobId: job.id, mode: run.mode, title: job.selectedDirection?.title || (job.kind === 'revise' ? `Revision ${job.targetSelector}` : workspace.name), audienceId: job.audienceId || null, kind: job.kind || 'build', createdAt: job.createdAt, parentJobId: job.parentJobId || null })))
           .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
         if (req.method === 'GET' && !workspaceMatch[2]) return send(res, 200, { ...workspace, variants });
-        if (req.method === 'PUT' && !workspaceMatch[2]) { checkOrigin(req); try { return send(res, 200, await workspaces.upsert(await readJson(req, 100000), workspace.id)); } catch (error) { throw new HttpError(error.status || 400, error.message); } }
+        if (req.method === 'PUT' && !workspaceMatch[2]) { checkOrigin(req, config); try { return send(res, 200, await workspaces.upsert(await readJson(req, 100000), workspace.id)); } catch (error) { throw new HttpError(error.status || 400, error.message); } }
         if (req.method === 'POST' && workspaceMatch[2] === 'select') {
-          checkOrigin(req); const input = await readJson(req, 1000), job = manager.get(input.jobId);
+          checkOrigin(req, config); const input = await readJson(req, 1000), job = manager.get(input.jobId);
           if (job.templateId !== workspace.templateId || (job.workspaceId && job.workspaceId !== workspace.id) || !['build', 'revise'].includes(job.kind || 'build') || !job.runs.some(r => r.mode === input.mode && r.status === 'completed')) throw new HttpError(400, 'A completed variant from the same workspace is required.');
           return send(res, 200, await workspaces.select(workspace.id, { jobId: job.id, mode: input.mode }));
         }
@@ -321,12 +322,12 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
       if (pathname === '/mcp') {
         requireAuth(req, config);
         if (req.method !== 'POST') return send(res, 405, 'Use POST for stateless Streamable HTTP MCP.', { Allow: 'POST' });
-        checkOrigin(req); const message = await readJson(req);
+        checkOrigin(req, config); const message = await readJson(req);
         const result = await dispatchRpc({ message, handler: standaloneHandler, includeProjectTools: false, includeQlooTools: true });
         return result ? send(res, 200, result) : send(res, 202, '');
       }
       if (pathname === '/api/jobs' && req.method === 'POST') {
-        requireAuth(req, config); checkOrigin(req);
+        requireAuth(req, config); checkOrigin(req, config);
         // On the jury's server the Studio's own paid runs are closed: the live try runs Moûsa, and the records stay readable.
         if (!config.legacyJobs) throw new HttpError(403, 'This server takes no new Studio jobs. The live try is at /try/.');
         const job = await manager.create(await readJson(req, 100000));
@@ -344,7 +345,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         if (!(req.method === 'GET' && isShowcaseJob(showcase, jobMatch[1]))) requireAuth(req, config);
         const job = manager.get(jobMatch[1]);
         if (req.method === 'GET' && !jobMatch[2]) return send(res, 200, manager.publicJob(job));
-        if (req.method === 'POST' && jobMatch[2] === 'cancel') { checkOrigin(req); return send(res, 200, manager.publicJob(await manager.cancel(job.id))); }
+        if (req.method === 'POST' && jobMatch[2] === 'cancel') { checkOrigin(req, config); return send(res, 200, manager.publicJob(await manager.cancel(job.id))); }
         if (req.method === 'GET' && jobMatch[3]) {
           if (job.kind === CHARACTER_KIND) throw new HttpError(404, 'A character pair has no site files; its record plays in the Game character view.');
           const run = job.runs.find(r => r.mode === jobMatch[3]);
@@ -415,7 +416,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         try {
           if (pathname === '/try/access') {
             if (req.method !== 'POST') return redirect('/try/');
-            checkOrigin(req);
+            checkOrigin(req, config);
             const form = new URLSearchParams(await readBody(req, 2048));
             try { return redirect('/try/', { 'Set-Cookie': tryAccess.enter(form.get('code'), { address, secure: !isLoopback(config.host) }) }); }
             catch (error) { if (error instanceof AccessError) return page(tryAccessPage({ problem: error.message, repository }), error.status); throw error; }
@@ -427,7 +428,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
           if (pathname === '/try' || pathname === '/try/') {
             if (req.method === 'GET') return page(tryStartPage({ starters: trial.starters(), repository }));
             if (req.method !== 'POST') return send(res, 405, 'Method not allowed.', { Allow: 'GET, POST' });
-            checkOrigin(req);
+            checkOrigin(req, config);
             const form = new URLSearchParams(await readBody(req, 8192));
             const values = { starter: form.get('starter') || '', references: form.get('references') || '', place: form.get('place') || '', ages: form.getAll('ages') };
             try { return redirect(`/try/${(await trial.create(values, { address })).id}/`); }
@@ -447,7 +448,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
           const action = /^\/(design|cancel|publish)$/u.exec(rest)?.[1];
           if (action) {
             if (req.method !== 'POST') return send(res, 405, 'Method not allowed.', { Allow: 'POST' });
-            checkOrigin(req);
+            checkOrigin(req, config);
             const form = new URLSearchParams(await readBody(req, 1024));
             if (action === 'design') await trial.design(run.id, { address });
             else if (action === 'cancel') await trial.cancel(run.id);
@@ -503,7 +504,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
               return page(votePage({ entry: gallery.entries.get(ballot.pair), ballot, repository }));
             }
             if (req.method === 'POST') {
-              checkOrigin(req);
+              checkOrigin(req, config);
               const form = new URLSearchParams(await readBody(req, 2048));
               const outcome = await voteBox.cast({ token: form.get('ballot'), choice: form.get('choice'), address });
               return page(voteThanksPage({ entry: gallery.entries.get(outcome.pair), outcome, result: voteBox.results().find(item => item.pair === outcome.pair), repository }));

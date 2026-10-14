@@ -22,10 +22,34 @@ It needs two HTTPS names, one for the app and one for the preview origin the des
 
 **The host.**
 - One x86-64 EC2 instance with an Elastic IP: about 2 vCPU and 8 GB, such as t3.large, on Amazon Linux 2023, with a 40 GB encrypted gp3 volume.
-- The security group admits 443, and 80 for the certificate's HTTP challenge. It admits nothing else; administer through Systems Manager.
+- Administer it through Systems Manager, with an instance role that holds only `AmazonSSMManagedInstanceCore`; no SSH port is opened.
 - The container gets 2 CPUs and 6 GB, since a pair runs two Kiro sessions, each with Moûsa's server and its captures, beside up to two first steps.
 
-**The proxy.** Caddy terminates TLS for both names and forwards to the loopback ports:
+### Without a domain: two CloudFront distributions
+
+Promotional credits do not cover domain registration, and Let's Encrypt refuses certificates for the EC2 host names under `amazonaws.com`. CloudFront gives each distribution an HTTPS name of its own under `cloudfront.net`, served with AWS's certificate at no charge for the certificate. CloudFront itself is an AWS service billed by use, within its free tier for traffic this small. Two distributions are two origins, which is what the app and its preview need.
+- **The two distributions.** Both have the instance's public DNS name (from its Elastic IP) as a custom origin, HTTP only:
+  - **App:** origin port 8787, viewer protocol "Redirect HTTP to HTTPS", all HTTP methods.
+  - **Preview:** origin port 8788, GET and HEAD.
+- **Their policies.**
+  - The cache policy is `CachingDisabled`; the app marks what may be cached itself, and the jury's traffic is small.
+  - The origin request policy is `AllViewer`, which forwards the cookies, the query strings, the `Range` header for the game's music and the viewer's `Host`.
+  - No Lambda@Edge, function or WAF is needed. Leave CloudFront's standard logs off: a try's URLs carry its id and preview token.
+- **The security group.** One inbound rule, TCP 8787-8788, from the managed prefix list `com.amazonaws.global.cloudfront.origin-facing`. The list counts as about 55 rules toward the group's quota, so two separate rules for the two ports may not fit. Nothing else comes in.
+- **The environment file.** Fill it with the distributions' names once they exist, then start Compose:
+  - `DEMO_BIND=0.0.0.0`, so the ports listen beyond loopback, behind the security group;
+  - `PUBLIC_APP_BASE_URL=https://<app>.cloudfront.net` and `PUBLIC_PREVIEW_BASE_URL=https://<preview>.cloudfront.net`;
+  - `TRUST_PROXY=1`: CloudFront appends the viewer's address to `X-Forwarded-For`, and the app reads that last entry, not one the client wrote.
+- **Health.** An uptime check can watch `https://<app>.cloudfront.net/api/health`, for example a Route 53 health check with a CloudWatch alarm, both AWS services.
+- **Between CloudFront and the instance**, requests travel as HTTP, since no certificate can be had for the EC2 name. The security group keeps everyone but CloudFront out.
+- **Stronger: a VPC origin.** CloudFront then reaches a private IP and the instance needs no public inbound path. It needs a private subnet and, for the instance's own outbound calls (Qloo, Kiro, packages), a NAT gateway, which costs by the hour.
+- **A domain later** needs no change to the server. Add it to both distributions as an alternate name with a free ACM certificate (in us-east-1), and update the two `PUBLIC_*` addresses.
+
+None of this has run on AWS yet.
+
+### With a domain: Caddy on the host
+
+The security group admits 443, and 80 for the certificate's HTTP challenge, and nothing else. Caddy terminates TLS for both names and forwards to the loopback ports:
 
 ```
 app.example.org {
@@ -36,10 +60,9 @@ preview.example.org {
 }
 ```
 
-Caddy sets `X-Forwarded-For`, which the app reads only with `TRUST_PROXY=1`, as Compose sets it. Caddy writes no access log unless one is configured, so leave it off.
+Caddy sets `X-Forwarded-For`, which the app reads with `TRUST_PROXY=1`, the Compose default, and `PUBLIC_PREVIEW_BASE_URL` is `https://preview.example.org`. Caddy writes no access log unless one is configured, so leave it off. With either proxy, keep the URLs out of logs:
 - A try's page and its designs' URLs carry the try's id and preview token.
 - The vote's picture URLs carry sealed ballots.
-- `PUBLIC_PREVIEW_BASE_URL` is `https://preview.example.org`.
 
 **The private environment file**, such as `/etc/mousa/demo.env` with mode 600, lives outside the checkout. Beyond the Studio's variables, it holds:
 - `SITE_SECRET` (`openssl rand -hex 32`), which seals the vote's ballots and signs the try's access cookie;
@@ -133,7 +156,9 @@ For a repeatable AWS demo, build once, inspect the version record, and deploy th
 | `MOUSA_BROWSER` | Container: `/usr/bin/chromium` |
 | `MOUSA_CAPTURE_NO_SANDBOX` | Empty by default. `1` runs Chromium without its own sandbox; read [Review captures in the container](#review-captures-in-the-container) first |
 | `SITE_SECRET` | Seals the vote's ballots and signs the try's access cookie; required by Compose |
-| `TRUST_PROXY` | Compose: `1`, so the client address comes from the proxy's `X-Forwarded-For` |
+| `TRUST_PROXY` | How many proxies in front append to `X-Forwarded-For`: Compose default `1` (CloudFront or Caddy alone), `2` for CloudFront in front of Caddy |
+| `PUBLIC_APP_BASE_URL` | The app's public origin behind CloudFront, such as `https://<app>.cloudfront.net`, which forms may post from |
+| `DEMO_BIND` | The host address Compose publishes the ports on: `127.0.0.1` for Caddy, `0.0.0.0` behind CloudFront |
 | `SITE_REPOSITORY_URL` | The public repository the site links to (https only); optional |
 | `TRY_ACCESS_CODE` | The jury's code for `/try/`, 12 characters or more; empty keeps the try closed |
 | `TRY_ARMS_PARALLEL` | `on` runs a pair's two Kiro sessions at once, `off` one after the other |

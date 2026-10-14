@@ -150,8 +150,19 @@ const request = async (url, { method = 'GET', cookie = '', form = null, origin =
 };
 const noScript = (page, what) => { assert.doesNotMatch(page.body, /<script/iu, what); assert.match(page.policy, /default-src 'none'/u, what); assert.doesNotMatch(page.policy, /script-src/u, what); };
 
+test('behind a proxy that sends its own Host, forms may post from the app\'s public address, and only from it', () => {
+  const base = { HOST: '127.0.0.1', DATA_DIR: os.tmpdir() };
+  assert.equal(getConfig({ ...base, PUBLIC_APP_BASE_URL: 'https://d111111abcdef8.cloudfront.net' }).appBaseUrl, 'https://d111111abcdef8.cloudfront.net');
+  assert.equal(getConfig({ ...base, TRUST_PROXY: '2' }).trustProxy, 2);
+  assert.equal(getConfig(base).trustProxy, 0);
+  assert.throws(() => getConfig({ ...base, PUBLIC_APP_BASE_URL: 'https://d111111abcdef8.cloudfront.net/try/' }), /origin with no path/u);
+  assert.throws(() => getConfig({ ...base, PUBLIC_APP_BASE_URL: 'https://d1.cloudfront.net', PUBLIC_PREVIEW_BASE_URL: 'https://d1.cloudfront.net' }), /different origin/u);
+  assert.throws(() => getConfig({ ...base, TRUST_PROXY: 'yes' }), /TRUST_PROXY/u);
+});
+
 test('the try\'s pages run no script and sit behind the access code; a try runs both steps from its forms and its designs play only by token', async t => {
-  const { app, preview } = await setup(t);
+  const { app, preview } = await setup(t, { env: { PUBLIC_APP_BASE_URL: 'https://d111111abcdef8.cloudfront.net' } });
+  assert.equal((await request(`${app}/try/access`, { method: 'POST', form: { code: CODE }, origin: 'https://d111111abcdef8.cloudfront.net' })).status, 303, 'a post from the public address CloudFront serves');
   const gate = await request(`${app}/try/`);
   assert.equal(gate.status, 200);
   noScript(gate, 'the access page');

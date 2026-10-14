@@ -17,6 +17,12 @@ export function loadDotEnv(file = path.join(rootDir, '.env'), env = process.env)
 
 export function isLoopback(host) { return ['127.0.0.1', 'localhost', '::1'].includes(host); }
 
+/** An http(s) origin with nothing after it, as PUBLIC_APP_BASE_URL gives one, or ''. */
+function publicOrigin(value) {
+  if (!value) return '';
+  try { const url = new URL(value); return /^https?:$/u.test(url.protocol) && url.pathname === '/' && !url.search && !url.username ? url.origin : ''; } catch { return ''; }
+}
+
 export function getConfig(env = process.env) {
   const host = env.HOST || '127.0.0.1';
   const token = env.DEMO_ACCESS_TOKEN || '';
@@ -28,6 +34,8 @@ export function getConfig(env = process.env) {
   if (env.TRY_ACCESS_CODE && env.TRY_ACCESS_CODE.length < 12) throw new Error('TRY_ACCESS_CODE must be at least 12 characters.');
   if (env.TRY_ARMS_PARALLEL && !['on', 'off'].includes(env.TRY_ARMS_PARALLEL)) throw new Error('Invalid TRY_ARMS_PARALLEL. Use on or off.');
   if (env.LEGACY_JOBS && !['on', 'off'].includes(env.LEGACY_JOBS)) throw new Error('Invalid LEGACY_JOBS. Use on or off.');
+  if (env.PUBLIC_APP_BASE_URL && !publicOrigin(env.PUBLIC_APP_BASE_URL)) throw new Error('PUBLIC_APP_BASE_URL must be an http(s) origin with no path, such as https://app.example.org.');
+  if (env.PUBLIC_APP_BASE_URL && env.PUBLIC_PREVIEW_BASE_URL && publicOrigin(env.PUBLIC_APP_BASE_URL) === publicOrigin(env.PUBLIC_PREVIEW_BASE_URL)) throw new Error('The preview must use a different origin from PUBLIC_APP_BASE_URL.');
   const productionStages = (env.PRODUCTION_STAGES || 'on') === 'on';
   if (!isLoopback(host) && token.length < 24) throw new Error('Public binding requires a DEMO_ACCESS_TOKEN of at least 24 characters.');
   if (!isLoopback(host) && !env.PUBLIC_PREVIEW_BASE_URL) throw new Error('Public binding requires an explicit separate PUBLIC_PREVIEW_BASE_URL.');
@@ -57,8 +65,12 @@ export function getConfig(env = process.env) {
     environment: env.MOUSA_ENVIRONMENT || 'local',
     // Taste-led builds can request generated images from Codex when it is signed in with ChatGPT; off disables the tool in both arms.
     codexImages: env.CODEX_IMAGES || 'auto', codexCliPath: env.CODEX_CLI_PATH || '',
-    // Seals the blind vote's ballots and keys its address hashes; behind a proxy, TRUST_PROXY=1 reads X-Forwarded-For.
-    siteSecret: env.SITE_SECRET || '', trustProxy: env.TRUST_PROXY === '1',
+    // Seals the blind vote's ballots and keys its address hashes. TRUST_PROXY is how many proxies stand in front, each
+    // appending to X-Forwarded-For: 1 for CloudFront or Caddy alone, 2 for CloudFront in front of Caddy.
+    siteSecret: env.SITE_SECRET || '', trustProxy: number('TRUST_PROXY', 0, 0, 3),
+    // The public address of the app when a proxy in front sends its own Host, as CloudFront does unless told otherwise;
+    // a form's Origin may then name this address.
+    appBaseUrl: publicOrigin(env.PUBLIC_APP_BASE_URL),
     // The public repository the site links to, once there is one.
     siteRepository: /^https:\/\/[^\s"'<>]+$/u.test(env.SITE_REPOSITORY_URL || '') ? env.SITE_REPOSITORY_URL : '',
     // The live try: the code jurors enter, whether a pair's two arms run at once, and the Qloo requests one try may send.

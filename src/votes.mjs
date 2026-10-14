@@ -23,10 +23,16 @@ export function wilson(wins, n, z = 1.96) {
   return [Math.max(0, centre - half), Math.min(1, centre + half)];
 }
 
-/** The address a vote is limited by: the first forwarded address behind a trusted proxy, else the socket's own. */
-export function voterAddress(req, trustProxy = false) {
-  const forwarded = trustProxy ? String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() : '';
-  return forwarded || req.socket?.remoteAddress || 'unknown';
+/**
+ * The address a vote or a try is limited by, behind `hops` trusted proxies (TRUST_PROXY): each proxy appends the
+ * address it saw to X-Forwarded-For, as CloudFront and Caddy do, so the client is that many entries from the end. The
+ * entries before it came from the client itself and are not trusted. Without a trusted proxy, the socket's own.
+ */
+export function voterAddress(req, hops = 0) {
+  const trusted = hops === true ? 1 : Number.isInteger(hops) && hops > 0 ? hops : 0;
+  const forwarded = trusted ? String(req.headers['x-forwarded-for'] || '').split(',').map(item => item.trim()).filter(Boolean) : [];
+  const client = forwarded.length >= trusted ? forwarded[forwarded.length - trusted] : forwarded[0];
+  return client || req.socket?.remoteAddress || 'unknown';
 }
 
 /**
