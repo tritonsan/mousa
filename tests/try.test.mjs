@@ -11,8 +11,8 @@ import { getConfig } from '../src/config.mjs';
 import { createStudio } from '../src/server.mjs';
 import { SHOWCASE_APP_CSP } from '../src/showcase.mjs';
 import { checkTryInput, tryBrief, tryPlan, STARTERS } from '../src/try/starters.mjs';
-import { tryAgent, sessionArgs, sessionEnvironment, callTool, refusalCode, sessionResources } from '../src/try/kiro.mjs';
-import { createTryAccess, ACCESS_COOKIE } from '../src/try/access.mjs';
+import { tryAgent, sessionArgs, sessionEnvironment, callTool, refusalCode, sessionResources, stopProcess } from '../src/try/kiro.mjs';
+import { createTryAccess, ACCESS_COOKIE, addressKey } from '../src/try/access.mjs';
 import { qlooFixture } from './helpers/mousa-fixtures.mjs';
 import { fakeKiro, predictScript, qlooArmScript, baselineArmScript } from './helpers/fake-kiro.mjs';
 
@@ -37,8 +37,20 @@ test('a juror\'s request is checked, and set into its starter\'s own words', () 
 test('each kind of session runs Moûsa\'s server with its own tools, and only the arm with Qloo holds the key', () => {
   const common = { model: 'fixed-test-model', rootDir: '/srv/mousa', home: '/data/try/abc/kiro/x', project: '/data/try/abc/project', qloo: { key: 'fixture-key-123', baseUrl: 'https://qloo.test' }, platform: 'linux', execPath: '/usr/bin/node' };
   const predict = tryAgent({ ...common, kind: 'predict', starter: STARTERS.ramble });
-  const qloo = tryAgent({ ...common, kind: 'qloo', starter: STARTERS['long-dusk'], project: '/data/try/abc/project/compare/with-qloo', capture: { browser: '/usr/bin/chromium' } });
+  const outside = [{ folder: '/data/try/abc/project/.mousa' }, { folder: '/data/try/abc/project/compare/without-qloo' }, { file: '/data/try/abc/meta.json' }];
+  const qloo = tryAgent({ ...common, kind: 'qloo', starter: STARTERS['long-dusk'], project: '/data/try/abc/project/compare/with-qloo', capture: { browser: '/usr/bin/chromium' },
+    usageFile: '/data/try/abc/project/.mousa/usage.json', outside });
   const own = tryAgent({ ...common, kind: 'baseline', starter: STARTERS.ramble, project: '/data/try/abc/project/compare/without-qloo' });
+  assert.equal(qloo.mcpServers.mousa.env.MOUSA_QLOO_USAGE_FILE, '/data/try/abc/project/.mousa/usage.json', 'the arm counts its requests in the try\'s one file');
+  assert.equal(own.mcpServers.mousa.env.MOUSA_QLOO_USAGE_FILE, undefined);
+  for (const denied of ['/data/try/abc/project/.mousa/**', '/data/try/abc/project/compare/without-qloo/**', '/data/try/abc/meta.json']) {
+    assert.ok(qloo.toolsSettings.read.deniedPaths.includes(denied) && qloo.toolsSettings.write.deniedPaths.includes(denied), denied);
+  }
+  // The refusals come before what is allowed, so they hold however the engine orders its rules.
+  for (const agent of [predict, qloo, own]) {
+    const rules = agent.permissions.rules, firstAllow = rules.findIndex(rule => rule.effect === 'allow');
+    assert.ok(rules.slice(firstAllow).every(rule => rule.effect === 'allow'), 'no refusal after an allowance');
+  }
   assert.deepEqual(predict.tools, ['@mousa']);
   assert.equal(predict.toolsSettings, undefined);
   assert.ok(predict.permissions.rules.some(rule => rule.capability === 'fs_write' && rule.effect === 'deny' && rule.match.includes('**')));
@@ -84,6 +96,22 @@ test('a Kiro stream line says which tool ran and whether Moûsa refused it, neve
   assert.equal(callTool({ title: 'Writing index.html', kind: 'edit' }), 'write');
   assert.equal(callTool({ title: 'Running: @other/tool', _meta: { kiro: { toolName: 'tool', mcpServerName: 'other' } } }), 'other tool');
   assert.equal(refusalCode({ rawOutput: { items: [{ Json: { content: [{ type: 'text', text: 'Saved.' }] } }] } }), null);
+});
+
+test('stopping a session ends its whole process tree, and an address is limited by what one subscriber holds', () => {
+  const started = [];
+  const fakeSpawn = (command, args) => { started.push([command, ...args]); return { on: () => {} }; };
+  stopProcess({ pid: 4242, kill: () => started.push(['kill']) }, { platform: 'win32', spawnImpl: fakeSpawn });
+  assert.deepEqual(started, [['taskkill', '/pid', '4242', '/T', '/F']]);
+  let killed = 0;
+  stopProcess({ kill: () => { killed++; } }, { platform: 'linux', spawnImpl: fakeSpawn });
+  assert.equal(killed, 1, 'a process without a pid is killed as it is');
+  assert.equal(addressKey('203.0.113.7'), '203.0.113.7');
+  assert.equal(addressKey('::ffff:203.0.113.7'), '203.0.113.7');
+  assert.equal(addressKey('2001:db8:aa:bb:1:2:3:4'), '2001:db8:aa:bb::/64');
+  assert.equal(addressKey('2001:0db8:00aa::5'), '2001:db8:aa:0::/64', 'one /64 for every address in it');
+  assert.equal(addressKey('2001:db8:aa:0:ffff::9'), addressKey('2001:db8:aa::1'));
+  assert.equal(addressKey('fe80::1%eth0'), 'fe80:0:0:0::/64');
 });
 
 test('the access code opens a signed cookie for twelve hours; a wrong code is limited and a new code ends earlier access', () => {

@@ -29,7 +29,17 @@ This record describes the tested scope of the local application. It does not est
   - The API never gives the token.
 - **Publishing.** Only a finished pair is published, only with consent. It joins the gallery as a Kiro comparison with its three sessions as lanes. The scan blocks a path to the tries' folder.
 - Six parallel runs of both files passed, after the run's saves were made sequential: two arms saving at once had failed a rename on Windows once.
-- The full suite is 490/490 with Chrome.
+
+**After an independent review of the try's code**, these were changed and tested:
+- **One Qloo budget per try.** A try's Qloo requests are counted in step one's `usage.json` whichever folder or workspace sends them, through the engine's new `MOUSA_QLOO_USAGE_FILE`. A `qloo_query` whose workspace does not resolve, or on a server that caps its requests, is refused. Before, it went to Qloo uncounted.
+- **The image's starters.** The image left out Ramble's `data/` (a later `**/data` rule won), so its walks would have been missing on the server. The rule is overridden now. A starter that lacks what it protects is left out of the try, with the reason in `/api/health/deep`.
+- **Bounded queues.** At most six first steps and three pairs wait. An address keeps at most two first steps and one pair waiting or working, and new runs stop below 2 GB of free disk.
+- **Building the pair.** Two quick posts queue the pair once. A finished pair is not built again, and a failed save puts the run back as it was.
+- **Stopping a session.** A stopped session ends its whole process tree: `taskkill /T` on Windows, its process group elsewhere, then SIGKILL. It is let go if it does not end. One arm that fails stops the other.
+- **Records.** A record being written reads as missing rather than failing the page. An unreadable `meta.json` is skipped at start, and an agent file a stopped session left, which names the key, is removed.
+- **Kiro's rules.** The agent's refusal rules come before its allowances. The arms' file tools are also denied, by absolute path, the run's other folders: step one's records, the other arm, the run's record, homes and streams.
+- **Smaller fixes.** The access limiter counts an IPv6 address by its /64 and stays bounded, and a stream file stops at 32 MB.
+- The full suite is 494/494 with Chrome.
 - The pages were captured at 1440 and 390 pixels through a cookie proxy and read: the request page, step one's measurement, a pair at work (arms first, step one folded) and a finished pair.
 
 **Not shown yet** (L1–L3, each needs approval):

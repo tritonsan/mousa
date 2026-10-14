@@ -56,7 +56,7 @@ Caddy sets `X-Forwarded-For`, which the app reads only with `TRUST_PROXY=1`, as 
 | --- | --- | --- |
 | `gallery/` | The public gallery | Yes |
 | `votes/` | The sealed vote records | No |
-| `try/<id>/` | One live try: `meta.json` and `project/` with its reports and both arms | Only after the juror's consent and a gallery build |
+| `try/<id>/` | One live try: `meta.json` and `project/` with its reports and both arms; `project/.mousa/usage.json` counts every Qloo request the try sent | Only after the juror's consent and a gallery build |
 | `try/<id>/kiro/` | Each session's Kiro home | Never |
 | `try/<id>/sessions/` | Each session's stream and error log, for the operator | Never |
 

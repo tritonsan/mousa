@@ -19,6 +19,16 @@ export function qlooBudget(env) {
   const limit = Number.parseInt(env?.MOUSA_QLOO_BUDGET, 10);
   return Number.isInteger(limit) && limit > 0 ? limit : null;
 }
+
+/**
+ * The file a folder's Qloo requests are counted in: its own .mousa/usage.json, or the absolute MOUSA_QLOO_USAGE_FILE
+ * when a host counts every folder and workspace of a session in one, as the hosted live try does for each try.
+ */
+export function qlooUsageFile(env, root) {
+  const pinned = typeof env?.MOUSA_QLOO_USAGE_FILE === 'string' ? env.MOUSA_QLOO_USAGE_FILE.trim() : '';
+  if (pinned && path.isAbsolute(pinned) && !/^\$\{[^}]*\}$/u.test(pinned)) return path.resolve(pinned);
+  return root ? path.join(root, STATE_DIR, 'usage.json') : null;
+}
 import { buildTasteBrief, buildBaselineBrief } from './brief.mjs';
 import { collectProjectFiles, styleFootprint } from '../design/systems.mjs';
 
@@ -133,7 +143,7 @@ export function createTasteTools(context) {
     const client = new QlooClient({ apiKey: connection.apiKey, baseUrl: connection.baseUrl, ...(fetchImpl ? { fetchImpl } : {}) });
     const limit = qlooBudget(env);
     return root ? createCachingClient({ client, dir: path.join(root, STATE_DIR, 'cache', 'qloo'), baseUrl: connection.baseUrl, refresh, now,
-      budget: { file: path.join(root, STATE_DIR, 'usage.json'), ...(limit ? { limit } : {}) } }) : Object.assign(client, { stats: { hits: 0, misses: 0 } });
+      budget: { file: qlooUsageFile(env, root), ...(limit ? { limit } : {}) } }) : Object.assign(client, { stats: { hits: 0, misses: 0 } });
   }
   const session = (root, stage) => writeState(root, 'session', { plugin: 'mousa', stage, updatedAt: new Date(now()).toISOString() });
 
@@ -353,7 +363,9 @@ export function createTasteTools(context) {
 
   async function query(args, meta) {
     let root = null;
-    try { root = await project(meta, args.workspace); } catch { /* Without a project folder, answers are not cached. */ }
+    // Without a project folder, answers are neither cached nor counted: so a workspace that does not resolve, or a
+    // server whose requests are capped, refuses instead of asking Qloo outside its budget.
+    try { root = await project(meta, args.workspace); } catch (error) { if (args.workspace !== undefined || qlooBudget(env) || qlooUsageFile(env, null)) throw error; }
     if (root && await isBaseline(root)) refuse('BASELINE_SESSION', BASELINE);
     const client = await qlooClient(root);
     let result;

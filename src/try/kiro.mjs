@@ -11,7 +11,7 @@ import { spawn } from 'node:child_process';
 import { kiroOutputReader, streamUpdate } from '../kiro-output.mjs';
 
 export const TRY_AGENT = 'mousa-try';
-export const SESSION_LIMITS = Object.freeze({ predictMs: 6 * 60 * 1000, armMs: 20 * 60 * 1000 });
+export const SESSION_LIMITS = Object.freeze({ predictMs: 6 * 60 * 1000, armMs: 20 * 60 * 1000, streamBytes: 32 * 1024 * 1024, killGraceMs: 10000 });
 const SYSTEM_VARIABLES = ['PATH', 'Path', 'SYSTEMROOT', 'SystemRoot', 'WINDIR', 'USERPROFILE', 'HOME', 'LOCALAPPDATA', 'APPDATA', 'TEMP', 'TMP', 'LANG', 'TERM'];
 const NEVER_WRITE = ['**/.env', '**/.env.*', '.kiro/**', '**/.kiro/**', '.mousa/**', '**/.mousa/**'];
 const NEVER_READ = ['**/.env', '**/.env.*', '.kiro/**', '**/.kiro/**'];
@@ -27,16 +27,22 @@ export function sessionResources(kind, medium) {
 /**
  * The agent of one session. `kind` is predict, qloo or baseline; `project` the folder it designs in; `home` its
  * KIRO_HOME; `starter` says which files the design may write; `capture` passes the browser the review captures use.
+ * `usageFile` is the one file the try counts its Qloo requests in, and `outside` the run's folders and files beside
+ * the arm (step one's records, the other arm, the run's record, homes and streams), denied to its file tools by
+ * absolute path on top of the working-folder boundary Kiro keeps.
  */
-export function tryAgent({ kind, model, rootDir, project, home, starter, qloo = null, budget = 24, capture = {}, execPath = process.execPath, platform = process.platform }) {
+export function tryAgent({ kind, model, rootDir, project, home, starter, qloo = null, budget = 24, usageFile = null, outside = [], capture = {}, execPath = process.execPath, platform = process.platform }) {
   const paths = platform === 'win32' ? path.win32 : path.posix;
   const script = paths.join(rootDir, 'plugin', 'server', 'mousa.mjs');
   // kiro-cli 2.24 did not start a server whose command and argument both held spaces; a bare node with this Node first on PATH does.
   const command = platform === 'win32' && /\s/u.test(execPath) && /\s/u.test(script) ? 'node' : execPath;
-  // Absolute, with forward slashes, as the Kiro power's own agent names its skills.
-  const resource = file => `file://${paths.join(rootDir, 'plugin', 'skills', ...file.split('/')).split(paths.sep).join('/')}`;
+  const glob = value => value.split(paths.sep).join('/');
+  // Absolute, with forward slashes, as the Kiro power's own agent names its skills and the Studio's runs deny paths.
+  const resource = file => `file://${glob(paths.join(rootDir, 'plugin', 'skills', ...file.split('/')))}`;
+  const beside = outside.map(item => (item.folder ? `${glob(item.folder)}/**` : glob(item.file)));
   const writable = kind === 'predict' ? [] : starter.writable ? [...starter.writable] : ['./**'];
-  const denied = [...NEVER_WRITE, ...(starter.protect || [])];
+  const denied = [...NEVER_WRITE, ...(starter.protect || []), ...beside];
+  const unread = [...NEVER_READ, ...beside];
   return {
     name: TRY_AGENT,
     description: `Moûsa's agent for the live try: ${kind === 'predict' ? 'the frozen prediction' : kind === 'qloo' ? 'the arm designed with Qloo' : 'the arm designed without Qloo'}.`,
@@ -44,20 +50,21 @@ export function tryAgent({ kind, model, rootDir, project, home, starter, qloo = 
     ...(model ? { model } : {}),
     mcpServers: { mousa: { command, args: [script], timeout: 600000, env: {
       MOUSA_PROJECT_DIR: project, MOUSA_HOST: 'kiro', MOUSA_ENVIRONMENT: 'hosted', MOUSA_IMAGES: 'off', MOUSA_QLOO_BUDGET: String(budget),
-      MOUSA_CONFIG_DIR: paths.join(home, 'mousa'), MOUSA_LIBRARY_ROOT: rootDir,
+      MOUSA_CONFIG_DIR: paths.join(home, 'mousa'), MOUSA_LIBRARY_ROOT: rootDir, ...(usageFile ? { MOUSA_QLOO_USAGE_FILE: usageFile } : {}),
       ...(capture.browser ? { MOUSA_BROWSER: capture.browser } : {}), ...(capture.noSandbox ? { MOUSA_CAPTURE_NO_SANDBOX: '1' } : {}),
       ...(kind === 'qloo' && qloo?.key ? { QLOO_API_KEY: qloo.key, ...(qloo.baseUrl ? { QLOO_BASE_URL: qloo.baseUrl } : {}) } : {}),
     } } },
     tools: kind === 'predict' ? ['@mousa'] : ['@mousa', 'read', 'write'],
     allowedTools: ['@mousa'],
-    ...(kind === 'predict' ? {} : { toolsSettings: { read: { allowedPaths: ['./**'], deniedPaths: NEVER_READ }, write: { allowedPaths: writable, deniedPaths: denied } } }),
-    // Kiro's V3 engine reads these instead, and skips an agent with the 2.x fields above that lacks them.
+    ...(kind === 'predict' ? {} : { toolsSettings: { read: { allowedPaths: ['./**'], deniedPaths: unread }, write: { allowedPaths: writable, deniedPaths: denied } } }),
+    // Kiro's V3 engine reads these instead, and skips an agent with the 2.x fields above that lacks them. The refusals
+    // come first, so they hold whether the engine takes the first rule that matches or lets a refusal win.
     permissions: { rules: [
-      { capability: 'mcp', match: ['mousa/*'], effect: 'allow' },
-      ...(kind === 'predict' ? [{ capability: 'fs_read', match: ['**'], effect: 'deny' }, { capability: 'fs_write', match: ['**'], effect: 'deny' }]
-        : [{ capability: 'fs_read', match: ['./**'], effect: 'allow' }, { capability: 'fs_read', match: NEVER_READ, effect: 'deny' },
-          { capability: 'fs_write', match: writable, effect: 'allow' }, { capability: 'fs_write', match: denied, effect: 'deny' }]),
       { capability: 'shell', match: ['**'], effect: 'deny' },
+      ...(kind === 'predict' ? [{ capability: 'fs_read', match: ['**'], effect: 'deny' }, { capability: 'fs_write', match: ['**'], effect: 'deny' }]
+        : [{ capability: 'fs_read', match: unread, effect: 'deny' }, { capability: 'fs_write', match: denied, effect: 'deny' },
+          { capability: 'fs_read', match: ['./**'], effect: 'allow' }, { capability: 'fs_write', match: writable, effect: 'allow' }]),
+      { capability: 'mcp', match: ['mousa/*'], effect: 'allow' },
     ] },
     resources: sessionResources(kind, starter.medium).map(resource),
     includeMcpJson: false, includePowers: false,
@@ -102,36 +109,74 @@ export function refusalCode(update) {
 }
 
 /**
+ * Stop a session and everything it started: Kiro, Moûsa's server and its browser. Windows ends the process tree with
+ * taskkill; elsewhere the session runs in a process group of its own, which is sent SIGTERM, then SIGKILL.
+ */
+export function stopProcess(child, { platform = process.platform, graceMs = SESSION_LIMITS.killGraceMs, spawnImpl = spawn } = {}) {
+  const pid = child?.pid;
+  if (!Number.isInteger(pid)) { try { child?.kill(); } catch { /* Already gone. */ } return; }
+  if (platform === 'win32') {
+    try { spawnImpl('taskkill', ['/pid', String(pid), '/T', '/F'], { windowsHide: true, stdio: 'ignore' }).on('error', () => { try { child.kill(); } catch { /* Already gone. */ } }); }
+    catch { try { child.kill(); } catch { /* Already gone. */ } }
+    return;
+  }
+  const signal = name => { try { process.kill(-pid, name); } catch { try { child.kill(name); } catch { /* Already gone. */ } } };
+  signal('SIGTERM');
+  setTimeout(() => signal('SIGKILL'), graceMs).unref?.();
+}
+
+/**
  * Run one session: write its agent into its home, start Kiro in the project folder with the prompt on stdin, and
  * keep the tool calls it makes (by tool name, stage and outcome only; no title, input or output) until it ends, is
- * cancelled or reaches `limitMs`. The stream itself is kept in `streamFile` for the operator. Never throws for a
- * failed session; the result says how it ended.
+ * cancelled or reaches `limitMs`. The stream itself is kept in `streamFile` for the operator, up to a size. Never
+ * throws for a failed session; the result says how it ended. The agent file, which names the Qloo key for the arm
+ * that measures, is removed when the session ends.
  */
 export async function runTrySession({ config, kind, home, project, starter, prompt, model = config.model, limitMs = kind === 'predict' ? SESSION_LIMITS.predictMs : SESSION_LIMITS.armMs,
-  streamFile = null, signal = null, spawnImpl = spawn, platform = process.platform, onCall = () => {} }) {
-  await fs.mkdir(path.join(home, 'agents'), { recursive: true });
-  await fs.mkdir(path.join(home, 'settings'), { recursive: true });
-  const agent = tryAgent({ kind, model, rootDir: config.rootDir, project, home, starter, qloo: { key: config.qlooKey, baseUrl: config.qlooBaseUrl },
-    budget: config.tryQlooBudget || 24, capture: { browser: config.captureBrowser, noSandbox: config.captureNoSandbox }, platform });
-  await fs.writeFile(path.join(home, 'agents', `${TRY_AGENT}.json`), `${JSON.stringify(agent, null, 2)}\n`);
-  await fs.writeFile(path.join(home, 'settings', 'cli.json'), JSON.stringify({ 'chat.disableInheritingDefaultResources': true }));
-  const started = Date.now();
-  if (streamFile) await fs.mkdir(path.dirname(streamFile), { recursive: true });
-  const stream = streamFile ? await fs.open(streamFile, 'w') : null;
-  let child;
+  streamFile = null, usageFile = null, outside = [], signal = null, spawnImpl = spawn, platform = process.platform, onCall = () => {} }) {
+  const agentFile = path.join(home, 'agents', `${TRY_AGENT}.json`);
+  const removeAgent = () => fs.rm(agentFile, { force: true }).catch(() => {});
+  const failed = error => ({ kind, exitCode: null, error, durationMs: 0, stopped: null, refused: 0, finished: [], calls: [], stderr: '' });
+  let stream = null;
   try {
-    child = spawnImpl(config.kiroPath, sessionArgs({ model, effort: config.effort }), { cwd: project, env: sessionEnvironment({ config, home, kind }),
-      stdio: ['pipe', 'pipe', 'pipe'], shell: false, windowsHide: true, detached: platform === 'win32' });
+    await fs.mkdir(path.join(home, 'agents'), { recursive: true });
+    await fs.mkdir(path.join(home, 'settings'), { recursive: true });
+    if (streamFile) { await fs.mkdir(path.dirname(streamFile), { recursive: true }); stream = await fs.open(streamFile, 'w'); }
+    const agent = tryAgent({ kind, model, rootDir: config.rootDir, project, home, starter, qloo: { key: config.qlooKey, baseUrl: config.qlooBaseUrl },
+      budget: config.tryQlooBudget || 24, usageFile, outside, capture: { browser: config.captureBrowser, noSandbox: config.captureNoSandbox }, platform });
+    await fs.writeFile(agentFile, `${JSON.stringify(agent, null, 2)}\n`);
+    await fs.writeFile(path.join(home, 'settings', 'cli.json'), JSON.stringify({ 'chat.disableInheritingDefaultResources': true }));
   } catch {
     await stream?.close().catch(() => {});
-    await fs.rm(path.join(home, 'agents', `${TRY_AGENT}.json`), { force: true }).catch(() => {});
-    return { kind, exitCode: null, error: 'The Kiro process could not be started.', durationMs: 0, stopped: null, refused: 0, finished: [], calls: [], stderr: '' };
+    await removeAgent();
+    return failed('The session\'s folders could not be prepared on this server.');
+  }
+  const started = Date.now();
+  let child;
+  try {
+    // Elsewhere than Windows the session leads a process group, so stopping it stops its server and browser too.
+    child = spawnImpl(config.kiroPath, sessionArgs({ model, effort: config.effort }), { cwd: project, env: sessionEnvironment({ config, home, kind }),
+      stdio: ['pipe', 'pipe', 'pipe'], shell: false, windowsHide: true, detached: true });
+  } catch {
+    await stream?.close().catch(() => {});
+    await removeAgent();
+    return failed('The Kiro process could not be started.');
   }
   const calls = new Map(), finished = [];
-  let stderr = '', stopped = null, settled = false, refused = 0, writing = Promise.resolve();
-  const stop = reason => { if (stopped) return; stopped = reason; try { child.kill(); } catch { /* Already gone. */ } };
+  let stderr = '', stopped = null, settled = false, refused = 0, writing = Promise.resolve(), written = 0, finishNow = null;
+  const stop = reason => {
+    if (stopped) return;
+    stopped = reason;
+    stopProcess(child, { platform, spawnImpl });
+    // A session that does not end once stopped is let go, so its step and its slot never wait on it.
+    setTimeout(() => finishNow?.({ exitCode: null }), SESSION_LIMITS.killGraceMs * 2).unref?.();
+  };
   const onLine = line => {
-    if (stream) writing = writing.then(() => stream.write(`${line}\n`)).catch(() => {});
+    if (stream && written < SESSION_LIMITS.streamBytes) {
+      written += Buffer.byteLength(line) + 1;
+      const text = written < SESSION_LIMITS.streamBytes ? `${line}\n` : `${JSON.stringify({ type: 'mousaNote', note: 'The stream file reached its size limit; later lines were not kept.' })}\n`;
+      writing = writing.then(() => stream.write(text)).catch(() => {});
+    }
     let event;
     try { event = JSON.parse(line); } catch { return; }
     if (event?.type === 'runFinished') { finished.push({ status: event.data?.status ?? null, stopReason: event.data?.stopReason ?? null }); return; }
@@ -161,11 +206,11 @@ export async function runTrySession({ config, kind, home, project, starter, prom
       settled = true; clearTimeout(timer); signal?.removeEventListener('abort', abort);
       await writing;
       await stream?.close().catch(() => {});
-      // The arm with Qloo's agent file holds the key for its server, so no agent file outlives its session.
-      await fs.rm(path.join(home, 'agents', `${TRY_AGENT}.json`), { force: true }).catch(() => {});
+      await removeAgent();
       resolve({ ...result, kind, durationMs: Date.now() - started, stopped, refused, finished, calls: [...calls.values()].filter(call => call.tool),
         stderr: stderr.replace(/\x1B\[[0-9;]*m/gu, '').trim().slice(-1500) });
     };
+    finishNow = finish;
     child.on('error', error => finish({ exitCode: null, error: error.code === 'ENOENT' ? 'Kiro CLI was not found.' : 'The Kiro process could not be started.' }));
     child.on('close', code => finish({ exitCode: code }));
   });

@@ -6,7 +6,7 @@ import { mkdtemp, rm, readFile, readdir } from 'node:fs/promises';
 import { QlooClient } from '../plugin/server/qloo/client.mjs';
 import { buildTasteProfile } from '../plugin/server/culture/taste.mjs';
 import { planTaste, MEDIUM_RECIPES, TASTE_QUESTIONS } from '../plugin/server/taste/questions.mjs';
-import { createCachingClient } from '../plugin/server/taste/cache.mjs';
+import { createCachingClient, readQlooUsage } from '../plugin/server/taste/cache.mjs';
 import { BRIEF_LIMIT_BYTES } from '../plugin/server/taste/brief.mjs';
 import { createMousaServer } from '../plugin/server/mcp/mousa.mjs';
 import { createConnectionStore, plainProtector } from '../plugin/server/connections/store.mjs';
@@ -308,6 +308,32 @@ test('the server counts a project\'s Qloo requests, shows them in mousa_status a
     const status = await call('mousa_status', {});
     assert.deepEqual([status.qloo.requests, status.qloo.budget], [5, 5]);
     assert.equal((await call('qloo_query', { kind: 'search', query: 'Khruangbin' })).error.code, 'QLOO_BUDGET');
+    // A workspace that does not resolve is refused, never asked of Qloo outside the budget.
+    assert.equal((await call('qloo_query', { kind: 'search', query: 'Khruangbin', workspace: '.x' })).status, 'error');
+    assert.equal(requests.length, 5, 'still no request beyond the budget');
+  } finally {
+    await rm(project, { recursive: true, force: true });
+    await rm(config, { recursive: true, force: true });
+  }
+});
+
+test('with MOUSA_QLOO_USAGE_FILE every folder and workspace of a session counts against one budget', async () => {
+  const project = await mkdtemp(path.join(os.tmpdir(), 'mousa-usage-project-'));
+  const config = await mkdtemp(path.join(os.tmpdir(), 'mousa-usage-config-'));
+  const usage = path.join(project, 'run-usage.json');
+  const { fetchImpl, requests } = qlooFixture();
+  const server = createMousaServer({ env: { MOUSA_PROJECT_DIR: project, QLOO_API_KEY: 'fixture-key-123', MOUSA_QLOO_BUDGET: '2', MOUSA_QLOO_USAGE_FILE: usage }, fetchImpl,
+    store: createConnectionStore({ env: { MOUSA_CONFIG_DIR: config }, protector: plainProtector }),
+    inspect: { browser: async () => ({ available: false, reason: 'Not in tests.' }), codex: async () => ({ available: false, reason: 'Not in tests.' }), fonts: async () => FONTS } });
+  const call = async (name, args) => parse(await server.callTool(name, args));
+  try {
+    assert.equal((await call('qloo_query', { kind: 'search', query: 'Paterson' })).status, 'ok');
+    assert.equal((await call('qloo_query', { kind: 'search', query: 'Nujabes', workspace: 'one' })).results.length, 1);
+    // A fresh workspace has an empty cache and no usage of its own, but counts against the same file.
+    assert.equal((await call('qloo_query', { kind: 'search', query: 'Khruangbin', workspace: 'two' })).error.code, 'QLOO_BUDGET');
+    assert.equal(requests.length, 2);
+    assert.equal(await readQlooUsage(usage), 2);
+    assert.equal((await call('mousa_status', { workspace: 'two' })).qloo.requests, 2, 'the status reads the session\'s file');
   } finally {
     await rm(project, { recursive: true, force: true });
     await rm(config, { recursive: true, force: true });

@@ -26,7 +26,7 @@ import { votePage, voteThanksPage, voteProblemPage, voteResultsPage, ballotViews
 import { createVoteBox, voterAddress, VoteError } from './votes.mjs';
 import { reportStylesheet } from '../plugin/server/design/report.mjs';
 import { createTryManager, TryError } from './try/manager.mjs';
-import { createTryAccess, AccessError } from './try/access.mjs';
+import { createTryAccess, AccessError, addressKey } from './try/access.mjs';
 import { TryInputError } from './try/starters.mjs';
 import { tryAccessPage, tryStartPage, tryRunPage, tryProblemPage } from './site/try-pages.mjs';
 import { PUBLIC_TYPES } from './gallery/sanitize.mjs';
@@ -411,7 +411,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
           if (api) throw new HttpError(503, 'The live try is not open on this server.');
           return page(tryPendingPage({ repository }), ['/try', '/try/'].includes(pathname) ? 200 : 503);
         }
-        const address = voterAddress(req, config.trustProxy);
+        const address = addressKey(voterAddress(req, config.trustProxy));
         try {
           if (pathname === '/try/access') {
             if (req.method !== 'POST') return redirect('/try/');
@@ -440,7 +440,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
           const run = trial.get(runMatch[1]), rest = runMatch[2] || '';
           if (rest === '') return redirect(`/try/${run.id}/`);
           if (rest === '/' && req.method === 'GET') {
-            const record = async file => { const found = await trial.reportFile(run.id, file); return found ? fs.readFile(found, 'utf8').then(JSON.parse, () => null) : null; };
+            const record = async file => { const found = await trial.reportFile(run.id, file); return found ? fs.readFile(found, 'utf8').then(JSON.parse).catch(() => null) : null; };
             return page(tryRunPage({ run, view: await trial.view(run), measurement: await record('.mousa/report/record.json'), comparison: run.pair ? await record('.mousa/compare-report/record.json') : null,
               previewBase: new URL(previewBaseUrl).origin, families: await fontFamilies(), repository }));
           }

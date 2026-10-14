@@ -34,6 +34,9 @@ game/tests/**
 **/node_modules
 **/.git
 **/data
+# Ramble's walks are its product facts, and the try protects them; they come after the rule above, which they override.
+!examples/mobile-app/data
+!examples/mobile-app/data/**
 **/secrets
 **/*.pem
 **/*.key

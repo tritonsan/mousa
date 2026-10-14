@@ -14,7 +14,7 @@ import { inspectBrowser, verifyBrowser } from '../production/capture.mjs';
 import { fontLibraryRoot, loadFontLibrary } from '../production/fonts.mjs';
 import { QlooError } from '../qloo/client.mjs';
 import { TasteProtocolError } from '../culture/taste.mjs';
-import { createTasteTools, TasteToolError, qlooBudget } from '../taste/tools.mjs';
+import { createTasteTools, TasteToolError, qlooBudget, qlooUsageFile } from '../taste/tools.mjs';
 import { readQlooUsage } from '../taste/cache.mjs';
 import { createDesignTools, DesignToolError } from '../design/tools.mjs';
 import { collectProjectFiles, detectDesignSystem } from '../design/systems.mjs';
@@ -187,7 +187,7 @@ export function createMousaServer({ env = process.env, platform = process.platfo
       if (args.workspace !== undefined) workspace = args.workspace;
       designSystem = detectDesignSystem(await collectProjectFiles(folder));
       // The Qloo requests this folder has sent, and the budget the person set for it.
-      qloo.requests = await readQlooUsage(`${folder}/.mousa/usage.json`);
+      qloo.requests = await readQlooUsage(qlooUsageFile(env, folder));
       if (qlooBudget(env)) qloo.budget = qlooBudget(env);
       stage = (await readState(folder, 'session').catch(() => null))?.stage || null;
     }

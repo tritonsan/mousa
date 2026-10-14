@@ -14,7 +14,7 @@ import { claudeCodeTimeline, codexTimeline, kiroTimeline, tryTimeline, jsonLines
 const run = promisify(execFile);
 const ARMS = Object.freeze(['compare/with-qloo', 'compare/without-qloo']);
 const HOSTS = Object.freeze(['claude-code', 'codex', 'kiro']);
-const readJson = file => fs.readFile(file, 'utf8').then(JSON.parse, () => null);
+const readJson = file => fs.readFile(file, 'utf8').then(JSON.parse).catch(() => null);
 const isFolder = file => fs.stat(file).then(stat => stat.isDirectory(), () => false);
 
 /** The commit of this repository that was current when a run started, as its short hash, or null outside git. */

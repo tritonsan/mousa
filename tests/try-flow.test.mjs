@@ -146,6 +146,11 @@ test('step two builds both arms from the one frozen prediction, keeps the key in
     assert.ok(arm.agent.permissions.rules.some(rule => rule.capability === 'fs_write' && rule.effect === 'deny' && rule.match.includes('serve.mjs')));
     assert.equal(arm.agent.model, 'fixed-test-model');
   }
+  assert.equal(arms.qloo.agent.mcpServers.mousa.env.MOUSA_QLOO_USAGE_FILE, path.join(project, '.mousa', 'usage.json'), 'the arm counts in step one\'s file');
+  assert.ok(!(await exists(path.join(project, 'compare', 'with-qloo', '.mousa', 'usage.json'))), 'no second count of the try\'s requests');
+  const slashed = file => file.split(path.sep).join('/');
+  assert.ok(arms.baseline.agent.toolsSettings.read.deniedPaths.includes(`${slashed(path.join(project, 'compare', 'with-qloo'))}/**`), 'the arm without Qloo may not open the other arm');
+  assert.ok(arms.baseline.agent.toolsSettings.read.deniedPaths.includes(`${slashed(path.join(project, '.mousa'))}/**`), 'nor step one\'s measurement');
   assert.match(arms.qloo.prompt, /Call taste_profile\(\{\}\) to read the Taste Brief/u);
   assert.match(arms.baseline.prompt, /taste_profile\(\{ baseline: true \}\).*never measure/su);
 
@@ -239,6 +244,60 @@ test('the try takes a run only when it is open, within each address\'s hourly li
   assert.match(after.pair.problem, /restarted/u);
   assert.equal(after.quick.status, 'done');
   await closed.close(); await restarted.close();
+});
+
+test('two quick posts queue one pair, a finished pair is not built again, and the queue and each address are bounded', async t => {
+  const { manager } = await setup(t, { limits: { quickSlots: 1, pairSlots: 1, quickWaiting: 1, pairWaiting: 3, quickPerAddress: 2, pairPerAddress: 1, perHour: 50 } });
+  const first = await manager.create({ starter: 'fixture-shop', references: ['Paterson', 'Nujabes'] }, { address: '198.51.100.20' });
+  await settled(manager, first.id, 'quick');
+  const [one, two] = await Promise.all([manager.design(first.id, { address: '198.51.100.20' }), manager.design(first.id, { address: '198.51.100.20' })]);
+  assert.equal(one, two);
+  const run = await settled(manager, first.id, 'pair');
+  assert.equal(run.pair.status, 'done', run.pair.problem);
+  assert.equal(run.pair.arms['with-qloo'].session.calls.filter(call => call.tool === 'mousa:taste_profile').length, 1, 'the pair ran once');
+  await assert.rejects(manager.design(first.id, { address: '198.51.100.20' }), error => error.status === 409 && /finished/u.test(error.message));
+
+  // An address holds at most two first steps, and two waiting fill this queue.
+  const slow = await setup(t, { scripts: { predict: async ({ stopped }) => { await stopped(); } }, limits: { quickSlots: 1, quickWaiting: 2, quickPerAddress: 2, perHour: 50 } });
+  const ask = (address, name) => slow.manager.create({ starter: 'fixture-shop', references: [name] }, { address });
+  const a = await ask('198.51.100.21', 'Paterson');
+  await ask('198.51.100.21', 'Nujabes');
+  await assert.rejects(ask('198.51.100.21', 'Akira'), error => error.status === 429 && /first steps waiting or working/u.test(error.message));
+  await ask('198.51.100.22', 'Akira');
+  await assert.rejects(ask('198.51.100.23', 'Mushishi'), error => error.status === 503 && /busy: 2 first steps wait/u.test(error.message));
+  // A step that ends frees its address's place.
+  await slow.manager.cancel(a.id);
+  await settled(slow.manager, a.id, 'quick');
+  assert.ok(await ask('198.51.100.21', 'Akira'));
+});
+
+test('a starter that lacks what it protects is left out, and a record that cannot be read does not stop the server', async t => {
+  const data = await fs.mkdtemp(path.join(os.tmpdir(), 'mousa-try-broken-'));
+  const source = await fs.mkdtemp(path.join(os.tmpdir(), 'mousa-try-broken-starter-'));
+  t.after(async () => { await fs.rm(data, { recursive: true, force: true }); await fs.rm(source, { recursive: true, force: true }); });
+  await fs.writeFile(path.join(source, 'index.html'), '<!doctype html><title>x</title>');
+  const bad = 'd'.repeat(32), stale = 'e'.repeat(32);
+  await fs.mkdir(path.join(data, 'try', bad), { recursive: true });
+  await fs.writeFile(path.join(data, 'try', bad, 'meta.json'), '{"id": "dd');
+  await fs.mkdir(path.join(data, 'try', stale, 'kiro', 'with-qloo', 'agents'), { recursive: true });
+  await fs.writeFile(path.join(data, 'try', stale, 'kiro', 'with-qloo', 'agents', 'mousa-try.json'), '{"mcpServers":{"mousa":{"env":{"QLOO_API_KEY":"fixture-key-123"}}}}');
+  await fs.writeFile(path.join(data, 'try', stale, 'meta.json'), JSON.stringify({ id: stale, updatedAt: '2026-10-14T10:00:00.000Z', input: { starter: 'kept', references: ['Paterson'] }, previewToken: 'c'.repeat(48), quick: { status: 'done' }, pair: null }));
+  const brief = audience => `Design for ${audience}.`;
+  const starters = { kept: { id: 'kept', title: 'Kept', medium: 'web', source, summary: 'Has its page.', protect: [], brief },
+    missing: { id: 'missing', title: 'Missing', medium: 'web', source, summary: 'Protects data it lacks.', protect: ['data/**'], brief } };
+  const config = getConfig({ HOST: '127.0.0.1', DATA_DIR: data, TRY_ACCESS_CODE: 'a-test-only-access-code', QLOO_API_KEY: 'fixture-key-123', KIRO_CLI_PATH: 'kiro-cli-test-only' });
+  const warned = [];
+  const manager = createTryManager({ config, kiro: KIRO, starters, log: { error: () => {}, warn: message => warned.push(message) } });
+  await manager.initialize();
+  t.after(() => manager.close());
+  assert.deepEqual(manager.starters().map(item => item.id), ['kept']);
+  assert.match(manager.readiness().starterProblems[0], /missing: .* has nothing for data\/\*\*/u);
+  assert.equal(manager.readiness().open, true, 'the other starter still runs');
+  await assert.rejects(manager.create({ starter: 'missing', references: ['Paterson'] }, { address: '198.51.100.30' }), error => error.status === 503);
+  assert.ok(warned.some(message => message.includes(bad)), 'the unreadable record is named in the log');
+  assert.throws(() => manager.get(bad), error => error.status === 404);
+  assert.equal(manager.get(stale).quick.status, 'done');
+  assert.ok(!(await exists(path.join(data, 'try', stale, 'kiro', 'with-qloo', 'agents', 'mousa-try.json'))), 'a left agent file, with its key, is removed at start');
 });
 
 test('a finished pair its juror agreed to publish joins the gallery as a Kiro comparison, with its three sessions, and nothing of the server', async t => {
