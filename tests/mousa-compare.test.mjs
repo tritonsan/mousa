@@ -6,44 +6,10 @@ import { mkdtemp, rm, readFile, writeFile } from 'node:fs/promises';
 import { createMousaServer, inHostTerms } from '../plugin/server/mcp/mousa.mjs';
 import { resolveTasteRefs } from '../plugin/server/design/tools.mjs';
 import { createConnectionStore, plainProtector } from '../plugin/server/connections/store.mjs';
-import { qlooFixture, prediction, parse, exists, designFor, siteFiles } from './helpers/mousa-fixtures.mjs';
+import { qlooFixture, prediction, parse, exists, designFor, siteFiles, byName, baselineDesign } from './helpers/mousa-fixtures.mjs';
 
 const QLOO = 'compare/with-qloo', OWN = 'compare/without-qloo';
 const PLAN = { dryRun: true, medium: 'web', references: [{ name: 'Paterson' }, { name: 'Nujabes' }] };
-
-/** Refs written as the Taste Brief names them, with its marks, so the agent never copies an opaque ID. */
-function byName(artifact, input) {
-  const named = new Map(input.entities.map(entity => [entity.ref, `${entity.name}${entity.surprise ? ' (new)' : ''}`]));
-  const name = ref => named.get(ref) || ref;
-  const copy = structuredClone(artifact);
-  for (const cluster of copy.clusters || []) cluster.refs = cluster.refs.map(name);
-  for (const item of copy.setAside || []) item.ref = name(item.ref);
-  for (const device of copy.devices || []) device.anchors = device.anchors.map(name);
-  for (const item of copy.rejected || []) item.ref = name(item.ref);
-  return copy;
-}
-
-/** A web DNA from the agent's own prediction alone: the baseline arm of a comparison, with no measured ref. */
-function baselineDesign(input) {
-  const ref = name => input.entities.find(entity => entity.name === name).ref;
-  const required = input.requiredAnchors.map(item => item.name);
-  const reading = { schemaVersion: '1.0', clusters: [
-    { id: 'c1', name: 'Warm paper', refs: ['nostalgic', 'paper texture', 'slow pacing', 'Lost in Translation'], layers: ['palette', 'motion', 'imagery'], reading: 'I expect them to love the warmth of old paper and a slow, unhurried pace.' },
-    { id: 'c2', name: 'Everyday poems', refs: ['everyday poetry', 'warm', 'Muji'], layers: ['typography', 'voice'], reading: 'I expect a quiet, plain voice that finds poetry in daily objects.' },
-    { id: 'c3', name: 'Gentle routines', refs: ['gentle', 'J Dilla'], layers: ['structure'], reading: 'I expect them to like gentle routines and loops that come back around.' },
-  ], setAside: [], approach: 'From my own prediction alone: paper colours and a slow drift, plain type and copy, and a weekly loop as the structure.' };
-  const dna = { schemaVersion: '1.0', thesis: 'A warm notebook shop, from my own expectation of this audience.', devices: [
-    { id: 'dna1', layer: 'palette', device: 'Old paper and rust', anchors: ['nostalgic', 'Lost in Translation'], qualities: ['nostalgic'], translation: 'Nostalgia becomes aged paper with a rust accent.', tokens: { colors: ['#f3ead8', '#b5653a'] } },
-    { id: 'dna2', layer: 'typography', device: 'Bookish serif', anchors: ['everyday poetry', 'Muji'], qualities: ['everyday poetry'], translation: 'Everyday poetry becomes a calm reading serif.', tokens: { fonts: ['Literata'] } },
-    { id: 'dna3', layer: 'motion', device: 'Slow record turn', anchors: ['slow pacing'], qualities: ['slow pacing'], translation: 'A slow pace becomes a record that turns once a minute.', tokens: { keyframes: ['turn'], css: [{ property: 'animation', value: 'turn 60s linear infinite' }] } },
-    { id: 'dna4', layer: 'imagery', device: 'Hand-drawn record', anchors: ['paper texture'], qualities: ['paper texture'], translation: 'Paper texture becomes a drawn record sleeve.', tokens: { svg: ['record'] } },
-    { id: 'dna5', layer: 'voice', device: 'Plain short lines', anchors: ['warm'], qualities: ['warm'], translation: 'Warmth becomes short, plain sentences.', tokens: { copy: ['Pull up a chair.', 'Something good is playing.'] } },
-    { id: 'dna6', layer: 'structure', device: 'A loop of days', anchors: ['gentle', 'J Dilla'], qualities: ['gentle'], translation: 'Gentle routines become a week that loops.', tokens: { ids: ['week-loop'] } },
-  ], rejected: [] };
-  for (const name of required) assert.ok(dna.devices.some(device => device.anchors.includes(name)), `${name} is used`);
-  void ref;
-  return { reading, dna };
-}
 
 function server(project, config, fetchImpl) {
   return createMousaServer({ env: { MOUSA_PROJECT_DIR: project, QLOO_API_KEY: 'fixture-key-123', MOUSA_HOST: 'claude-code' }, fetchImpl,

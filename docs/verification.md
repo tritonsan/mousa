@@ -2,6 +2,65 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Taste Provenance reports — October 14, 2026
+
+The surface is now 0.6.0, with a thirteenth tool, `design_report`. It writes one page from a design's records, which a reader can follow without the JSON:
+- the frozen prediction and sketch, beside what Qloo measured, each measured name marked new or predicted;
+- the reading and each DNA device, with its anchors, tokens, method and check;
+- the last round's captures, the review's verdicts and repairs, and the limits.
+
+Its other parts:
+- **The comparison page** pairs two arms' captures by view and sets their devices side by side, layer by layer.
+- **The shared distance.** The distance moved into `design/pair.mjs`, so `design_compare` and the page give the same number.
+- **`scripts/build-report.mjs`** writes the page for a recorded run, including the October 6 Kiro session's 0.4 `culture-*.json` files.
+
+No model or Qloo request was made.
+
+**The recorded runs.** Reports were written into `output/reports/` for the ten complete live runs in `D:/mousa-live` and the October 6 Kiro Ramble run. Three of them are comparisons, written as six arm reports and three comparison pages. The run folders were not changed.
+
+| Run | Headline | Page height |
+| --- | --- | --- |
+| Long Dusk compare, Claude Code | distance 0.53; with Qloo 9 of 9 devices on what the prediction did not contain, without 7 on the prediction | 8,041 px |
+| Long Dusk compare, Codex | distance 0.57; 7 of 7 with Qloo; 6 on the prediction without | 7,005 px |
+| Long Dusk compare with portraits, Codex | distance 0.58; 5 of 5 with Qloo; each arm's portrait is in its device card | 6,938 px |
+| Long Dusk, Claude Code and Codex | 9 of 9 and 6 of 6 | 11,316 and 8,128 px |
+| Wax & Wane, Claude Code and Codex | 8 of 8 and 7 of 7 | 12,517 and 10,897 px |
+| Ramble restyle, Claude Code | 8 of 8 | 11,020 px |
+| Lanterna restyle, Codex (both tries) | 6 of 6 each | 11,785 and 10,973 px |
+| Ramble, Kiro, 0.4 surface | 7 of 7, counted again from its taste input | 10,443 px |
+
+Checked by eye, from captures taken with Chrome at 1280 pixels:
+- the Claude Code Long Dusk arm and comparison;
+- the Kiro Ramble page;
+- the Codex Wax & Wane, Ramble, Lanterna and portrait-pair cards.
+
+What the pages showed:
+- **The order.** The result comes right after the headline, then the prediction, the measurement in the Taste Brief's own order, the reading, the DNA cards, the departure from the sketch, the `taste_ask` questions with the agent's guess first, the review and the check.
+- **Names only.** A scan of each `record.json` and page found no Qloo id, tag URN, affinity, popularity or description. The word "affinity" appears only in the limits.
+
+**Fixed while checking:**
+- Lazy-loaded captures came out blank in the full-page picture.
+- A comparison written with `--out` removed the arm reports inside its folder.
+- A URN or a path swallowed the full stop or comma after it, and a path with a space was cut at the space.
+- The page named the report's own Moûsa version as if it were the session's. It now names it only as the writer.
+
+**One engine behaviour the page now shows.** The prediction match is liberal on purpose, which only lowers what counts as new. In the Claude Code Long Dusk arm, the game "Journey" was matched by the series "Kino's Journey". The prediction card now says what each entry matched, such as "Journey: matched Kino's Journey (TV)".
+
+**Automated.**
+- Six tests in `tests/mousa-report.test.mjs`:
+  - a full session's page and record, with names only, no script and embedded fonts;
+  - a comparison with `design_compare`'s distance, and the script's `--out` layout;
+  - a measurement before any design;
+  - the text scrubbing and the answer lists;
+  - the 0.4 records;
+  - a real-browser picture past the 3,200-pixel capture height (`maxHeight` on `captureShots`).
+- The suite is 465/465 with `MOUSA_BROWSER` set to Chrome, run outside the tool sandbox. Headless Edge 155 exits at once on this machine, so with Edge the three older browser tests fail and four skip.
+
+Limits:
+- Windows and Chrome only.
+- The pages have not been viewed on a phone.
+- No live session has called `design_report` yet; the reports above were written from recorded runs.
+
 ## Live game comparisons in both hosts — October 13, 2026
 
 The game test as the Studio ran it: Ilo designed with Qloo and without it, from one frozen prediction. This time it ran through the plugins' `compare` skill, one session per host, both at the same time on copies of `examples/long-dusk`.

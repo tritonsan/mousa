@@ -17,6 +17,7 @@ Moûsa checks each stage of the design against the measured taste and saves it i
 | 6. Check | `design_check({})` | Each device present, partial or missing |
 | 7. Capture | `design_capture({})` | Pictures of the result, in the tool result |
 | 8. Review | `design_validate({ stage: 'review', artifact })` | Your verdict on each criterion |
+| 9. Report | `design_report({})` | The Taste Provenance page in `.mousa/report/` |
 
 The **medium** decides what is checked, and Moûsa detects it from the project:
 - `web`: pages and stylesheets. See [references/medium-web.md](references/medium-web.md).
@@ -132,6 +133,15 @@ A round holds six captures, and a session has two rounds.
 - Judge every criterion once, on a capture of this round, by what the picture shows rather than what you meant to build.
 - Then make the repairs, check again, and capture round 2 with `design_capture({ round: 2 })`.
 - The DNA and the plan stay frozen. Repairs change the build, not the specification.
+
+## 9. Report where the design came from
+
+After the last review, call `design_report({})`. Moûsa writes the **Taste Provenance** page from the session's records:
+- your frozen prediction beside what Qloo measured, with each measured name marked new or predicted;
+- the reading, then each DNA device with its anchors, tokens, method and check;
+- the captures of the last round, the review's verdicts and repairs, and the limits.
+
+It goes to `.mousa/report/`: `index.html` opens in any browser without a server, `card.html` is a 1200 by 630 summary, and `record.json` holds the same evidence with names only. When captures work, it also saves `report.png` and `card.png`. Tell the person where the page is. It makes no Qloo request and changes no file of the design.
 
 ## Changing course
 

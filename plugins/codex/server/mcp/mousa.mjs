@@ -19,7 +19,7 @@ import { createDesignTools, DesignToolError } from '../design/tools.mjs';
 import { collectProjectFiles, detectDesignSystem } from '../design/systems.mjs';
 
 export const MOUSA_SERVER_NAME = 'mousa';
-export const MOUSA_SERVER_VERSION = '0.5.0';
+export const MOUSA_SERVER_VERSION = '0.6.0';
 export const MOUSA_PROTOCOL_VERSIONS = Object.freeze(['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05']);
 export const MOUSA_INSTRUCTIONS_LIMIT = 2048;
 
@@ -31,6 +31,7 @@ export const MOUSA_INSTRUCTIONS = [
   'If no project folder is set, ask the person which folder to design in, then call mousa_open_project.',
   'To measure an audience: taste_profile with dryRun:true plans the Qloo questions without a request; save your own prediction with design_validate (stage prediction) before any data; then taste_profile measures and returns the Taste Brief. While designing, ask taste_ask, writing your own guess first.',
   'Then design_validate the reading, the Design DNA and the production plan, build in the project\'s own design system, run design_check, look at design_capture (specimen:true for work a browser cannot open) and design_validate your review.',
+  'Finish with design_report: the Taste Provenance page that shows where each choice came from. Give the person its path.',
   'Never invent Qloo results, entities or affinities. Report missing connections, unresolved names and empty results as they are.',
 ].join(' ');
 
@@ -123,9 +124,9 @@ function setupHints({ host, qloo, project, images, capture }) {
 
 /**
  * The server. `store`, `page` and `inspect` ({browser, codex, fonts}) replace the machine parts in tests and other
- * hosts; `fetchImpl` reaches Qloo for the key test.
+ * hosts; `fetchImpl` reaches Qloo for the key test; `generate`, `capture` and `shoot` stand in for Codex and the browser.
  */
-export function createMousaServer({ env = process.env, platform = process.platform, store, page, inspect = {}, fetchImpl, generate, capture } = {}) {
+export function createMousaServer({ env = process.env, platform = process.platform, store, page, inspect = {}, fetchImpl, generate, capture, shoot } = {}) {
   const host = hostName(env);
   const environment = env.MOUSA_ENVIRONMENT === 'hosted' ? 'hosted' : 'local';
   const connections = store || createConnectionStore({ env, platform });
@@ -145,7 +146,7 @@ export function createMousaServer({ env = process.env, platform = process.platfo
   // A tool's workspace, when it names one, is a folder inside the project with its own .mousa records.
   const projectFolder = async (meta, workspace) => workspaceRoot((await resolveProjectRoot({ env, meta, session })).root, workspace);
   const taste = createTasteTools({ env, connections, fetchImpl, fonts: fontStatus, project: projectFolder });
-  const design = createDesignTools({ env, host, project: projectFolder, fonts: fontStatus, images: imageStatus, browser: browserStatus, generate, capture });
+  const design = createDesignTools({ env, host, version: MOUSA_SERVER_VERSION, project: projectFolder, fonts: fontStatus, images: imageStatus, browser: browserStatus, generate, capture, shoot });
   const tools = [...MOUSA_SETUP_TOOLS, ...taste.definitions, ...design.definitions];
 
   async function status(args, meta) {

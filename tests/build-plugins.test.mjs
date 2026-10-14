@@ -143,7 +143,7 @@ test('each packaged server starts on its own in a bare environment and finds its
         assert.equal(init.result.serverInfo.name, 'mousa');
         assert.ok(init.result.instructions.length <= 2048);
         const listed = await server.request('tools/list', {});
-        assert.deepEqual(listed.result.tools.map(tool => tool.name), TOOLS, `${name} lists the twelve tools`);
+        assert.deepEqual(listed.result.tools.map(tool => tool.name), TOOLS, `${name} lists the thirteen tools`);
         const status = JSON.parse((await server.request('tools/call', { name: 'mousa_status', arguments: {}, ...(meta ? { _meta: meta } : {}) })).result.content[0].text);
         assert.equal(status.host, name);
         assert.equal(status.materials.fonts, 33, `${name} reads the font library it carries`);

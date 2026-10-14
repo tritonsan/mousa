@@ -37,11 +37,13 @@ When the design restyles an existing project, copy the starter files, unchanged,
    - **Claude Code.** Give the arms to this plugin's agents: `mousa:mousa-baseline` for the baseline and `mousa:mousa-designer` for the Qloo arm. Give each the brief and its workspace. Each works in its own context and folder, so they may run at the same time. The baseline agent has no Qloo tools.
    - **Codex and other hosts.** Build the baseline arm first, in this session, before measuring, so it is built before any Qloo data is seen. Then measure and build the Qloo arm. Say in the report that the Qloo arm was built after the baseline. For a cleaner pair, build each arm in a session of its own.
 6. **Compare.** Call `design_compare({ a: 'compare/with-qloo', b: 'compare/without-qloo' })`.
-7. **Report:**
+7. **Write the comparison page.** Call `design_report({ a: 'compare/with-qloo', b: 'compare/without-qloo' })`. It writes each arm's own Taste Provenance page and, in the project's `.mousa/compare-report/`, a page that sets the two arms side by side: their captures paired by view, their devices layer by layer, the distance and the prediction both started from.
+8. **Report:**
    - the distance, overall and by its parts: palette, type, sections and CSS features for a website; palette, part ids and the words of the text for a game, read from the files the two arms changed differently;
    - `samePrediction`;
    - the Qloo arm's headline: how many devices rest on what the prediction did not contain;
    - each arm's review verdicts and repairs;
+   - where the comparison page is;
    - the limits below.
 
 ## Fairness

@@ -10,7 +10,8 @@
     "doctor": "node scripts/doctor.mjs",
     "test": "node --test tests/*.test.mjs game/tests/*.test.mjs",
     "pack:plugin": "node scripts/package-plugin.mjs",
-    "build:plugins": "node scripts/build-plugins.mjs"
+    "build:plugins": "node scripts/build-plugins.mjs",
+    "build:report": "node scripts/build-report.mjs"
   },
   "license": "MIT"
 }

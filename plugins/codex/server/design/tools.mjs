@@ -7,7 +7,7 @@
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { htmlElementIds, designFingerprint, compareDesignFingerprints, normalizeTasteName, DNA_LAYERS, TasteProtocolError } from '../culture/taste.mjs';
+import { htmlElementIds, normalizeTasteName, DNA_LAYERS, TasteProtocolError } from '../culture/taste.mjs';
 import { mediumProfile, listMedia } from '../production/media.mjs';
 import { normalizeTasteReading, applyReadingToDna } from '../production/reading.mjs';
 import { normalizeProductionPlan, generationAllowance } from '../production/plan.mjs';
@@ -21,7 +21,8 @@ import { readState, writeState, resolveInProject, relativePath, readProjectFiles
 import { tasteInputArgument } from '../production/tools.mjs';
 import { collectProjectFiles, detectDesignSystem, mergedPages, checkDesignSystem, checkFontFiles, styleFootprint, styleNotes } from './systems.mjs';
 import { buildSpecimen } from './specimen.mjs';
-import { dataFingerprint, compareDataFingerprints, differingFiles } from './distance.mjs';
+import { pairDistance } from './pair.mjs';
+import { readRecords, writeSessionReport, writeComparisonReport, captureReport, REPORT_FOLDERS } from './report.mjs';
 
 export const PRODUCTION_MEDIA = Object.freeze(listMedia().map(medium => medium.id).filter(id => ['web', 'app-ui', 'game', 'generic'].includes(id)));
 // What a taste recipe usually makes when the project itself does not say: pages for a site, a place or a brand, an
@@ -104,6 +105,13 @@ export const DESIGN_TOOLS = Object.freeze([
       prepare: { type: 'boolean', description: 'Copy the project\'s files into both folders, which hold nothing yet but their .mousa records. Dot folders, node_modules, build output and the folders\' own parent are left out.' } }, required: ['a', 'b'], additionalProperties: false },
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   },
+  {
+    name: 'design_report',
+    description: 'Write the Taste Provenance report of the design, after its last review: one page that sets your frozen prediction beside what Qloo measured, marks each measured name new or predicted, and follows the taste through your reading and DNA, token by token, to the captures, the review and the check, with its limits. It goes to .mousa/report/: index.html, a 1200 by 630 card.html, record.json with names only and, when captures work, report.png and card.png. With a and b instead of a workspace, it reports a comparison of two workspaces in the project\'s .mousa/compare-report/, beside each arm\'s own report. It makes no Qloo request and changes no design file.',
+    inputSchema: { type: 'object', properties: { workspace: WORKSPACE_FIELD, a: { type: 'string', minLength: 1, maxLength: 200 }, b: { type: 'string', minLength: 1, maxLength: 200 },
+      picture: { type: 'boolean', description: 'Also capture report.png and card.png when captures work (default true).' } }, additionalProperties: false },
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+  },
 ]);
 
 export class DesignToolError extends Error {
@@ -166,12 +174,13 @@ const stemMatch = (word, value) => {
 };
 
 /**
- * The tools. `context`: env, host, project(meta) for the folder, fonts() for the library, images() for the picture
- * providers, browser() for capture, and, in tests, generate (a Codex stand-in), capture (a browser stand-in) and now.
+ * The tools. `context`: env, host, version (the surface's, for reports), project(meta) for the folder, fonts() for the
+ * library, images() for the picture providers, browser() for capture, and, in tests, generate (a Codex stand-in),
+ * capture (a browser stand-in for views), shoot (one for report pictures) and now.
  */
 export function createDesignTools(context) {
-  const { env = process.env, host = 'unknown', project, fonts = async () => null, images = async () => [], browser = async () => ({ available: false, reason: 'No browser check.' }),
-    generate, capture, now = Date.now } = context;
+  const { env = process.env, host = 'unknown', version = null, project, fonts = async () => null, images = async () => [], browser = async () => ({ available: false, reason: 'No browser check.' }),
+    generate, capture, shoot, now = Date.now } = context;
   const environment = env.MOUSA_ENVIRONMENT === 'hosted' ? 'hosted' : 'local';
   const perRun = Math.min(IMAGE_LIMITS.perRun, Math.max(1, Number.parseInt(env.MOUSA_IMAGES_PER_RUN, 10) || 4));
   const stamp = () => new Date(now()).toISOString();
@@ -519,42 +528,65 @@ export function createDesignTools(context) {
     const folders = [args.a, args.b].map(value => relativePath(value, { name: 'folder' }));
     if (folders[0] === folders[1]) refuse('TOOL_INPUT_INVALID', 'a and b must be two different folders.');
     if (args.prepare) return prepareArms(root, folders);
-    const sets = [];
-    for (const folder of folders) {
-      const { file } = await resolveInProject(root, folder);
-      const files = await collectProjectFiles(file);
-      if (!Object.keys(files).length) refuse('PROJECT_EMPTY', `${folder} holds no pages, styles or scripts.`);
-      sets.push(files);
-    }
-    const arms = [];
-    for (const folder of folders) arms.push(await armRecord(root, folder));
-    const both = arms.every(Boolean);
-    const same = both && arms[0].prediction && arms[0].prediction === arms[1].prediction;
-    // Two game or source designs keep their look in data, which pages and stylesheets do not show.
-    const data = both && arms.every(arm => ['game', 'generic'].includes(arm.medium));
-    const distance = data ? compareDataFingerprints(...differingFiles(...sets).map(dataFingerprint)) : compareDesignFingerprints(...sets.map(designFingerprint));
+    const pair = await pairDistance(root, folders);
+    if (pair.empty) refuse('PROJECT_EMPTY', `${pair.empty} holds no pages, styles or scripts.`);
+    const { arms, both, samePrediction: same, distance } = pair;
     return { status: 'compared', a: folders[0], b: folders[1], distance,
       ...(arms.some(Boolean) ? { arms: { a: arms[0]?.summary || null, b: arms[1]?.summary || null } } : {}),
-      ...(both ? { samePrediction: Boolean(same) } : {}),
+      ...(both ? { samePrediction: same } : {}),
       limitation: `A heuristic distance from palette, type classes, landmark sections and CSS features.${both && !same ? ' The two designs did not start from the same frozen prediction, so their difference mixes the taste source with two different starting points.' : ''} Repeat the comparison under the same conditions before calling a difference the taste data's effect; it says nothing about quality.` };
   }
 
-  /** What a design folder's own records say: where its taste came from, its frozen prediction and its DNA's anchors. */
-  async function armRecord(root, folder) {
-    const { file } = await resolveInProject(root, folder);
-    const real = await fs.realpath(file).catch(() => null);
-    if (!real) return null;
-    const [input, prediction, dnaRecord] = await Promise.all(['taste/input', 'taste/prediction', 'design/dna'].map(name => readState(real, name).catch(() => null)));
-    if (!input && !dnaRecord) return null;
-    const stats = dnaRecord?.dna?.stats;
-    const source = input?.source === 'qloo-profile' ? 'qloo' : input?.source === 'model-assumption' ? 'own prediction' : 'unknown';
-    return {
-      medium: dnaRecord?.medium || null,
-      prediction: prediction ? JSON.stringify({ entries: (prediction.entries || []).map(entry => [entry.domain, normalizeTasteName(entry.name)]), sketch: prediction.designSketch || null }) : null,
-      summary: { taste: source, ...(stats ? { devices: stats.devices, layers: stats.layers, qualityAnchoredDevices: stats.qualityAnchoredDevices,
-        ...(source === 'qloo' ? { surpriseAnchoredDevices: stats.surpriseAnchoredDevices, headline: `${stats.surpriseAnchoredDevices} of ${stats.devices} devices rest on what the prediction did not contain.` } : {}),
-        ...(stats.sketchMoves ? { sketchMoves: stats.sketchMoves } : {}) } : {}) },
-    };
+  /**
+   * The Taste Provenance report of one design folder, or of a comparison of two with each arm's own beside it, and its
+   * pictures when captures work. A picture that fails leaves the report as it is, with the reason.
+   */
+  async function report(args, meta) {
+    const comparing = args.a !== undefined || args.b !== undefined;
+    if (comparing && (args.a === undefined || args.b === undefined)) refuse('TOOL_INPUT_INVALID', 'A comparison report needs both a and b.');
+    if (comparing && args.workspace !== undefined) refuse('TOOL_INPUT_INVALID', 'Give a workspace for one design, or a and b for a comparison, not both.');
+    const root = await project(meta);
+    const where = folder => path.relative(root, folder).split(path.sep).filter(Boolean).join('/');
+    const options = { library: await fonts(), host, version, now };
+    const empty = folder => `There is nothing to report${folder ? ` in ${folder}` : ''} yet: measure the audience with taste_profile, or set the baseline with taste_profile baseline:true, first.`;
+    let written, arms = [];
+    if (comparing) {
+      const folders = [args.a, args.b].map(value => relativePath(value, { name: 'folder' }));
+      if (folders[0] === folders[1]) refuse('TOOL_INPUT_INVALID', 'a and b must be two different folders.');
+      const pair = await pairDistance(root, folders);
+      if (pair.empty) refuse('PROJECT_EMPTY', `${pair.empty} holds no pages, styles or scripts.`);
+      for (const folder of folders) {
+        const records = await readRecords((await resolveInProject(root, folder)).file);
+        if (!records?.input) refuse('REPORT_EMPTY', empty(folder));
+        arms.push({ folder, records });
+      }
+      // An arm is named by where its taste came from, and by its folder when both arms took theirs from the same place.
+      const tastes = arms.map(arm => arm.records.input.source);
+      for (const arm of arms) arm.label = tastes[0] === tastes[1] ? arm.folder : arm.records.input.source === 'qloo-profile' ? 'With Qloo' : 'Without Qloo';
+      for (const arm of arms) arm.written = await writeSessionReport({ records: arm.records, ...options });
+      const dir = path.join(root, STATE_DIR, REPORT_FOLDERS.comparison);
+      written = await writeComparisonReport({ arms, pair, dir, ...options, links: arms.map(arm => `../../${where(arm.written.dir)}/index.html`) });
+    } else {
+      const records = await readRecords(await project(meta, args.workspace));
+      if (!records?.input) refuse('REPORT_EMPTY', empty(args.workspace));
+      written = await writeSessionReport({ records, ...options });
+    }
+    let pictures = null;
+    if (args.picture !== false) {
+      const found = await browser();
+      if (!found.available) pictures = { unavailable: found.reason };
+      else {
+        try {
+          const shot = await captureReport(written.dir, { browser: found, env, ...(shoot ? { shoot } : {}) });
+          pictures = { report: `${where(written.dir)}/${shot.report.file}`, card: `${where(written.dir)}/${shot.card.file}` };
+        } catch (error) { pictures = { failed: String(error?.message || 'The report could not be captured.').slice(0, 240) }; }
+      }
+    }
+    const folder = where(written.dir), record = written.record;
+    return { status: 'written', kind: record.kind, report: `${folder}/index.html`, card: `${folder}/card.html`, record: `${folder}/record.json`,
+      headline: record.kind === 'comparison' ? `Distance ${record.headline.value}; ${record.arms.map(arm => `${arm.label}: ${arm.headline?.sentence || ''}`).join(' ')}`.trim() : record.headline.sentence,
+      ...(arms.length ? { arms: arms.map(arm => ({ folder: arm.folder, report: `${where(arm.written.dir)}/index.html` })) } : {}), ...(pictures ? { pictures } : {}),
+      next: `Tell the person where the report is: ${folder}/index.html. It opens in any browser, with no server and no script.` };
   }
 
   const names = DESIGN_TOOLS.map(tool => tool.name);
@@ -565,6 +597,7 @@ export function createDesignTools(context) {
     if (name === 'image') return picture(args, meta);
     if (name === 'materials') return material(args, meta);
     if (name === 'design_compare') return compare(args, meta);
+    if (name === 'design_report') return report(args, meta);
     return null;
   }
   return { definitions: DESIGN_TOOLS, names, handle, layers: DNA_LAYERS };

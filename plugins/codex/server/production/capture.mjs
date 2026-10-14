@@ -107,11 +107,11 @@ export function browserFailure(output = '') {
 }
 
 /**
- * Capture loopback pages, one PNG per shot: each shot is {url, width, height, out, full?, ready?}. The page is laid out
- * at exactly width by height (as a phone below 768 pixels wide), loaded, given its fonts and a moment to settle, then
- * captured; `full` captures the whole page height up to maxFullHeight. `ready` is an expression for a page that draws
- * after it loads, such as a canvas: a promise that resolves to true once the drawing is done, or to the text of what
- * went wrong. One browser serves all shots of a call.
+ * Capture loopback pages, one PNG per shot: each shot is {url, width, height, out, full?, maxHeight?, ready?}. The page
+ * is laid out at exactly width by height (as a phone below 768 pixels wide), loaded, given its fonts and a moment to
+ * settle, then captured; `full` captures the whole page height up to maxHeight, by default maxFullHeight, which a
+ * report page raises. `ready` is an expression for a page that draws after it loads, such as a canvas: a promise that
+ * resolves to true once the drawing is done, or to the text of what went wrong. One browser serves all shots of a call.
  */
 export async function captureShots({ browser, shots, timeoutMs = CAPTURE_TIMING.timeoutMs, settleMs = CAPTURE_TIMING.settleMs, env = process.env, spawnImpl = spawn }) {
   if (!browser?.available || typeof browser.path !== 'string') throw new Error(browser?.reason || 'No browser is available to capture the page.');
@@ -152,7 +152,7 @@ export async function captureShots({ browser, shots, timeoutMs = CAPTURE_TIMING.
         let clip;
         if (shot.full) {
           const { cssContentSize, contentSize } = await cdp.send('Page.getLayoutMetrics', {}, sessionId);
-          const height = Math.min(CAPTURE_TIMING.maxFullHeight, Math.max(shot.height, Math.ceil((cssContentSize || contentSize).height)));
+          const height = Math.min(shot.maxHeight ?? CAPTURE_TIMING.maxFullHeight, Math.max(shot.height, Math.ceil((cssContentSize || contentSize).height)));
           clip = { x: 0, y: 0, width: shot.width, height, scale: 1 };
         }
         const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', ...(clip ? { clip, captureBeyondViewport: true } : {}) }, sessionId);

@@ -10,7 +10,7 @@ Successful standalone Qloo replies receive an `evidence.id` beginning with `cult
 
 Set `QLOO_API_KEY` in the MCP process environment or the host's secret environment facility. The default base URL is `https://hackathon.api.qloo.com`. Do not put a credential into this plugin, client configuration examples, artifacts, browser code, or logs. Without a key, tool discovery works and a Qloo tool returns an explicit `QLOO_KEY_MISSING` error. Set `QLOO_BASE_URL` only when using a credential issued for another documented Qloo environment.
 
-## The mousa entry (0.5.0, in progress)
+## The mousa entry (0.6.0, in progress)
 
 `server/mousa.mjs` starts the server that the Claude Code and Codex packages will run. The server is named `mousa`, and its surface is built to be cheap to load:
 - Instructions stay under 2,048 characters, because Claude Code cuts server instructions there.
@@ -19,7 +19,7 @@ Set `QLOO_API_KEY` in the MCP process environment or the host's secret environme
 
 `server/index.mjs` keeps the standalone surface described below for Studio's `/mcp` endpoint and the Kiro example. The two entries share the same engine.
 
-It offers twelve tools in three groups: setup (below), taste (see [Taste questions](#taste-questions)) and design (see [Design stages](#design-stages)).
+It offers thirteen tools in three groups: setup (below), taste (see [Taste questions](#taste-questions)) and design (see [Design stages](#design-stages)).
 
 - **`mousa_status`.** Call it first. It reports:
   - whether Qloo is connected, and from where;
@@ -141,6 +141,12 @@ The design tools take the work from the Taste Brief to a checked and captured re
    - where each one's taste came from;
    - how many of the Qloo design's devices rest on what the prediction did not contain;
    - whether both started from the same frozen prediction. When they did not, the limitation says that the difference mixes the taste source with two starting points.
+8. **Report.** `design_report` writes the Taste Provenance page from the session's records, with no request.
+   - **The page** sets the frozen prediction and sketch beside what Qloo measured, each measured name marked new or predicted. It then follows the taste through the reading and each DNA device (its anchors, tokens, method and check) to the last round's captures, the review's verdicts and repairs, and the limits. The agent's own text is labelled as interpretation.
+   - **The files** go to `.mousa/report/`: `index.html` with no script and its fonts embedded, so it opens from the folder; a 1200×630 `card.html`; the captures it shows; and `record.json`, the same evidence as data. When captures work, `report.png` (the whole page, up to 16,000 pixels tall) and `card.png` are saved too.
+   - **Names only.** Qloo's ids, tag URNs, affinities, popularity and descriptions stay in the project. A Qloo id or local path in the agent's own text is replaced, and the page copies only the tools' own captures and registered pictures.
+   - **A comparison.** With `a` and `b`, it writes each arm's own page and, in the project's `.mousa/compare-report/`, a page that pairs the arms' captures by view, sets their devices side by side layer by layer and gives `design_compare`'s distance. Both share one implementation in `design/pair.mjs`, so they give the same number.
+   - **Earlier runs.** `scripts/build-report.mjs` writes the page for a recorded run, including one made with the earlier 0.4 surface, whose `culture-*.json` files it reads.
 
 `mousa_status` also reports the detected design system and the stage the session has reached (`.mousa/session.json`).
 
@@ -161,7 +167,7 @@ The skills carry what the agent needs to know, and the server instructions point
 | --- | --- | --- |
 | `taste-brief` | by the agent, before any design for an audience | The audience signal and its roles, the plan, the frozen prediction, the measurement, how to read the Taste Brief, `taste_ask`, designing without Qloo, and the honesty rules. References: the nine taste questions and the recipes, how to read what Qloo measured, and how qualities become design layers |
 | `design` | by the agent, after the Taste Brief | The reading, the DNA, the plan, materials and pictures, the build, the check, captures and the review, with the schemas. References: the DNA with an example per layer and the common refusals, production methods per medium, the web, app-ui, game and generic media, design systems and pictures |
-| `compare` | only when the person asks | Both arms in their own workspaces from one frozen prediction, `design_compare`, and the limits to report |
+| `compare` | only when the person asks | Both arms in their own workspaces from one frozen prediction, `design_compare`, the comparison page from `design_report`, and the limits to report |
 | `connect` | only when the person asks; Codex's onboarding skill | The Qloo key per host, the local key page, the project folder, pictures, captures and Codex hooks |
 
 Each skill has an `agents/openai.yaml` for Codex with its display name and invocation policy.

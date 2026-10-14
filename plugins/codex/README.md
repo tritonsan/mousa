@@ -1,4 +1,4 @@
-# Moûsa 0.5.0 for Codex
+# Moûsa 0.6.0 for Codex
 
 Moûsa grounds design work in measured cultural taste from Qloo: what an audience loves, what those works share, and what that means for palette, type, imagery, motion, voice and structure.
 
@@ -15,7 +15,7 @@ Codex asks you to approve each Moûsa tool that reaches the network, such as `ta
 
 ## What it holds
 
-- **The `mousa` MCP server** has twelve tools: setup (`mousa_status`, `mousa_connect`, `mousa_open_project`), taste (`taste_profile`, `taste_ask`, `qloo_query`) and design (`design_validate`, `design_check`, `design_capture`, `image`, `materials`, `design_compare`).
+- **The `mousa` MCP server** has thirteen tools: setup (`mousa_status`, `mousa_connect`, `mousa_open_project`), taste (`taste_profile`, `taste_ask`, `qloo_query`) and design (`design_validate`, `design_check`, `design_capture`, `image`, `materials`, `design_compare`, `design_report`).
 - **Skills:**
   - `taste-brief`: what to ask Qloo and how to read the answer;
   - `design`: from the Taste Brief to a checked, captured design;

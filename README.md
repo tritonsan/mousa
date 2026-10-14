@@ -236,7 +236,7 @@ Each job must be a completed record of its kind. `--app` builds `DATA_DIR/showca
 
 ## Portable plugin
 
-### Claude Code and Codex plugins (0.5.0)
+### Claude Code and Codex plugins (0.6.0)
 
 Moûsa ships as two plugins built from `plugin/`: `plugins/claude-code` and `plugins/codex`, with a Kiro agent template in `plugins/kiro`. Each plugin carries the `mousa` MCP server, the font library, four skills and a write gate. The four skills are `taste-brief`, `design`, `compare` and `connect`. The gate holds a design's file writes between the frozen prediction and a valid Design DNA. The repository root holds a marketplace for each host:
 
@@ -252,6 +252,8 @@ codex plugin add mousa@mousa
 Each person uses their own Qloo API key. They can enter it in Claude Code's plugin settings or on Moûsa's local key page, `mousa_connect`, which never passes the key through the chat. `npm run build:plugins` rebuilds the packages, and a test fails when a committed package differs from what its sources build. See the [plugin README](plugin/README.md#packages).
 
 The plugins restyle existing projects in their own design systems: CSS custom properties, design token files and Tailwind themes. In live runs, Claude Code restyled the Ramble app (`examples/mobile-app`) through its design tokens, and Codex restyled a Vite and Tailwind CSS 4 site (`examples/tailwind-site`) through its `@theme` and its own build. Both kept every fact; see the [verification record](docs/verification.md#live-restyles-of-existing-projects--october-13-2026).
+
+Each design ends with its **Taste Provenance** page, written by `design_report` from the session's own records. It sets the prediction the agent froze before any data beside what Qloo measured, marks each measured name new or predicted, and follows that through the reading and each DNA device to the captures the agent reviewed, with the limits. A comparison page sets the two arms side by side. The page opens from its folder with no script, and its `record.json` keeps names only: no Qloo ids, scores or descriptions. [`scripts/build-report.mjs`](scripts/build-report.mjs) writes the page for a recorded run (`npm run build:report -- <run folder>`).
 
 The older standalone package follows.
 
