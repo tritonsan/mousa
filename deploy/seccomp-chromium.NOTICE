@@ -1,0 +1,17 @@
+deploy/seccomp-chromium.json
+
+This file is derived from Docker's default seccomp profile, seccomp/default.json in
+https://github.com/moby/profiles (last changed upstream in commit 6fe7deb1b9fb, 17 September 2026,
+downloaded 14 October 2026). That work is licensed under the Apache License, Version 2.0; a copy is
+in deploy/seccomp-chromium.LICENSE.
+
+Changes, made by scripts/build-seccomp.mjs and marked with "Mousa:" comments in the file:
+- The two rules that allow clone without CAP_SYS_ADMIN no longer mask its namespace flags, so a
+  process may create user, PID and network namespaces.
+- A rule allows unshare and chroot without a capability.
+
+Everything else is the default profile as it is: mount, setns, pivot_root and the other calls keep
+their default rules. The changes let Chromium keep its own sandbox when it captures a design for its
+review, in a container that drops every capability, instead of running it without the sandbox.
+
+The rest of this repository is under its own MIT licence (LICENSE).

@@ -369,7 +369,10 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
     if (times.length >= limits.perHour) throw new TryError(429, `This address started ${limits.perHour} tries in the last hour. The next one can start in ${Math.max(1, Math.ceil((HOUR - (at - times[0])) / 60000))} minutes.`);
     const waiting = lanes[lane].waiting.length, room = lane === 'quick' ? limits.quickWaiting : limits.pairWaiting;
     if (waiting >= room) throw new TryError(503, `The try is busy: ${waiting} ${lane === 'quick' ? 'first steps' : 'pairs'} wait for a slot. Please try again in a few minutes.`);
-    const mine = [...askers].filter(([key, who]) => who === address && key.endsWith(`:${lane}`)).length, most = lane === 'quick' ? limits.quickPerAddress : limits.pairPerAddress;
+    // A step counts while it waits or works: one whose page already shows it finished does not hold its address's place.
+    const active = lane === 'quick' ? QUICK_ACTIVE : PAIR_ACTIVE;
+    const mine = [...askers].filter(([key, who]) => who === address && key.endsWith(`:${lane}`) && active.includes(runs.get(key.split(':')[0])?.[lane]?.status)).length;
+    const most = lane === 'quick' ? limits.quickPerAddress : limits.pairPerAddress;
     if (mine >= most) throw new TryError(429, lane === 'quick' ? 'This address has first steps waiting or working already. Let one finish first.' : 'This address has a pair waiting or working already. Let it finish first.');
     // Only a run that is taken counts toward the hour; an address whose last run is over an hour old is forgotten.
     times.push(at);

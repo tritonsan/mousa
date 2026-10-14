@@ -36,8 +36,8 @@ services:
       MOUSA_ENVIRONMENT: hosted
       PRODUCTION_STAGES: ${PRODUCTION_STAGES:-on}
       MOUSA_CAPTURE: ${MOUSA_CAPTURE:-auto}
-      # Empty keeps Chromium's own sandbox, which this container's default profile blocks, so the review is left out.
-      # Read docs/aws-deployment.md before setting 1: the container is then the only boundary around the captured pages.
+      # Empty keeps Chromium's own sandbox, which the seccomp profile below lets it start. Read docs/aws-deployment.md
+      # before setting 1: the container is then the only boundary around the captured pages.
       MOUSA_CAPTURE_NO_SANDBOX: ${MOUSA_CAPTURE_NO_SANDBOX:-}
       # The public site: the vote's ballots and the try's access are signed with SITE_SECRET. Caddy is the proxy in
       # front, so the client's address comes from X-Forwarded-For.
@@ -61,6 +61,9 @@ services:
       - ALL
     security_opt:
       - no-new-privileges:true
+      # Docker's default profile with what Chromium's sandbox needs: clone may create namespaces, unshare and chroot
+      # are allowed (scripts/build-seccomp.mjs, deploy/seccomp-chromium.NOTICE).
+      - seccomp=./seccomp-chromium.json
     # Threads count toward this limit: a headless Chromium alone runs well over a hundred, and a pair runs two Kiro
     # sessions, each with Moûsa's server and its captures, beside two first steps.
     pids_limit: 1024

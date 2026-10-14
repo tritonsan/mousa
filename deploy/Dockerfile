@@ -8,9 +8,10 @@ ARG KIRO_EXPECTED_VERSION=""
 ARG MOUSA_COMMIT=""
 
 USER root
-# Chromium captures each design for the designing model's self-review. Its sandbox needs user namespaces, which the
-# default container profile blocks; the Studio then checks one test capture at start and leaves the review out. See
-# docs/aws-deployment.md before enabling MOUSA_CAPTURE_NO_SANDBOX.
+# Chromium captures each design for the designing model's self-review. Its sandbox needs user namespaces, which
+# Docker's default seccomp profile blocks; the Compose file runs the container under deploy/seccomp-chromium.json,
+# which allows them. Without it the Studio's one test capture at start fails and the review is left out. See
+# docs/aws-deployment.md before enabling MOUSA_CAPTURE_NO_SANDBOX instead.
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        bash ca-certificates curl unzip \

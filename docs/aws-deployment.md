@@ -157,13 +157,31 @@ Do not give the generation worker an EC2 instance role or task role with provisi
 
 With the production stages, each designer reviews captures of its saved site (desktop 1440×900 and mobile 390×844) or character before it finishes. The host renders them in headless Chromium, which can reach only a loopback server holding that one design: host names resolve nowhere, other connections go to a closed local proxy, and the browser process gets the server's environment without the variables whose names contain KEY, TOKEN, SECRET or PASSWORD. Kiro opens the PNGs with its own read tool, pointed at the run's review folder: the run's other files are denied to it by name, and a read outside the run's folder fails in the non-interactive run (observed with kiro-cli 2.24.0 and 2.27.1 on Windows).
 
-Chromium isolates each page in its own sandbox, which needs unprivileged user namespaces. Docker's default seccomp profile blocks them, so in this Compose setup the browser is expected to stop as it starts. The Studio finds this out before any run: at start it captures one test page, and when that fails it leaves the review out of every capability list and says why in its log and in `/api/status` (here: its sandbox needs user namespaces, which this system blocks). Designs are then planned and checked as before, without a visual review. The Compose file already gives Chromium a 256 MB `/dev/shm` and a process limit that fits its threads.
+Chromium isolates each page in its own sandbox, which needs unprivileged user namespaces. Docker's default seccomp profile blocks them. The Studio checks this before any run: at start it captures one test page. When that fails, it leaves the review out of every capability list and says why in its log and in `/api/status` (its sandbox needs user namespaces, which this system blocks). Designs are then planned and checked as before, without a visual review. The Compose file gives Chromium 512 MB of `/dev/shm` and a process limit that fits its threads.
 
-Three ways to run the review on the server:
+**The Compose file keeps Chromium's sandbox.** It runs the container under `deploy/seccomp-chromium.json`: Docker's default profile with three changes, written by `scripts/build-seccomp.mjs` from moby/profiles' `default.json`.
+- `clone` may create namespaces.
+- `unshare` and `chroot` are allowed.
+- Nothing else changes: `mount`, `setns`, `pivot_root` and every other call keep the default's rules. Inside a new user namespace a mount is still refused.
 
-- Keep Chromium's sandbox: give this container a seccomp profile that also allows the namespace calls the sandbox makes (`unshare`, and `clone` with namespace flags), referenced with `security_opt: [seccomp=<file>]`. The host kernel must allow unprivileged user namespaces, and an AppArmor policy can still block them. This route has not been verified here.
-- Set `MOUSA_CAPTURE_NO_SANDBOX=1`. Chromium then runs without its sandbox, and the container is the only boundary around the captured pages, which the model wrote from reviewers' briefs. A browser exploit in such a page would run as UID 1000 with this container's access: the volume's jobs and Kiro home, the server's environment through `/proc` (including `KIRO_API_KEY` and `QLOO_API_KEY`), and outbound network, because an exploit is not bound by the browser's own network rules. The read-only root filesystem, dropped capabilities, `no-new-privileges` and the process and memory limits still apply. Consider it only for a gated jury demo, and rebuild the image to take Debian's Chromium security updates.
-- Leave the review out with `MOUSA_CAPTURE=off`, or as the default does when the sandbox cannot start.
+Licence and changes: `deploy/seccomp-chromium.NOTICE` and `deploy/seccomp-chromium.LICENSE` (Apache 2.0).
+
+On 14 October 2026, on Docker Desktop's Linux engine, the real Compose file started the image under this profile with every capability dropped and `no-new-privileges`. Chromium's test capture passed with its sandbox, and the healthcheck reported healthy. Two conditions remain:
+- the host kernel must allow unprivileged user namespaces, as Amazon Linux 2023 does by default;
+- an AppArmor or SELinux policy can still refuse them.
+
+Check the start log's `Review captures:` line on the server.
+
+**The trade-off.** The profile lets a process in the container create user namespaces, which widens what the kernel exposes to it: kernel bugs reachable through user namespaces have been used to escalate privileges. In return the captured pages, which the model wrote, stay inside Chromium's own sandbox. Keep the host's kernel updated.
+
+**The other routes**, if the profile cannot be used:
+- **Without Chromium's sandbox.** Set `MOUSA_CAPTURE_NO_SANDBOX=1` and remove the `seccomp=` line. The container is then the only boundary around the captured pages. A browser exploit in such a page would run as UID 1000 with this container's access:
+  - the volume's jobs and Kiro homes;
+  - the server's environment through `/proc`, including `KIRO_API_KEY` and `QLOO_API_KEY`;
+  - outbound network, since an exploit is not bound by the browser's own network rules.
+
+  The read-only root filesystem, the dropped capabilities, `no-new-privileges` and the process and memory limits still apply. The test capture passed this way too.
+- **No review.** Leave the review out with `MOUSA_CAPTURE=off`, as the Studio does by itself when the sandbox cannot start.
 
 ## Recorded local work on the hosted server
 
@@ -252,5 +270,5 @@ Later the same day the image was built locally (Docker Desktop 4.76, engine 29.5
   - with `MOUSA_CAPTURE_NO_SANDBOX=1`;
   - with Chromium's sandbox kept under `--security-opt seccomp=unconfined`.
 
-  So on this kernel only Docker's default seccomp profile blocks the sandbox. A profile that adds the namespace calls to the default should keep it, but it has not been written or tested.
+  So on this kernel only Docker's default seccomp profile blocks the sandbox. The profile the Compose file now uses, `deploy/seccomp-chromium.json`, passed the test with the sandbox kept. See [Review captures in the container](#review-captures-in-the-container).
 - **Not run in the container:** Kiro with an API key, and a try.

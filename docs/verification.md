@@ -21,6 +21,13 @@ One try ran with `node scripts/run-try.mjs --starter blank-site --references "Pa
 
 **Not shown:** Kiro 2.31.0, which the image installs, the API-key sign-in, and a try on the server.
 
+**Published.** The operator's consent was recorded with `scripts/run-try.mjs --publish-run`, and the gallery rebuilt with it as its eleventh entry, `try-f8d19b29`. The scan was clean. The pair joins the blind vote, and its page reads "A live try, recorded". `scripts/verify-site.mjs` passed every page, the new entry's and its arms' included, and captured them at 1440 and 390 pixels.
+
+**The container's captures with Chromium's sandbox.**
+- `deploy/seccomp-chromium.json` is Docker's default seccomp profile with clone's namespace mask lifted and `unshare` and `chroot` allowed, written by `scripts/build-seccomp.mjs` (tested in `tests/seccomp.test.mjs`).
+- Under it, the real Compose file with every capability dropped passed Chromium's test capture with its sandbox, and the image's healthcheck reported healthy.
+- Inside the container a user namespace could be made, and a mount in it was still refused.
+
 ## Live Kiro try — October 14, 2026
 
 `/try/` runs a juror's request in Kiro on the server, in two steps, behind `TRY_ACCESS_CODE`.
@@ -58,7 +65,7 @@ One try ran with `node scripts/run-try.mjs --starter blank-site --references "Pa
 - **Records.** A record being written reads as missing rather than failing the page. An unreadable `meta.json` is skipped at start, and an agent file a stopped session left, which names the key, is removed.
 - **Kiro's rules.** The agent's refusal rules come before its allowances. The arms' file tools are also denied, by absolute path, the run's other folders: step one's records, the other arm, the run's record, homes and streams.
 - **Smaller fixes.** The access limiter counts an IPv6 address by its /64 and stays bounded, and a stream file stops at 32 MB.
-- The full suite is 494/494 with Chrome.
+- The full suite is 496/496 with Chrome.
 - The pages were captured at 1440 and 390 pixels through a cookie proxy and read: the request page, step one's measurement, a pair at work (arms first, step one folded) and a finished pair.
 
 **Not shown yet** (L1–L3, each needs approval):
