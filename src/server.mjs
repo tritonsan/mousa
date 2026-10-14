@@ -25,6 +25,11 @@ import { landingPage, galleryPage, entryPage, armPage, missingPage, tryPendingPa
 import { votePage, voteThanksPage, voteProblemPage, voteResultsPage, ballotViews } from './site/vote-pages.mjs';
 import { createVoteBox, voterAddress, VoteError } from './votes.mjs';
 import { reportStylesheet } from '../plugin/server/design/report.mjs';
+import { createTryManager, TryError } from './try/manager.mjs';
+import { createTryAccess, AccessError } from './try/access.mjs';
+import { TryInputError } from './try/starters.mjs';
+import { tryAccessPage, tryStartPage, tryRunPage, tryProblemPage } from './site/try-pages.mjs';
+import { PUBLIC_TYPES } from './gallery/sanitize.mjs';
 
 const mime = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.json': 'application/json; charset=utf-8', '.txt': 'text/plain; charset=utf-8' };
 // The app shows generated-image thumbnails from the separate preview origin, which is added to img-src per response.
@@ -76,7 +81,7 @@ function checkOrigin(req) {
   if (origin.host !== req.headers.host) throw new HttpError(403, 'Generation requests from another site are not accepted.');
 }
 
-export async function createStudio({ config = getConfig(), inspect = inspectKiro, runner, characterRunner, qlooClientFactory, imageGenerator = null, siteCapture = null, browser = null } = {}) {
+export async function createStudio({ config = getConfig(), inspect = inspectKiro, runner, characterRunner, qlooClientFactory, imageGenerator = null, siteCapture = null, browser = null, tryOptions = {} } = {}) {
   let kiro = await inspect(config);
   const getKiroStatus = async () => kiro;
   const workspaces = new WorkspaceStore(config, templates); await workspaces.initialize();
@@ -96,6 +101,11 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
     .map(entry => ({ id: entry.id, arms: entry.record.arms || [] }));
   if (votePairs.length && !config.siteSecret) console.warn('Vote: SITE_SECRET is not set, so ballots last only as long as this process.');
   const voteBox = votePairs.length ? await createVoteBox({ dataDir: config.dataDir, secret: config.siteSecret, pairs: votePairs }) : null;
+  // The jury's live try in Kiro, behind its access code; its runs live in DATA_DIR/try.
+  const trial = createTryManager({ config, kiro: () => kiro, ...tryOptions });
+  await trial.initialize();
+  const tryAccess = createTryAccess({ code: config.tryAccessCode, secret: config.siteSecret });
+  if (config.tryAccessCode && !trial.readiness().open) console.warn(`Try: not open. ${trial.readiness().missing.join(' ')}`);
   let previewBaseUrl = config.previewBaseUrl;
   // A network client of /mcp gets the validators and the font catalog, but no file, image or capture tool: those act on
   // this machine, so the endpoint reports them as a hosted server would.
@@ -159,6 +169,24 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         if (!found) throw new HttpError(404, 'Not found.');
         const body = await fs.readFile(found.file).catch(() => { throw new HttpError(404, 'Not found.'); });
         return send(res, 200, body, { 'Content-Type': found.type, ...headers, 'Cache-Control': 'public, max-age=600' });
+      }
+      // A live try's two designs, by the run's token, sandboxed like the gallery's; a game's music as the gallery plays it.
+      const tryMatch = url.pathname.match(/^\/try\/([a-f0-9]{32})\/([a-f0-9]{48})\/(with-qloo|without-qloo)\/(.+)$/u);
+      if (tryMatch) {
+        let relative;
+        try { relative = decodeURIComponent(tryMatch[4]); } catch { throw new HttpError(404, 'Not found.'); }
+        const headers = { 'Content-Security-Policy': SHOWCASE_APP_CSP, 'Access-Control-Allow-Origin': '*' };
+        const run = await trial.armFile(tryMatch[1], tryMatch[2], tryMatch[3], 'index.html').then(found => found, () => null);
+        if (run?.medium === 'game' && MUSIC_PATH.test(relative)) {
+          const track = musicLibraryFile(config.rootDir, await loadMusicLibrary(config.rootDir), relative);
+          if (!track) throw new HttpError(404, 'Track not found.');
+          return await sendLibraryFile(req, res, track, { ...headers, 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer' })
+            .catch(error => { if (res.headersSent) { res.destroy(); return; } throw error.code === 'ENOENT' ? new HttpError(404, 'Track not found.') : error; });
+        }
+        const type = PUBLIC_TYPES[path.extname(relative).toLowerCase()];
+        const found = type ? await trial.armFile(tryMatch[1], tryMatch[2], tryMatch[3], relative) : null;
+        if (!found) throw new HttpError(404, 'Not found.');
+        return send(res, 200, await fs.readFile(found.file), { 'Content-Type': type, ...headers });
       }
       // The showcased app run: the starter as it was, the redesign and the review captures, sandboxed like a site preview.
       const appMatch = url.pathname.match(/^\/showcase\/app\/([a-z0-9-]{3,61})\/(.+)$/u);
@@ -358,6 +386,83 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         if (!template) throw new HttpError(404, 'Starter site not found.');
         return send(res, 200, template.files[templateMatch[2]], { 'Content-Type': mime[path.extname(templateMatch[2])], 'Content-Security-Policy': previewCsp });
       }
+      // The live try, with no script: the access code, the request, each try's page, its report files and the latest
+      // capture of each arm. A form posts and is answered with a redirect, so a refresh never posts again.
+      if (/^\/(?:try(?:\/|$)|api\/try\/)/u.test(pathname)) {
+        const page = (html, status = 200, headers = {}) => send(res, status, html, { 'Content-Type': mime['.html'], 'Content-Security-Policy': siteCsp(new URL(previewBaseUrl).origin), ...headers });
+        const repository = config.siteRepository || '';
+        const api = pathname.startsWith('/api/');
+        const redirect = (to, headers = {}) => send(res, 303, '', { Location: to, ...headers });
+        if (req.method === 'GET' && pathname === '/api/try/starters') return send(res, 200, { open: trial.readiness().open, starters: trial.starters() });
+        if (!trial.readiness().open) {
+          if (api) throw new HttpError(503, 'The live try is not open on this server.');
+          return page(tryPendingPage({ repository }), ['/try', '/try/'].includes(pathname) ? 200 : 503);
+        }
+        const address = voterAddress(req, config.trustProxy);
+        try {
+          if (pathname === '/try/access') {
+            if (req.method !== 'POST') return redirect('/try/');
+            checkOrigin(req);
+            const form = new URLSearchParams(await readBody(req, 2048));
+            try { return redirect('/try/', { 'Set-Cookie': tryAccess.enter(form.get('code'), { address, secure: !isLoopback(config.host) }) }); }
+            catch (error) { if (error instanceof AccessError) return page(tryAccessPage({ problem: error.message, repository }), error.status); throw error; }
+          }
+          if (!tryAccess.granted(req)) {
+            if (api) throw new HttpError(401, 'The try\'s access code is required.');
+            return page(tryAccessPage({ repository }), req.method === 'GET' ? 200 : 401);
+          }
+          if (pathname === '/try' || pathname === '/try/') {
+            if (req.method === 'GET') return page(tryStartPage({ starters: trial.starters(), repository }));
+            if (req.method !== 'POST') return send(res, 405, 'Method not allowed.', { Allow: 'GET, POST' });
+            checkOrigin(req);
+            const form = new URLSearchParams(await readBody(req, 8192));
+            const values = { starter: form.get('starter') || '', references: form.get('references') || '', place: form.get('place') || '', ages: form.getAll('ages') };
+            try { return redirect(`/try/${(await trial.create(values, { address })).id}/`); }
+            catch (error) { if (error instanceof TryInputError || error instanceof TryError) return page(tryStartPage({ starters: trial.starters(), problem: error.message, values, repository }), error.status); throw error; }
+          }
+          const apiMatch = pathname.match(/^\/api\/try\/([a-f0-9]{32})$/u);
+          if (apiMatch && req.method === 'GET') { const run = trial.get(apiMatch[1]); return send(res, 200, { ...trial.publicRun(run), view: await trial.view(run) }); }
+          const runMatch = pathname.match(/^\/try\/([a-f0-9]{32})(\/.*)?$/u);
+          if (!runMatch) throw new TryError(404, 'There is no such try.');
+          const run = trial.get(runMatch[1]), rest = runMatch[2] || '';
+          if (rest === '') return redirect(`/try/${run.id}/`);
+          if (rest === '/' && req.method === 'GET') {
+            const record = async file => { const found = await trial.reportFile(run.id, file); return found ? fs.readFile(found, 'utf8').then(JSON.parse, () => null) : null; };
+            return page(tryRunPage({ run, view: await trial.view(run), measurement: await record('.mousa/report/record.json'), comparison: run.pair ? await record('.mousa/compare-report/record.json') : null,
+              previewBase: new URL(previewBaseUrl).origin, families: await fontFamilies(), repository }));
+          }
+          const action = /^\/(design|cancel|publish)$/u.exec(rest)?.[1];
+          if (action) {
+            if (req.method !== 'POST') return send(res, 405, 'Method not allowed.', { Allow: 'POST' });
+            checkOrigin(req);
+            const form = new URLSearchParams(await readBody(req, 1024));
+            if (action === 'design') await trial.design(run.id, { address });
+            else if (action === 'cancel') await trial.cancel(run.id);
+            else await trial.publish(run.id, form.get('consent') === 'yes');
+            return redirect(`/try/${run.id}/${action === 'design' ? '#step-two' : action === 'publish' ? '#publish' : ''}`);
+          }
+          const fileMatch = /^\/files\/(.+)$/u.exec(rest);
+          if (fileMatch && req.method === 'GET') {
+            let relative;
+            try { relative = decodeURIComponent(fileMatch[1]); } catch { throw new TryError(404, 'Not found.'); }
+            const type = PUBLIC_TYPES[path.extname(relative).toLowerCase()];
+            const found = type ? await trial.reportFile(run.id, relative) : null;
+            if (!found) throw new TryError(404, 'Not found.');
+            return send(res, 200, await fs.readFile(found), { 'Content-Type': type, 'Content-Security-Policy': reportCsp, 'Cache-Control': 'private, no-store' });
+          }
+          const captureMatch = /^\/progress\/(with-qloo|without-qloo)\.png$/u.exec(rest);
+          if (captureMatch && req.method === 'GET') {
+            const file = await trial.latestCapture(run.id, captureMatch[1]);
+            const body = file ? await fs.readFile(file).catch(() => null) : null;
+            if (!body) throw new TryError(404, 'No capture yet.');
+            return send(res, 200, body, { 'Content-Type': 'image/png', 'Cache-Control': 'private, no-store' });
+          }
+          throw new TryError(404, 'There is no such page in this try.');
+        } catch (error) {
+          if (error instanceof TryError) return api ? send(res, error.status, { error: error.message }) : page(tryProblemPage({ message: error.message, status: error.status, repository }), error.status);
+          throw error;
+        }
+      }
       // The blind vote: a ballot, its pictures by sealed token, a vote cast with the form, and the results.
       if (hasGallery() && /^\/(?:vote(?:\/|$)|api\/vote\/)/u.test(pathname)) {
         const page = (html, status = 200) => send(res, status, html, { 'Content-Type': mime['.html'], 'Content-Security-Policy': siteCsp(new URL(previewBaseUrl).origin) });
@@ -403,7 +508,6 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         const repository = config.siteRepository || '';
         if (pathname === '/') return page(landingPage({ gallery, repository }));
         if (pathname === '/gallery' || pathname === '/gallery/') return page(galleryPage({ gallery, repository }));
-        if (pathname === '/try' || pathname === '/try/') return page(tryPendingPage({ repository }));
         const entryMatch = pathname.match(/^\/gallery\/([a-z0-9][a-z0-9-]{2,60})\/(?:arms\/([a-z0-9][a-z0-9-]{0,60})\/)?$/u);
         if (entryMatch) {
           const entry = gallery.entries.get(entryMatch[1]);
@@ -451,7 +555,8 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
   const appUrl = `http://${isLoopback(config.host) ? config.host : '127.0.0.1'}:${server.address().port}`;
   if (new URL(previewBaseUrl).origin === new URL(appUrl).origin) throw new Error('Preview must use a different origin from the app.');
   manager.setUrls({ bridgeUrl: `http://127.0.0.1:${server.address().port}`, previewBaseUrl });
-  return { server, previewServer, manager, workspaces, appUrl, previewBaseUrl, close: async () => {
+  return { server, previewServer, manager, trial, workspaces, appUrl, previewBaseUrl, close: async () => {
+    await trial.close();
     await manager.close();
     const closed = [server, previewServer].map(item => new Promise(resolve => item.close(resolve)));
     // A response its client never read would otherwise hold the server open.

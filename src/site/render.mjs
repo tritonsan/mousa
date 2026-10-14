@@ -13,18 +13,18 @@ const MEDIA = Object.freeze({ web: 'Website', 'app-ui': 'App interface', game: '
 const LANES = Object.freeze({ 'mousa:mousa-baseline': 'The baseline agent, without Qloo', 'mousa:mousa-designer': 'The Qloo agent' });
 const hex = value => (/^#[0-9a-f]{6}$/u.test(value || '') ? value : null);
 
-/** A page of the site: its header and navigation, the body and the footer. */
-export function layout({ title, description = '', body, active = '', repository = '', image = '' }) {
+/** A page of the site: its header and navigation, the body and the footer. `refresh` reloads it every so many seconds. */
+export function layout({ title, description = '', body, active = '', repository = '', image = '', refresh = 0 }) {
   const nav = [['/#how', 'How it works', 'how'], ['/gallery/', 'Evidence', 'gallery'], ['/vote/', 'Blind vote', 'vote'], ['/try/', 'Try it', 'try'], ['/studio', 'Studio', 'studio']];
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${escape(title)}</title>${description ? `<meta name="description" content="${escape(description)}">` : ''}${image ? `<meta property="og:image" content="${escape(image)}">` : ''}
+<title>${escape(title)}</title>${description ? `<meta name="description" content="${escape(description)}">` : ''}${image ? `<meta property="og:image" content="${escape(image)}">` : ''}${Number.isInteger(refresh) && refresh > 0 ? `<meta http-equiv="refresh" content="${refresh}">` : ''}
 <link rel="stylesheet" href="/site/report.css"><link rel="stylesheet" href="/site/site.css"><link rel="stylesheet" href="/brand.css"></head>
 <body class="site mr"><a class="site-skip" href="#main">Skip to the content</a>
 <header class="site-head"><a class="site-mark" href="/" aria-label="Moûsa home"><span class="brand-lockup"><img src="/assets/mousa-logo.png" alt="Moûsa" width="1254" height="1254"></span></a>
 <nav aria-label="Site">${nav.map(([href, label, key]) => `<a href="${href}"${key === active ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></header>
 <main id="main">${body}</main>
 <footer class="site-foot"><p>Moûsa is an entry to the Qloo Agentic Hackathon. Taste data from <a href="https://www.qloo.com/">Qloo</a>; fonts from the open-licence library the plugin carries (SIL OFL 1.1).${repository ? ` Source: <a href="${escape(repository)}">${escape(repository.replace(/^https?:\/\//u, ''))}</a>, MIT licence.` : ' MIT licence.'}</p>
-<p>Every page here is drawn from recorded sessions. Qloo's ids, affinity scores, popularity and descriptions are not published; each design choice is the agent's interpretation of the names shown.</p></footer>
+<p>Every page here is drawn from the sessions' own records. Qloo's ids, affinity scores, popularity and descriptions are not published; each design choice is the agent's interpretation of the names shown.</p></footer>
 </body></html>`;
 }
 

@@ -25,6 +25,8 @@ export function getConfig(env = process.env) {
   if (env.CODEX_IMAGES && !['auto', 'off'].includes(env.CODEX_IMAGES)) throw new Error('Invalid CODEX_IMAGES. Use auto or off.');
   if (env.PRODUCTION_STAGES && !['on', 'off'].includes(env.PRODUCTION_STAGES)) throw new Error('Invalid PRODUCTION_STAGES. Use on or off.');
   if (env.MOUSA_ENVIRONMENT && !['local', 'hosted'].includes(env.MOUSA_ENVIRONMENT)) throw new Error('Invalid MOUSA_ENVIRONMENT. Use local or hosted.');
+  if (env.TRY_ACCESS_CODE && env.TRY_ACCESS_CODE.length < 12) throw new Error('TRY_ACCESS_CODE must be at least 12 characters.');
+  if (env.TRY_ARMS_PARALLEL && !['on', 'off'].includes(env.TRY_ARMS_PARALLEL)) throw new Error('Invalid TRY_ARMS_PARALLEL. Use on or off.');
   const productionStages = (env.PRODUCTION_STAGES || 'on') === 'on';
   if (!isLoopback(host) && token.length < 24) throw new Error('Public binding requires a DEMO_ACCESS_TOKEN of at least 24 characters.');
   if (!isLoopback(host) && !env.PUBLIC_PREVIEW_BASE_URL) throw new Error('Public binding requires an explicit separate PUBLIC_PREVIEW_BASE_URL.');
@@ -58,6 +60,10 @@ export function getConfig(env = process.env) {
     siteSecret: env.SITE_SECRET || '', trustProxy: env.TRUST_PROXY === '1',
     // The public repository the site links to, once there is one.
     siteRepository: /^https:\/\/[^\s"'<>]+$/u.test(env.SITE_REPOSITORY_URL || '') ? env.SITE_REPOSITORY_URL : '',
+    // The live try: the code jurors enter, whether a pair's two arms run at once, and the Qloo requests one try may send.
+    tryAccessCode: env.TRY_ACCESS_CODE || '', tryArmsParallel: (env.TRY_ARMS_PARALLEL || 'on') === 'on', tryQlooBudget: number('TRY_QLOO_BUDGET', 24, 1, 60),
+    // The browser the try's sessions capture their designs with, when the machine's default one cannot run headless.
+    captureBrowser: env.MOUSA_BROWSER || '', captureNoSandbox: env.MOUSA_CAPTURE_NO_SANDBOX === '1',
     // Stored jobs, including finished ones; a local study can raise it without archiving earlier work.
     maxJobs: number('MAX_JOBS', 30, 1, 200), maxFiles: 30, maxFileBytes: 160000,
     maxProjectBytes: 1500000, maxBriefLength: 3500,
@@ -66,7 +72,7 @@ export function getConfig(env = process.env) {
 
 export function redact(value, config = {}) {
   let text = String(value ?? '');
-  for (const secret of [config.kiroApiKey, config.qlooKey, config.accessToken]) {
+  for (const secret of [config.kiroApiKey, config.qlooKey, config.accessToken, config.tryAccessCode, config.siteSecret]) {
     if (secret) text = text.split(secret).join('[redacted]');
   }
   return text.replace(/ksk_[A-Za-z0-9_-]+/g, '[redacted]').replace(/Bearer\s+[A-Za-z0-9._-]+/gi, 'Bearer [redacted]');
