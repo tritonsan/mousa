@@ -370,3 +370,84 @@ test('the guard knows what each starter lets a design change', async () => {
   }
   void prediction; void repo;
 });
+
+test('a try records what each session cost and how full its context got, and the server caps its own day: first steps, pairs and credits', async t => {
+  // The fake Kiro meters one credit a call. Step one's prediction session makes two calls.
+  const { manager } = await setup(t);
+  const run = await manager.create({ starter: 'fixture-shop', references: ['Paterson', 'Nujabes'] }, { address: '198.51.100.40' });
+  const quick = await settled(manager, run.id, 'quick');
+  assert.equal(quick.quick.session.credits, 2);
+  assert.equal(quick.quick.session.contextPeak, 14.5, 'the fullest the context window got, not the last reading');
+  assert.equal(quick.quick.session.dropped, undefined, 'no stream line was too long to keep');
+  await manager.design(run.id, { address: '198.51.100.40' });
+  const done = await settled(manager, run.id, 'pair');
+  assert.equal(done.pair.status, 'done', JSON.stringify(done.pair).slice(0, 400));
+  const arms = Object.values(done.pair.arms);
+  assert.ok(arms.every(arm => Number.isFinite(arm.session.credits) && arm.session.credits > 0 && Number.isFinite(arm.session.contextPeak)));
+  assert.equal(done.pair.credits, arms.reduce((sum, arm) => sum + arm.session.credits, 0), 'the pair costs what its two sessions metered');
+  const usage = manager.usage();
+  assert.deepEqual(usage.limits, { runs: 0, pairs: 0, credits: 0 }, 'no cap unless one is set');
+  assert.deepEqual(usage.day, { runs: 1, pairs: 1, credits: 2 + done.pair.credits });
+
+  // TRY_DAILY_RUNS counts every first step of the day, whoever asked.
+  const runs = await setup(t, { env: { TRY_DAILY_RUNS: '1' } });
+  await runs.manager.create({ starter: 'fixture-shop', references: ['Akira'] }, { address: '198.51.100.41' });
+  await assert.rejects(runs.manager.create({ starter: 'fixture-shop', references: ['Paterson'] }, { address: '198.51.100.42' }), error => error.status === 503 && /first steps today/u.test(error.message));
+
+  // TRY_DAILY_CREDITS stops new steps once the day's sessions metered that much.
+  const credits = await setup(t, { env: { TRY_DAILY_CREDITS: '1' } });
+  const first = await credits.manager.create({ starter: 'fixture-shop', references: ['Paterson', 'Nujabes'] }, { address: '198.51.100.43' });
+  await settled(credits.manager, first.id, 'quick');
+  assert.equal(credits.manager.usage().day.credits, 2);
+  await assert.rejects(credits.manager.create({ starter: 'fixture-shop', references: ['Paterson'] }, { address: '198.51.100.44' }), error => error.status === 503 && /budget for today/u.test(error.message));
+  await assert.rejects(credits.manager.design(first.id, { address: '198.51.100.43' }), error => error.status === 503 && /budget for today/u.test(error.message));
+
+  // TRY_DAILY_PAIRS counts the pairs asked for in the day; first steps still run.
+  const pairs = await setup(t, { env: { TRY_DAILY_PAIRS: '1' } });
+  const a = await pairs.manager.create({ starter: 'fixture-shop', references: ['Paterson', 'Nujabes'] }, { address: '198.51.100.45' });
+  const b = await pairs.manager.create({ starter: 'fixture-shop', references: ['Nujabes', 'Paterson'] }, { address: '198.51.100.46' });
+  await Promise.all([settled(pairs.manager, a.id, 'quick'), settled(pairs.manager, b.id, 'quick')]);
+  await pairs.manager.design(a.id, { address: '198.51.100.45' });
+  await assert.rejects(pairs.manager.design(b.id, { address: '198.51.100.46' }), error => error.status === 503 && /pairs today/u.test(error.message));
+  assert.equal(pairs.manager.get(b.id).pair, null, 'a refused pair leaves the run as it was');
+  await settled(pairs.manager, a.id, 'pair');
+});
+
+test('with TRY_PRIVATE_RETENTION_DAYS, a finished try older than that loses its Kiro homes and streams at start, and keeps its record', async t => {
+  const data = await fs.mkdtemp(path.join(os.tmpdir(), 'mousa-try-retention-'));
+  const source = await fs.mkdtemp(path.join(os.tmpdir(), 'mousa-try-starter-'));
+  t.after(async () => { await fs.rm(data, { recursive: true, force: true }); await fs.rm(source, { recursive: true, force: true }); });
+  const starters = await fixtureStarter(source);
+  const day = 24 * 60 * 60 * 1000, now = Date.parse('2026-11-10T12:00:00Z');
+  const write = async (id, endedAt, extra = {}) => {
+    const folder = path.join(data, 'try', id);
+    for (const part of ['kiro/predict/agents', 'sessions', 'project/.mousa/report']) await fs.mkdir(path.join(folder, ...part.split('/')), { recursive: true });
+    await fs.writeFile(path.join(folder, 'sessions', 'predict.jsonl'), '{}\n');
+    await fs.writeFile(path.join(folder, 'project', '.mousa', 'report', 'index.html'), '<p>kept</p>');
+    await fs.writeFile(path.join(folder, 'meta.json'), JSON.stringify({ schemaVersion: '1.0', id, createdAt: endedAt, updatedAt: endedAt, input: { starter: 'fixture-shop', references: ['Akira'] }, title: 't', medium: 'web', brief: 'b',
+      previewToken: 'f'.repeat(48), quick: { status: 'done', endedAt, session: { credits: 2 } }, pair: null, consent: null, ...extra }));
+  };
+  const old = 'a'.repeat(32), fresh = 'b'.repeat(32), working = 'c'.repeat(32);
+  await write(old, new Date(now - 9 * day).toISOString());
+  await write(fresh, new Date(now - 2 * day).toISOString());
+  await write(working, new Date(now - 9 * day).toISOString(), { pair: { status: 'designing', queuedAt: new Date(now - 9 * day).toISOString() } });
+  const config = getConfig({ HOST: '127.0.0.1', DATA_DIR: data, TRY_ACCESS_CODE: 'a-test-only-access-code', QLOO_API_KEY: 'fixture-key-123', KIRO_CLI_PATH: 'kiro-cli-test-only', TRY_PRIVATE_RETENTION_DAYS: '7' });
+  const manager = createTryManager({ config, kiro: KIRO, starters, log: quiet, now: () => now });
+  await manager.initialize();
+  t.after(() => manager.close());
+  assert.equal(await exists(path.join(data, 'try', old, 'kiro')), false);
+  assert.equal(await exists(path.join(data, 'try', old, 'sessions')), false);
+  assert.equal(await exists(path.join(data, 'try', old, 'project', '.mousa', 'report', 'index.html')), true, 'the report stays');
+  assert.ok(manager.get(old).privateRemovedAt);
+  assert.equal((await readJson(path.join(data, 'try', old, 'meta.json'))).privateRemovedAt, manager.get(old).privateRemovedAt);
+  assert.equal(await exists(path.join(data, 'try', fresh, 'sessions')), true, 'a recent try keeps its streams');
+  // The interrupted pair is marked failed at this start, and its streams stay for the operator to read.
+  assert.equal(manager.get(working).pair.status, 'failed');
+  assert.equal(await exists(path.join(data, 'try', working, 'sessions')), true);
+  assert.equal(manager.get(fresh).privateRemovedAt, undefined);
+  // Without the setting nothing is removed.
+  const keep = createTryManager({ config: getConfig({ HOST: '127.0.0.1', DATA_DIR: data, TRY_ACCESS_CODE: 'a-test-only-access-code', QLOO_API_KEY: 'fixture-key-123', KIRO_CLI_PATH: 'kiro-cli-test-only' }), kiro: KIRO, starters, log: quiet, now: () => now });
+  await keep.initialize();
+  t.after(() => keep.close());
+  assert.equal(await exists(path.join(data, 'try', fresh, 'kiro')), true);
+});

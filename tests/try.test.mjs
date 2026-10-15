@@ -255,4 +255,21 @@ test('a Studio without the try\'s code shows what the try will be, and its API s
   assert.deepEqual([health.try.open, health.try.missing, health.legacyJobs, health.commit], [false, ['TRY_ACCESS_CODE is not set.', 'QLOO_API_KEY is not set.'], false, 'abc1234']);
   assert.ok(health.disk.freeBytes > 0 && Number.isInteger(health.try.quick.waiting));
   assert.doesNotMatch(JSON.stringify(health), /fixture-key|access-code/u);
+  // What the operator reads before the jury does: the address this request counts as and the proxies that wrote to
+  // X-Forwarded-For, the day's spend against its caps, and how the server logs.
+  assert.deepEqual(health.caller, { address: '127.0.0.1', forwardedEntries: 0, trustProxy: 0 });
+  assert.deepEqual(health.try.day, { runs: 0, pairs: 0, credits: 0 });
+  assert.deepEqual(health.try.limits, { runs: 0, pairs: 0, credits: 0 }, 'no cap unless one is set');
+  assert.deepEqual(health.log, { format: 'text', requests: false });
+  const forwarded = await (await fetch(`${studio.appUrl}/api/health/deep`, { headers: { 'x-forwarded-for': '203.0.113.9, 198.51.100.2' } })).json();
+  assert.deepEqual(forwarded.caller, { address: '127.0.0.1', forwardedEntries: 2, trustProxy: 0 }, 'without a trusted proxy the socket\'s address counts');
+  // With the Studio's jobs closed, the network MCP endpoint and the job bridge are not there, workspaces take no change,
+  // and the status says so; the records stay readable.
+  assert.equal((await fetch(`${studio.appUrl}/mcp`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' })).status, 404);
+  assert.equal((await fetch(`${studio.appUrl}/internal/tools`, { method: 'POST', headers: { 'content-type': 'application/json', authorization: 'Bearer x' }, body: '{"name":"x"}' })).status, 404);
+  const workspace = await fetch(`${studio.appUrl}/api/workspaces`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: 'x', templateId: 'shop' }) });
+  assert.equal(workspace.status, 403);
+  assert.match((await workspace.json()).error, /no new Studio jobs/u);
+  assert.equal((await request(`${studio.appUrl}/api/workspaces`)).status, 200, 'the list stays readable');
+  assert.equal(JSON.parse((await request(`${studio.appUrl}/api/status`)).body).jobs.open, false);
 });

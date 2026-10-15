@@ -9,3 +9,6 @@ output/
 *.zip
 coverage/
 .playwright-mcp/
+
+# Kiro CLI writes a lock beside its settings while it runs; the lock is this machine's, never the repository's.
+.kiro/settings/cli.json.lock

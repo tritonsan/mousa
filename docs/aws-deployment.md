@@ -99,6 +99,10 @@ node scripts/export-hosted-jobs.mjs --out ../hosted --gallery --showcase
 - **Health.** `/api/health` is public, for an uptime monitor.
 - **The detailed check.** `/api/health/deep`, behind `X-Demo-Token: <DEMO_ACCESS_TOKEN>`, says whether the try is open and what it lacks. It also reports Kiro's version and sign-in, the capture browser, the free disk, the try's queues and the gallery's size, and names no secret.
 - **Pausing.** `docker compose exec app touch /data/jobs/try/PAUSED` stops new tries without a restart, and removing the file resumes them. Running steps finish.
+- **The day's spend.** `/api/health/deep` reports `try.day` (first steps, pairs and metered credits in the last 24 hours) beside `try.limits`. The caps are off by default, as decided for the jury's six members; the numbers are there to read, and a cap can be set later without any other change.
+- **The caller's address.** `/api/health/deep` also returns `caller`: the address this request counts as and how many entries `X-Forwarded-For` carried. Check it from two networks before the jury does: behind CloudFront with `TRUST_PROXY=1` the two addresses must differ, or every juror shares one address's limits.
+- **Logs.** With `LOG_FORMAT=json` the container writes one object a line: `started`, each `request` (route pattern, status, milliseconds; no id or token), the try's warnings and errors, `unhandled-rejection` and `uncaught-exception`. A collector reads `docker logs`; nothing in it needs redaction after the fact, since the secrets are removed as lines are written.
+- **Restarts and the retention.** A restart marks an interrupted step as such and keeps its streams; a finished try older than `TRY_PRIVATE_RETENTION_DAYS` loses its Kiro homes and streams at that start. An uncaught exception ends the process for Compose to start it again; an unhandled promise rejection is logged and the Studio goes on.
 - **Restarts.** A restart marks an interrupted step as such. The juror starts it again.
 - **The judging period (2 to 16 November).**
   - Build the image once, inspect it, and deploy it by digest. Do not rebuild while judging runs.
@@ -163,7 +167,11 @@ For a repeatable AWS demo, build once, inspect the version record, and deploy th
 | `TRY_ACCESS_CODE` | The jury's code for `/try/`, 12 characters or more; empty keeps the try closed |
 | `TRY_ARMS_PARALLEL` | `on` runs a pair's two Kiro sessions at once, `off` one after the other |
 | `TRY_QLOO_BUDGET` | Qloo requests one try may send in all; default `24` |
-| `LEGACY_JOBS` | Compose: `off`, so the Studio's own job runs take no new work; `on` locally |
+| `TRY_DAILY_RUNS`, `TRY_DAILY_PAIRS`, `TRY_DAILY_CREDITS` | Optional caps on the server's own rolling day for the try, whoever asks: first steps, pairs and Kiro credits as its stream meters them. All off at `0`, the default, as decided for the jury's six members; a cap that is set refuses a new step with 503 and the recorded sessions stay open. One live pair cost about 87 credits on 14 October 2026; a try's record keeps each session's `credits` and `contextPeak` either way |
+| `TRY_PRIVATE_RETENTION_DAYS` | Compose: `14`. At start, a finished try older than this keeps its record, reports and designs; its Kiro homes and session streams are removed. `0` keeps them |
+| `MOUSA_CAPTURE_INLINE_SIDE` | The longer side a review capture is scaled to before the model sees it (512-2400). Empty is the engine's choice: 1024 on a hosted server, 1568 locally, since a round of 1568-pixel captures took two live arms to 95% of their context |
+| `LOG_FORMAT`, `REQUEST_LOG` | Compose: `json` and `on`: one JSON object a line with the secrets redacted, and a record per request with its route pattern, status and time, never a try's id, a preview token or a ballot. Locally `text` and `off` |
+| `LEGACY_JOBS` | Compose: `off`, so the Studio's own job runs take no new work and `/mcp`, the job bridge and workspace changes answer 404 or 403; `on` locally |
 | `MOUSA_COMMIT` | Build argument and variable: the commit the image is built from, which each try records |
 | `DEMO_PORT` | Compose host port, default `8787`; host mapping stays loopback |
 | `DEMO_PREVIEW_PORT` | Compose preview host port, default `8788`; host mapping stays loopback |

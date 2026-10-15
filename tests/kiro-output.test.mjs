@@ -55,3 +55,14 @@ test('the update of a stream event is found in each format Kiro has written', ()
   const plain = { type: 'tool_call', title: 'Read' };
   assert.equal(streamUpdate(plain), plain);
 });
+
+test('a dropped line is reported once, whether it arrived whole or grew past the limit across chunks', () => {
+  const dropped = [];
+  const lines = [];
+  const read = kiroOutputReader({ onLine: line => lines.push(line), onDrop: () => dropped.push(true), limits: { line: 10, total: 1000 } });
+  read(Buffer.from('{"a":1}\n[1,2,3,4,5,6,7,8,9,10,11,12]\n'));
+  read(Buffer.from('[1,2,3,4,5'));
+  read(Buffer.from(',6,7,8,9,10,11,12,13,14]\n{"b":2}\n'));
+  assert.deepEqual(lines, ['{"a":1}', '{"b":2}']);
+  assert.equal(dropped.length, 2);
+});

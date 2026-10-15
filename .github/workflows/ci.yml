@@ -1,0 +1,45 @@
+# The suite on both platforms the Studio runs on, and the plugin packages checked against their source: a package is
+# generated from plugin/ by scripts/build-plugins.mjs, so a hand edit under plugins/ fails here. No model, Qloo or
+# network request is made; the Docker image is built on the operator's machine (docs/aws-deployment.md).
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # The capture tests need a Chromium-based browser: the runners carry Google Chrome. On Windows it is named, since
+      # a headless Edge has been seen to exit at once (docs/verification.md).
+      - name: Tests
+        shell: bash
+        env:
+          MOUSA_BROWSER: ${{ matrix.os == 'windows-latest' && 'C:\Program Files\Google\Chrome\Application\chrome.exe' || '' }}
+        run: node --test tests/*.test.mjs game/tests/*.test.mjs
+
+  plugins:
+    name: Plugin packages match their source
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Rebuild the packages
+        run: node scripts/build-plugins.mjs
+      - name: No difference from the committed packages
+        run: git diff --exit-code --stat -- plugins .claude-plugin .agents

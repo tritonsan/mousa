@@ -52,6 +52,7 @@ export function tryAgent({ kind, model, rootDir, project, home, starter, qloo = 
       MOUSA_PROJECT_DIR: project, MOUSA_HOST: 'kiro', MOUSA_ENVIRONMENT: 'hosted', MOUSA_IMAGES: 'off', MOUSA_QLOO_BUDGET: String(budget),
       MOUSA_CONFIG_DIR: paths.join(home, 'mousa'), MOUSA_LIBRARY_ROOT: rootDir, ...(usageFile ? { MOUSA_QLOO_USAGE_FILE: usageFile } : {}),
       ...(capture.browser ? { MOUSA_BROWSER: capture.browser } : {}), ...(capture.noSandbox ? { MOUSA_CAPTURE_NO_SANDBOX: '1' } : {}),
+      ...(capture.inlineSide ? { MOUSA_CAPTURE_INLINE_SIDE: String(capture.inlineSide) } : {}),
       ...(kind === 'qloo' && qloo?.key ? { QLOO_API_KEY: qloo.key, ...(qloo.baseUrl ? { QLOO_BASE_URL: qloo.baseUrl } : {}) } : {}),
     } } },
     tools: kind === 'predict' ? ['@mousa'] : ['@mousa', 'read', 'write'],
@@ -143,7 +144,7 @@ export async function runTrySession({ config, kind, home, project, starter, prom
     await fs.mkdir(path.join(home, 'settings'), { recursive: true });
     if (streamFile) { await fs.mkdir(path.dirname(streamFile), { recursive: true }); stream = await fs.open(streamFile, 'w'); }
     const agent = tryAgent({ kind, model, rootDir: config.rootDir, project, home, starter, qloo: { key: config.qlooKey, baseUrl: config.qlooBaseUrl },
-      budget: config.tryQlooBudget || 24, usageFile, outside, capture: { browser: config.captureBrowser, noSandbox: config.captureNoSandbox }, platform });
+      budget: config.tryQlooBudget || 24, usageFile, outside, capture: { browser: config.captureBrowser, noSandbox: config.captureNoSandbox, inlineSide: config.captureInlineSide || 0 }, platform });
     await fs.writeFile(agentFile, `${JSON.stringify(agent, null, 2)}\n`);
     await fs.writeFile(path.join(home, 'settings', 'cli.json'), JSON.stringify({ 'chat.disableInheritingDefaultResources': true }));
   } catch {
@@ -163,6 +164,8 @@ export async function runTrySession({ config, kind, home, project, starter, prom
     return failed('The Kiro process could not be started.');
   }
   const calls = new Map(), finished = [];
+  // What Kiro meters as the session goes: its credits (the latest total) and the fullest its context window got.
+  let credits = null, contextPeak = null, dropped = 0;
   let stderr = '', stopped = null, settled = false, refused = 0, writing = Promise.resolve(), written = 0, finishNow = null;
   const stop = reason => {
     if (stopped) return;
@@ -180,6 +183,12 @@ export async function runTrySession({ config, kind, home, project, starter, prom
     let event;
     try { event = JSON.parse(line); } catch { return; }
     if (event?.type === 'runFinished') { finished.push({ status: event.data?.status ?? null, stopReason: event.data?.stopReason ?? null }); return; }
+    if (event?.type === 'metadata') {
+      const used = Number(event.data?.contextUsagePercentage);
+      if (Number.isFinite(used)) contextPeak = Math.max(contextPeak ?? 0, Math.round(used * 10) / 10);
+      if (Array.isArray(event.data?.meteringUsage)) credits = Math.round(event.data.meteringUsage.reduce((sum, item) => sum + (Number(item?.value) || 0), 0) * 100) / 100;
+      return;
+    }
     const update = streamUpdate(event);
     if (!['tool_call', 'tool_call_update'].includes(update?.sessionUpdate) || typeof update.toolCallId !== 'string') return;
     const isNew = !calls.has(update.toolCallId);
@@ -196,7 +205,7 @@ export async function runTrySession({ config, kind, home, project, starter, prom
   const abort = () => stop('The try was cancelled.');
   signal?.addEventListener('abort', abort, { once: true });
   if (signal?.aborted) abort();
-  child.stdout.on('data', kiroOutputReader({ onLine, onLimit: () => stop('The session exceeded its output limit.') }));
+  child.stdout.on('data', kiroOutputReader({ onLine, onDrop: () => { dropped++; }, onLimit: () => stop('The session exceeded its output limit.') }));
   child.stderr.on('data', chunk => { stderr = (stderr + chunk.toString()).slice(-4000); });
   child.stdin.on('error', () => {});
   child.stdin.end(prompt);
@@ -208,7 +217,7 @@ export async function runTrySession({ config, kind, home, project, starter, prom
       await stream?.close().catch(() => {});
       await removeAgent();
       resolve({ ...result, kind, durationMs: Date.now() - started, stopped, refused, finished, calls: [...calls.values()].filter(call => call.tool),
-        stderr: stderr.replace(/\x1B\[[0-9;]*m/gu, '').trim().slice(-1500) });
+        credits, contextPeak, dropped, stderr: stderr.replace(/\x1B\[[0-9;]*m/gu, '').trim().slice(-1500) });
     };
     finishNow = finish;
     child.on('error', error => finish({ exitCode: null, error: error.code === 'ENOENT' ? 'Kiro CLI was not found.' : 'The Kiro process could not be started.' }));
@@ -216,10 +225,14 @@ export async function runTrySession({ config, kind, home, project, starter, prom
   });
 }
 
-/** What a session's end says, in words: kiro-cli exits 3 when an MCP server did not start and 4 when its agent did not load. */
+/**
+ * What a session's end says, in words: kiro-cli exits 3 when an MCP server did not start and 4 when its agent did not
+ * load, and a run the model's content filter stopped ends with that stop reason (seen with a read-probe prompt).
+ */
 export function sessionProblem(result) {
   if (result.stopped) return result.stopped;
   if (result.error) return result.error;
+  if ((result.finished || []).some(run => run?.stopReason === 'CONTENT_FILTERED')) return 'The model declined this request before finishing. Try other names, or another starter.';
   if (result.exitCode === 3) return 'Kiro could not start Moûsa\'s server.';
   if (result.exitCode === 4) return 'Kiro did not load the try\'s agent.';
   if (result.exitCode !== 0) return `Kiro ended with exit code ${result.exitCode}.`;

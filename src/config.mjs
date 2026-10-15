@@ -34,6 +34,8 @@ export function getConfig(env = process.env) {
   if (env.TRY_ACCESS_CODE && env.TRY_ACCESS_CODE.length < 12) throw new Error('TRY_ACCESS_CODE must be at least 12 characters.');
   if (env.TRY_ARMS_PARALLEL && !['on', 'off'].includes(env.TRY_ARMS_PARALLEL)) throw new Error('Invalid TRY_ARMS_PARALLEL. Use on or off.');
   if (env.LEGACY_JOBS && !['on', 'off'].includes(env.LEGACY_JOBS)) throw new Error('Invalid LEGACY_JOBS. Use on or off.');
+  if (env.LOG_FORMAT && !['text', 'json'].includes(env.LOG_FORMAT)) throw new Error('Invalid LOG_FORMAT. Use text or json.');
+  if (env.REQUEST_LOG && !['on', 'off'].includes(env.REQUEST_LOG)) throw new Error('Invalid REQUEST_LOG. Use on or off.');
   if (env.PUBLIC_APP_BASE_URL && !publicOrigin(env.PUBLIC_APP_BASE_URL)) throw new Error('PUBLIC_APP_BASE_URL must be an http(s) origin with no path, such as https://app.example.org.');
   if (env.PUBLIC_APP_BASE_URL && env.PUBLIC_PREVIEW_BASE_URL && publicOrigin(env.PUBLIC_APP_BASE_URL) === publicOrigin(env.PUBLIC_PREVIEW_BASE_URL)) throw new Error('The preview must use a different origin from PUBLIC_APP_BASE_URL.');
   const productionStages = (env.PRODUCTION_STAGES || 'on') === 'on';
@@ -75,6 +77,20 @@ export function getConfig(env = process.env) {
     siteRepository: /^https:\/\/[^\s"'<>]+$/u.test(env.SITE_REPOSITORY_URL || '') ? env.SITE_REPOSITORY_URL : '',
     // The live try: the code jurors enter, whether a pair's two arms run at once, and the Qloo requests one try may send.
     tryAccessCode: env.TRY_ACCESS_CODE || '', tryArmsParallel: (env.TRY_ARMS_PARALLEL || 'on') === 'on', tryQlooBudget: number('TRY_QLOO_BUDGET', 24, 1, 60),
+    // What the whole server may spend on the try in any rolling day, whoever asks: first steps, pairs and Kiro credits.
+    // All three are off (0) unless set: the jury's server runs with the code and the per-address limits alone, as was
+    // decided for six jurors. The credits are what Kiro's stream meters for each session; a host that meters nothing
+    // counts 0.
+    tryDailyRuns: number('TRY_DAILY_RUNS', 0, 0, 100000), tryDailyPairs: number('TRY_DAILY_PAIRS', 0, 0, 100000), tryDailyCredits: number('TRY_DAILY_CREDITS', 0, 0, 10000000),
+    // After this many days a finished try keeps its record, reports and designs but not its Kiro homes and session
+    // streams, which only the operator reads; 0 keeps them for good, as a study on this machine wants.
+    tryPrivateRetentionDays: number('TRY_PRIVATE_RETENTION_DAYS', 0, 0, 3650),
+    // The longer side the engine scales a review capture to before handing it to the model; 0 leaves the engine's
+    // own choice (1024 on a hosted server, 1568 elsewhere).
+    captureInlineSide: env.MOUSA_CAPTURE_INLINE_SIDE ? number('MOUSA_CAPTURE_INLINE_SIDE', 0, 512, 2400) : 0,
+    // text writes lines for a terminal; json writes one object a line for a log collector, and then logs each request
+    // (its route pattern, never an id or a token) unless REQUEST_LOG says otherwise.
+    logFormat: env.LOG_FORMAT || 'text', requestLog: (env.REQUEST_LOG || (env.LOG_FORMAT === 'json' ? 'on' : 'off')) === 'on',
     // The browser the try's sessions capture their designs with, when the machine's default one cannot run headless.
     captureBrowser: env.MOUSA_BROWSER || '', captureNoSandbox: env.MOUSA_CAPTURE_NO_SANDBOX === '1',
     // off closes the Studio's own job runs to new work, as on the jury's server; their records stay readable.

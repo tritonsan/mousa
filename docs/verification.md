@@ -2,6 +2,49 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Engineering pass before the server — October 15, 2026
+
+A read-only review of the repository, with the 14 October try's private records as evidence, and then the changes it
+called for in the code. No model, Qloo or Codex request was made; the suite ran with Chrome.
+
+**What the records showed.**
+- The pair's two sessions metered 49.2 and 37.1 Kiro credits and the prediction 1.1, about 87 a try; both arms reached
+  95% of their context window (`contextUsagePercentage` in the streams' metadata events). The largest stream line was a
+  `design_capture` result of 950 KB: four captures at 1568 pixels, inlined as PNG.
+- Every session's stderr held `[warn] failed to set model … Method not found`; the read probes of 6 October show
+  `CONTENT_FILTERED` endings the try would have reported as "ended without freezing a prediction".
+
+**What changed.**
+- **The try's own day.** `TRY_DAILY_RUNS`, `TRY_DAILY_PAIRS` and `TRY_DAILY_CREDITS` can cap the server as a whole,
+  whoever asks; all three are off by default, as decided for the jury's six members. `manager.usage()` and
+  `/api/health/deep` (`try.day`, `try.limits`) say where the day stands either way. Each session's record keeps
+  `credits`, `contextPeak` and `dropped` (stream lines too long to keep), a pair its `credits`, and the try page shows
+  them per arm.
+- **Smaller captures for the model on a hosted server:** 1024 pixels on the longer side (`MOUSA_CAPTURE_INLINE_SIDE`
+  sets either environment's), in the engine, so every host's hosted run gets it.
+- **The capture browser reaches only its own server:** `--proxy-bypass-list=<-loopback>;host:port` of the shots, so a
+  page the model wrote cannot call another loopback port during its capture.
+- **A content-filter ending is named** in `sessionProblem`.
+- **`/api/health/deep` names the caller:** the address the limits key on and the `X-Forwarded-For` entries, for the
+  check behind a proxy. `/api/status` says whether the Studio's jobs are open.
+- **With `LEGACY_JOBS=off`,** `/mcp` and the job bridge answer 404 and workspace changes 403; the records stay readable.
+- **A log** (`src/log.mjs`): text or JSON lines with the secrets redacted, a record per request by route pattern, and
+  process-level handlers (a rejection is logged, an exception ends the process for Compose).
+- **Retention:** `TRY_PRIVATE_RETENTION_DAYS` removes a finished try's Kiro homes and streams at start; a try the
+  restart interrupted keeps them. **HSTS** is sent behind an HTTPS address.
+- **A finished pair is refused again** even in the moment after its save when its lane still lists it.
+- Repository: the Kiro lock file is ignored and untracked, `web/app.js` and `web/index.html` are LF in the working
+  tree, `THIRD_PARTY_NOTICES.md` lists the fonts, photographs, music and the seccomp profile, and `.github/workflows/ci.yml`
+  runs the suite on Ubuntu and Windows and rebuilds the plugin packages against their source.
+
+**Automated:** `tests/hosted-profile.test.mjs` (capture side, route patterns, the log), two tests in `tests/try-flow.test.mjs`
+(the recorded cost and the three daily caps; the retention at start), the deep health and closed routes in
+`tests/try.test.mjs`, the bypass list in `tests/production.test.mjs` and dropped lines in `tests/kiro-output.test.mjs`.
+The packages were rebuilt with `scripts/build-plugins.mjs`. The suite is 504/504 with Chrome, in 33 seconds.
+
+**Not done here:** a try in the container, the AWS resources themselves, and the Kiro-specific questions (the key in the
+agent file, the model warning, 2.31.0's behaviour), which wait for the first container run.
+
 ## Live Kiro try in real Kiro (L1–L3) — October 14, 2026
 
 One try ran with `node scripts/run-try.mjs --starter blank-site --references "Paterson; Nujabes" --pair`.

@@ -4,6 +4,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { loadDotEnv, getConfig, isLoopback, redact } from './config.mjs';
+import { createLogger, routePattern } from './log.mjs';
 import { inspectKiro } from './doctor.mjs';
 import { templates } from './templates.mjs';
 import { JobManager, HttpError, validModes } from './jobs.mjs';
@@ -75,6 +76,8 @@ function authorized(req, config) {
   return tokenMatches(req.headers['x-demo-token'], config.accessToken) || tokenMatches(req.headers.authorization?.replace(/^Bearer /i, ''), config.accessToken);
 }
 function requireAuth(req, config) { if (!authorized(req, config)) throw new HttpError(401, 'A valid reviewer access code is required.'); }
+/** On the jury's server the Studio's own paid runs are closed (LEGACY_JOBS=off): the live try runs Moûsa, and the records stay readable. */
+function requireOpenJobs(config) { if (!config.legacyJobs) throw new HttpError(403, 'This server takes no new Studio jobs. The live try is at /try/.'); }
 /** A post from this site only: its Origin names the Host it was sent to, or the app's public address behind a proxy. */
 function checkOrigin(req, config = {}) {
   if (!req.headers.origin) return;
@@ -82,7 +85,20 @@ function checkOrigin(req, config = {}) {
   if (origin.host !== req.headers.host && origin.origin !== config.appBaseUrl) throw new HttpError(403, 'Generation requests from another site are not accepted.');
 }
 
-export async function createStudio({ config = getConfig(), inspect = inspectKiro, runner, characterRunner, qlooClientFactory, imageGenerator = null, siteCapture = null, browser = null, tryOptions = {} } = {}) {
+export async function createStudio({ config = getConfig(), inspect = inspectKiro, runner, characterRunner, qlooClientFactory, imageGenerator = null, siteCapture = null, browser = null, tryOptions = {}, log = null } = {}) {
+  // The Studio's log: text for a terminal, JSON lines for a collector; whatever it writes has the secrets redacted.
+  const logger = log || createLogger({ format: config.logFormat || 'text', redact: value => redact(value, config) });
+  // Behind an HTTPS proxy the browser is told to keep to HTTPS; a loopback Studio sends no such header.
+  const hsts = /^https:/u.test(config.appBaseUrl || '') || /^https:/u.test(config.previewBaseUrl || '');
+  /** The headers every response starts with, and the request record a collector gets once the response is done. */
+  const observe = (req, res, server) => {
+    if (hsts) res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+    if (!config.requestLog) return;
+    const started = process.hrtime.bigint();
+    let route = '/';
+    try { route = routePattern(new URL(req.url, 'http://localhost').pathname); } catch { /* An unparsable URL is logged as the root. */ }
+    res.once('finish', () => logger.info('request', { server, method: req.method, route, status: res.statusCode, ms: Math.round(Number(process.hrtime.bigint() - started) / 1e4) / 100 }));
+  };
   let kiro = await inspect(config);
   const getKiroStatus = async () => kiro;
   const workspaces = new WorkspaceStore(config, templates); await workspaces.initialize();
@@ -90,23 +106,23 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
   await manager.initialize();
   // The recorded work a reviewer sees first, readable without the access token; read once at start.
   const showcase = await loadShowcase({ dataDir: config.dataDir, jobs: manager.jobs });
-  for (const note of showcase.notes) console.warn(`Showcase: ${note}`);
+  for (const note of showcase.notes) logger.warn(`Showcase: ${note}`);
   // The public gallery of recorded sessions, also read once at start; with one, the plain address opens the site.
   const gallery = await loadGallery({ dataDir: config.dataDir });
-  for (const note of gallery.notes) console.warn(`Gallery: ${note}`);
+  for (const note of gallery.notes) logger.warn(`Gallery: ${note}`);
   const hasGallery = () => Boolean(gallery.index?.entries.length);
   let siteStyles = null;
   const fontFamilies = async () => ((await loadFontLibrary(config.rootDir))?.families || []).map(family => family.family);
   // The blind vote's pool: the comparisons the gallery names for it whose arms have pictures to show side by side.
   const votePairs = (gallery.index?.vote || []).map(id => gallery.entries.get(id)).filter(entry => entry?.kind === 'comparison' && ballotViews(entry.record).length)
     .map(entry => ({ id: entry.id, arms: entry.record.arms || [] }));
-  if (votePairs.length && !config.siteSecret) console.warn('Vote: SITE_SECRET is not set, so ballots last only as long as this process.');
+  if (votePairs.length && !config.siteSecret) logger.warn('Vote: SITE_SECRET is not set, so ballots last only as long as this process.');
   const voteBox = votePairs.length ? await createVoteBox({ dataDir: config.dataDir, secret: config.siteSecret, pairs: votePairs }) : null;
   // The jury's live try in Kiro, behind its access code; its runs live in DATA_DIR/try.
-  const trial = createTryManager({ config, kiro: () => kiro, ...tryOptions });
+  const trial = createTryManager({ config, kiro: () => kiro, log: logger, ...tryOptions });
   await trial.initialize();
   const tryAccess = createTryAccess({ code: config.tryAccessCode, secret: config.siteSecret });
-  if (config.tryAccessCode && !trial.readiness().open) console.warn(`Try: not open. ${trial.readiness().missing.join(' ')}`);
+  if (config.tryAccessCode && !trial.readiness().open) logger.warn(`Try: not open. ${trial.readiness().missing.join(' ')}`);
   let previewBaseUrl = config.previewBaseUrl;
   // A network client of /mcp gets the validators and the font catalog, but no file, image or capture tool: those act on
   // this machine, so the endpoint reports them as a hosted server would.
@@ -114,6 +130,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
     production: { env: { MOUSA_ENVIRONMENT: 'hosted', MOUSA_CAPTURE: 'off', MOUSA_LIBRARY_ROOT: config.rootDir } } });
 
   const previewServer = http.createServer(async (req, res) => {
+    observe(req, res, 'preview');
     try {
       if (req.method !== 'GET') return send(res, 405, 'Method not allowed.');
       const url = new URL(req.url, 'http://localhost');
@@ -249,6 +266,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
   });
 
   const server = http.createServer(async (req, res) => {
+    observe(req, res, 'app');
     try {
       const url = new URL(req.url, 'http://localhost');
       const pathname = url.pathname;
@@ -259,22 +277,27 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         requireAuth(req, config);
         const disk = await fs.statfs(config.dataDir).then(stats => ({ freeBytes: stats.bavail * stats.bsize, totalBytes: stats.blocks * stats.bsize }), () => null);
         const tryView = trial.readiness();
+        // The address this request counts as, and how many proxies wrote to X-Forwarded-For: what an operator checks
+        // from two networks before the jury does, since every limit of the try and the vote is keyed by it.
+        const forwarded = String(req.headers['x-forwarded-for'] || '').split(',').map(item => item.trim()).filter(Boolean);
         return send(res, 200, { status: tryView.open && disk && disk.freeBytes > 2 * 1024 ** 3 ? 'ok' : 'degraded', checkedAt: new Date().toISOString(),
           kiro: { available: Boolean(kiro.available), authenticated: Boolean(kiro.authenticated), version: kiro.version || null, model: config.model || kiro.defaultModel || null },
-          capture: manager.captureStatus(), disk, try: { ...tryView, paused: await trial.paused(), ...trial.queues() },
-          gallery: { entries: gallery.index?.entries.length ?? 0, vote: votePairs.length }, legacyJobs: Boolean(config.legacyJobs), commit: config.commit || null });
+          capture: manager.captureStatus(), disk, try: { ...tryView, paused: await trial.paused(), ...trial.queues(), ...trial.usage() },
+          caller: { address: addressKey(voterAddress(req, config.trustProxy)), forwardedEntries: forwarded.length, trustProxy: config.trustProxy },
+          gallery: { entries: gallery.index?.entries.length ?? 0, vote: votePairs.length }, legacyJobs: Boolean(config.legacyJobs), commit: config.commit || null,
+          log: { format: config.logFormat || 'text', requests: Boolean(config.requestLog) } });
       }
       if (req.method === 'GET' && pathname === '/api/status') {
         if (url.searchParams.get('refresh') === '1' && authorized(req, config)) kiro = await inspect(config);
         return send(res, 200, { kiro, qloo: { configured: Boolean(config.qlooKey) }, images: manager.imageStatus(), capture: manager.captureStatus(),
-          production: { stages: Boolean(config.productionStages), environment: config.environment || 'local' }, access: { required: Boolean(config.accessToken) },
+          production: { stages: Boolean(config.productionStages), environment: config.environment || 'local' }, access: { required: Boolean(config.accessToken) }, jobs: { open: Boolean(config.legacyJobs) },
           protocol: config.creativeProtocol || 'research', model: config.model || kiro.defaultModel, comparisonReady: Boolean(kiro.available && kiro.authenticated && (config.model || kiro.defaultModel) && config.qlooKey), previewOrigin: new URL(previewBaseUrl).origin });
       }
       if (req.method === 'GET' && pathname === '/api/templates') return send(res, 200, templates.map(({ files, ...metadata }) => metadata));
       if (pathname === '/api/workspaces') {
         requireAuth(req, config);
         if (req.method === 'GET') return send(res, 200, workspaces.list());
-        if (req.method === 'POST') { checkOrigin(req, config); try { return send(res, 201, await workspaces.upsert(await readJson(req, 100000))); } catch (error) { throw new HttpError(error.status || 400, error.message); } }
+        if (req.method === 'POST') { requireOpenJobs(config); checkOrigin(req, config); try { return send(res, 201, await workspaces.upsert(await readJson(req, 100000))); } catch (error) { throw new HttpError(error.status || 400, error.message); } }
       }
       const workspaceMatch = pathname.match(/^\/api\/workspaces\/([a-f0-9-]{36})(?:\/(export|select))?$/);
       if (workspaceMatch) {
@@ -284,9 +307,9 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
           .flatMap(job => job.runs.filter(run => run.status === 'completed').map(run => ({ jobId: job.id, mode: run.mode, title: job.selectedDirection?.title || (job.kind === 'revise' ? `Revision ${job.targetSelector}` : workspace.name), audienceId: job.audienceId || null, kind: job.kind || 'build', createdAt: job.createdAt, parentJobId: job.parentJobId || null })))
           .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
         if (req.method === 'GET' && !workspaceMatch[2]) return send(res, 200, { ...workspace, variants });
-        if (req.method === 'PUT' && !workspaceMatch[2]) { checkOrigin(req, config); try { return send(res, 200, await workspaces.upsert(await readJson(req, 100000), workspace.id)); } catch (error) { throw new HttpError(error.status || 400, error.message); } }
+        if (req.method === 'PUT' && !workspaceMatch[2]) { requireOpenJobs(config); checkOrigin(req, config); try { return send(res, 200, await workspaces.upsert(await readJson(req, 100000), workspace.id)); } catch (error) { throw new HttpError(error.status || 400, error.message); } }
         if (req.method === 'POST' && workspaceMatch[2] === 'select') {
-          checkOrigin(req, config); const input = await readJson(req, 1000), job = manager.get(input.jobId);
+          requireOpenJobs(config); checkOrigin(req, config); const input = await readJson(req, 1000), job = manager.get(input.jobId);
           if (job.templateId !== workspace.templateId || (job.workspaceId && job.workspaceId !== workspace.id) || !['build', 'revise'].includes(job.kind || 'build') || !job.runs.some(r => r.mode === input.mode && r.status === 'completed')) throw new HttpError(400, 'A completed variant from the same workspace is required.');
           return send(res, 200, await workspaces.select(workspace.id, { jobId: job.id, mode: input.mode }));
         }
@@ -312,6 +335,8 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         }
       }
       if (req.method === 'POST' && pathname === '/internal/tools') {
+        // The bridge serves the Studio's own job runs; a server that takes none has no bridge.
+        if (!config.legacyJobs) throw new HttpError(404, 'Resource not found.');
         const token = req.headers.authorization?.replace(/^Bearer /i, '');
         const session = manager.bridgeSessions.get(token);
         if (!session) throw new HttpError(403, 'Inactive job bridge.');
@@ -320,6 +345,8 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         return send(res, 200, await session.handle(input.name, input.arguments || {}));
       }
       if (pathname === '/mcp') {
+        // The network MCP endpoint answers with this server's Qloo key; a server closed to Studio jobs does not offer it.
+        if (!config.legacyJobs) throw new HttpError(404, 'Resource not found.');
         requireAuth(req, config);
         if (req.method !== 'POST') return send(res, 405, 'Use POST for stateless Streamable HTTP MCP.', { Allow: 'POST' });
         checkOrigin(req, config); const message = await readJson(req);
@@ -327,9 +354,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         return result ? send(res, 200, result) : send(res, 202, '');
       }
       if (pathname === '/api/jobs' && req.method === 'POST') {
-        requireAuth(req, config); checkOrigin(req, config);
-        // On the jury's server the Studio's own paid runs are closed: the live try runs Moûsa, and the records stay readable.
-        if (!config.legacyJobs) throw new HttpError(403, 'This server takes no new Studio jobs. The live try is at /try/.');
+        requireAuth(req, config); requireOpenJobs(config); checkOrigin(req, config);
         const job = await manager.create(await readJson(req, 100000));
         return send(res, 202, { id: job.id });
       }
@@ -581,18 +606,23 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   loadDotEnv();
+  let logger = createLogger();
   (async () => {
     const config = getConfig();
+    logger = createLogger({ format: config.logFormat || 'text', redact: value => redact(value, config) });
+    // A promise nobody awaited must not end the server mid-try: it is logged and the Studio goes on. An exception that
+    // reached the event loop leaves the process in a state nothing checked, so it is logged and the process ends for
+    // the supervisor (Compose restarts it) to start it clean; an interrupted step is marked as such at the next start.
+    process.on('unhandledRejection', reason => logger.error('unhandled-rejection', { message: String(reason?.stack || reason).slice(0, 2000) }));
+    process.on('uncaughtException', error => { logger.error('uncaught-exception', { message: String(error?.stack || error).slice(0, 2000) }); process.exit(1); });
     // Only the running Studio looks for Codex and a browser; tests and scripts that create a Studio get neither unless they pass one.
     // An installed browser counts once it has captured a test page, so a container that cannot run it offers no review.
     const [imageGenerator, browser] = await Promise.all([createImageGenerator(config), inspectBrowser().then(found => verifyBrowser(found))]);
-    return createStudio({ config, imageGenerator, browser, siteCapture: createSiteCapture({ browser }) });
+    return createStudio({ config, imageGenerator, browser, siteCapture: createSiteCapture({ browser }), log: logger });
   })().then(studio => {
-    console.log(`Moûsa Studio: ${studio.appUrl}`);
-    console.log(`Static site previews: ${studio.previewBaseUrl}`);
     const images = studio.manager.imageStatus(), capture = studio.manager.captureStatus();
-    console.log(images.available ? `Generated images: ${images.provider} ${images.version}` : `Generated images: off (${images.reason})`);
-    console.log(capture.available ? `Review captures: ${capture.label}` : `Review captures: off (${capture.reason})`);
-    for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, async () => { await studio.close(); process.exit(0); });
-  }).catch(error => { console.error(error.message); process.exitCode = 1; });
+    logger.info('started', { app: studio.appUrl, previews: studio.previewBaseUrl, images: images.available ? `${images.provider} ${images.version}` : `off (${images.reason})`,
+      captures: capture.available ? capture.label : `off (${capture.reason})` });
+    for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, async () => { logger.info('stopping', { signal }); await studio.close(); process.exit(0); });
+  }).catch(error => { logger.error('start-failed', { message: String(error?.message || error) }); process.exitCode = 1; });
 }

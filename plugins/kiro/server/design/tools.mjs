@@ -31,8 +31,17 @@ const RECIPE_ARTIFACT = Object.freeze({ web: 'web', 'app-ui': 'app-ui', place: '
 // A page that draws after it loads, such as a canvas, may set window.captureReady to a promise that settles once the
 // view is drawn; a rejection names what went wrong, such as a data file the game could not load.
 const CAPTURE_READY = 'Promise.resolve(window.captureReady).then(value => value === undefined ? true : value, error => String(error && error.message || error))';
-// Captures handed to a model are scaled to this longer side, which models reduce larger pictures to anyway.
+// Captures handed to a model are scaled to this longer side, which models reduce larger pictures to anyway. A hosted
+// server scales further: a review round of pictures at 1568 pixels took both arms of a live pair to 95% of their
+// context window (October 14, 2026). MOUSA_CAPTURE_INLINE_SIDE sets the side for either environment.
 export const INLINE_CAPTURE_MAX_SIDE = 1568;
+export const HOSTED_CAPTURE_MAX_SIDE = 1024;
+export const INLINE_CAPTURE_SIDES = Object.freeze({ min: 512, max: 2400 });
+export function inlineCaptureSide(env = process.env) {
+  const given = Number(env?.MOUSA_CAPTURE_INLINE_SIDE);
+  if (Number.isInteger(given) && given >= INLINE_CAPTURE_SIDES.min && given <= INLINE_CAPTURE_SIDES.max) return given;
+  return env?.MOUSA_ENVIRONMENT === 'hosted' ? HOSTED_CAPTURE_MAX_SIDE : INLINE_CAPTURE_MAX_SIDE;
+}
 const SPECIMEN_VIEW = Object.freeze({ id: 'board', width: 1440, height: 900 });
 // What design_compare copies into both arms' folders at most: a starter, not a repository.
 const COMPARE_LIMITS = Object.freeze({ files: 400, bytes: 40 * 1024 * 1024 });
@@ -361,7 +370,7 @@ export function createDesignTools(context) {
     const content = [];
     for (const shot of shots) {
       const bytes = await fs.readFile(shot.file);
-      content.push({ type: 'image', data: scalePng(bytes, INLINE_CAPTURE_MAX_SIDE).toString('base64'), mimeType: 'image/png' });
+      content.push({ type: 'image', data: scalePng(bytes, inlineCaptureSide(env)).toString('base64'), mimeType: 'image/png' });
     }
     content.push({ type: 'text', text: JSON.stringify({ status: 'captured', round, captures: issued.map(({ capturedAt, delivered, ...shot }) => { void capturedAt; void delivered; return shot; }),
       next: 'Judge each review criterion of your plan on these captures, describing what they show, then design_validate with stage review.' }) });

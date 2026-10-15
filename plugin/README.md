@@ -10,7 +10,7 @@ Successful standalone Qloo replies receive an `evidence.id` beginning with `cult
 
 Set `QLOO_API_KEY` in the MCP process environment or the host's secret environment facility. The default base URL is `https://hackathon.api.qloo.com`. Do not put a credential into this plugin, client configuration examples, artifacts, browser code, or logs. Without a key, tool discovery works and a Qloo tool returns an explicit `QLOO_KEY_MISSING` error. Set `QLOO_BASE_URL` only when using a credential issued for another documented Qloo environment.
 
-## The mousa entry (0.6.0, in progress)
+## The mousa entry (0.6.0)
 
 `server/mousa.mjs` starts the server that the Claude Code and Codex packages will run. The server is named `mousa`, and its surface is built to be cheap to load:
 - Instructions stay under 2,048 characters, because Claude Code cuts server instructions there.

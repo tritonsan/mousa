@@ -13,10 +13,10 @@ export const streamUpdate = event => event?.params?.update || event?.data?.updat
 
 /**
  * A reader for Kiro's standard output, fed one chunk at a time: `onLine` receives each complete line of at most
- * `limits.line` characters, and longer lines are dropped whole. `onLimit` is called once the output passes
- * `limits.total` bytes, after which the reader ignores the rest.
+ * `limits.line` characters, and longer lines are dropped whole, each reported once to `onDrop`. `onLimit` is called
+ * once the output passes `limits.total` bytes, after which the reader ignores the rest.
  */
-export function kiroOutputReader({ onLine, onLimit, limits = KIRO_OUTPUT_LIMITS }) {
+export function kiroOutputReader({ onLine, onLimit, onDrop, limits = KIRO_OUTPUT_LIMITS }) {
   const decoder = new StringDecoder('utf8');
   let buffer = '', skipping = false, total = 0, limited = false;
   return chunk => {
@@ -29,10 +29,11 @@ export function kiroOutputReader({ onLine, onLimit, limits = KIRO_OUTPUT_LIMITS 
       text = text.slice(newline + 1);
       if (skipping) skipping = false;
       else if (buffer.length + piece.length <= limits.line) onLine(buffer + piece);
+      else onDrop?.();
       buffer = '';
     }
     if (skipping) return;
     buffer += text;
-    if (buffer.length > limits.line) { buffer = ''; skipping = true; }
+    if (buffer.length > limits.line) { buffer = ''; skipping = true; onDrop?.(); }
   };
 }

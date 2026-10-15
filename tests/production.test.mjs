@@ -300,6 +300,9 @@ test('a capture lays the page out at each exact view over the DevTools pipe, wit
   assert.deepEqual(shots.map(({ file, ...shot }) => shot), [{ id: 'r1-desktop-walk-list', view: 'desktop', target: 'walk-list', width: 1440, height: 900, bytes: 33 }, { id: 'r1-mobile-walk-list', view: 'mobile', target: 'walk-list', width: 390, height: 844, bytes: 33 }]);
   assert.deepEqual(log[0].stdio, ['ignore', 'ignore', 'pipe', 'pipe', 'pipe']);
   assert.deepEqual(log[0].env, { PATH: 'x' });
+  // The browser's implicit loopback bypass is withdrawn: only the capture's own server is reached directly.
+  assert.ok(log[0].args.includes('--proxy-bypass-list=<-loopback>;127.0.0.1:4000'), log[0].args.join(' '));
+  assert.equal(browserArgs({ profileDir: 'p' }).some(flag => flag.startsWith('--proxy-bypass-list=')), false, 'without shots the implicit bypass stays');
   assert.ok(log.includes('http://127.0.0.1:4000/index.html#walk-list'));
   assert.equal(log.filter(entry => entry === 'Emulation.setDeviceMetricsOverride').length, 2);
   const full = await captureViews({ browser, baseUrl: 'http://127.0.0.1:4000', views: [{ id: 'mobile', width: 390, height: 844 }], full: true, outDir, prefix: 'r1', spawnImpl: fakeBrowser([]), settleMs: 0 });

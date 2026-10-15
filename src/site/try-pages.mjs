@@ -65,7 +65,9 @@ function armCard(run, arm, previewBase) {
   const play = `${previewBase}/try/${run.id}/${run.previewToken}/${arm.id}/index.html`;
   const capture = !working ? '' : arm.latest ? `<img src="/try/${escape(run.id)}/progress/${escape(arm.id)}.png?n=${escape(arm.captures)}" alt="${escape(`${arm.label}: the latest capture`)}">
 <p class="site-small"><a href="${escape(play)}" target="_blank" rel="noopener noreferrer">Open the design as it stands</a></p>` : '<p class="site-small">No capture yet.</p>';
-  const counts = [arm.live?.calls ? `${arm.live.calls} calls` : arm.session ? `${arm.session.calls.length} calls` : '', arm.captures ? `${arm.captures} captures` : '', arm.reviews ? `${arm.reviews} review round${arm.reviews === 1 ? '' : 's'}` : '', arm.session ? minutes(arm.session.durationMs) : ''];
+  const counts = [arm.live?.calls ? `${arm.live.calls} calls` : arm.session ? `${arm.session.calls.length} calls` : '', arm.captures ? `${arm.captures} captures` : '', arm.reviews ? `${arm.reviews} review round${arm.reviews === 1 ? '' : 's'}` : '', arm.session ? minutes(arm.session.durationMs) : '',
+    // What the session cost, as Kiro metered it, and how full its context window got: the two numbers a hosted try is bounded by.
+    Number.isFinite(arm.session?.credits) ? `${arm.session.credits} credits` : '', Number.isFinite(arm.session?.contextPeak) ? `context ${Math.round(arm.session.contextPeak)}%` : ''];
   return `<div class="mr-card try-arm" data-state="${escape(arm.status || 'queued')}"><p class="mr-label">${escape(arm.label)}</p>
 <p><b>${escape(working ? STAGES[arm.stage] || 'Starting its session' : arm.status === 'done' ? 'Finished' : arm.status === 'failed' ? 'Ended early' : 'Waiting')}</b></p>
 <p class="site-small">${escape(counts.filter(Boolean).join(' · '))}</p>${capture}${arm.problem ? problemBlock(arm.problem) : ''}

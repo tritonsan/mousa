@@ -53,7 +53,19 @@ services:
       TRY_ACCESS_CODE: ${TRY_ACCESS_CODE:-}
       TRY_ARMS_PARALLEL: ${TRY_ARMS_PARALLEL:-on}
       TRY_QLOO_BUDGET: ${TRY_QLOO_BUDGET:-24}
-      # The Studio's own paid job runs take no new work here; their recorded jobs stay readable.
+      # Optional caps on the server's own day for the try (first steps, pairs, Kiro credits); all off at 0, the default.
+      TRY_DAILY_RUNS: ${TRY_DAILY_RUNS:-0}
+      TRY_DAILY_PAIRS: ${TRY_DAILY_PAIRS:-0}
+      TRY_DAILY_CREDITS: ${TRY_DAILY_CREDITS:-0}
+      # A finished try older than this keeps its record, reports and designs; its Kiro homes and session streams go.
+      TRY_PRIVATE_RETENTION_DAYS: ${TRY_PRIVATE_RETENTION_DAYS:-14}
+      # The longer side of a review capture handed to the model; empty is 1024 pixels on a hosted server.
+      MOUSA_CAPTURE_INLINE_SIDE: ${MOUSA_CAPTURE_INLINE_SIDE:-}
+      # One JSON object a line for the log collector, with each request's route pattern (never an id or a token).
+      LOG_FORMAT: ${LOG_FORMAT:-json}
+      REQUEST_LOG: ${REQUEST_LOG:-on}
+      # The Studio's own paid job runs take no new work here; their recorded jobs stay readable, and /mcp and the job
+      # bridge are closed.
       LEGACY_JOBS: ${LEGACY_JOBS:-off}
     volumes:
       - demo-data:/data

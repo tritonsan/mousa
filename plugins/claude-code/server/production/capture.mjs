@@ -44,13 +44,18 @@ export async function inspectBrowser({ env = process.env, platform = process.pla
   return { available: false, reason: 'No Chromium-based browser (Edge, Chrome or Chromium) was found. Set MOUSA_BROWSER to its executable.' };
 }
 
-/** A headless browser on a DevTools pipe that can reach only loopback addresses. */
-export function browserArgs({ profileDir, noSandbox = false }) {
+/**
+ * A headless browser on a DevTools pipe that can reach only loopback addresses, and with `allow` (host:port entries,
+ * such as 127.0.0.1:4000) only those: the browser's implicit proxy bypass for loopback is withdrawn, so a page's request
+ * to any other local port goes to the closed proxy like every other address.
+ */
+export function browserArgs({ profileDir, noSandbox = false, allow = [] }) {
   return ['--headless=new', '--remote-debugging-pipe', '--disable-gpu', '--hide-scrollbars', '--mute-audio', '--no-first-run', '--no-default-browser-check', '--disable-extensions',
     '--disable-sync', '--disable-background-networking', '--disable-component-update', '--disable-default-apps', '--no-pings', '--dns-prefetch-disable',
     '--disable-features=Translate,MediaRouter,OptimizationHints,AutofillServerCommunication,InterestFeedContentSuggestions',
     // The rules apply to IP literals too, so the loopback address is excluded by name.
     '--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE localhost , EXCLUDE 127.0.0.1', '--proxy-server=http://127.0.0.1:9', '--webrtc-ip-handling-policy=disable_non_proxied_udp',
+    ...(allow.length ? [`--proxy-bypass-list=<-loopback>;${allow.join(';')}`] : []),
     ...(noSandbox ? ['--no-sandbox'] : []), `--user-data-dir=${profileDir}`, 'about:blank'];
 }
 
@@ -123,7 +128,9 @@ export async function captureShots({ browser, shots, timeoutMs = CAPTURE_TIMING.
   // Host secrets stay out of the browser, as they stay out of Codex.
   const childEnv = Object.fromEntries(Object.entries(env).filter(([key]) => !/(?:KEY|TOKEN|SECRET|PASSWORD)/iu.test(key)));
   const noSandbox = ['1', 'true'].includes(String(env.MOUSA_CAPTURE_NO_SANDBOX || '').toLowerCase());
-  const child = spawnImpl(browser.path, browserArgs({ profileDir, noSandbox }), { env: childEnv, windowsHide: true, shell: false, stdio: ['ignore', 'ignore', 'pipe', 'pipe', 'pipe'] });
+  // Only the servers the shots name are reachable, not every port on the loopback interface.
+  const allow = [...new Set(shots.map(shot => new URL(shot.url).host))];
+  const child = spawnImpl(browser.path, browserArgs({ profileDir, noSandbox, allow }), { env: childEnv, windowsHide: true, shell: false, stdio: ['ignore', 'ignore', 'pipe', 'pipe', 'pipe'] });
   const started = new Promise((resolve, reject) => { child.once('error', error => reject(error.code === 'ENOENT' ? new Error('The browser could not be started.') : error)); child.once('spawn', resolve); });
   // The tail of the browser's error output is kept to name why it stopped, such as a sandbox that cannot start.
   let output = '';

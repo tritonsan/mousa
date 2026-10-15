@@ -30,7 +30,7 @@ export const RUN_ID = /^[a-f0-9]{32}$/u;
 export const QUICK_ACTIVE = Object.freeze(['queued', 'planning', 'predicting', 'measuring']);
 export const PAIR_ACTIVE = Object.freeze(['queued', 'preparing', 'designing', 'reporting']);
 const PAUSE_FILE = 'PAUSED';
-const HOUR = 60 * 60 * 1000;
+const HOUR = 60 * 60 * 1000, DAY = 24 * HOUR;
 // The records a prediction session may leave: its prediction, the design start it notes, and its stage.
 const AFTER_PREDICTION = Object.freeze(['input', 'brief', 'profile', 'evidence', 'decisions']);
 const NO_CONNECTIONS = Object.freeze({ read: async () => null });
@@ -130,6 +130,9 @@ export async function guardArm({ folder, source, starter, original }) {
 /** A session as a run keeps it: how long, how it ended and its calls by tool and outcome, with no title, input or output. */
 const sessionSummary = session => ({ durationMs: session.durationMs, exitCode: session.exitCode ?? null, finished: session.finished?.at(-1)?.status ?? null,
   ...(sessionProblem(session) ? { problem: sessionProblem(session) } : {}), ...(session.refused ? { blocked: session.refused } : {}),
+  // What Kiro metered: the session's credits and the fullest its context window got, and stream lines too long to keep.
+  ...(Number.isFinite(session.credits) ? { credits: session.credits } : {}), ...(Number.isFinite(session.contextPeak) ? { contextPeak: session.contextPeak } : {}),
+  ...(session.dropped ? { dropped: session.dropped } : {}),
   calls: session.calls.map(call => ({ at: call.at, tool: call.tool, status: call.status, ...(call.code ? { code: call.code } : {}) })) });
 
 /**
@@ -168,6 +171,23 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
     return { open: !missing.length, missing, ...(broken.size ? { starterProblems: [...broken.values()] } : {}) };
   }
   const paused = () => exists(path.join(base, PAUSE_FILE));
+
+  // What the whole server has spent on the try in the last day, whoever asked, against the caps TRY_DAILY_RUNS,
+  // TRY_DAILY_PAIRS and TRY_DAILY_CREDITS set (0 is no cap). Credits are what Kiro metered for each session that ended
+  // in the day; a host that meters nothing adds 0, so only the counts bound it then.
+  const caps = Object.freeze({ runs: config.tryDailyRuns || 0, pairs: config.tryDailyPairs || 0, credits: config.tryDailyCredits || 0 });
+  const within = (time, since) => Number.isFinite(Date.parse(time || '')) && Date.parse(time) > since;
+  function usage() {
+    const since = now() - DAY;
+    let dayRuns = 0, dayPairs = 0, dayCredits = 0;
+    for (const run of runs.values()) {
+      if (within(run.createdAt, since)) dayRuns++;
+      if (within(run.pair?.queuedAt, since)) dayPairs++;
+      if (within(run.quick?.endedAt, since)) dayCredits += run.quick.session?.credits || 0;
+      for (const arm of Object.values(run.pair?.arms || {})) if (within(arm.endedAt, since)) dayCredits += arm.session?.credits || 0;
+    }
+    return { day: { runs: dayRuns, pairs: dayPairs, credits: Math.round(dayCredits * 100) / 100 }, limits: caps };
+  }
 
   /** A Moûsa server inside this process, for the host's own steps; only the steps that measure get the Qloo key. */
   function hostServer(root, { qloo = false, usage = null } = {}) {
@@ -334,6 +354,9 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
       const record = await readJson(path.join(project, '.mousa', 'compare-report', 'record.json'));
       step.report = { page: written.report, headline: written.headline || null, arms: written.arms || [], distance: record?.distance?.overall ?? null, samePrediction: record?.samePrediction ?? null };
       step.qlooRequests = await readQlooUsage(usageOf(run.id));
+      // The pair's cost, as Kiro metered its two sessions; left out when the host metered nothing.
+      const metered = TRY_ARMS.map(arm => step.arms[arm.id]?.session?.credits).filter(Number.isFinite);
+      if (metered.length) step.credits = Math.round(metered.reduce((sum, value) => sum + value, 0) * 100) / 100;
       const failed = TRY_ARMS.filter(arm => step.arms[arm.id]?.status === 'failed');
       await mark(failed.length ? 'partial' : 'done', { endedAt: stamp(), ...(failed.length ? { problem: `${failed.map(arm => arm.label).join(' and ')} ended early: ${failed.map(arm => step.arms[arm.id].problem).join(' ')}` } : {}) });
     } catch (error) {
@@ -363,6 +386,11 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
     if (closed) throw new TryError(503, 'The server is stopping.');
     if (!readiness().open) throw new TryError(503, 'The live try is not open on this server.');
     if (await paused()) throw new TryError(503, 'The live try is paused for a moment. The recorded sessions stay open meanwhile.');
+    // The server's own day: however many jurors ask, the plan behind the try is spent at most this far in a day.
+    const spent = usage().day;
+    if (caps.credits && spent.credits >= caps.credits) throw new TryError(503, 'The try has spent its budget for today on this server. The recorded sessions stay open; please try again tomorrow.');
+    if (lane === 'quick' && caps.runs && spent.runs >= caps.runs) throw new TryError(503, 'The try has started as many first steps today as this server allows. The recorded sessions stay open; please try again tomorrow.');
+    if (lane === 'pair' && caps.pairs && spent.pairs >= caps.pairs) throw new TryError(503, 'The try has built as many pairs today as this server allows. The recorded sessions stay open; please try again tomorrow.');
     const free = await fs.statfs(base).then(stats => stats.bavail * stats.bsize, () => null);
     if (free !== null && free < limits.minFreeBytes) throw new TryError(507, 'The server is short of disk space for a new try. The recorded sessions stay open.');
     const at = now(), times = (recent.get(address) || []).filter(time => at - time < HOUR);
@@ -393,7 +421,7 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
 
   return {
     get,
-    readiness, paused,
+    readiness, paused, usage,
     /** How many steps work and wait in each lane, and how many runs are kept. */
     queues: () => ({ runs: runs.size, quick: { working: lanes.quick.running.size, waiting: lanes.quick.waiting.length }, pair: { working: lanes.pair.running.size, waiting: lanes.pair.waiting.length } }),
     starters: () => Object.values(starters).filter(starter => !broken.has(starter.id)).map(({ id, title, medium, summary }) => ({ id, title, medium, summary })),
@@ -417,6 +445,16 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
           let changed = false;
           for (const [step, active] of [['quick', QUICK_ACTIVE], ['pair', PAIR_ACTIVE]]) {
             if (run[step] && active.includes(run[step].status)) { Object.assign(run[step], { status: 'failed', endedAt: run.updatedAt, problem: 'The server restarted during this step. Start it again.' }); changed = true; }
+          }
+          // A finished try older than the retention keeps its record, reports and designs; its Kiro homes and session
+          // streams, which only the operator reads, go, so the volume holds what the site serves. A try this start found
+          // interrupted keeps them for now: its streams say what the restart cut short.
+          const retentionMs = (config.tryPrivateRetentionDays || 0) * DAY;
+          const ended = [run.quick?.endedAt, ...Object.values(run.pair?.arms || {}).map(arm => arm.endedAt), run.pair?.endedAt].filter(Boolean).map(Date.parse).filter(Number.isFinite);
+          if (retentionMs && !changed && !run.privateRemovedAt && ended.length && now() - Math.max(...ended) > retentionMs) {
+            for (const folder of ['kiro', 'sessions']) await fs.rm(path.join(base, name, folder), { recursive: true, force: true });
+            run.privateRemovedAt = stamp();
+            changed = true;
           }
           runs.set(run.id, run);
           if (changed) await save(run);
@@ -455,9 +493,10 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
     async design(id, { address = 'unknown' } = {}) {
       const run = get(id);
       if (run.quick?.status !== 'done' || run.quick.measured?.status !== 'ok') throw new TryError(409, 'The pair is built from a finished measurement; this try has none.');
+      // A finished pair is never built again, even in the moment after its save when its lane still lists it.
+      if (run.pair && ['done', 'partial'].includes(run.pair.status)) throw new TryError(409, 'This pair is finished. Start a new try to build another.');
       // One request at a time decides, so two quick posts cannot both queue the pair.
       if (reserving.has(id) || lanes.pair.waiting.includes(id) || lanes.pair.running.has(id) || (run.pair && PAIR_ACTIVE.includes(run.pair.status))) return run;
-      if (run.pair && ['done', 'partial'].includes(run.pair.status)) throw new TryError(409, 'This pair is finished. Start a new try to build another.');
       reserving.add(id);
       const before = { pair: run.pair, consent: run.consent };
       try {

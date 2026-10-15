@@ -52,6 +52,10 @@ export function fakeKiro({ fetchImpl, scripts, seen = [] }) {
         };
         const stopped = () => new Promise(resolve => { if (killed) resolve(); else child.once('killed', resolve); });
         await scripts[kind]({ call, write, cwd: options.cwd, agent, prompt, stopped, killed: () => killed });
+        // What kiro-cli meters as a session goes: how full the context window got and the credits so far, in its last
+        // metadata event the whole total. One call of the fixture is one credit, so a test can foresee the sum.
+        emit({ type: 'metadata', data: { sessionId: 'fake', contextUsagePercentage: 12.5 + n, reasoning: { support: 'alwaysOn' } } });
+        emit({ type: 'metadata', data: { sessionId: 'fake', contextUsagePercentage: 10 + n, meteringUsage: Array.from({ length: n }, () => ({ value: 1, unit: 'credit', unitPlural: 'credits' })) } });
         emit({ type: 'runFinished', data: { status: 'success', stopReason: 'end_turn' } });
       } catch (error) { code = 1; child.stderr.write(String(error?.stack || error)); }
       child.stdout.end();
