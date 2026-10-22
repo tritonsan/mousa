@@ -19,7 +19,9 @@ test('the 0.4.0 distributable contains the current self-contained plugin with ma
   assert.equal(initialization.result.serverInfo.version, manifest.version);
   await exec(process.execPath, [path.join(rootDir, 'scripts', 'package-plugin.mjs')], { cwd: rootDir, env: { ...process.env, PLUGIN_PACKAGE_DIRECTORY: directory }, windowsHide: true });
   const archive = path.join(directory, `${manifest.name}-${manifest.version}.tar.gz`);
-  const listing = (await exec('tar', ['-tzf', archive], { windowsHide: true })).stdout.trim().split(/\r?\n/u);
+  // Named from its own folder: GNU tar, first on PATH with Git for Windows, reads "D:" in an archive path as a remote host.
+  const inFolder = { windowsHide: true, cwd: path.dirname(archive) }, name = path.basename(archive);
+  const listing = (await exec('tar', ['-tzf', name], inFolder)).stdout.trim().split(/\r?\n/u);
   assert.ok(listing.every(entry => entry.startsWith(manifest.name + '/') && !entry.includes('..') && !/(^|\/)(?:\.env|data|node_modules|\.git)(\/|$)/u.test(entry)));
   async function verify(relative = '') {
     for (const entry of await fs.readdir(path.join(rootDir, 'plugin', relative), { withFileTypes: true })) {
@@ -28,7 +30,7 @@ test('the 0.4.0 distributable contains the current self-contained plugin with ma
       else {
         const archivePath = manifest.name + '/' + sourcePath.replaceAll('\\', '/');
         assert.ok(listing.includes(archivePath), `Missing archive file: ${archivePath}`);
-        const actual = await exec('tar', ['-xOf', archive, archivePath], { encoding: 'buffer', windowsHide: true });
+        const actual = await exec('tar', ['-xOf', name, archivePath], { ...inFolder, encoding: 'buffer' });
         assert.deepEqual(actual.stdout, await fs.readFile(path.join(rootDir, 'plugin', sourcePath)), `Stale archive file: ${archivePath}`);
       }
     }
