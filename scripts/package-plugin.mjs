@@ -24,8 +24,11 @@ await fs.cp(source, staging, { recursive: true, filter: file => !/(^|[\\/])(node
 // The photo and music libraries stay behind: one belongs to a Studio starter and the other is CC BY with credits.
 await fs.cp(path.join(rootDir, 'library', 'fonts'), path.join(staging, 'library', 'fonts'), { recursive: true });
 const archive = path.join(artifacts, `${manifest.name}-${manifest.version}.tar.gz`);
-await exec('tar', ['-czf', archive, '-C', path.dirname(staging), manifest.name], { windowsHide: true });
-const contents = await exec('tar', ['-tzf', archive], { windowsHide: true });
+// The archive is named from its own folder: GNU tar, the one Git for Windows puts first on PATH, reads "C:" in an
+// archive path as a remote host, while Windows' own bsdtar does not.
+const inArtifacts = { windowsHide: true, cwd: path.dirname(archive) };
+await exec('tar', ['-czf', path.basename(archive), '-C', path.relative(path.dirname(archive), path.dirname(staging)) || '.', manifest.name], inArtifacts);
+const contents = await exec('tar', ['-tzf', path.basename(archive)], inArtifacts);
 if (!['plugin.json', 'server/index.mjs', 'server/culture/policy.mjs', 'server/culture/taste.mjs', 'server/production/tools.mjs', 'library/fonts/fonts.json', `skills/${manifest.name}/policy.md`, `skills/${manifest.name}/taste-policy.md`, `skills/${manifest.name}/production-policy.md`].every(file => contents.stdout.includes(`${manifest.name}/${file}`))) throw new Error('Archive is missing its executable plugin entrypoint, its font library or its shared creative, taste-led and production policies.');
 console.log(archive);
 console.log(`Verified ${contents.stdout.trim().split(/\r?\n/).length} archive entries; no account upload or installation performed.`);

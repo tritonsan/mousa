@@ -4,7 +4,7 @@ import http from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
-import { mkdtemp, rm, readFile, writeFile, mkdir } from 'node:fs/promises';
+import { mkdtemp, rm, readFile, writeFile, mkdir, realpath } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { envValue, hostName, resolveQlooConnection, testQlooKey, DEFAULT_QLOO_BASE_URL } from '../plugin/server/connections/config.mjs';
 import { createConnectionStore, plainProtector, dpapiProtector, connectionsDir } from '../plugin/server/connections/store.mjs';
@@ -180,7 +180,8 @@ test('the project folder comes from the host setting, then the folder Codex repo
     assert.equal((await resolveProjectRoot({ env: { MOUSA_PROJECT_DIR: dir }, meta })).source, 'environment');
     const reported = await resolveProjectRoot({ env: { MOUSA_PROJECT_DIR: '${CLAUDE_PROJECT_DIR}' }, meta });
     assert.equal(reported.source, 'host');
-    assert.equal(path.resolve(reported.root).toLowerCase(), path.resolve(other).toLowerCase());
+    // The folder as the file system resolves it: a temporary folder may be named by a Windows short name.
+    assert.equal(path.resolve(reported.root).toLowerCase(), path.resolve(await realpath(other)).toLowerCase());
     assert.equal((await resolveProjectRoot({ env: {}, session: { root: dir } })).source, 'approved');
     await assert.rejects(resolveProjectRoot({ env: {} }), error => error.code === 'PROJECT_DIR_MISSING' && /mousa_open_project/.test(error.message));
     await assert.rejects(checkProjectFolder('relative/path'), error => error.code === 'PROJECT_DIR_INVALID');

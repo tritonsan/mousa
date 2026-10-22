@@ -2,7 +2,9 @@ node_modules/
 .env
 .env.*
 !.env.example
-data/
+# The Studio's own DATA_DIR at the root: jobs, tries, votes and the built gallery, never published. A starter's data
+# folder, such as examples/mobile-app/data, is its product facts and is tracked.
+/data/
 artifacts/
 output/
 *.log

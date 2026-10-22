@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0",
+  "app": "Ramble",
+  "city": "Port Calder",
+  "note": "Port Calder and its walks are fictional. These are the app's fixed facts: a redesign keeps every name, distance, duration, stop and access note as written.",
+  "walks": [
+    {
+      "id": "harbour-lights",
+      "name": "Harbour Lights",
+      "district": "Old Harbour",
+      "distanceKm": 2.4,
+      "minutes": 45,
+      "stepFree": true,
+      "start": "Ferry Steps",
+      "summary": "Lamp-lit quays, the fish market's arches and the old customs house.",
+      "stops": [
+        { "name": "Ferry Steps", "note": "The walk starts where the island ferry ties up." },
+        { "name": "Fish Market Arches", "note": "Seven brick arches; the market opens at six." },
+        { "name": "Customs House", "note": "Its clock still runs ten minutes fast." },
+        { "name": "Rope Walk", "note": "A quarter-mile shed where ships' ropes were twisted." },
+        { "name": "Harbour Light", "note": "The red lamp at the end of the east pier." },
+        { "name": "Net Menders' Yard", "note": "Benches and the best view back over the quays." }
+      ]
+    },
+    {
+      "id": "market-stairs",
+      "name": "Market Stairs",
+      "district": "Upper Town",
+      "distanceKm": 1.8,
+      "minutes": 40,
+      "stepFree": false,
+      "start": "Hay Market",
+      "summary": "Stone stairs between the covered market and the bell tower lookout.",
+      "stops": [
+        { "name": "Hay Market", "note": "The covered market, busiest before noon." },
+        { "name": "Cooper's Stair", "note": "One hundred and twelve steps; a handrail on the left." },
+        { "name": "Printers' Court", "note": "A courtyard of old presses, open to walk through." },
+        { "name": "Bell Tower", "note": "The lookout is open until dusk." },
+        { "name": "Wall Walk", "note": "A stretch of the old town wall above the rooftops." }
+      ]
+    },
+    {
+      "id": "canal-loop",
+      "name": "Canal Loop",
+      "district": "Weavers' Quarter",
+      "distanceKm": 3.1,
+      "minutes": 60,
+      "stepFree": true,
+      "start": "Mill Bridge",
+      "summary": "Towpaths past the dye works, two lock gates and the printers' lane.",
+      "stops": [
+        { "name": "Mill Bridge", "note": "Cast-iron, with the mill's name still on the rail." },
+        { "name": "Dye Works", "note": "The water ran blue here on Mondays." },
+        { "name": "Upper Lock", "note": "The lock keeper's cottage is a café now." },
+        { "name": "Weavers' Row", "note": "Tall windows let the light onto the looms." },
+        { "name": "Lower Lock", "note": "Watch the gates open on the hour." },
+        { "name": "Basin", "note": "Moored boats and a chalkboard of the day's arrivals." },
+        { "name": "Printers' Lane", "note": "The loop closes back at Mill Bridge." }
+      ]
+    },
+    {
+      "id": "garden-hill",
+      "name": "Garden Hill",
+      "district": "North Slopes",
+      "distanceKm": 2.9,
+      "minutes": 70,
+      "stepFree": false,
+      "start": "Orchard Gate",
+      "summary": "Terraced allotments, the glasshouse and a view over the whole bay.",
+      "stops": [
+        { "name": "Orchard Gate", "note": "Apple trees planted by the first allotment holders." },
+        { "name": "Terraces", "note": "Grassy steps between the plots; uneven after rain." },
+        { "name": "Glasshouse", "note": "Warm all year, with a palm older than the town hall." },
+        { "name": "Beehives", "note": "Keep to the path while the bees are out." },
+        { "name": "Signal Station", "note": "Flags once told the harbour which ships were coming." },
+        { "name": "Bay View", "note": "The whole of Port Calder from one bench." }
+      ]
+    }
+  ]
+}

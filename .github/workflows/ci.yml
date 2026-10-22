@@ -19,16 +19,31 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      # The whole history: the gallery finds the commit each recorded run started at.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      # Chrome keeps its own sandbox for the captured pages, which needs the unprivileged user namespaces that Ubuntu
+      # 24.04's AppArmor refuses by default; the server's first boot allows them the same way (deploy/aws/bootstrap.sh).
+      - name: User namespaces for Chrome's sandbox
+        if: runner.os == 'Linux'
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      # On Windows the temporary folder is the runner's own, whose path has no 8.3 short name (C:\Users\RUNNER~1).
+      - name: A temporary folder without short names
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          echo "TEMP=$RUNNER_TEMP" >> "$GITHUB_ENV"
+          echo "TMP=$RUNNER_TEMP" >> "$GITHUB_ENV"
       # The capture tests need a Chromium-based browser: the runners carry Google Chrome. On Windows it is named, since
       # a headless Edge has been seen to exit at once (docs/verification.md).
       - name: Tests
         shell: bash
         env:
-          MOUSA_BROWSER: ${{ matrix.os == 'windows-latest' && 'C:\Program Files\Google\Chrome\Application\chrome.exe' || '' }}
+          MOUSA_BROWSER: ${{ runner.os == 'Windows' && 'C:\Program Files\Google\Chrome\Application\chrome.exe' || '' }}
         run: node --test tests/*.test.mjs game/tests/*.test.mjs
 
   plugins:

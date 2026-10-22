@@ -94,8 +94,10 @@ export async function resolveInProject(root, relative, options) {
   const target = path.join(root, ...clean.split('/'));
   let existing = target;
   while (existing !== root && !(await fs.lstat(existing).then(() => true, () => false))) existing = path.dirname(existing);
-  const real = await fs.realpath(existing);
-  if (real !== root && !real.startsWith(root + path.sep)) throw new ProjectScopeError(`${clean} leads outside the project.`);
+  // Both sides as the file system resolves them: a root reached through a link (macOS's /var to /private/var) or by a
+  // Windows short name (C:\Users\RUNNER~1) is the same folder as its real path, which a path inside it starts with.
+  const [real, realRoot] = await Promise.all([fs.realpath(existing), fs.realpath(root).catch(() => root)]);
+  if (real !== realRoot && !real.startsWith(realRoot + path.sep)) throw new ProjectScopeError(`${clean} leads outside the project.`);
   return { relative: clean, file: target };
 }
 
