@@ -1,0 +1,894 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Mousa jury server: one Ubuntu instance behind two CloudFront names (app and preview), the keys in Secrets Manager, a daily disk snapshot. The instance builds and starts the site at first boot.",
+  "Metadata": {
+    "cfn-lint": {
+      "config": {
+        "ignore_checks": [
+          "E6101"
+        ]
+      }
+    },
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "The code"
+          },
+          "Parameters": [
+            "RepositoryUrl",
+            "RepositoryRef",
+            "DataBundleUrl",
+            "DataBundleSha256"
+          ]
+        },
+        {
+          "Label": {
+            "default": "Keys and the live try"
+          },
+          "Parameters": [
+            "QlooApiKey",
+            "KiroApiKey",
+            "TryAccessCode",
+            "KiroModel"
+          ]
+        },
+        {
+          "Label": {
+            "default": "The server"
+          },
+          "Parameters": [
+            "VpcId",
+            "SubnetId",
+            "InstanceType",
+            "VolumeSize",
+            "DailySnapshots",
+            "UbuntuImage"
+          ]
+        }
+      ],
+      "ParameterLabels": {
+        "RepositoryUrl": {
+          "default": "Public GitHub repository"
+        },
+        "RepositoryRef": {
+          "default": "Branch, tag or commit"
+        },
+        "DataBundleUrl": {
+          "default": "Data bundle URL (optional)"
+        },
+        "DataBundleSha256": {
+          "default": "Data bundle SHA-256 (optional)"
+        },
+        "QlooApiKey": {
+          "default": "Qloo API key"
+        },
+        "KiroApiKey": {
+          "default": "Kiro API key"
+        },
+        "TryAccessCode": {
+          "default": "Access code for the jury"
+        },
+        "KiroModel": {
+          "default": "Kiro model"
+        },
+        "VpcId": {
+          "default": "VPC (the default one)"
+        },
+        "SubnetId": {
+          "default": "Subnet of that VPC"
+        },
+        "InstanceType": {
+          "default": "Instance type"
+        },
+        "VolumeSize": {
+          "default": "Disk size (GB)"
+        },
+        "DailySnapshots": {
+          "default": "Daily disk snapshots"
+        },
+        "UbuntuImage": {
+          "default": "Ubuntu image (leave as it is)"
+        }
+      }
+    }
+  },
+  "Parameters": {
+    "RepositoryUrl": {
+      "Type": "String",
+      "Description": "The public repository the server clones, such as https://github.com/owner/name.",
+      "AllowedPattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$",
+      "ConstraintDescription": "An https://github.com/owner/name address."
+    },
+    "RepositoryRef": {
+      "Type": "String",
+      "Default": "main",
+      "Description": "The branch, tag or commit to deploy. The site is built once, at first boot.",
+      "AllowedPattern": "^[A-Za-z0-9._/-]{1,100}$"
+    },
+    "DataBundleUrl": {
+      "Type": "String",
+      "Default": "",
+      "Description": "An https address of a .tar.gz of scripts/export-hosted-jobs.mjs --gallery --showcase. Empty: the site starts without the gallery.",
+      "AllowedPattern": "^(https://[^\\s']+)?$"
+    },
+    "DataBundleSha256": {
+      "Type": "String",
+      "Default": "",
+      "Description": "The bundle's SHA-256, checked before it is unpacked. Empty: not checked.",
+      "AllowedPattern": "^([a-f0-9]{64})?$"
+    },
+    "QlooApiKey": {
+      "Type": "String",
+      "NoEcho": true,
+      "MinLength": 8,
+      "AllowedPattern": "^[^'\\s]+$",
+      "Description": "The Qloo hackathon key. It is kept in Secrets Manager and never in the instance's user data."
+    },
+    "KiroApiKey": {
+      "Type": "String",
+      "NoEcho": true,
+      "MinLength": 8,
+      "AllowedPattern": "^[^'\\s]+$",
+      "Description": "A key from app.kiro.dev, API Keys. Kept in Secrets Manager."
+    },
+    "TryAccessCode": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "^[A-Za-z0-9._~-]{12,64}$",
+      "Description": "The code the jury enters at /try/: 12 to 64 letters, digits, dots, dashes or underscores. Put it in the submission's testing instructions.",
+      "ConstraintDescription": "12 to 64 letters, digits, dots, dashes, underscores or tildes."
+    },
+    "KiroModel": {
+      "Type": "String",
+      "Default": "claude-opus-5.5",
+      "AllowedPattern": "^[A-Za-z0-9._:/-]{1,120}$",
+      "Description": "The model both arms of a try run with."
+    },
+    "VpcId": {
+      "Type": "AWS::EC2::VPC::Id",
+      "Description": "The default VPC of the region, whose subnets give instances a public address."
+    },
+    "SubnetId": {
+      "Type": "AWS::EC2::Subnet::Id",
+      "Description": "A subnet of the VPC above."
+    },
+    "InstanceType": {
+      "Type": "String",
+      "Default": "t3.large",
+      "AllowedValues": [
+        "t3.large",
+        "t3.xlarge",
+        "m6i.large",
+        "m7i.large"
+      ],
+      "Description": "Two vCPUs and 8 GB fit one pair (two Kiro sessions) beside two first steps."
+    },
+    "VolumeSize": {
+      "Type": "Number",
+      "Default": 60,
+      "MinValue": 40,
+      "MaxValue": 500,
+      "Description": "The encrypted gp3 disk: the system, the image, the gallery and the tries."
+    },
+    "DailySnapshots": {
+      "Type": "String",
+      "Default": "Yes",
+      "AllowedValues": [
+        "Yes",
+        "No"
+      ],
+      "Description": "A snapshot of the disk every day at 03:00 UTC, the last 14 kept."
+    },
+    "UbuntuImage": {
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+      "Default": "/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id",
+      "Description": "Canonical's current Ubuntu 24.04 image for the region."
+    }
+  },
+  "Conditions": {
+    "InUsEast1": {
+      "Fn::Equals": [
+        {
+          "Ref": "AWS::Region"
+        },
+        "us-east-1"
+      ]
+    },
+    "MakeSnapshots": {
+      "Fn::Equals": [
+        {
+          "Ref": "DailySnapshots"
+        },
+        "Yes"
+      ]
+    }
+  },
+  "Resources": {
+    "PrefixListRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+          }
+        ],
+        "Policies": [
+          {
+            "PolicyName": "describe-prefix-lists",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": "ec2:DescribeManagedPrefixLists",
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "PrefixListFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Handler": "index.handler",
+        "Timeout": 30,
+        "Role": {
+          "Fn::GetAtt": [
+            "PrefixListRole",
+            "Arn"
+          ]
+        },
+        "Description": "Finds the CloudFront origin-facing prefix list of the region for the security group.",
+        "Code": {
+          "ZipFile": "import boto3\nimport cfnresponse\n\n\ndef handler(event, context):\n    physical = event.get('PhysicalResourceId', 'cloudfront-origin-facing')\n    try:\n        if event['RequestType'] == 'Delete':\n            cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, physical)\n            return\n        name = event['ResourceProperties']['Name']\n        found = boto3.client('ec2').describe_managed_prefix_lists(Filters=[{'Name': 'prefix-list-name', 'Values': [name]}])['PrefixLists']\n        if not found:\n            raise ValueError(name + ' is not a managed prefix list in this region.')\n        cfnresponse.send(event, context, cfnresponse.SUCCESS, {'Id': found[0]['PrefixListId']}, found[0]['PrefixListId'])\n    except Exception as error:\n        cfnresponse.send(event, context, cfnresponse.FAILED, {}, physical, reason=str(error)[:200])\n"
+        }
+      }
+    },
+    "CloudFrontPrefixList": {
+      "Type": "Custom::PrefixList",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "PrefixListFunction",
+            "Arn"
+          ]
+        },
+        "Name": "com.amazonaws.global.cloudfront.origin-facing"
+      }
+    },
+    "SecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VpcId"
+        },
+        "GroupDescription": "Mousa: the app and preview ports, from CloudFront only",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 8787,
+            "ToPort": 8788,
+            "SourcePrefixListId": {
+              "Fn::GetAtt": [
+                "CloudFrontPrefixList",
+                "Id"
+              ]
+            },
+            "Description": "CloudFront origin-facing addresses"
+          }
+        ]
+      }
+    },
+    "KeysSecret": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-keys"
+        },
+        "Description": "Mousa: the Qloo and Kiro keys and the jury's access code.",
+        "SecretString": {
+          "Fn::Sub": "{\"QLOO_API_KEY\":\"${QlooApiKey}\",\"KIRO_API_KEY\":\"${KiroApiKey}\",\"TRY_ACCESS_CODE\":\"${TryAccessCode}\"}"
+        }
+      }
+    },
+    "SiteSecret": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-site-secret"
+        },
+        "Description": "Mousa: seals the blind vote's ballots and signs the try's access.",
+        "GenerateSecretString": {
+          "PasswordLength": 64,
+          "ExcludePunctuation": true
+        }
+      }
+    },
+    "DemoTokenSecret": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-studio-token"
+        },
+        "Description": "Mousa: the token for /studio and /api/health/deep.",
+        "GenerateSecretString": {
+          "PasswordLength": 40,
+          "ExcludePunctuation": true
+        }
+      }
+    },
+    "InstanceRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
+          }
+        ],
+        "Policies": [
+          {
+            "PolicyName": "read-own-secrets",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": "secretsmanager:GetSecretValue",
+                  "Resource": [
+                    {
+                      "Ref": "KeysSecret"
+                    },
+                    {
+                      "Ref": "SiteSecret"
+                    },
+                    {
+                      "Ref": "DemoTokenSecret"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "InstanceProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "InstanceRole"
+          }
+        ]
+      }
+    },
+    "ElasticIp": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Sub": "${AWS::StackName}"
+            }
+          }
+        ]
+      }
+    },
+    "AppDistribution": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Comment": "Mousa app: the site, the gallery, the vote and the try",
+          "Enabled": true,
+          "HttpVersion": "http2and3",
+          "IPV6Enabled": true,
+          "PriceClass": "PriceClass_100",
+          "Origins": [
+            {
+              "Id": "app",
+              "DomainName": {
+                "Fn::If": [
+                  "InUsEast1",
+                  {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "ec2-",
+                        {
+                          "Fn::Join": [
+                            "-",
+                            {
+                              "Fn::Split": [
+                                ".",
+                                {
+                                  "Ref": "ElasticIp"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        ".compute-1.amazonaws.com"
+                      ]
+                    ]
+                  },
+                  {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "ec2-",
+                        {
+                          "Fn::Join": [
+                            "-",
+                            {
+                              "Fn::Split": [
+                                ".",
+                                {
+                                  "Ref": "ElasticIp"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        ".",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ".compute.amazonaws.com"
+                      ]
+                    ]
+                  }
+                ]
+              },
+              "CustomOriginConfig": {
+                "HTTPPort": 8787,
+                "OriginProtocolPolicy": "http-only",
+                "OriginReadTimeout": 60,
+                "OriginKeepaliveTimeout": 5
+              }
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "TargetOriginId": "app",
+            "ViewerProtocolPolicy": "redirect-to-https",
+            "AllowedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PUT",
+              "PATCH",
+              "POST",
+              "DELETE"
+            ],
+            "CachedMethods": [
+              "GET",
+              "HEAD"
+            ],
+            "Compress": false,
+            "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+            "OriginRequestPolicyId": "216adef6-5c7f-47e4-b989-5492eafa07d3"
+          },
+          "CustomErrorResponses": [
+            {
+              "ErrorCode": 400,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 403,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 404,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 405,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 414,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 416,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 500,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 501,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 502,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 503,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 504,
+              "ErrorCachingMinTTL": 0
+            }
+          ]
+        }
+      }
+    },
+    "PreviewDistribution": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Comment": "Mousa preview: the designs, sandboxed, on an origin of their own",
+          "Enabled": true,
+          "HttpVersion": "http2and3",
+          "IPV6Enabled": true,
+          "PriceClass": "PriceClass_100",
+          "Origins": [
+            {
+              "Id": "preview",
+              "DomainName": {
+                "Fn::If": [
+                  "InUsEast1",
+                  {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "ec2-",
+                        {
+                          "Fn::Join": [
+                            "-",
+                            {
+                              "Fn::Split": [
+                                ".",
+                                {
+                                  "Ref": "ElasticIp"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        ".compute-1.amazonaws.com"
+                      ]
+                    ]
+                  },
+                  {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "ec2-",
+                        {
+                          "Fn::Join": [
+                            "-",
+                            {
+                              "Fn::Split": [
+                                ".",
+                                {
+                                  "Ref": "ElasticIp"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        ".",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ".compute.amazonaws.com"
+                      ]
+                    ]
+                  }
+                ]
+              },
+              "CustomOriginConfig": {
+                "HTTPPort": 8788,
+                "OriginProtocolPolicy": "http-only",
+                "OriginReadTimeout": 60,
+                "OriginKeepaliveTimeout": 5
+              }
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "TargetOriginId": "preview",
+            "ViewerProtocolPolicy": "redirect-to-https",
+            "AllowedMethods": [
+              "GET",
+              "HEAD"
+            ],
+            "CachedMethods": [
+              "GET",
+              "HEAD"
+            ],
+            "Compress": false,
+            "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+            "OriginRequestPolicyId": "216adef6-5c7f-47e4-b989-5492eafa07d3"
+          },
+          "CustomErrorResponses": [
+            {
+              "ErrorCode": 400,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 403,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 404,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 405,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 414,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 416,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 500,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 501,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 502,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 503,
+              "ErrorCachingMinTTL": 0
+            },
+            {
+              "ErrorCode": 504,
+              "ErrorCachingMinTTL": 0
+            }
+          ]
+        }
+      }
+    },
+    "BootstrapHandle": {
+      "Type": "AWS::CloudFormation::WaitConditionHandle"
+    },
+    "Instance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": {
+          "Ref": "UbuntuImage"
+        },
+        "InstanceType": {
+          "Ref": "InstanceType"
+        },
+        "IamInstanceProfile": {
+          "Ref": "InstanceProfile"
+        },
+        "NetworkInterfaces": [
+          {
+            "DeviceIndex": "0",
+            "SubnetId": {
+              "Ref": "SubnetId"
+            },
+            "GroupSet": [
+              {
+                "Ref": "SecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": true,
+            "DeleteOnTermination": true
+          }
+        ],
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "VolumeSize": {
+                "Ref": "VolumeSize"
+              },
+              "VolumeType": "gp3",
+              "Encrypted": true,
+              "DeleteOnTermination": true
+            }
+          }
+        ],
+        "MetadataOptions": {
+          "HttpEndpoint": "enabled",
+          "HttpTokens": "required",
+          "HttpPutResponseHopLimit": 1
+        },
+        "PropagateTagsToVolumeOnCreation": true,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Sub": "${AWS::StackName}"
+            }
+          },
+          {
+            "Key": "mousa-backup",
+            "Value": {
+              "Fn::Sub": "${AWS::StackName}"
+            }
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Sub": "#!/bin/bash\n# The user data of deploy/aws/mousa-stack.json, which scripts/build-aws-stack.mjs reads into the template's Fn::Sub:\n# each name in a dollar sign and braces below is a stack value CloudFormation fills in, so this file runs only as the\n# stack's user data, and a comment here must never hold such a name. At first\n# boot it waits until the stack's Elastic IP is the instance's address (so no download is cut when the address\n# changes), clones the repository at the stack's ref and runs its bootstrap. A failure before the bootstrap is reported\n# to the stack's wait condition, so the stack stops with the reason instead of waiting for its timeout.\nset -euo pipefail\nexport MOUSA_WAIT_HANDLE='${BootstrapHandle}'\nfail() {\n  body=\"{\\\"Status\\\":\\\"FAILURE\\\",\\\"Reason\\\":\\\"The first boot stopped before the bootstrap: $1. Read /var/log/cloud-init-output.log through Session Manager.\\\",\\\"UniqueId\\\":\\\"bootstrap\\\",\\\"Data\\\":\\\"\\\"}\"\n  curl -fsS --retry 5 -X PUT -H 'Content-Type:' --data-binary \"$body\" \"$MOUSA_WAIT_HANDLE\" || true\n  exit 1\n}\ntoken() { curl -fsS -X PUT -H 'X-aws-ec2-metadata-token-ttl-seconds: 300' http://169.254.169.254/latest/api/token; }\nfor attempt in $(seq 1 120); do\n  address=$(curl -fsS -H \"X-aws-ec2-metadata-token: $(token)\" http://169.254.169.254/latest/meta-data/public-ipv4 || true)\n  if [ \"$address\" = '${ElasticIp}' ]; then break; fi\n  if [ \"$attempt\" = 120 ]; then fail 'the Elastic IP was not associated within ten minutes'; fi\n  sleep 5\ndone\nexport DEBIAN_FRONTEND=noninteractive\napt-get -o DPkg::Lock::Timeout=600 -y update >/dev/null || fail 'apt-get update failed'\napt-get -o DPkg::Lock::Timeout=600 -y install git ca-certificates curl >/dev/null || fail 'git could not be installed'\ngit init -q /opt/mousa && git -C /opt/mousa remote add origin '${RepositoryUrl}' || fail 'the repository folder could not be made'\ngit -C /opt/mousa fetch -q --depth 1 origin '${RepositoryRef}' && git -C /opt/mousa checkout -q --detach FETCH_HEAD || fail 'the repository or its ref could not be fetched'\nexport MOUSA_REPO_DIR=/opt/mousa MOUSA_REGION='${AWS::Region}' MOUSA_REPOSITORY_URL='${RepositoryUrl}' MOUSA_KIRO_MODEL='${KiroModel}'\nexport MOUSA_KEYS_SECRET='${KeysSecret}' MOUSA_SITE_SECRET='${SiteSecret}' MOUSA_TOKEN_SECRET='${DemoTokenSecret}'\nexport MOUSA_APP_DOMAIN='${AppDistribution.DomainName}' MOUSA_PREVIEW_DOMAIN='${PreviewDistribution.DomainName}'\nexport MOUSA_DATA_URL='${DataBundleUrl}' MOUSA_DATA_SHA256='${DataBundleSha256}'\nexec bash /opt/mousa/deploy/aws/bootstrap.sh\n"
+          }
+        }
+      }
+    },
+    "ElasticIpAssociation": {
+      "Type": "AWS::EC2::EIPAssociation",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "ElasticIp",
+            "AllocationId"
+          ]
+        },
+        "InstanceId": {
+          "Ref": "Instance"
+        }
+      }
+    },
+    "BootstrapWait": {
+      "Type": "AWS::CloudFormation::WaitCondition",
+      "DependsOn": "Instance",
+      "Properties": {
+        "Handle": {
+          "Ref": "BootstrapHandle"
+        },
+        "Timeout": "3600",
+        "Count": 1
+      }
+    },
+    "SnapshotRole": {
+      "Condition": "MakeSnapshots",
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "dlm.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSDataLifecycleManagerServiceRole"
+          }
+        ]
+      }
+    },
+    "SnapshotPolicy": {
+      "Type": "AWS::DLM::LifecyclePolicy",
+      "Condition": "MakeSnapshots",
+      "Properties": {
+        "Description": "Mousa daily snapshot of the server disk with 14 kept",
+        "State": "ENABLED",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "SnapshotRole",
+            "Arn"
+          ]
+        },
+        "PolicyDetails": {
+          "PolicyType": "EBS_SNAPSHOT_MANAGEMENT",
+          "ResourceTypes": [
+            "VOLUME"
+          ],
+          "TargetTags": [
+            {
+              "Key": "mousa-backup",
+              "Value": {
+                "Fn::Sub": "${AWS::StackName}"
+              }
+            }
+          ],
+          "Schedules": [
+            {
+              "Name": "daily",
+              "CopyTags": true,
+              "CreateRule": {
+                "Interval": 24,
+                "IntervalUnit": "HOURS",
+                "Times": [
+                  "03:00"
+                ]
+              },
+              "RetainRule": {
+                "Count": 14
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "AppUrl": {
+      "Description": "The site, for the jury: the gallery, the blind vote and the live try at /try/.",
+      "Value": {
+        "Fn::Sub": "https://${AppDistribution.DomainName}"
+      }
+    },
+    "PreviewUrl": {
+      "Description": "Where the designs play, sandboxed: an origin of its own.",
+      "Value": {
+        "Fn::Sub": "https://${PreviewDistribution.DomainName}"
+      }
+    },
+    "StudioToken": {
+      "Description": "Open it and choose Retrieve secret value: the token for /studio and /api/health/deep.",
+      "Value": {
+        "Fn::Sub": "https://${AWS::Region}.console.aws.amazon.com/secretsmanager/secret?name=${AWS::StackName}-studio-token&region=${AWS::Region}"
+      }
+    },
+    "SessionManager": {
+      "Description": "A shell on the server, with no SSH: the bootstrap log is /var/log/mousa-bootstrap.log.",
+      "Value": {
+        "Fn::Sub": "https://${AWS::Region}.console.aws.amazon.com/systems-manager/session-manager/${Instance}?region=${AWS::Region}"
+      }
+    },
+    "Bootstrap": {
+      "Description": "What the first boot reported: Kiro, the captures, the try and the gallery.",
+      "Value": {
+        "Fn::GetAtt": [
+          "BootstrapWait",
+          "Data"
+        ]
+      }
+    },
+    "InstanceId": {
+      "Value": {
+        "Ref": "Instance"
+      }
+    },
+    "ElasticIp": {
+      "Value": {
+        "Ref": "ElasticIp"
+      }
+    }
+  }
+}

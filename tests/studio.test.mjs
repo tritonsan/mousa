@@ -50,6 +50,7 @@ test('Kiro job configuration restricts tools and disables inherited resources', 
   for (const location of [path.join(home, 'settings', 'cli.json'), path.join(directory, '.kiro', 'settings', 'cli.json')]) {
     const settings = JSON.parse(await fs.readFile(location, 'utf8'));
     assert.equal(settings['chat.disableInheritingDefaultResources'], true);
+    assert.equal(settings['app.disableAutoupdates'], true, 'a run never updates Kiro when it starts');
   }
 });
 test('project rejects absolute, traversing, private and executable paths', () => {

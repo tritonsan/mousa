@@ -2,6 +2,43 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## The try in the container with a Kiro API key, and the server's stack — October 22, 2026
+
+**The key.** The user created a Kiro API key at app.kiro.dev, signing in through "Your organization" with the IAM Identity Center start URL, and put it in `.env` without it passing through the chat.
+- A check on this machine would not have tested it: Kiro's authentication documentation puts an active `kiro-cli login` before `KIRO_API_KEY`, and this machine is signed in. The container has no sign-in, as the server will not.
+
+**The image,** built again from the current code: the stable channel installed kiro-cli 2.33.1, and the new guard on the major version let it through. The 14 October image, with 2.31.0, is kept as `qloo-design-demo:2026-10-14`.
+
+**Step one in the container, through the site's own forms** (the access code, then the request for Wax & Wane and Paterson and Nujabes):
+- The first attempt failed in one second with `failed to launch kiro-cli-chat`. Kiro's launcher looks for its chat binary on PATH, and `/opt/kiro/bin` was on no PATH in the image. The container path of the try had never run before.
+- The image now puts `/opt/kiro/bin` on PATH, and each try session puts Kiro's own folder on its PATH too (`sessionEnvironment`, tested).
+- The second attempt finished in 40 seconds:
+
+| Measure | Value |
+| --- | --- |
+| Kiro | 2.33.1, with the API key |
+| Prediction session | 33 s, three Moûsa calls, 47 entries frozen |
+| Credits, as Kiro metered them | 1.1 |
+| Fullest context | 3.6% |
+| Qloo requests | 12 |
+
+- Kiro wrote nothing to stderr; the `Method not found` warning of 2.24 was gone.
+- `/api/health/deep` reported Kiro, the key, Chromium's captures and an open try, and the entrypoint had written `app.disableAutoupdates` into Kiro's settings.
+
+**Kiro stays on the version tested.** CLI 3.0, with the V3 engine as the default, is due by the end of October.
+- Every Kiro session Moûsa starts (the try, the Studio's runs and the game's pairs) writes `app.disableAutoupdates` into its own `KIRO_HOME`, beside `chat.disableInheritingDefaultResources` (`src/kiro-settings.mjs`).
+- The entrypoint sets the same in `HOME`, which the status checks use.
+- The image build stops on a Kiro major version other than `KIRO_EXPECTED_MAJOR` (2); an empty value accepts any.
+
+**The server's stack** (`deploy/aws/mousa-stack.json`, written by `scripts/build-aws-stack.mjs`):
+- cfn-lint 1.58 passes it, with one check left out at template level: E6101 types a wait condition's `Data` as an object, while AWS's own examples put it in Outputs.
+- `tests/aws-stack.test.mjs`, 7 tests: the template is the generator's output; the user data names only stack values, waits for the Elastic IP before it downloads anything and holds no key; the only inbound rule is CloudFront's prefix list on the two ports; IMDSv2 with one hop; the distributions; the bootstrap's order; the environment file sets every variable `deploy/demo.env.example` and the Compose file name, quoted, and refuses a quote; the health summary carries no token.
+- The first boot's parts were rehearsed in Docker on Windows:
+  - `write-env.py` wrote its 34 settings against a stand-in Secrets Manager;
+  - the bundle (`export-hosted-jobs.mjs --gallery --showcase`: 11 gallery entries scanned clean and the showcase, 110 MB packed) passed its SHA-256 check and was imported into `qloo-design-demo_demo-data` with the bootstrap's own commands;
+  - the site started, `health-summary.py` reported Kiro 2.33.1, Chromium, an open try and 11 entries, and `verify-site.mjs --no-picture` passed 21 pages, with HSTS and request log lines that hold route patterns only.
+- **Not done:** creating the stack on AWS, and a pair in the container.
+
 ## Engineering pass before the server — October 15, 2026
 
 A read-only review of the repository, with the 14 October try's private records as evidence, and then the changes it
@@ -537,7 +574,7 @@ Limits: one session and one brief, on Windows with Claude Code 2.1.284 and the p
 
 ## Showcase for reviewers — October 6, 2026
 
-The [showcase](../README.md#showcase) was set with `scripts/build-showcase.mjs --sites=dfc72570-5a8a-4615-9e91-5968da7c8745 --app=2026-10-06T10-20-02-669Z`: the Gather comparison below and the standalone Ramble run. It built `data/showcase/app/ramble-2026-10-06/` from 24 files of the run and the starter and a record of its artifacts. No character pair is showcased yet. No request was made.
+The [showcase](development-notes.md#showcase) was set with `scripts/build-showcase.mjs --sites=dfc72570-5a8a-4615-9e91-5968da7c8745 --app=2026-10-06T10-20-02-669Z`: the Gather comparison below and the standalone Ramble run. It built `data/showcase/app/ramble-2026-10-06/` from 24 files of the run and the starter and a record of its artifacts. No character pair is showcased yet. No request was made.
 
 - **Automated.** Six tests in `tests/showcase.test.mjs` and one in `tests/export-hosted-jobs.test.mjs`: which entries load and which are left out with a note; with a token set, `/api/showcase`, the showcased records and their diffs open without it, while other records, the pair list, the workspaces, cancellation and new jobs return 401; the preview serves the app run's listed files under its sandboxed policy and 404 for `record.json`, `.kiro`, `..`, unlisted types and other folders; the build copies only the web files, the fonts and the listed captures; the export carries only what the Studio serves. Suite 382/382 (319 + 63).
 - **Local Studio**, restarted as "studio-production-runs" and captured with headless Edge at 1440 and 390 pixels. A plain address opened the Gather comparison with its "Showcase · recorded October 6" badge, kept the address plain and left the workspace unopened. The App interface tab played both phones from the preview origin, with the redesign's fonts and its walk list read from `data/walks.json`; the board and the eight review captures loaded. Leaving the tab unloaded both phones, arrow keys moved across the three tabs, and the Game character view was unchanged. The console showed no error from the pages.
@@ -610,7 +647,7 @@ Limits: one pair and one model. The comparison's distance does not measure the p
 
 ## Live character pair with the production stages — October 6, 2026
 
-The first live pair to use the [production stages](../README.md#universal-production-protocol) ran from the Studio's Game character tab with the default brief, claude-opus-5.5 and the recorded taste profile of pair-20261004-232241 (job 3b9d6e6a), so it made no Qloo request. Both arms were offered the same capability list: one portrait and one painting of the figure, neither required, and reviews captured by Microsoft Edge.
+The first live pair to use the [production stages](development-notes.md#universal-production-protocol) ran from the Studio's Game character tab with the default brief, claude-opus-5.5 and the recorded taste profile of pair-20261004-232241 (job 3b9d6e6a), so it made no Qloo request. Both arms were offered the same capability list: one portrait and one painting of the figure, neither required, and reviews captured by Microsoft Edge.
 
 The first attempt (job 54ba8fb4) exposed a host fault. The Qloo off arm opened its four round-one captures in one read, and Kiro echoed their 2.5 MB of PNG bytes on its output as a JSON array, about 9 MB in one line. The game host capped Kiro's whole output at 6 MB and stopped the run there, so the arm left no review and never painted, though it counted as completed because its character had been saved. The Qloo on arm's captures were smaller and it finished two rounds. The Studio's own cap was 4 MB, so a site review would have failed the same way. Both hosts now read Kiro's output through [`src/kiro-output.mjs`](../src/kiro-output.mjs), which skips any line over 1 MB and keeps an overall limit of 256 MB against a runaway session. They also read kiro-cli 2.24's event format, whose updates sit under `data.update`, so tool titles reach the event log for the first time, and a pair now warns when Kiro stops before an arm's session ends.
 
@@ -655,7 +692,7 @@ Limits: each behavior was seen in one to five sessions on Windows; Linux and the
 
 ## Universal production protocol — October 6, 2026
 
-The [production stages](../README.md#universal-production-protocol) move the judgment between the taste input and the build to the designing model: a reading, a production plan chosen from the host's capability list and a review of captures. They were built in four steps and verified without a model, Qloo or Codex request.
+The [production stages](development-notes.md#universal-production-protocol) move the judgment between the taste input and the build to the designing model: a reading, a production plan chosen from the host's capability list and a review of captures. They were built in four steps and verified without a model, Qloo or Codex request.
 
 What was built:
 
@@ -680,7 +717,7 @@ Limits:
 
 ## Painted characters — October 5, 2026
 
-The art-direction pairs moved every layer of the design, but each figure was still the engine's rounded vector shapes, and the pixel frame only pixelated them. A spike tested whether Codex could paint a character that the rig can still move, and the [painted-character pipeline](../README.md#painted-characters) followed from it. The spike used four Codex images on the ChatGPT plan. Each was a non-interactive `codex exec --ignore-user-config` turn in an empty folder, as the portraits are, with the blueprint attached through `--image`, and each request's session folder was deleted afterwards. It made no Kiro run and no Qloo request. Its subject was the Qloo on character of [pair D](#live-pairs-with-art-direction--october-5-2026): a tall lamplighter in a sage coat with a funnel collar, a flat hat, a dusty-rose sash and a lantern.
+The art-direction pairs moved every layer of the design, but each figure was still the engine's rounded vector shapes, and the pixel frame only pixelated them. A spike tested whether Codex could paint a character that the rig can still move, and the [painted-character pipeline](development-notes.md#painted-characters) followed from it. The spike used four Codex images on the ChatGPT plan. Each was a non-interactive `codex exec --ignore-user-config` turn in an empty folder, as the portraits are, with the blueprint attached through `--image`, and each request's session folder was deleted afterwards. It made no Kiro run and no Qloo request. Its subject was the Qloo on character of [pair D](#live-pairs-with-art-direction--october-5-2026): a tall lamplighter in a sage coat with a funnel collar, a flat hat, a dusty-rose sash and a lantern.
 
 | Attempt | What Codex was given | Time | Overlap of each cut piece with its blueprint | Result |
 | --- | --- | --- | --- | --- |
@@ -1280,7 +1317,7 @@ Not yet verified: the standalone `scripts/verify-qloo-taste-live.mjs`, other bri
 
 ## Taste-led protocol 0.4.0 — October 3, 2026
 
-The [researched comparison](#completed-researched-comparison) below showed a visible but moderate difference that could not be attributed to Qloo alone: both arms had the same web tools, and the Qloo arm chose when and what to ask Qloo (four calls). Version 0.4.0 makes the taste-led protocol the default: a host taste pass before any model run, a frozen blind prediction in both arms, required anchors favoring entities the model did not predict, a binding Design DNA with literal tokens, a host conformance check, and no web or direct Qloo tools in either arm. See the [README](../README.md#taste-led-protocol--040-default) and [creative policy](creative-policy.md#taste-led-design-040).
+The [researched comparison](#completed-researched-comparison) below showed a visible but moderate difference that could not be attributed to Qloo alone: both arms had the same web tools, and the Qloo arm chose when and what to ask Qloo (four calls). Version 0.4.0 makes the taste-led protocol the default: a host taste pass before any model run, a frozen blind prediction in both arms, required anchors favoring entities the model did not predict, a binding Design DNA with literal tokens, a host conformance check, and no web or direct Qloo tools in either arm. See the [README](development-notes.md#taste-led-protocol--040-default) and [creative policy](creative-policy.md#taste-led-design-040).
 
 The **202/202 automated tests passed**, including 18 new taste-protocol tests and 2 new Studio UI tests. They inject a test-only Qloo client and an agent that follows the protocol through the real bridge, and they check:
 

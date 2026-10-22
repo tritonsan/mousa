@@ -4,7 +4,7 @@ Result: passed
 
 ## Target and scope
 
-The supplied logo is the brand reference, not a full-screen UI mockup. The implementation carries its navy, violet and warm gradient accents into the existing Studio layout. Source: `D:/Qloo Hackathon/Moûsa Layered Gradient Logo.png` (1254 × 1254).
+The supplied logo is the brand reference, not a full-screen UI mockup. The implementation carries its navy, violet and warm gradient accents into the existing Studio layout. Source: the supplied brand logo (1254 × 1254), served as `web/assets/mousa-logo.png`.
 
 The served logo is an exact copy with matching SHA-256 `961e1efe0f27018a19e1b1ed260f2d222e157d173c6a1855bbec2da6250477bd`. CSS hides the surrounding white canvas without modifying the image or distorting its proportions. No new model or Qloo calls were needed for this change.
 

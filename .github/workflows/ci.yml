@@ -43,3 +43,21 @@ jobs:
         run: node scripts/build-plugins.mjs
       - name: No difference from the committed packages
         run: git diff --exit-code --stat -- plugins .claude-plugin .agents
+
+  aws-stack:
+    name: The server's CloudFormation stack
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: The template is its generator's output
+        run: node scripts/build-aws-stack.mjs --check
+      - name: cfn-lint
+        run: |
+          python -m pip install --quiet cfn-lint
+          cfn-lint deploy/aws/mousa-stack.json

@@ -9,6 +9,7 @@ import { methodSummary } from '../plugin/server/production/capabilities.mjs';
 import { mediumProfile } from '../plugin/server/production/media.mjs';
 import { reviewReadSettings } from './kiro-session-audit.mjs';
 import { KIRO_OUTPUT_LIMITS, kiroOutputReader, streamUpdate } from './kiro-output.mjs';
+import { kiroSessionSettings } from './kiro-settings.mjs';
 import { SITE_MEDIUM_ID, CAPABILITIES_FILE, READING_FILE, PLAN_FILE, REVIEW_FILE, REVIEW_DIR, SITE_VIEWS } from './site-production.mjs';
 
 // Generated site code budget. Raised from 25,000 when motion and SVG illustration became DNA layers of their own.
@@ -227,7 +228,7 @@ export async function prepareKiroWorkspace({ directory, config, model, bridgeUrl
   // real probe. Observe its private typed session records instead, so a future
   // version cannot double-count a hook and the host's session adapter.
   await fs.rm(path.join(directory, '.kiro', 'hooks', 'culture-web-research.json'), { force: true });
-  const settings = JSON.stringify({ 'chat.disableInheritingDefaultResources': true });
+  const settings = kiroSessionSettings();
   await fs.writeFile(path.join(directory, '.kiro', 'settings', 'cli.json'), settings);
   await fs.writeFile(path.join(home, 'settings', 'cli.json'), settings);
   return home;

@@ -77,6 +77,10 @@ test('step one freezes the prediction in a Kiro session without Qloo, then measu
   assert.equal(predict.agent.mcpServers.mousa.env.MOUSA_PROJECT_DIR, project);
   assert.equal(predict.agent.mcpServers.mousa.env.MOUSA_ENVIRONMENT, 'hosted');
   assert.equal(predict.agent.includePowers, false);
+  // The session's own settings: only the resources its agent names, and no Kiro update when it starts, so a hosted
+  // try runs on the CLI version the image was tested with.
+  assert.deepEqual(JSON.parse(await fs.readFile(path.join(predict.env.KIRO_HOME, 'settings', 'cli.json'), 'utf8')),
+    { 'chat.disableInheritingDefaultResources': true, 'app.disableAutoupdates': true });
   assert.ok(predict.agent.permissions.rules.some(rule => rule.capability === 'shell' && rule.effect === 'deny'));
   assert.deepEqual(predict.args.slice(0, 7), ['chat', '--agent', 'mousa-try', '--agent-engine', 'v2', '--model', 'fixed-test-model']);
   assert.ok(predict.args.includes('--require-mcp-startup') && predict.args.includes('--no-interactive'));

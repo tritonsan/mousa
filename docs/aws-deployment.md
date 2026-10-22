@@ -25,6 +25,64 @@ It needs two HTTPS names, one for the app and one for the preview origin the des
 - Administer it through Systems Manager, with an instance role that holds only `AmazonSSMManagedInstanceCore`; no SSH port is opened.
 - The container gets 2 CPUs and 6 GB, since a pair runs two Kiro sessions, each with Moûsa's server and its captures, beside up to two first steps.
 
+### One stack: `deploy/aws/mousa-stack.json` (recommended)
+
+The whole server is one CloudFormation stack, made in the console in one form. `scripts/build-aws-stack.mjs` writes the template; `deploy/aws/first-boot.sh` is its user data and `deploy/aws/bootstrap.sh` the first boot.
+
+**What the stack makes.**
+- One Ubuntu 24.04 instance, t3.large by default, with an encrypted 60 GB gp3 disk, administered through Session Manager with no SSH key.
+- Its Elastic IP, and a security group with one rule: TCP 8787-8788 from CloudFront's origin-facing prefix list, which a small Lambda looks up for the region.
+- Two CloudFront distributions, the app (port 8787, all methods) and the preview (port 8788, GET and HEAD), each with its own `cloudfront.net` HTTPS name, `CachingDisabled` and `AllViewer`, and no error kept in the cache.
+- Three secrets in Secrets Manager: the Qloo key, the Kiro key and the jury's access code as given, and a generated `SITE_SECRET` and `DEMO_ACCESS_TOKEN`. Only the instance role reads them. They never enter the instance's user data.
+- IMDSv2 with one hop, so no container, and no page the model wrote, can reach the instance role.
+- A daily snapshot of the disk at 03:00 UTC, the last 14 kept.
+
+**What the first boot does**, logged to `/var/log/mousa-bootstrap.log` without any secret:
+1. It waits until the Elastic IP is the instance's address, so no download is cut when the address changes.
+2. It clones the repository at the stack's ref.
+3. It adds 4 GB of swap, and lets Chromium's sandbox create user namespaces, which Ubuntu 24.04's AppArmor refuses by default.
+4. It installs Docker from Docker's repository, with container logs rotating at 5 × 20 MB.
+5. It writes `/etc/mousa/demo.env`, mode 600, with `deploy/aws/write-env.py`: the secrets, the two CloudFront names, `TRUST_PROXY=1`, `LEGACY_JOBS=off` and JSON logs.
+6. It builds the image. The build stops if the stable channel's Kiro is not major version 2.
+7. It imports the data bundle when the stack names one, after checking its SHA-256.
+8. It starts the site and waits for `/api/health`.
+9. It reports to the stack's wait condition: success with the deep health summary (`deploy/aws/health-summary.py`), or the line it stopped at.
+
+**Before the stack.**
+- The repository is public on GitHub, with the commit to deploy pushed.
+- The keys at hand: the Qloo hackathon key, a Kiro API key from app.kiro.dev, and an access code for the jury of 12 or more letters and digits.
+- Optional, the data bundle, on the machine that holds the recorded runs:
+
+  ```sh
+  node scripts/export-hosted-jobs.mjs --out ../hosted --gallery --showcase
+  tar -czf mousa-data.tar.gz -C ../hosted .
+  ```
+
+  The bundle is put at an https address the instance can download, such as a release asset or a presigned S3 address, and its SHA-256 goes into the stack with it. Without a bundle the site starts with the Studio and the try, and no gallery.
+
+**In the console.**
+1. CloudFormation, Create stack, With new resources, Upload a template file: `deploy/aws/mousa-stack.json`.
+2. Name the stack, for example `mousa-jury`. Fill in the repository and its ref, the three keys and the code, and choose the region's default VPC and one of its subnets. Leave the rest as it is.
+3. On the options page, under Stack failure options, choose "Preserve successfully provisioned resources". A failed first boot then leaves the server running, so its log can be read.
+4. Acknowledge that the stack creates IAM roles, and create it.
+5. It takes about 25 minutes, most of it CloudFront's. The stack ends with CREATE_COMPLETE once the site runs, or with the bootstrap's reason.
+
+**Its outputs.**
+- `AppUrl` is the address for the jury.
+- `StudioToken` links to the Secrets Manager page of the token for `/studio` and `/api/health/deep`.
+- `SessionManager` opens a shell on the server.
+- `Bootstrap` is what the first boot reported: Kiro's version, the captures, the try and the gallery.
+
+**Checks once it runs.**
+- `node scripts/verify-site.mjs --app <AppUrl>` from any machine.
+- `/api/health/deep` with the token, from two networks: `caller.address` must differ between them.
+
+**During the judging,** do not update the stack: a change that replaces the instance builds the image again, with whatever Kiro is then current. **After 16 November,** delete the stack, delete the snapshots the policy made, revoke the Kiro key at app.kiro.dev and rotate the Qloo key.
+
+**Its cost,** on demand in us-east-1, roughly: the t3.large about $60 a month, the disk about $5, the public IPv4 address about $3.60, the secrets $1.20, and the snapshots, CloudFront and the Lambda a little each.
+
+**Where it stands (22 October 2026).** cfn-lint passes the template and `tests/aws-stack.test.mjs` checks it. The first boot's own parts were rehearsed in Docker on Windows: `write-env.py` against a stand-in Secrets Manager, the bundle (11 gallery entries and the showcase, 110 MB) imported into the Compose volume with the bootstrap's commands, the site started, and `verify-site.mjs` passed 21 pages. The stack itself has not been created on AWS.
+
 ### Without a domain: two CloudFront distributions
 
 Promotional credits do not cover domain registration, and Let's Encrypt refuses certificates for the EC2 host names under `amazonaws.com`. CloudFront gives each distribution an HTTPS name of its own under `cloudfront.net`, served with AWS's certificate at no charge for the certificate. CloudFront itself is an AWS service billed by use, within its free tier for traffic this small. Two distributions are two origins, which is what the app and its preview need.
@@ -226,7 +284,7 @@ node scripts/export-hosted-jobs.mjs --out ../hosted-jobs <job-id> <job-id>
 node scripts/export-hosted-jobs.mjs --out ../hosted-jobs --showcase
 ```
 
-`--showcase` adds the [showcase](../README.md#showcase) set locally with `scripts/build-showcase.mjs`: `showcase.json`, the jobs it names and the app run's folder, only the files the Studio serves from it. The showcase is public on purpose: anyone who reaches the application reads those records without the access token, with their briefs, cultural context, the Qloo responses they cite, the model's output and their preview links, and plays the app run. Everything else stays behind `DEMO_ACCESS_TOKEN`. Leave `--showcase` out for a server that should show nothing without the token; a server whose `DATA_DIR` has no `showcase.json` has no showcase.
+`--showcase` adds the [showcase](development-notes.md#showcase) set locally with `scripts/build-showcase.mjs`: `showcase.json`, the jobs it names and the app run's folder, only the files the Studio serves from it. The showcase is public on purpose: anyone who reaches the application reads those records without the access token, with their briefs, cultural context, the Qloo responses they cite, the model's output and their preview links, and plays the app run. Everything else stays behind `DEMO_ACCESS_TOKEN`. Leave `--showcase` out for a server that should show nothing without the token; a server whose `DATA_DIR` has no `showcase.json` has no showcase.
 
 Review the exported folder before uploading it: the job records keep the briefs, cultural context and model output of those runs. Then copy it into the volume as UID 1000 and restart the app, for example:
 

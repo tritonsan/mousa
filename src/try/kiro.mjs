@@ -9,6 +9,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { kiroOutputReader, streamUpdate } from '../kiro-output.mjs';
+import { kiroSessionSettings } from '../kiro-settings.mjs';
 
 export const TRY_AGENT = 'mousa-try';
 export const SESSION_LIMITS = Object.freeze({ predictMs: 6 * 60 * 1000, armMs: 20 * 60 * 1000, streamBytes: 32 * 1024 * 1024, killGraceMs: 10000 });
@@ -76,9 +77,14 @@ export function tryAgent({ kind, model, rootDir, project, home, starter, qloo = 
 export function sessionEnvironment({ config, home, kind, base = process.env, nodeDir = path.dirname(process.execPath) }) {
   const env = {};
   for (const name of SYSTEM_VARIABLES) if (base[name]) env[name] = base[name];
+  // This Node first, so the agent's `node` is the Studio's; then Kiro's own folder, where its launcher looks for
+  // kiro-cli-chat (the image installs both in /opt/kiro/bin, on no default PATH: without it the launcher stopped with
+  // "failed to launch kiro-cli-chat", 22 October 2026); then the system's.
+  const kiroDir = typeof config.kiroPath === 'string' && path.isAbsolute(config.kiroPath) ? path.dirname(config.kiroPath) : null;
+  const lead = [nodeDir, ...(kiroDir && kiroDir !== nodeDir ? [kiroDir] : [])].join(path.delimiter);
   const keys = ['PATH', 'Path'].filter(name => env[name]);
-  if (!keys.length) env.PATH = nodeDir;
-  for (const name of keys) env[name] = `${nodeDir}${path.delimiter}${env[name]}`;
+  if (!keys.length) env.PATH = lead;
+  for (const name of keys) env[name] = `${lead}${path.delimiter}${env[name]}`;
   env.KIRO_HOME = home;
   if (config.kiroApiKey) env.KIRO_API_KEY = config.kiroApiKey;
   if (kind === 'qloo' && config.qlooKey) { env.QLOO_API_KEY = config.qlooKey; if (config.qlooBaseUrl) env.QLOO_BASE_URL = config.qlooBaseUrl; }
@@ -146,7 +152,7 @@ export async function runTrySession({ config, kind, home, project, starter, prom
     const agent = tryAgent({ kind, model, rootDir: config.rootDir, project, home, starter, qloo: { key: config.qlooKey, baseUrl: config.qlooBaseUrl },
       budget: config.tryQlooBudget || 24, usageFile, outside, capture: { browser: config.captureBrowser, noSandbox: config.captureNoSandbox, inlineSide: config.captureInlineSide || 0 }, platform });
     await fs.writeFile(agentFile, `${JSON.stringify(agent, null, 2)}\n`);
-    await fs.writeFile(path.join(home, 'settings', 'cli.json'), JSON.stringify({ 'chat.disableInheritingDefaultResources': true }));
+    await fs.writeFile(path.join(home, 'settings', 'cli.json'), kiroSessionSettings());
   } catch {
     await stream?.close().catch(() => {});
     await removeAgent();

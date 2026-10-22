@@ -74,7 +74,7 @@ test('each kind of session runs Moûsa\'s server with its own tools, and only th
   assert.ok(!sessionResources('baseline', 'web').some(file => file.startsWith('taste-brief/')), 'the arm without Qloo reads no measurement skill');
   assert.deepEqual(sessionArgs({ model: 'm', effort: 'low' }), ['chat', '--agent', 'mousa-try', '--agent-engine', 'v2', '--model', 'm', '--effort', 'low', '--no-interactive', '--output-format', 'stream-json', '--require-mcp-startup']);
 
-  const config = { kiroApiKey: 'ksk_test_only', qlooKey: 'fixture-key-123', qlooBaseUrl: 'https://qloo.test' };
+  const config = { kiroApiKey: 'ksk_test_only', qlooKey: 'fixture-key-123', qlooBaseUrl: 'https://qloo.test', kiroPath: '/opt/kiro/bin/kiro-cli' };
   const base = { PATH: '/usr/bin', HOME: '/root', QLOO_API_KEY: 'from-the-server', DEMO_ACCESS_TOKEN: 'never', SITE_SECRET: 'never' };
   const qlooEnv = sessionEnvironment({ config, home: '/h', kind: 'qloo', base, nodeDir: '/opt/node' });
   const ownEnv = sessionEnvironment({ config, home: '/h', kind: 'baseline', base, nodeDir: '/opt/node' });
@@ -84,7 +84,10 @@ test('each kind of session runs Moûsa\'s server with its own tools, and only th
   assert.equal(ownEnv.SITE_SECRET, undefined);
   assert.equal(ownEnv.KIRO_API_KEY, 'ksk_test_only');
   assert.equal(ownEnv.KIRO_HOME, '/h');
-  assert.match(ownEnv.PATH, /^\/opt\/node/u);
+  // This Node, then Kiro's own folder, where its launcher finds kiro-cli-chat, then the system's.
+  assert.deepEqual(ownEnv.PATH.split(path.delimiter), ['/opt/node', '/opt/kiro/bin', '/usr/bin']);
+  assert.deepEqual(sessionEnvironment({ config: { ...config, kiroPath: 'kiro-cli' }, home: '/h', kind: 'baseline', base, nodeDir: '/opt/node' }).PATH.split(path.delimiter), ['/opt/node', '/usr/bin'],
+    'a bare command name adds no folder');
 });
 
 test('a Kiro stream line says which tool ran and whether Moûsa refused it, never what it read or wrote', () => {

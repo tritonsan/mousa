@@ -8,6 +8,8 @@ services:
       args:
         KIRO_RELEASE_CHANNEL: ${KIRO_RELEASE_CHANNEL:-stable}
         KIRO_EXPECTED_VERSION: ${KIRO_EXPECTED_VERSION:-}
+        # The build stops on a Kiro major version other than this one; set it empty to accept any.
+        KIRO_EXPECTED_MAJOR: ${KIRO_EXPECTED_MAJOR-2}
         MOUSA_COMMIT: ${MOUSA_COMMIT:-}
     image: qloo-design-demo:local
     platform: linux/amd64

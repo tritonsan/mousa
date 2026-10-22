@@ -25,4 +25,10 @@ if [ -n "${TRY_ACCESS_CODE_FILE:-}" ]; then
 fi
 
 mkdir -p "${DATA_DIR:-/data/jobs}" "${HOME:-/data/kiro-home}"
+
+# Kiro checks for an update when it starts. The image's version is the one the try was tested with, so the server's
+# own Kiro never updates itself: the status checks run with HOME, and each try session sets the same in its KIRO_HOME.
+settings="${HOME:-/data/kiro-home}/.kiro/settings/cli.json"
+mkdir -p "$(dirname "$settings")"
+node -e 'const fs = require("fs"), file = process.argv[1]; let value = {}; try { value = JSON.parse(fs.readFileSync(file, "utf8")); } catch {} value["app.disableAutoupdates"] = true; fs.writeFileSync(file, JSON.stringify(value, null, 2) + "\n");' "$settings" || true
 exec "$@"

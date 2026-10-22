@@ -4,6 +4,9 @@ FROM node:22-bookworm-slim
 ARG KIRO_RELEASE_CHANNEL=stable
 # Optional drift guard, not an installer version selector. See docs/aws-deployment.md.
 ARG KIRO_EXPECTED_VERSION=""
+# The major version the live try was tested with. The installer takes a channel, not a version, so an image built
+# after CLI 3.0 reaches the stable channel would get its new engine untested; the build stops instead. Empty allows any.
+ARG KIRO_EXPECTED_MAJOR="2"
 # The commit the image is built from (git rev-parse --short HEAD), which each live try records: the image has no git.
 ARG MOUSA_COMMIT=""
 
@@ -31,9 +34,14 @@ RUN curl --fail --silent --show-error --location https://cli.kiro.dev/install -o
     && chmod -R a+rX /opt/kiro \
     && /opt/kiro/bin/kiro-cli --version > /opt/kiro/version.txt \
     && cat /opt/kiro/version.txt \
+    && actual_version="$(cat /opt/kiro/version.txt)" \
     && if [ -n "$KIRO_EXPECTED_VERSION" ]; then \
-         actual_version="$(cat /opt/kiro/version.txt)"; \
          test "${actual_version##* }" = "$KIRO_EXPECTED_VERSION"; \
+       fi \
+    && version_number="${actual_version##* }" \
+    && if [ -n "$KIRO_EXPECTED_MAJOR" ] && [ "${version_number%%.*}" != "$KIRO_EXPECTED_MAJOR" ]; then \
+         echo "kiro-cli $version_number is not major version $KIRO_EXPECTED_MAJOR, the one the live try was tested with. Build with KIRO_EXPECTED_MAJOR= to accept it." >&2; \
+         exit 1; \
        fi \
     && rm -f /tmp/kiro-install.sh
 
@@ -53,6 +61,8 @@ COPY --chown=root:root deploy/entrypoint.sh /usr/local/bin/qloo-demo-entrypoint
 RUN chmod 0555 /usr/local/bin/qloo-demo-entrypoint
 
 # A hosted server has no Codex: no image generator is offered, and plans make imagery without one.
+# Kiro's launcher finds kiro-cli-chat on PATH; without /opt/kiro/bin there, every session stopped at once with
+# "failed to launch kiro-cli-chat" (22 October 2026). Each try session also puts Kiro's folder on its own PATH.
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
     PORT=8787 \
@@ -60,6 +70,7 @@ ENV NODE_ENV=production \
     DATA_DIR=/data/jobs \
     HOME=/data/kiro-home \
     KIRO_CLI_PATH=/opt/kiro/bin/kiro-cli \
+    PATH=/opt/kiro/bin:$PATH \
     KIRO_RUN_TIMEOUT_MS=900000 \
     KIRO_EFFORT=medium \
     QLOO_API_BASE_URL=https://hackathon.api.qloo.com \

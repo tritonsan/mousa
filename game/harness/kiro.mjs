@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { redact } from '../../src/config.mjs';
 import { reviewReadSettings as sharedReviewReadSettings } from '../../src/kiro-session-audit.mjs';
 import { KIRO_OUTPUT_LIMITS, kiroOutputReader, streamUpdate } from '../../src/kiro-output.mjs';
+import { kiroSessionSettings } from '../../src/kiro-settings.mjs';
 import { CHARACTER_TASTE_POLICY_TEXT, armPolicyText } from './protocol.mjs';
 import { REVIEW_DIR } from './production.mjs';
 
@@ -54,7 +55,7 @@ export async function prepareWorkspace({ dir, model, platform = process.platform
   const serialized = JSON.stringify(agent, null, 2);
   await fs.writeFile(path.join(workspace, '.kiro', 'agents', `${AGENT_NAME}.json`), serialized);
   await fs.writeFile(path.join(home, 'agents', `${AGENT_NAME}.json`), serialized);
-  const settings = JSON.stringify({ 'chat.disableInheritingDefaultResources': true });
+  const settings = kiroSessionSettings();
   await fs.writeFile(path.join(workspace, '.kiro', 'settings', 'cli.json'), settings);
   await fs.writeFile(path.join(home, 'settings', 'cli.json'), settings);
   return { workspace, home, launch };

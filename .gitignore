@@ -12,3 +12,9 @@ coverage/
 
 # Kiro CLI writes a lock beside its settings while it runs; the lock is this machine's, never the repository's.
 .kiro/settings/cli.json.lock
+# Kiro homes the game's command-line runs keep beside their records: session transcripts, never published.
+game/runs/**/kiro-home/
+# The desktop app's launch settings and the brand logo's source file are this machine's own; the served copy is
+# web/assets/mousa-logo.png.
+.claude/launch.json
+/Moûsa Layered Gradient Logo.png
