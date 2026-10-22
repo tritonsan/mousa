@@ -81,7 +81,7 @@ The whole server is one CloudFormation stack, made in the console in one form. `
 
 **Its cost,** on demand in us-east-1, roughly: the t3.large about $60 a month, the disk about $5, the public IPv4 address about $3.60, the secrets $1.20, and the snapshots, CloudFront and the Lambda a little each.
 
-**Where it stands (22 October 2026).** cfn-lint passes the template and `tests/aws-stack.test.mjs` checks it. The first boot's own parts were rehearsed in Docker on Windows: `write-env.py` against a stand-in Secrets Manager, the bundle (11 gallery entries and the showcase, 110 MB) imported into the Compose volume with the bootstrap's commands, the site started, and `verify-site.mjs` passed 21 pages. The stack itself has not been created on AWS.
+**Where it stands (22 October 2026).** cfn-lint passes the template and `tests/aws-stack.test.mjs` checks it. The first boot's own parts were rehearsed in Docker on Windows: `write-env.py` against a stand-in Secrets Manager, the bundle (11 gallery entries and the showcase, 110 MB) imported into the Compose volume with the bootstrap's commands, the site started, and `verify-site.mjs` passed 21 pages. The same day the stack was created as `mousa-jury` in us-east-1, with the AWS CLI instead of the console: see the [verification record](verification.md#the-jury-server-on-aws--october-22-2026).
 
 ### Without a domain: two CloudFront distributions
 

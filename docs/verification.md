@@ -2,6 +2,25 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## The jury server on AWS — October 22, 2026
+
+The stack `mousa-jury` was created in us-east-1 from `deploy/aws/mousa-stack.json` with the AWS CLI, at ref 87d8172, in the default VPC's us-east-1a subnet, with the gallery bundle of release `data-2026-10-22`. The keys went from `.env` through a temporary parameter file, deleted after the call.
+- **Time.** CREATE_COMPLETE after 7 minutes: the two CloudFront distributions in about 2, then the first boot in 4 (Docker, the image build, the bundle and the start).
+- **What the first boot reported.** Status ok: kiro-cli 2.33.1 with the key, Chromium's captures, the try open with nothing missing, 11 gallery entries, commit 87d81727ba1f.
+
+**Checked from outside, from this machine,** with a scratch script and `verify-site.mjs`:
+- **The site.** The app's CloudFront name answers with HSTS and the site's policy, and no page has a script. Plain HTTP is redirected to HTTPS with a 301. `/gallery/`, `/vote/`, `/try/`, `/studio` and `/api/gallery` answer, and `verify-site.mjs --no-picture` passed all 21 pages.
+- **What a jury server closes.** `/mcp` and `/internal/tools` answer 404.
+- **The origin.** Ports 8787, 8788 and 22 on the Elastic IP time out from outside: only CloudFront reaches the server.
+- **The designs.** They play from the preview name under the sandboxed policy, and the app name answers 404 for a design's files. A gallery page, opened in a browser, played both Long Dusk designs side by side.
+- **The deep check,** with the Studio token from Secrets Manager: status ok and 50 GB free. The caller is this machine's own address, an IPv6 /64, with one X-Forwarded-For entry: CloudFront's address is not what the limits count.
+- **Step one of a try through CloudFront,** with the jury's code:
+  - the access cookie came back Secure, and the request was redirected to the try's page;
+  - it finished in 33 seconds: 48 entries frozen, 12 Qloo requests, 1.07 credits and 3.6% of the context;
+  - "66 of 69 measured works were not in the prediction."
+
+The page captures of `verify-site.mjs` need a loopback address, by the capture's own rule, so the live site was captured only through the browser pane.
+
 ## The try in the container with a Kiro API key, and the server's stack — October 22, 2026
 
 **The key.** The user created a Kiro API key at app.kiro.dev, signing in through "Your organization" with the IAM Identity Center start URL, and put it in `.env` without it passing through the chat.
