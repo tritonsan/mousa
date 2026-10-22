@@ -37,7 +37,24 @@ This record describes the tested scope of the local application. It does not est
   - `write-env.py` wrote its 34 settings against a stand-in Secrets Manager;
   - the bundle (`export-hosted-jobs.mjs --gallery --showcase`: 11 gallery entries scanned clean and the showcase, 110 MB packed) passed its SHA-256 check and was imported into `qloo-design-demo_demo-data` with the bootstrap's own commands;
   - the site started, `health-summary.py` reported Kiro 2.33.1, Chromium, an open try and 11 entries, and `verify-site.mjs --no-picture` passed 21 pages, with HSTS and request log lines that hold route patterns only.
-- **Not done:** creating the stack on AWS, and a pair in the container.
+- **Not done:** creating the stack on AWS.
+
+**A pair in the container,** step two of the same try, started with the site's own form:
+
+| Measure | 14 October, on this machine (2.24.0, captures at 1568 px) | 22 October, in the container (2.33.1, 1024 px) |
+| --- | --- | --- |
+| The pair | 6.4 min | 4.5 min |
+| Credits, both arms | 86.2 | 47.2 (37.1 with Qloo, 10.1 without) |
+| Fullest context, with Qloo | 95.4% | 72.3% |
+| Fullest context, without Qloo | 95.9% | 10.9% |
+| Qloo requests in the try | 12 | 12 |
+
+- Both arms finished every stage, with six captures each in the container's Chromium, under its own sandbox. No file was put back.
+- The distance was 0.53, with the same frozen prediction in both arms; with Qloo, 7 of 7 devices rest on what the prediction did not contain.
+- The arm without Qloo had two stream lines over the 1 MB line limit, which were skipped and counted as `dropped`.
+- The try stays private in the test volume; it is not in the gallery.
+
+**The repository** went public as [tritonsan/mousa](https://github.com/tritonsan/mousa), and GitHub detects its MIT licence. The gallery bundle is the release asset `data-2026-10-22/mousa-gallery.tar.gz` (11 entries, scanned clean, 101.7 MB), with its SHA-256 in the release notes; the download matched it.
 
 ## Engineering pass before the server — October 15, 2026
 
