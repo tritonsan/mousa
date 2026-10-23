@@ -4,7 +4,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { loadDotEnv, getConfig, redact } from '../src/config.mjs';
 
-const patersonId = '00000000-0000-4000-8000-00000000006A';
+// The Insights calls are seeded with the Nujabes id the first Search returns: Qloo's ids stay out of the repository.
 const plan = {
   maximumSourceToolCalls: 4, modelCalls: 0,
   stages: ['HTTP MCP initialize/discovery and real Nujabes Search', 'Standalone STDIO MCP initialize/discovery and real artist Insights', 'HTTP MCP documented media-tag analysis', 'Optional HTTP MCP Tokyo artist context'],
@@ -67,7 +67,11 @@ async function run() {
         perEntityExplainability: payload.results.filter(entity => Object.hasOwn(entity, 'explainability')).length,
         aggregateExplainabilityPresent: Object.hasOwn(payload, 'explainability') };
       // HTTP can retain the already running handler; source IDs are optional here.
-      if (name === 'qloo_search_entities') assert.ok(payload.results.some(entity => entity.name.toLowerCase() === 'nujabes' && entity.entityId), 'An exact Nujabes catalog result was not returned.');
+      if (name === 'qloo_search_entities') {
+        const nujabes = payload.results.find(entity => entity.name.toLowerCase() === 'nujabes' && entity.entityId);
+        assert.ok(nujabes, 'An exact Nujabes catalog result was not returned.');
+        record.seedEntityId = nujabes.entityId;
+      }
       if (argumentsValue.resultType === 'tag') {
         const requestedParents = argumentsValue.parentTypes.map(type => 'urn:entity:' + type);
         record.filterObservations = { requestedTagNamespace: argumentsValue.tagTypes,
@@ -118,14 +122,16 @@ async function run() {
   try {
     await discover('http', httpRpc);
     const search = await sourceCall('http', 'qloo_search_entities', { query: 'Nujabes', types: ['artist'], limit: 3 }, httpRpc);
+    const seed = search.seedEntityId;
+    assert.ok(seed, 'The Search returned no Nujabes id to seed the Insights calls.');
     stdio = createStdio(config);
     await discover('stdio', stdio.rpc);
-    const insights = await sourceCall('stdio', 'qloo_get_insights', { seedEntityIds: [patersonId], resultType: 'artist', limit: 3, explainability: true }, stdio.rpc);
+    const insights = await sourceCall('stdio', 'qloo_get_insights', { seedEntityIds: [seed], resultType: 'artist', limit: 3, explainability: true }, stdio.rpc);
     if (report.discovery.http.tagFilterSchema) {
-      await sourceCall('http', 'qloo_get_insights', { seedEntityIds: [patersonId], resultType: 'tag', tagTypes: ['urn:tag:keyword:media'], parentTypes: ['movie', 'tv_show'], limit: 6, explainability: true }, httpRpc);
+      await sourceCall('http', 'qloo_get_insights', { seedEntityIds: [seed], resultType: 'tag', tagTypes: ['urn:tag:keyword:media'], parentTypes: ['movie', 'tv_show'], limit: 6, explainability: true }, httpRpc);
     } else report.errors.push({ stage: 'http-tag-discovery', message: 'The running HTTP handler does not yet advertise tagTypes/parentTypes; no unsupported request was sent.' });
     if (search.outcome === 'ok' && insights.outcome === 'ok') {
-      await sourceCall('http', 'qloo_get_insights', { seedEntityIds: [patersonId], resultType: 'artist', location: 'Tokyo', limit: 3, explainability: true }, httpRpc);
+      await sourceCall('http', 'qloo_get_insights', { seedEntityIds: [seed], resultType: 'artist', location: 'Tokyo', limit: 3, explainability: true }, httpRpc);
     }
     report.verified = Boolean(report.discovery.http && report.discovery.stdio && report.calls.length === 4 && report.calls.every(call => ['ok', 'empty'].includes(call.outcome)));
   } catch (error) {

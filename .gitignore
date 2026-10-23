@@ -16,6 +16,11 @@ coverage/
 .kiro/settings/cli.json.lock
 # Kiro homes the game's command-line runs keep beside their records: session transcripts, never published.
 game/runs/**/kiro-home/
+# A live run's records hold Qloo's answers, which Qloo's developer guide keeps out of a public repository. New runs
+# stay on this machine; the two recorded runs kept here carry stand-in ids and no scores, and the replay fixtures stay.
+game/runs/*/
+!game/runs/dry-run/
+examples/*-run-*/
 # The desktop app's launch settings and the brand logo's source file are this machine's own; the served copy is
 # web/assets/mousa-logo.png.
 .claude/launch.json

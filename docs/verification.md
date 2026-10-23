@@ -2,6 +2,32 @@
 
 This record describes the tested scope of the local application. It does not establish a working AWS deployment or that Qloo improves the design.
 
+## Qloo's answers taken out of the public repository — October 23, 2026
+
+Qloo's developer guide allows private server-side caching, but asks: "Do not store Qloo response data in a public repository". This repository held two recorded runs with Qloo's answers in them, and a few of Qloo's ids in tests and live scripts.
+
+**The whole history was rewritten.** All 42 commits keep their authors, dates and messages.
+- The Kiro homes once kept beside the game's first live pair (session transcripts) are gone from every commit.
+- In `game/runs/pair-20261004-210303/` and `examples/mobile-app-run-2026-10-06T10-20-02-669Z/`, every entity Qloo scored lost its affinity, popularity and description. Names and tags stay.
+- Each of the 133 Qloo entity ids, wherever it appeared, became a synthetic stand-in (`00000000-0000-4000-8000-…`), the same one in every file.
+- References to the old commits, in this record and in one commit message, point at their rewritten ids.
+
+**Checked.**
+- No blob reachable from `main` holds any of the 644 uppercase ids in this machine's run records.
+- No Kiro home is in any commit.
+- 42 commits before and after, with the same authors, dates and subjects.
+- 511/511 tests on the rewritten tip.
+
+**Kept from coming back.**
+- `tests/no-qloo-answers.test.mjs` fails on an uppercase UUID that is not a stand-in, and on a scored entity in tracked JSON outside the replay fixtures.
+- `.gitignore` keeps new run folders out.
+- The three live scripts that named their seeds by id now resolve them with Search.
+
+**Not changed yet.**
+- The gallery bundle of release `data-2026-10-22` holds names only: 505 text files, with no id, URN, affinity or popularity. Its "Run it again" sections name commits of the old history.
+- The jury server still runs the old 2d85adb until its next deployment. That commit has the same code as its rewritten 87d8172; only these records differ.
+- GitHub may serve the old commits by their ids for a while. GitHub Support can purge them.
+
 ## The jury server on AWS — October 22, 2026
 
 The stack `mousa-jury` was created in us-east-1 from `deploy/aws/mousa-stack.json` with the AWS CLI, at ref 87d8172, in the default VPC's us-east-1a subnet, with the gallery bundle of release `data-2026-10-22`. The keys went from `.env` through a temporary parameter file, deleted after the call.
