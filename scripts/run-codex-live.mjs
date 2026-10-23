@@ -143,7 +143,9 @@ async function main() {
   await fs.writeFile(path.join(folder, 'install.log'), installed.map(item => `exit ${item.code}\n${item.out}`).join('\n---\n'));
   if (installed.at(-1).code !== 0) throw new Error(`The plugin did not install: ${installed.at(-1).out.slice(0, 300)}`);
 
-  Object.assign(env, { QLOO_API_KEY: dotenv.QLOO_API_KEY, MOUSA_QLOO_BUDGET: String(budget), ...(images ? {} : { MOUSA_IMAGES: 'off' }), ...(dotenv.QLOO_API_BASE_URL ? { QLOO_BASE_URL: dotenv.QLOO_API_BASE_URL } : {}) });
+  // The browser the session captures with is the one this run names, as the Claude Code runner passes it.
+  const browser = process.env.MOUSA_BROWSER || dotenv.MOUSA_BROWSER || '';
+  Object.assign(env, { QLOO_API_KEY: dotenv.QLOO_API_KEY, MOUSA_QLOO_BUDGET: String(budget), ...(images ? {} : { MOUSA_IMAGES: 'off' }), ...(browser ? { MOUSA_BROWSER: browser } : {}), ...(dotenv.QLOO_API_BASE_URL ? { QLOO_BASE_URL: dotenv.QLOO_API_BASE_URL } : {}) });
   const stream = createWriteStream(path.join(folder, 'session.jsonl'));
   const stderr = createWriteStream(path.join(folder, 'session.stderr.log'));
   const started = Date.now();

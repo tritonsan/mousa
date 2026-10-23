@@ -161,7 +161,7 @@ async function main() {
   const args = ['-p', ...(command ? [brief.trim()] : []), '--plugin-dir', plugin, '--output-format', 'stream-json', '--verbose', '--max-turns', String(maxTurns),
     '--permission-mode', 'dontAsk', '--allowedTools', ALLOWED_TOOLS.join(','), ...(model ? ['--model', model] : [])];
   const plan = { folder, project, ...(from ? { from: path.resolve(from) } : {}), plugin, claude, args, brief,
-    environment: ['QLOO_API_KEY (from .env)', 'QLOO_BASE_URL (from QLOO_API_BASE_URL)', `MOUSA_QLOO_BUDGET=${budget}`, 'MOUSA_IMAGES=off', 'CODEX_IMAGES=off', 'CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1'],
+    environment: ['QLOO_API_KEY (from .env)', 'QLOO_BASE_URL (from QLOO_API_BASE_URL)', `MOUSA_QLOO_BUDGET=${budget}`, 'MOUSA_IMAGES=off', 'CODEX_IMAGES=off', 'MOUSA_BROWSER (as this run names it)', 'CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1'],
     qlooKeyInDotEnv: Boolean(dotenv.QLOO_API_KEY), note: `Each run is a full Claude Code session on your own login, and at most ${budget} Qloo requests.` };
   if (!run) { console.log(JSON.stringify(plan, null, 2)); console.log('\nPlan only. Add --run to start the session.'); return; }
   if (!claude) throw new Error('The claude CLI was not found on PATH.');
@@ -172,8 +172,11 @@ async function main() {
   await fs.writeFile(path.join(folder, 'brief.md'), brief);
 
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !HOST_VARIABLES.test(name)));
+  // The browser the session captures with is the one this run names: the session's own variables are cleared above, and a
+  // machine whose default browser cannot capture headless (Edge 155 here) would otherwise review nothing.
+  const browser = process.env.MOUSA_BROWSER || dotenv.MOUSA_BROWSER || '';
   // Subagents run in the foreground, so a print-mode session waits for the arms it gave them.
-  Object.assign(env, { QLOO_API_KEY: dotenv.QLOO_API_KEY, MOUSA_QLOO_BUDGET: String(budget), MOUSA_IMAGES: 'off', CODEX_IMAGES: 'off', CLAUDE_CODE_DISABLE_BACKGROUND_TASKS: '1',
+  Object.assign(env, { QLOO_API_KEY: dotenv.QLOO_API_KEY, MOUSA_QLOO_BUDGET: String(budget), MOUSA_IMAGES: 'off', CODEX_IMAGES: 'off', CLAUDE_CODE_DISABLE_BACKGROUND_TASKS: '1', ...(browser ? { MOUSA_BROWSER: browser } : {}),
     ...(dotenv.QLOO_API_BASE_URL ? { QLOO_BASE_URL: dotenv.QLOO_API_BASE_URL } : {}) });
   const stream = createWriteStream(path.join(folder, 'session.jsonl'));
   const stderr = createWriteStream(path.join(folder, 'session.stderr.log'));

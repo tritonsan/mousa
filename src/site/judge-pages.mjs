@@ -3,7 +3,7 @@
 // with what the live API taught it. Drawn on the server with no script, like the rest of the site.
 
 import { layout } from './render.mjs';
-import { blindSpotOf, blindSpotTotals } from '../gallery/blind-spot.mjs';
+import { blindSpotOf, blindSpotTotals, benchmarkTotals } from '../gallery/blind-spot.mjs';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/gu, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 // One decimal everywhere, so this page and the landing page show the same figure.
@@ -56,10 +56,12 @@ export function judgesPage({ gallery, benchmark = null, repository = '' }) {
   const spot = galleryBlindSpot(gallery);
   const featured = gallery?.index?.featured || '';
   const tryEntry = [...(gallery?.entries?.values() || [])].find(entry => entry.origin === 'try')?.id || featured;
+  const bench = benchmarkTotals(benchmark);
   const numbers = [
+    bench ? [percent(bench.missed), `of the works Qloo measured were missing from the AI agents' own sealed guesses, pooled over the ${bench.runs} runs of the pre-registered benchmark: ${bench.audiences} audiences, each guessed by Claude Code, Codex and Kiro.`] : null,
     spot.works ? [percent(spot.missed), `of the works Qloo measured were missing from the agents' own frozen guesses: ${spot.works - spot.known} of ${spot.works}, in ${spot.sessions} recorded sessions.`] : null,
     spot.guessed ? [percent(spot.confirmedShare), `of the works the agents guessed turned up in Qloo's measurement: ${spot.confirmed} of ${spot.guessed}.`] : null,
-    ['3', 'agents run the same plugin: Claude Code, Codex and Kiro, on the project a team already has.'],
+    bench ? null : ['3', 'agents run the same plugin: Claude Code, Codex and Kiro, on the project a team already has.'],
   ].filter(Boolean);
   const body = `<section class="site-hero small"><p class="mr-kicker">For the jury</p><h1>Moûsa in one minute</h1>
 <p class="site-lede">Moûsa is a plugin for the design agents teams already use. Before the agent designs anything, it writes down and seals its own guess about the audience. Qloo then measures that audience, and every design choice has to rest on what the guess missed. Each session ends with a record that sets the guess beside the measurement.</p></section>

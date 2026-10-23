@@ -42,6 +42,18 @@ export function blindSpotTotals(items) {
   return { ...sum(counted), byHost: Object.fromEntries(hosts.map(host => [host, sum(counted.filter(item => item.host === host))])) };
 }
 
+/**
+ * The benchmark's results (docs/benchmark/results.json) pooled over its agents: runs, audiences, measured works and the
+ * works the sealed guesses named, or null without results.
+ */
+export function benchmarkTotals(benchmark) {
+  const hosts = Object.values(benchmark?.hosts || {});
+  if (!hosts.length) return null;
+  const works = hosts.reduce((total, row) => total + (row.pooled?.known?.whole || 0), 0), known = hosts.reduce((total, row) => total + (row.pooled?.known?.part || 0), 0);
+  if (!works) return null;
+  return { runs: hosts.reduce((total, row) => total + (row.runs || 0), 0), audiences: benchmark.measurable ?? null, agents: hosts.length, works, known, missed: share(works - known, works) };
+}
+
 /** The records of a built gallery folder (gallery.json and each entry's report/record.json), as items for the totals. */
 export async function readGalleryBlindSpots(dir) {
   const index = JSON.parse(await fs.readFile(path.join(dir, 'gallery.json'), 'utf8'));

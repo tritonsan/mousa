@@ -13,7 +13,7 @@ Every fact the page states is here. Keep each one exactly. Invent no claim, numb
 
 - An AI agent asked to design for an audience designs from its own idea of that audience. That idea is never tested, so the design looks plausible and generic.
 - In 11 recorded Moûsa sessions in Claude Code, Codex and Kiro, the agents' sealed guesses named 22 of the 714 works Qloo measured for their audiences. 692 of them (96.9%) were missing from the guesses.
-- {{BENCHMARK}}
+- In a pre-registered benchmark of 20 audiences, the sealed guesses of three agents named 6.8% (Claude Code), 6.6% (Kiro) and 4.7% (Codex) of the works Qloo measured.
 
 ## How it works, in five steps
 
@@ -26,7 +26,7 @@ Every fact the page states is here. Keep each one exactly. Invent no claim, numb
 ## The evidence, and what each kind does not show
 
 - **The blind spot.** In 11 sessions, 692 of 714 measured works were not in the guesses, and 22 of the 245 works the agents guessed were measured. It does not show that the design is better.
-- **The benchmark.** {{BENCHMARK_DETAIL}}
+- **The benchmark.** Twenty audiences and three agents: Claude Code, Codex and Kiro. The protocol and all 60 sealed predictions were committed to the public repository before Qloo measured any audience. The guesses named 6.8% (Claude Code), 6.6% (Kiro) and 4.7% (Codex) of the works Qloo measured, and 14% to 16% of the works they guessed were among those measured. Both pre-registered hypotheses held for every agent. The agents knew music and TV best (about 10%) and films, brands and books least (2% to 6%). It measures what the agents assume, not whether a design is better.
 - **The mechanism.** Four recorded pairs were each built twice from one frozen guess, once with Qloo's measurement and once from the guess alone. The distances between the two designs were 0.53, 0.57, 0.58 and 0.60, on a heuristic scale from 0 (alike) to 1 (unrelated). That scale is not a quality score. Every device of each Qloo design rests on a name the guess missed.
 - **Beyond the model's own variance.** In repeated pairs of one website brief (12 generations), the blind sketches of both arms were alike (p = 0.81). After Qloo, the typography, structure, palette and overall distance separated (exact permutation test, p = 0.005 each). For game characters, the finished characters separated (p = 0.0079) and the blind sketches did not. It shows difference, not preference.
 - **The blind vote.** Visitors see both designs of a pair without knowing which used Qloo, and choose the one the audience would rather have. Voters choose themselves, and there are few.

@@ -1,8 +1,34 @@
 {
   "schemaVersion": "1.0",
   "featured": "long-dusk-compare-claude-code",
-  "vote": ["long-dusk-compare-claude-code", "long-dusk-compare-codex", "long-dusk-portraits-codex"],
+  "vote": [
+    "long-dusk-compare-claude-code",
+    "long-dusk-compare-codex",
+    "long-dusk-portraits-codex",
+    "showcase-claude-code",
+    "venue-claude-code",
+    "comedy-night-claude-code"
+  ],
   "entries": [
+    {
+      "id": "showcase-claude-code",
+      "run": "claude-code-showcase-compare-1",
+      "title": "Moûsa, explained to the jury: Claude Code",
+      "summary": "The page that explains Moûsa, designed by Moûsa for its audience: the jury, described to Qloo by works the judges are known for. One sealed guess, two arms, the same facts.",
+      "from": "examples/showcase"
+    },
+    {
+      "id": "venue-claude-code",
+      "run": "claude-code-venue-compare-2",
+      "title": "The Lamplight, a live music venue, with Qloo and without: Claude Code",
+      "summary": "An autumn season page for people who love Khruangbin, Anderson .Paak and Tame Impala, built twice from one sealed guess."
+    },
+    {
+      "id": "comedy-night-claude-code",
+      "run": "claude-code-comedy-compare-1",
+      "title": "Second Drink, a stand-up night, with Qloo and without: Claude Code",
+      "summary": "A weekly comedy night for people who love The Original Kings of Comedy, Def Comedy Jam and The Bernie Mac Show, built twice from one sealed guess."
+    },
     {
       "id": "long-dusk-compare-claude-code",
       "run": "claude-code-long-dusk-compare-1",
@@ -46,7 +72,9 @@
       "title": "Ramble, a walking app, restyled: Claude Code",
       "summary": "An existing app restyled through its own design tokens, with its walks and its data kept as they were.",
       "from": "examples/mobile-app",
-      "before": { "repo": "examples/mobile-app" }
+      "before": {
+        "repo": "examples/mobile-app"
+      }
     },
     {
       "id": "lanterna-codex",
@@ -56,7 +84,9 @@
       "from": "examples/tailwind-site",
       "install": true,
       "play": "dist",
-      "before": { "folder": "tailwind-lock/dist" },
+      "before": {
+        "folder": "tailwind-lock/dist"
+      },
       "model": "the Codex CLI's default model"
     },
     {
@@ -65,7 +95,9 @@
       "title": "Ilo, the lamplighter: Claude Code",
       "summary": "The game's character designed once, with Qloo, in Claude Code.",
       "from": "examples/long-dusk",
-      "before": { "repo": "examples/long-dusk" }
+      "before": {
+        "repo": "examples/long-dusk"
+      }
     },
     {
       "id": "long-dusk-codex",
@@ -73,15 +105,22 @@
       "title": "Ilo, the lamplighter: Codex",
       "summary": "The same character brief in Codex.",
       "from": "examples/long-dusk",
-      "before": { "repo": "examples/long-dusk" },
+      "before": {
+        "repo": "examples/long-dusk"
+      },
       "model": "the Codex CLI's default model"
     },
     {
       "id": "ramble-kiro",
-      "kiro": { "record": "output/mobile-app-run/2026-10-06T10-20-02-669Z/run.json", "project": "examples/mobile-app-run-2026-10-06T10-20-02-669Z" },
+      "kiro": {
+        "record": "output/mobile-app-run/2026-10-06T10-20-02-669Z/run.json",
+        "project": "examples/mobile-app-run-2026-10-06T10-20-02-669Z"
+      },
       "title": "Ramble, a walking app, redesigned: Kiro",
       "summary": "The example's own Kiro agent with the earlier 0.4 tool surface, outside the Studio.",
-      "before": { "repo": "examples/mobile-app" }
+      "before": {
+        "repo": "examples/mobile-app"
+      }
     }
   ]
 }

@@ -4,7 +4,7 @@
 // so a page and a report's own index.html show the same evidence.
 
 import { renderBody, listText } from '../../plugin/server/design/report.mjs';
-import { blindSpotOf, blindSpotTotals } from '../gallery/blind-spot.mjs';
+import { blindSpotOf, blindSpotTotals, benchmarkTotals } from '../gallery/blind-spot.mjs';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/gu, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -91,7 +91,10 @@ export function landingPage({ gallery, repository = '' }) {
   const featured = gallery.entries.get(index?.featured) || [...gallery.entries.values()][0];
   const spot = index?.blindSpot?.sessions ? index.blindSpot
     : blindSpotTotals([...gallery.entries.values()].map(entry => ({ id: entry.id, host: entry.host, blindSpot: entry.blindSpot || blindSpotOf(entry.record) })));
-  const stat = spot.works ? `<p class="site-hero-stat"><b>${escape((100 * spot.missed).toFixed(1))}%</b><span>of the works Qloo measured were missing from the agents' own sealed guesses: ${escape(spot.works - spot.known)} of ${escape(spot.works)}, in ${escape(spot.sessions)} recorded sessions in Claude Code, Codex and Kiro.</span></p>` : '';
+  // The pre-registered benchmark when its results are published; the gallery's own sessions otherwise.
+  const bench = benchmarkTotals(gallery.benchmark);
+  const stat = bench ? `<p class="site-hero-stat"><b>${escape((100 * bench.missed).toFixed(1))}%</b><span>of the works Qloo measured were missing from the AI agents' own sealed guesses, pooled over the ${escape(bench.runs)} runs of a <a href="/benchmark/">pre-registered benchmark</a>: ${escape(bench.audiences)} audiences, each guessed by Claude Code, Codex and Kiro.</span></p>`
+    : spot.works ? `<p class="site-hero-stat"><b>${escape((100 * spot.missed).toFixed(1))}%</b><span>of the works Qloo measured were missing from the agents' own sealed guesses: ${escape(spot.works - spot.known)} of ${escape(spot.works)}, in ${escape(spot.sessions)} recorded sessions in Claude Code, Codex and Kiro.</span></p>` : '';
   const body = `<section class="site-hero"><p class="mr-kicker">The taste layer for AI agents</p><h1>Design that rests on what an audience actually loves.</h1>
 <p class="site-lede">Moûsa makes an AI agent write down its own guess about an audience before it sees any data. Then Qloo measures that audience, and every choice in the design has to rest on what the guess did not contain. Each session leaves a record of where its choices came from.</p>
 ${stat}<p class="site-actions"><a class="site-button" href="/judges/">Start here: for the jury</a><a class="site-button quiet" href="/try/">Try it with your own audience</a><a class="site-button quiet" href="/vote/">Judge two designs blind</a></p></section>
