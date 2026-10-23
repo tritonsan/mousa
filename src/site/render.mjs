@@ -4,6 +4,7 @@
 // so a page and a report's own index.html show the same evidence.
 
 import { renderBody, listText } from '../../plugin/server/design/report.mjs';
+import { blindSpotOf, blindSpotTotals } from '../gallery/blind-spot.mjs';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/gu, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -15,7 +16,7 @@ const hex = value => (/^#[0-9a-f]{6}$/u.test(value || '') ? value : null);
 
 /** A page of the site: its header and navigation, the body and the footer. `refresh` reloads it every so many seconds. */
 export function layout({ title, description = '', body, active = '', repository = '', image = '', refresh = 0 }) {
-  const nav = [['/#how', 'How it works', 'how'], ['/gallery/', 'Evidence', 'gallery'], ['/vote/', 'Blind vote', 'vote'], ['/try/', 'Try it', 'try'], ['/studio', 'Studio', 'studio']];
+  const nav = [['/judges/', 'For the jury', 'judges'], ['/#how', 'How it works', 'how'], ['/gallery/', 'Evidence', 'gallery'], ['/benchmark/', 'Benchmark', 'benchmark'], ['/vote/', 'Blind vote', 'vote'], ['/try/', 'Try it', 'try']];
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escape(title)}</title>${description ? `<meta name="description" content="${escape(description)}">` : ''}${image ? `<meta property="og:image" content="${escape(image)}">` : ''}${Number.isInteger(refresh) && refresh > 0 ? `<meta http-equiv="refresh" content="${refresh}">` : ''}
 <link rel="stylesheet" href="/site/report.css"><link rel="stylesheet" href="/site/site.css"><link rel="stylesheet" href="/brand.css"></head>
@@ -24,16 +25,19 @@ export function layout({ title, description = '', body, active = '', repository 
 <nav aria-label="Site">${nav.map(([href, label, key]) => `<a href="${href}"${key === active ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></header>
 <main id="main">${body}</main>
 <footer class="site-foot"><p>Moûsa is an entry to the Qloo Agentic Hackathon. Taste data from <a href="https://www.qloo.com/">Qloo</a>; fonts from the open-licence library the plugin carries (SIL OFL 1.1).${repository ? ` Source: <a href="${escape(repository)}">${escape(repository.replace(/^https?:\/\//u, ''))}</a>, MIT licence.` : ' MIT licence.'}</p>
-<p>Every page here is drawn from the sessions' own records. Qloo's ids, affinity scores, popularity and descriptions are not published; each design choice is the agent's interpretation of the names shown.</p></footer>
+<p>Every page here is drawn from the sessions' own records. Qloo's ids, affinity scores, popularity and descriptions are not published; each design choice is the agent's interpretation of the names shown. <a href="/qloo/">How Moûsa uses Qloo</a> · <a href="/studio">The Studio</a></p></footer>
 </body></html>`;
 }
 
 const qlooRecord = record => record?.kind === 'comparison' ? (record.records || []).find(item => item.taste === 'qloo') || record.records?.[0] : record;
 const swatches = colors => `<span class="site-swatches">${(colors || []).map(hex).filter(Boolean).slice(0, 7).map(color => `<i style="background:${color}"></i>`).join('')}</span>`;
 const chip = (item, small = '') => `<span class="mr-chip" data-mark="${escape(item.mark)}">${escape(item.name)}${small ? ` <small>${escape(small)}</small>` : ''}</span>`;
-const card = (entry, base = '/gallery/') => `<a class="site-card" href="${base}${escape(entry.id)}/"><span class="site-card-image">${entry.card ? `<img src="/gallery/${escape(entry.id)}/${escape(entry.card)}" alt="" width="1200" height="630">` : ''}</span>
+/** An index entry's blind spot: from the index when the gallery carries it, else from the entry's loaded record. */
+const spotOf = (gallery, entry) => entry.blindSpot || blindSpotOf(gallery?.entries?.get(entry.id)?.record);
+const spotSentence = spot => spot ? `The agent's guess named ${spot.known} of the ${spot.works} works Qloo measured.` : '';
+const card = (entry, { base = '/gallery/', spot = null } = {}) => `<a class="site-card" href="${base}${escape(entry.id)}/"><span class="site-card-image">${entry.card ? `<img src="/gallery/${escape(entry.id)}/${escape(entry.card)}" alt="" width="1200" height="630">` : ''}</span>
 <span class="site-card-text"><span class="site-tags"><span>${escape(HOSTS[entry.host] || entry.host)}</span><span>${escape(MEDIA[entry.medium] || entry.medium || '')}</span>${entry.kind === 'comparison' ? '<span>Comparison</span>' : ''}${entry.origin === 'try' ? '<span>Live try</span>' : ''}${entry.surface ? '<span>0.4 surface</span>' : ''}</span>
-<b>${escape(entry.title)}</b><span>${escape(entry.headline?.sentence || '')}</span></span></a>`;
+<b>${escape(entry.title)}</b><span>${escape(spotSentence(spot) || entry.headline?.sentence || '')}</span></span></a>`;
 
 /** The steps of the featured session, in its own data: what the model guessed, what Qloo found and what the design rests on. */
 function howItWorks(entry) {
@@ -85,12 +89,15 @@ const PUBLISHED = `<section class="site-section" id="published"><div class="site
 export function landingPage({ gallery, repository = '' }) {
   const index = gallery.index;
   const featured = gallery.entries.get(index?.featured) || [...gallery.entries.values()][0];
+  const spot = index?.blindSpot?.sessions ? index.blindSpot
+    : blindSpotTotals([...gallery.entries.values()].map(entry => ({ id: entry.id, host: entry.host, blindSpot: entry.blindSpot || blindSpotOf(entry.record) })));
+  const stat = spot.works ? `<p class="site-hero-stat"><b>${escape((100 * spot.missed).toFixed(1))}%</b><span>of the works Qloo measured were missing from the agents' own sealed guesses: ${escape(spot.works - spot.known)} of ${escape(spot.works)}, in ${escape(spot.sessions)} recorded sessions in Claude Code, Codex and Kiro.</span></p>` : '';
   const body = `<section class="site-hero"><p class="mr-kicker">The taste layer for AI agents</p><h1>Design that rests on what an audience actually loves.</h1>
 <p class="site-lede">Moûsa makes an AI agent write down its own guess about an audience before it sees any data. Then Qloo measures that audience, and every choice in the design has to rest on what the guess did not contain. Each session leaves a record of where its choices came from.</p>
-<p class="site-actions"><a class="site-button" href="#gallery">See the evidence</a><a class="site-button quiet" href="/vote/">Judge two designs blind</a><a class="site-button quiet" href="/try/">Try it live</a></p></section>
+${stat}<p class="site-actions"><a class="site-button" href="/judges/">Start here: for the jury</a><a class="site-button quiet" href="/try/">Try it with your own audience</a><a class="site-button quiet" href="/vote/">Judge two designs blind</a></p></section>
 ${featuredPair(featured)}${howItWorks(featured)}${install(repository)}
 <section class="site-section" id="gallery"><div class="site-head-row"><h2>Recorded sessions</h2><p>${escape(index?.entries.length ?? 0)} sessions in Claude Code, Codex and Kiro. Each page shows the design, its record and how to run it again.</p></div>
-<div class="site-cards">${(index?.entries || []).map(entry => card(entry)).join('')}</div></section>${PUBLISHED}`;
+<div class="site-cards">${(index?.entries || []).map(entry => card(entry, { spot: spotOf(gallery, entry) })).join('')}</div></section>${PUBLISHED}`;
   return layout({ title: 'Moûsa: design grounded in measured taste', description: 'An AI agent freezes its own guess, Qloo measures the audience, and every design choice rests on what the guess did not contain.',
     body, repository, image: featured?.report?.card ? `/gallery/${featured.id}/${featured.report.card}` : '' });
 }
@@ -98,7 +105,7 @@ ${featuredPair(featured)}${howItWorks(featured)}${install(repository)}
 /** Every entry of the gallery, comparisons first. */
 export function galleryPage({ gallery, repository = '' }) {
   const entries = gallery.index?.entries || [];
-  const group = (title, note, list) => list.length ? `<section class="site-section"><div class="site-head-row"><h2>${escape(title)}</h2><p>${escape(note)}</p></div><div class="site-cards">${list.map(entry => card(entry)).join('')}</div></section>` : '';
+  const group = (title, note, list) => list.length ? `<section class="site-section"><div class="site-head-row"><h2>${escape(title)}</h2><p>${escape(note)}</p></div><div class="site-cards">${list.map(entry => card(entry, { spot: spotOf(gallery, entry) })).join('')}</div></section>` : '';
   const body = `<section class="site-hero small"><p class="mr-kicker">Evidence</p><h1>Recorded sessions</h1><p class="site-lede">Each one ran with the Moûsa plugin in a real agent host. Open one for its design, its Taste Provenance record, what the agent did step by step and how to run it again.</p></section>
 ${group('With Qloo and without', 'One frozen prediction, two arms; only the source of the taste differs.', entries.filter(entry => entry.kind === 'comparison'))}
 ${group('Single sessions', 'One design each, measured with Qloo.', entries.filter(entry => entry.kind !== 'comparison'))}`;
