@@ -170,3 +170,16 @@ test('the health summary the stack reports carries the deep check without the to
   assert.doesNotMatch(result.stdout, /token-test-only/u);
   assert.deepEqual(seen, ['token-test-only']);
 });
+
+test('the redeploy builds before it stops the site, checks a bundle\'s SHA-256 and replaces only the gallery', async () => {
+  const text = await read('deploy/aws/redeploy.sh');
+  const at = needle => { const index = text.indexOf(needle); assert.ok(index >= 0, needle); return index; };
+  assert.ok(at('"${COMPOSE[@]}" build') < at('"${COMPOSE[@]}" stop app'), 'the image is built while the site still runs');
+  assert.ok(at('sha256sum -c -') < at('"${COMPOSE[@]}" stop app'), 'the bundle is checked before anything stops');
+  assert.match(text, /a bundle needs its SHA-256/u);
+  assert.match(text, /rm -rf \/data\/jobs\/gallery && mkdir -p \/data\/jobs && cp -R \/import\/\. \/data\/jobs\//u, 'only the gallery folder is replaced');
+  assert.doesNotMatch(text, /rm -rf \/data\/jobs(?:\/)?(?:\s|'|$)/u, 'the jobs, tries and votes stay');
+  assert.match(text, /s\/\^MOUSA_COMMIT=\.\*\//u, 'the site reports the commit it runs');
+  assert.doesNotMatch(text, /cat\s+"?\$ENV_FILE|cat \/etc\/mousa/u, 'the environment file is never printed');
+  if (bash) assert.equal(spawnSync('bash', ['-n', path.join(repo, 'deploy', 'aws', 'redeploy.sh')]).status, 0);
+});
