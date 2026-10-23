@@ -99,6 +99,10 @@ test('a fixture run becomes a gallery entry with its report, playable files, tim
     assert.equal(entry.surfaceVersion, '0.6.0', 'the version the session\'s own mousa_status answered with');
     assert.equal(entry.model, 'claude-opus-5-5');
     assert.equal(entry.qlooRequests > 0, true);
+    assert.ok(entry.blindSpot?.works > 0, 'the entry carries the blind spot its measurement counted');
+    const index = JSON.parse(await fs.readFile(path.join(out, 'gallery.json'), 'utf8'));
+    assert.equal(index.blindSpot.sessions, 1);
+    assert.equal(index.entries[0].blindSpot.works, entry.blindSpot.works);
     assert.match(entry.reproduce.command, /^node scripts\/run-claude-code-live\.mjs --run$/u, 'a request no brief file holds runs without --brief-file');
     assert.match(entry.reproduce.commit || '', /^[0-9a-f]{7,}$/u, 'the commit current when the run started');
     assert.deepEqual(entry.play, [{ label: 'The design', path: 'out/design/index.html' }]);
