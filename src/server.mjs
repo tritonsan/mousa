@@ -23,7 +23,7 @@ import { inspectBrowser, verifyBrowser } from '../plugin/server/production/captu
 import { loadShowcase, isShowcaseJob, showcaseAppFile, SHOWCASE_APP_CSP } from './showcase.mjs';
 import { loadGallery, galleryFile, armRecord } from './gallery.mjs';
 import { landingPage, galleryPage, entryPage, armPage, missingPage, tryPendingPage } from './site/render.mjs';
-import { judgesPage, qlooPage } from './site/judge-pages.mjs';
+import { judgesPage, qlooPage, benchmarkPage } from './site/judge-pages.mjs';
 import { votePage, voteThanksPage, voteProblemPage, voteResultsPage, ballotViews } from './site/vote-pages.mjs';
 import { createVoteBox, voterAddress, VoteError } from './votes.mjs';
 import { reportStylesheet } from '../plugin/server/design/report.mjs';
@@ -550,6 +550,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         if (pathname === '/gallery' || pathname === '/gallery/') return page(galleryPage({ gallery, repository }));
         if (pathname === '/judges' || pathname === '/judges/') return page(judgesPage({ gallery, benchmark: gallery.benchmark || null, repository }));
         if (pathname === '/qloo' || pathname === '/qloo/') return page(qlooPage({ repository }));
+        if (pathname === '/benchmark' || pathname === '/benchmark/') return page(benchmarkPage({ benchmark: gallery.benchmark || null, repository }));
         const entryMatch = pathname.match(/^\/gallery\/([a-z0-9][a-z0-9-]{2,60})\/(?:arms\/([a-z0-9][a-z0-9-]{0,60})\/)?$/u);
         if (entryMatch) {
           const entry = gallery.entries.get(entryMatch[1]);

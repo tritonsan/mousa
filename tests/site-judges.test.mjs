@@ -3,7 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { landingPage, galleryPage } from '../src/site/render.mjs';
-import { judgesPage, qlooPage, galleryBlindSpot, benchmarkSentence } from '../src/site/judge-pages.mjs';
+import { judgesPage, qlooPage, benchmarkPage, galleryBlindSpot, benchmarkSentence } from '../src/site/judge-pages.mjs';
 
 const record = (works, known, guessed, confirmed, frozenAt) => ({ kind: 'session', prediction: { frozenAt, groups: [] }, measured: { counts: { works, worksPredicted: known, predictions: guessed, predictionsMeasured: confirmed } } });
 function gallery() {
@@ -39,5 +39,19 @@ test('the Qloo page names each request and what the live API taught, with no id'
   const html = qlooPage({ repository: 'https://github.com/tritonsan/mousa' });
   for (const text of ['/search', '/v2/tags', '/v2/audiences', '/v2/insights, entities', 'filter.results.entities', 'X-Api-Key', 'at most 24 requests', 'video_game', 'docs/qloo-integration.md']) assert.ok(html.includes(text), text);
   assert.doesNotMatch(html, /[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}/u);
+  assert.doesNotMatch(html, /<script/u);
+});
+
+test('the benchmark page shows each agent\'s measures and every audience, and waits for results without them', () => {
+  const empty = benchmarkPage({ repository: 'https://github.com/tritonsan/mousa' });
+  assert.match(empty, /not published yet/u);
+  const run = (host, audience, known, works) => ({ host, audience, seeds: ['Paterson', 'Nujabes'], status: 'measured', known, works, knownShare: known / works, guessed: 28, confirmed: known,
+    names: { measured: { movie: [{ name: 'Anomalisa', mark: 'new' }, { name: 'Paterson', mark: 'predicted' }] }, predicted: { movie: ['Lost in Translation'] } } });
+  const benchmark = { audiences: 1, measurable: 1, notMeasurable: [], bootstrap: { resamples: 10000, seed: 20261023 }, pairs: [],
+    hosts: { 'claude-code': { runs: 1, failed: 0, models: ['claude-opus-5-5[1m]'], knownShare: { mean: 0.029, interval: [0.01, 0.05] }, confirmedShare: { mean: 0.07, interval: null },
+      pooled: { known: { part: 2, whole: 69, share: 0.029 }, confirmed: { part: 2, whole: 28, share: 0.071 } }, byDomain: { movie: { works: 20, known: 1, knownShare: 0.05 } }, hypotheses: { H1: 'supported', H2: 'not established' } } },
+    runs: [run('claude-code', 'paterson-nujabes', 2, 69)] };
+  const html = benchmarkPage({ benchmark, repository: 'https://github.com/tritonsan/mousa' });
+  for (const text of ['How well do AI agents know an audience?', '2.9%', '1.0% to 5.0%', 'supported', 'Paterson and Nujabes', 'named 2 of the 69 works', 'Anomalisa', 'Lost in Translation', 'docs/benchmark/README.md', 'What it does not show']) assert.ok(html.includes(text), text);
   assert.doesNotMatch(html, /<script/u);
 });

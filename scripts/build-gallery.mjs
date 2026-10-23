@@ -68,6 +68,9 @@ async function main() {
   const result = await buildGallery({ config, runsDir: path.resolve(args.runs), triesDir, repo, out, library: await loadFontLibrary(repo), browser, user, secrets, log: line => console.log(line) });
   for (const finding of result.findings) console.error(`${finding.entry}/${finding.file}: ${finding.pattern}: …${finding.sample}…`);
   if (!result.written) { console.error(`${result.findings.length} finding${result.findings.length === 1 ? '' : 's'}: gallery.json was not written.`); process.exitCode = 1; return; }
+  // The blind spot benchmark's results join the gallery, so the site's /benchmark/ page and the bundle carry them.
+  const benchmark = await fs.readFile(path.join(repo, 'docs', 'benchmark', 'results.json'), 'utf8').catch(() => null);
+  if (benchmark) { await fs.writeFile(path.join(out, 'benchmark.json'), benchmark); console.log('The benchmark\'s results join the gallery.'); }
   console.log(`${result.entries.length} entries in ${out}. Restart the Studio to show them.`);
 }
 

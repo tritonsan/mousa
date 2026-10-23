@@ -97,6 +97,53 @@ const FINDINGS = [
   'Unsupported parameters can be ignored silently with a 200, so Moûsa records what it asked and reads the returned context before saying a filter applied.',
 ];
 
+const HOST_NAMES = Object.freeze({ 'claude-code': 'Claude Code', codex: 'Codex', kiro: 'Kiro' });
+const DOMAIN_NAMES = Object.freeze({ brand: 'Brands', movie: 'Films', artist: 'Music', book: 'Books', tv_show: 'TV', podcast: 'Podcasts', videogame: 'Games', place: 'Places', destination: 'Destinations', person: 'People' });
+const interval = range => range ? `${percent(range[0])} to ${percent(range[1])}` : 'n/a';
+const github = (repository, file) => repository ? `${repository}/blob/main/${file}` : '';
+
+/** One audience of the benchmark: each agent's count, and on request the names on both sides by domain. */
+function atlasCard(id, runs) {
+  const measured = runs.find(run => run.status === 'measured');
+  const seeds = measured?.seeds || runs[0]?.seeds || [id];
+  const rows = runs.map(run => `<li><b>${escape(HOST_NAMES[run.host] || run.host)}</b> ${run.status === 'measured' ? `named ${escape(run.known)} of the ${escape(run.works)} works Qloo measured` : escape(run.status)}</li>`).join('');
+  const domains = measured ? Object.keys(measured.names?.measured || {}) : [];
+  const names = domains.map(domain => `<div class="site-atlas-domain"><p class="mr-label">${escape(DOMAIN_NAMES[domain] || domain)}</p>
+<p class="site-small"><b>Qloo measured:</b> ${(measured.names.measured[domain] || []).map(item => `<span class="mr-chip" data-mark="${escape(item.mark)}">${escape(item.name)}</span>`).join(' ')}</p>
+${runs.filter(run => run.status === 'measured').map(run => `<p class="site-small"><b>${escape(HOST_NAMES[run.host] || run.host)} guessed:</b> ${escape((run.names?.predicted?.[domain] || []).join(', ') || 'nothing')}</p>`).join('')}</div>`).join('');
+  return `<article class="mr-card site-atlas-card"><h3>${escape(seeds.join(' and '))}</h3><ul class="site-atlas-counts">${rows}</ul>${names ? `<details><summary>What the guesses and Qloo named</summary>${names}</details>` : ''}</article>`;
+}
+
+/** The blind spot benchmark: the agents' measures with their intervals and verdicts, by domain, and each audience. */
+export function benchmarkPage({ benchmark = null, repository = '' } = {}) {
+  const protocol = github(repository, 'docs/benchmark/README.md');
+  const hero = `<section class="site-hero small"><p class="mr-kicker">Pre-registered benchmark</p><h1>How well do AI agents know an audience?</h1>
+<p class="site-lede">Twenty audiences, each named by two works or people. Claude Code, Codex and Kiro each froze their own prediction of what every audience loves, with no access to Qloo. The predictions were committed to the public repository, and only then did Qloo measure each audience.${protocol ? ` <a class="site-link" href="${escape(protocol)}">The protocol</a>, fixed before any run.` : ''}</p></section>`;
+  if (!benchmark?.hosts) {
+    return layout({ title: 'Benchmark · Moûsa', body: `${hero}<section class="site-section"><p>The benchmark's results are not published yet. The protocol and the agents' sealed predictions are in the repository.</p></section>`, active: 'benchmark', repository });
+  }
+  const hosts = Object.entries(benchmark.hosts);
+  const table = `<div class="vote-table"><table><thead><tr><th>Agent</th><th>Runs</th><th>Known share: measured works the guess named</th><th>Confirmed share: guessed works Qloo measured</th><th>H1: known below 15%</th><th>H2: confirmed below 25%</th></tr></thead><tbody>
+${hosts.map(([host, row]) => `<tr><td><b>${escape(HOST_NAMES[host] || host)}</b><br><span class="site-small">${escape(row.models.join(', '))}</span></td><td>${escape(row.runs)}${row.failed ? `, ${escape(row.failed)} failed` : ''}</td>
+<td><b>${escape(percent(row.knownShare.mean))}</b><br><span class="site-small">${escape(interval(row.knownShare.interval))}</span></td><td><b>${escape(percent(row.confirmedShare.mean))}</b><br><span class="site-small">${escape(interval(row.confirmedShare.interval))}</span></td>
+<td>${escape(row.hypotheses.H1)}</td><td>${escape(row.hypotheses.H2)}</td></tr>`).join('')}</tbody></table></div>
+<p class="site-small">Means over audiences, each weighted equally, with 95% bootstrap intervals (${escape(benchmark.bootstrap?.resamples)} resamples, seed ${escape(benchmark.bootstrap?.seed)}). ${escape(benchmark.measurable)} of ${escape(benchmark.audiences)} audiences could be measured${benchmark.notMeasurable?.length ? `; not measurable: ${escape(benchmark.notMeasurable.join(', '))}` : ''}.</p>`;
+  const domains = [...new Set(hosts.flatMap(([, row]) => Object.keys(row.byDomain || {})))];
+  const byDomain = `<div class="vote-table"><table><thead><tr><th>Domain</th>${hosts.map(([host]) => `<th>${escape(HOST_NAMES[host] || host)}</th>`).join('')}</tr></thead><tbody>
+${domains.map(domain => `<tr><td>${escape(DOMAIN_NAMES[domain] || domain)}</td>${hosts.map(([, row]) => { const cell = row.byDomain?.[domain]; return `<td>${cell ? `${escape(percent(cell.knownShare))} <span class="site-small">(${escape(cell.known)} of ${escape(cell.works)})</span>` : ''}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>`;
+  const pooled = `<ul class="site-findings">${hosts.map(([host, row]) => `<li><b>${escape(HOST_NAMES[host] || host)}:</b> the guesses named ${escape(row.pooled.known.part)} of ${escape(row.pooled.known.whole)} measured works (${escape(percent(row.pooled.known.share))}), and ${escape(row.pooled.confirmed.part)} of ${escape(row.pooled.confirmed.whole)} guessed works were measured (${escape(percent(row.pooled.confirmed.share))}).</li>`).join('')}
+${(benchmark.pairs || []).map(pair => `<li>Exploratory, paired by audience: ${escape(pair.hosts.map(host => HOST_NAMES[host] || host).join(' minus '))}, ${escape(percent(pair.meanDifference))} (${escape(interval(pair.interval))}).</li>`).join('')}</ul>`;
+  const ids = [...new Set((benchmark.runs || []).map(run => run.audience))];
+  const atlas = `<div class="site-atlas">${ids.map(id => atlasCard(id, benchmark.runs.filter(run => run.audience === id))).join('')}</div>`;
+  const body = `${hero}
+<section class="site-section"><div class="site-head-row"><h2>The measures</h2><p>Both shares are bounded by the two lists' sizes: an agent names three to six works per domain, and Qloo measures about sixty to eighty in all. Read them together.</p></div>${table}${pooled}</section>
+<section class="site-section"><div class="site-head-row"><h2>By domain</h2><p>Pooled over audiences: of the works Qloo measured in each domain, how many the guesses named.</p></div>${byDomain}</section>
+<section class="site-section"><div class="site-head-row"><h2>Every audience</h2><p>What each agent's sealed guess named, and on request the names on both sides: up to six measured works per domain, marked new or predicted.</p></div>${atlas}</section>
+<section class="site-section"><div class="mr-card"><h3>What it does not show</h3><ul><li>Qloo's measurement is aggregate affinity data, not ground truth about any person; a work missing from Qloo's lists may still be loved.</li><li>The name match is liberal, which can only raise the known share.</li><li>One prompt, one brief and one run per agent and audience: it measures what each agent assumes when Moûsa asks it, not everything its model knows.</li><li>It says nothing about whether a design made with Qloo is better.</li></ul>
+${repository ? `<p class="site-small"><a class="site-link" href="${escape(protocol)}">Protocol and amendments</a> · <a class="site-link" href="${escape(repository)}/tree/main/docs/benchmark/predictions">The sealed predictions</a> · <a class="site-link" href="${escape(github(repository, 'docs/benchmark/results.json'))}">results.json</a></p>` : ''}</div></section>`;
+  return layout({ title: 'Benchmark · Moûsa', description: 'How well do AI agents know an audience? A pre-registered benchmark of Claude Code, Codex and Kiro against Qloo\'s measurement.', body, active: 'benchmark', repository });
+}
+
 /** How Moûsa uses Qloo: each request, what it decides, the budget and cache, the data rule and what the live API taught it. */
 export function qlooPage({ repository = '' } = {}) {
   const body = `<section class="site-hero small"><p class="mr-kicker">Qloo in Moûsa</p><h1>Request by request</h1>

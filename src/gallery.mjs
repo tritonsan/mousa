@@ -31,7 +31,9 @@ export async function loadGallery({ dataDir }) {
     if (!plain(entry) || entry.id !== item.id || !plain(record)) { notes.push(`${item.id}: its entry.json or report is missing; build the gallery again.`); continue; }
     entries.set(item.id, { ...entry, record });
   }
-  return { index: { ...index, entries: index.entries.filter(item => entries.has(item.id)) }, entries, notes };
+  // The blind spot benchmark's results (docs/benchmark/results.json), which build-gallery copies beside the index.
+  const benchmark = await fs.readFile(path.join(folder, 'benchmark.json'), 'utf8').then(JSON.parse, () => null);
+  return { index: { ...index, entries: index.entries.filter(item => entries.has(item.id)) }, entries, notes, ...(plain(benchmark) ? { benchmark } : {}) };
 }
 
 /** An arm's own report record inside a comparison entry, or null. */
