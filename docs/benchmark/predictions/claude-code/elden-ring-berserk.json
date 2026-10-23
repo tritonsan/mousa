@@ -1,0 +1,307 @@
+{
+  "audience": "elden-ring-berserk",
+  "seeds": [
+    "Elden Ring",
+    "Berserk"
+  ],
+  "host": "claude-code",
+  "hostVersion": "2.1.284 (Claude Code)",
+  "model": "claude-opus-5-5[1m]",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Elden Ring and Berserk. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Fans of grim, ornate dark fantasy who love hard-won mastery, ruined grandeur and lonely melancholy heroes; they lean toward souls-like games, seinen manga, heavy and atmospheric music, and they want a cosy place that takes that mood seriously without cosplay kitsch.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "FromSoftware"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Bandai Namco"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Dark Horse Comics"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Games Workshop"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Crunchyroll"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Wizards of the Coast"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "The Lord of the Rings: The Fellowship of the Ring"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Princess Mononoke"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "The Green Knight"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Excalibur"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Conan the Barbarian"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "Dune"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Susumu Hirasawa"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Shoji Meguro"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Tsukasa Saitoh"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Wardruna"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Sleep Token"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "Amon Amarth"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Vagabond"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Vinland Saga"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "Claymore"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "A Song of Ice and Fire"
+      },
+      {
+        "id": "M23",
+        "domain": "book",
+        "name": "The Silmarillion"
+      },
+      {
+        "id": "M24",
+        "domain": "book",
+        "name": "Hellsing"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Attack on Titan"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Game of Thrones"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Castlevania"
+      },
+      {
+        "id": "M28",
+        "domain": "tv_show",
+        "name": "Arcane"
+      },
+      {
+        "id": "M29",
+        "domain": "tv_show",
+        "name": "Chainsaw Man"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "slow brooding build-ups"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "sudden brutal violence"
+      },
+      {
+        "id": "M32",
+        "domain": "style",
+        "name": "epic sweeping scale"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "long silent atmosphere"
+      },
+      {
+        "id": "M34",
+        "domain": "style",
+        "name": "tragic arcs"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "ruined gothic architecture"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "weathered stone and rusted iron"
+      },
+      {
+        "id": "M37",
+        "domain": "aesthetic",
+        "name": "golden light in darkness"
+      },
+      {
+        "id": "M38",
+        "domain": "aesthetic",
+        "name": "ink-hatched illustration"
+      },
+      {
+        "id": "M39",
+        "domain": "aesthetic",
+        "name": "candlelit gloom"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "melancholic"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "grim"
+      },
+      {
+        "id": "M42",
+        "domain": "tone",
+        "name": "defiant"
+      },
+      {
+        "id": "M43",
+        "domain": "tone",
+        "name": "bittersweet"
+      },
+      {
+        "id": "M44",
+        "domain": "tone",
+        "name": "awe-struck"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "dark fantasy"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "struggle against fate"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "lonely warriors"
+      },
+      {
+        "id": "M48",
+        "domain": "qualities",
+        "name": "decayed grandeur"
+      },
+      {
+        "id": "M49",
+        "domain": "qualities",
+        "name": "hard-won triumph"
+      }
+    ],
+    "designSketch": {
+      "summary": "A candlelit, ink-and-gold one-page café site that reads like a weathered illuminated tome: near-black soot ground, Erdtree-gold accents, engraved serif headlines and quiet copy that frames a coffee break as a resting place by a grace-lit fire.",
+      "palette": [
+        "#14110f",
+        "#2a241f",
+        "#c9a24a",
+        "#8a1c1c",
+        "#e8dcc4",
+        "#6b6355"
+      ],
+      "fonts": [
+        "Cormorant Garamond",
+        "EB Garamond",
+        "Cabin"
+      ],
+      "sections": [
+        "hero",
+        "site-of-grace",
+        "menu",
+        "the-table",
+        "events",
+        "visit"
+      ],
+      "motifs": [
+        "guttering candle glow",
+        "ink-hatched engraving lines",
+        "gold-leaf rune dividers",
+        "resting by the fire",
+        "worn stone texture"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:09:33.645Z",
+    "sha256": "f914d85d62b2a4d95b9006618d4e3d5f5b57127c6bf3095af50ecceabf6500b4"
+  }
+}

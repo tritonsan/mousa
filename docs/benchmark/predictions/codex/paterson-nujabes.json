@@ -1,0 +1,284 @@
+{
+  "audience": "paterson-nujabes",
+  "seeds": [
+    "Paterson",
+    "Nujabes"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Paterson and Nujabes. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured prediction is that people who love Paterson and Nujabes find pleasure in ordinary routines, attentive observation and intimate creative work. I expect an affinity for reflective cinema, jazz-inflected music, modest useful objects and neighbourhood spaces where lingering feels welcome.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "MUJI"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "KINTO"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "TRAVELER'S COMPANY"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "UNIQLO"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Blue Bottle Coffee"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Perfect Days"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Columbus"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Old Joy"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "After Life"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Mystery Train"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Uyama Hiroto"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "J Dilla"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "DJ Okawari"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Bill Evans"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Shing02"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "Devotions by Mary Oliver"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "Kitchen by Banana Yoshimoto"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "The Book of Disquiet by Fernando Pessoa"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "The Summer Book by Tove Jansson"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "A Coney Island of the Mind by Lawrence Ferlinghetti"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "Midnight Diner"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Detectorists"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Joe Pera Talks with You"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Mushishi"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Samurai Champloo"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "unhurried pacing"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "observational framing"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "episodic everyday encounters"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "quiet repetition with small variations"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "room for silence"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "warm natural light"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "matte paper grain"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "worn timber"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "simple ceramic forms"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "muted earthy colours"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "contemplative"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "gently wistful"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "quietly hopeful"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "unpretentious"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "intimately welcoming"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "poetry in everyday routines"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "affection for ordinary people"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "handmade imperfection"
+      },
+      {
+        "id": "M44",
+        "domain": "qualities",
+        "name": "creative solitude alongside community"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "rhythm built from repetition"
+      }
+    ],
+    "designSketch": {
+      "summary": "From this prediction alone, I would make Common Table a spacious single-page neighbourhood café site with warm paper colours, literary headings, candid photographs of everyday café rituals, a compact menu and clear visiting details, paced like a quiet notebook with a recurring daily rhythm.",
+      "palette": [
+        "#f3eee3",
+        "#292d28",
+        "#777b61",
+        "#ad7055",
+        "#d6c8b3"
+      ],
+      "fonts": [
+        "Literata",
+        "Alegreya Sans"
+      ],
+      "sections": [
+        "welcome",
+        "daily-ritual",
+        "menu",
+        "around-the-table",
+        "visit"
+      ],
+      "motifs": [
+        "generous notebook-like margins",
+        "small repeated date and time labels",
+        "thin rules between daily entries",
+        "natural-light photographs of cups, hands and shared tables",
+        "short poetic observations beside practical café information"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T13:57:52.048Z",
+    "sha256": "e1f24669a6158be0feaa3c7d8695496fd9274fbead48ec3247dcd2cd370c979d"
+  }
+}

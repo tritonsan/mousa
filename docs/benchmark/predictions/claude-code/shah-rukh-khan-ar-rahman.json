@@ -1,0 +1,305 @@
+{
+  "audience": "shah-rukh-khan-ar-rahman",
+  "seeds": [
+    "Shah Rukh Khan",
+    "A. R. Rahman"
+  ],
+  "host": "claude-code",
+  "hostVersion": "2.1.284 (Claude Code)",
+  "model": "claude-opus-5-5[1m]",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Shah Rukh Khan and A. R. Rahman. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Fans of Shah Rukh Khan's romantic-hero era and A. R. Rahman's lush, devotional-meets-electronic scores: people who love big-hearted Hindi cinema, melodic film music, nostalgia for 90s–2000s Bollywood and warm family-and-longing stories. I expect a sentimental, romantic, musical audience that also enjoys grand spectacle.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Taj Mahal Tea"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Amul"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Cadbury Dairy Milk"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Fabindia"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Tanishq"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Kolkata Knight Riders"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Dilwale Dulhania Le Jayenge"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Kuch Kuch Hota Hai"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Dil Se.."
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Swades"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Kal Ho Naa Ho"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "Lagaan"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Lata Mangeshkar"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Arijit Singh"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Udit Narayan"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Sonu Nigam"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Shreya Ghoshal"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "Ilaiyaraaja"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "The God of Small Things"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "A Suitable Boy"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "The White Tiger"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "Midnight's Children"
+      },
+      {
+        "id": "M23",
+        "domain": "book",
+        "name": "Train to Pakistan"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Kaun Banega Crorepati"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Indian Idol"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Made in Heaven"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Sacred Games"
+      },
+      {
+        "id": "M28",
+        "domain": "tv_show",
+        "name": "The Family Man"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "sweeping song-and-dance set pieces"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "slow-motion romantic reveals"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "long musical interludes"
+      },
+      {
+        "id": "M32",
+        "domain": "style",
+        "name": "lush widescreen landscapes"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "melodramatic swells"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "saturated jewel tones"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "chiffon sarees in mountain wind"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "golden-hour light"
+      },
+      {
+        "id": "M37",
+        "domain": "aesthetic",
+        "name": "marigold and rose petals"
+      },
+      {
+        "id": "M38",
+        "domain": "aesthetic",
+        "name": "ornate textiles"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "romantic"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "nostalgic"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "heartfelt"
+      },
+      {
+        "id": "M42",
+        "domain": "tone",
+        "name": "devotional"
+      },
+      {
+        "id": "M43",
+        "domain": "tone",
+        "name": "joyful"
+      },
+      {
+        "id": "M44",
+        "domain": "tone",
+        "name": "bittersweet longing"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "love against family obstacles"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "homecoming and belonging"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "music as emotional climax"
+      },
+      {
+        "id": "M48",
+        "domain": "qualities",
+        "name": "larger-than-life charm"
+      },
+      {
+        "id": "M49",
+        "domain": "qualities",
+        "name": "Indian diaspora longing"
+      }
+    ],
+    "designSketch": {
+      "summary": "A warm, cinematic one-page café site in marigold, deep rose and jewel teal, with a poster-style serif headline, a ‘chai and songs’ menu framed like a film interval card, and an evening music-night section built around slow, swelling motion.",
+      "palette": [
+        "#e8a33d",
+        "#b23a48",
+        "#1f5c5a",
+        "#fbf3e4",
+        "#2b1a1f"
+      ],
+      "fonts": [
+        "Rozha One",
+        "Literata",
+        "Cabin"
+      ],
+      "sections": [
+        "hero",
+        "menu",
+        "music-nights",
+        "our-story",
+        "visit"
+      ],
+      "motifs": [
+        "open-arms welcome",
+        "marigold garlands",
+        "interval card",
+        "golden-hour window light",
+        "vinyl and chai"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:08:57.233Z",
+    "sha256": "ff46768d5025788c1889a1fe0fd38352c0696b04a7120b49200e14e1fdeb879e"
+  }
+}

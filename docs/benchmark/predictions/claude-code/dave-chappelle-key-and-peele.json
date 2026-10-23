@@ -1,0 +1,314 @@
+{
+  "audience": "dave-chappelle-key-and-peele",
+  "seeds": [
+    "Dave Chappelle",
+    "Key & Peele"
+  ],
+  "host": "claude-code",
+  "hostVersion": "2.1.284 (Claude Code)",
+  "model": "claude-opus-5-5[1m]",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Dave Chappelle and Key & Peele. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Fans of sharp, race-aware sketch and stand-up comedy: people who love observational satire that is absurd on the surface and pointed underneath, and who follow the Black comedy, hip-hop and prestige-TV world around Chappelle and Key & Peele.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Nike"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Jordan"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Netflix"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Comedy Central"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Supreme"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Adult Swim"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Get Out"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Keanu"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Half Baked"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Sorry to Bother You"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Nope"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "Dave Chappelle's Block Party"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Kanye West"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Mos Def"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Talib Kweli"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "A Tribe Called Quest"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Erykah Badu"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "Childish Gambino"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Between the World and Me"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Born a Crime"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "The Sellout"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "Yes Please"
+      },
+      {
+        "id": "M23",
+        "domain": "book",
+        "name": "Bossypants"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Chappelle's Show"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Atlanta"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "The Boondocks"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Insecure"
+      },
+      {
+        "id": "M28",
+        "domain": "tv_show",
+        "name": "Key & Peele"
+      },
+      {
+        "id": "M29",
+        "domain": "tv_show",
+        "name": "Curb Your Enthusiasm"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "sketch-length quick cuts"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "deadpan escalation"
+      },
+      {
+        "id": "M32",
+        "domain": "style",
+        "name": "genre parody"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "cold opens"
+      },
+      {
+        "id": "M34",
+        "domain": "style",
+        "name": "live stand-up long takes"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "gritty urban realism"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "retro 70s-90s TV look"
+      },
+      {
+        "id": "M37",
+        "domain": "aesthetic",
+        "name": "bold block colour"
+      },
+      {
+        "id": "M38",
+        "domain": "aesthetic",
+        "name": "handheld documentary feel"
+      },
+      {
+        "id": "M39",
+        "domain": "aesthetic",
+        "name": "street signage and murals"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "satirical"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "irreverent"
+      },
+      {
+        "id": "M42",
+        "domain": "tone",
+        "name": "absurd"
+      },
+      {
+        "id": "M43",
+        "domain": "tone",
+        "name": "deadpan"
+      },
+      {
+        "id": "M44",
+        "domain": "tone",
+        "name": "warm underneath"
+      },
+      {
+        "id": "M45",
+        "domain": "tone",
+        "name": "provocative"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "race and identity satire"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "social commentary"
+      },
+      {
+        "id": "M48",
+        "domain": "qualities",
+        "name": "escalating absurdity"
+      },
+      {
+        "id": "M49",
+        "domain": "qualities",
+        "name": "Black American culture"
+      },
+      {
+        "id": "M50",
+        "domain": "qualities",
+        "name": "hip-hop roots"
+      },
+      {
+        "id": "M51",
+        "domain": "qualities",
+        "name": "everyday observational humour"
+      }
+    ],
+    "designSketch": {
+      "summary": "A warm, loud neighbourhood café page that plays like a sketch show: bold mustard and brick block colours, condensed poster type, menu items written as deadpan sketch setups, and a corner-store-sign hero that escalates down the page.",
+      "palette": [
+        "#1c1a17",
+        "#f2e8d5",
+        "#e2a72e",
+        "#b4432b",
+        "#2f5d50"
+      ],
+      "fonts": [
+        "Bebas Neue",
+        "Libre Franklin",
+        "Courier Prime"
+      ],
+      "sections": [
+        "hero",
+        "menu",
+        "sketches",
+        "neighbourhood",
+        "visit"
+      ],
+      "motifs": [
+        "hand-painted corner-store signage",
+        "sketch title cards",
+        "deadpan escalating copy",
+        "stage spotlight on brick"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:03:07.525Z",
+    "sha256": "576f0f724282dba66fd4e5868d89d7c853024dd20fd7a2244e19e4f9ead8a733"
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "audience": "drive-to-survive-ford-v-ferrari",
+  "seeds": [
+    "Formula 1: Drive to Survive",
+    "Ford v Ferrari"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Formula 1: Drive to Survive and Ford v Ferrari. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "I predict that people who love Formula 1: Drive to Survive and Ford v Ferrari enjoy human stories of rivalry, skilled craft and teamwork under pressure. For Common Table, I expect an interest in purposeful engineering and heritage to coexist with the pleasure of a familiar place to gather; these are my assumptions, with no audience measurement.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Porsche"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "TAG Heuer"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Barbour"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Bremont"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Gulf Oil"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Rush"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Le Mans"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Senna"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "The World's Fastest Indian"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Top Gun: Maverick"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "The Rolling Stones"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Fleetwood Mac"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "AC/DC"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Dire Straits"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "The Black Keys"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "Go Like Hell by A. J. Baime"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "How to Build a Car by Adrian Newey"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "The Art of Racing in the Rain by Garth Stein"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Total Competition by Ross Brawn and Adam Parr"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Top Gear"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "The Grand Tour"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Full Swing"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Welcome to Wrexham"
+      },
+      {
+        "id": "M24",
+        "domain": "style",
+        "name": "propulsive editing"
+      },
+      {
+        "id": "M25",
+        "domain": "style",
+        "name": "intimate behind-the-scenes observation"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "cinematic widescreen compositions"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "patient craft sequences punctuated by bursts of action"
+      },
+      {
+        "id": "M28",
+        "domain": "aesthetic",
+        "name": "patinated metal"
+      },
+      {
+        "id": "M29",
+        "domain": "aesthetic",
+        "name": "warm leather"
+      },
+      {
+        "id": "M30",
+        "domain": "aesthetic",
+        "name": "analogue instruments"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "bold utilitarian lettering"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "sunlit workshop surfaces"
+      },
+      {
+        "id": "M33",
+        "domain": "tone",
+        "name": "determined"
+      },
+      {
+        "id": "M34",
+        "domain": "tone",
+        "name": "companionable"
+      },
+      {
+        "id": "M35",
+        "domain": "tone",
+        "name": "wry"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "nostalgic"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "quietly triumphant"
+      },
+      {
+        "id": "M38",
+        "domain": "qualities",
+        "name": "mastery earned through practice"
+      },
+      {
+        "id": "M39",
+        "domain": "qualities",
+        "name": "underdogs challenging institutions"
+      },
+      {
+        "id": "M40",
+        "domain": "qualities",
+        "name": "rivalry balanced by mutual respect"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "trust within a small team"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "heritage made useful in the present"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these predictions alone, I would make Common Table a welcoming neighbourhood café page with the warmth of a well-used workshop, bold compact headlines, generous café photography and a clear path from the daily menu to visiting.",
+      "palette": [
+        "#f3ead8",
+        "#242724",
+        "#a94b32",
+        "#234c47",
+        "#c1a06b"
+      ],
+      "fonts": [
+        "Big Shoulders Display",
+        "Cabin",
+        "DM Mono"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "coffee-and-craft",
+        "the-common-table",
+        "visit"
+      ],
+      "motifs": [
+        "small numbered menu labels",
+        "thin rules recalling workshop specification sheets",
+        "warm grain and brushed-metal accents",
+        "close-up photographs of hands preparing coffee",
+        "restrained horizontal reveals between generous still sections"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:05:56.186Z",
+    "sha256": "52b24f13fd0a5846694fbbf34449718b3e2f7cbe323fa98016067ca531d7b587"
+  }
+}

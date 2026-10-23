@@ -1,0 +1,274 @@
+{
+  "audience": "dune-part-two-brian-eno",
+  "seeds": [
+    "Dune: Part Two",
+    "Brian Eno"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Dune: Part Two and Brian Eno. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured prediction is that people who love Dune: Part Two and Brian Eno enjoy immersive worlds, patient attention and tactile minimalism, with an interest in ecology and experimental sound. For Common Table, I would interpret those interests as a warm, contemplative neighbourhood gathering place.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Aesop"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "MUJI"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Bang & Olufsen"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Noma t.d."
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "Arrival"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Blade Runner 2049"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Stalker"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Koyaanisqatsi"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "2001: A Space Odyssey"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Harold Budd"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Hiroshi Yoshimura"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Ryuichi Sakamoto"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Jon Hopkins"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Stars of the Lid"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "Dune"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "Solaris"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "The Dispossessed"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "Invisible Cities"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "The Overstory"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Scavengers Reign"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "Severance"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Devs"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Tales from the Loop"
+      },
+      {
+        "id": "M24",
+        "domain": "style",
+        "name": "patient pacing"
+      },
+      {
+        "id": "M25",
+        "domain": "style",
+        "name": "expansive compositions"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "sparse dialogue"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "gradual revelation"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "immersive sound"
+      },
+      {
+        "id": "M29",
+        "domain": "aesthetic",
+        "name": "sand and clay hues"
+      },
+      {
+        "id": "M30",
+        "domain": "aesthetic",
+        "name": "matte mineral surfaces"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "weathered timber"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "diffuse light"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "restrained geometric forms"
+      },
+      {
+        "id": "M34",
+        "domain": "tone",
+        "name": "contemplative"
+      },
+      {
+        "id": "M35",
+        "domain": "tone",
+        "name": "quietly mysterious"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "awe-filled"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "melancholic"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "intimate"
+      },
+      {
+        "id": "M39",
+        "domain": "qualities",
+        "name": "ecological interconnectedness"
+      },
+      {
+        "id": "M40",
+        "domain": "qualities",
+        "name": "ritual in everyday life"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "human scale within vast systems"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "textural depth"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "space for ambiguity"
+      }
+    ],
+    "designSketch": {
+      "summary": "From this prediction alone, I would make Common Table a spacious, warm one-page café site with a large literary welcome, sunlit photographs of ceramics and a shared timber table, a compact seasonal menu, a neighbourhood story and clear visiting information, paced by generous pauses and subtle slow fades.",
+      "palette": [
+        "#eee6d8",
+        "#c0a17b",
+        "#8a6548",
+        "#343a32",
+        "#242520"
+      ],
+      "fonts": [
+        "Instrument Serif",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "seasonal-menu",
+        "shared-table",
+        "neighbourhood",
+        "visit"
+      ],
+      "motifs": [
+        "wide fields of warm paper colour",
+        "soft light across tactile ceramics",
+        "fine concentric lines suggesting sound and gathering",
+        "generous vertical pauses",
+        "small practical typographic labels"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:01:26.799Z",
+    "sha256": "3056088c24eadc3b34e52e79f6e73a1d437fb16f216c1ad1139fc7dd08851cf6"
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "audience": "kendrick-lamar-insecure",
+  "seeds": [
+    "Kendrick Lamar",
+    "Insecure"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Kendrick Lamar and Insecure. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "The stated audience loves Kendrick Lamar and Insecure. Before any measurement, I predict an interest in layered storytelling, candid friendship and relationship stories, musical discovery, and specific accounts of neighbourhood life; these are my hypotheses from the named works, not measured preferences or demographic assumptions.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Patta"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Noah"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Converse"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Stüssy"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Thebe Magugu"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Moonlight"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Do the Right Thing"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Love & Basketball"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "If Beale Street Could Talk"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "The Last Black Man in San Francisco"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "SZA"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Solange"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Frank Ocean"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Noname"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Anderson .Paak"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "The Vanishing Half"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "All About Love: New Visions"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "Such a Fun Age"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Between the World and Me"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Open Water"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "Atlanta"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Ramy"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Rap Sh!t"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Chewing Gum"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Abbott Elementary"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "unhurried conversational scenes"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "sudden shifts between humour and reflection"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "character-led ensemble storytelling"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "music-led transitions"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "intimate observational framing"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "sun-warmed colour"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "natural photographic grain"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "tactile paper and wood"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "lived-in interiors"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "bold editorial typography"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "wry"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "vulnerable"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "intimate"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "reflective"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "playful"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "complicated friendships"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "neighbourhood specificity"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "self-examination"
+      },
+      {
+        "id": "M44",
+        "domain": "qualities",
+        "name": "everyday rituals"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "tension between ambition and belonging"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these predictions alone, I would make Common Table a warm editorial one-page café site with a large conversational welcome, candid photographs of shared tables and everyday café rituals, an easy-to-scan menu, a small neighbourhood noticeboard, and prominent hours and directions.",
+      "palette": [
+        "#f3e9d8",
+        "#28231f",
+        "#a54d36",
+        "#69704b",
+        "#d3a64b"
+      ],
+      "fonts": [
+        "DM Serif Display",
+        "Libre Franklin"
+      ],
+      "sections": [
+        "welcome",
+        "menu",
+        "our-table",
+        "neighbourhood-board",
+        "visit"
+      ],
+      "motifs": [
+        "oversized serif welcome with compact sans-serif details",
+        "warm documentary photography in unequal editorial crops",
+        "paper-coloured menu with fine rules",
+        "small handwritten-style margin notes expressed as plain text",
+        "generous pauses between dense conversational sections"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T13:59:53.995Z",
+    "sha256": "ca0e23819766af97e2a13599cdad8409c3ebf209acb93e3abd9f6349e08d345f"
+  }
+}

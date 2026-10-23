@@ -1,0 +1,269 @@
+{
+  "audience": "bad-bunny-narcos",
+  "seeds": [
+    "Bad Bunny",
+    "Narcos"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Bad Bunny and Narcos. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured prediction for people who love Bad Bunny and Narcos is an appetite for expressive music, cinematic tension, streetwear and stories of ambition, loyalty and conflicted belonging. These are guesses from the named works, not claims about the audience's identity or measured preferences.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "adidas"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Nike"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Carhartt WIP"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Diesel"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "City of God"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Scarface"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Amores Perros"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Training Day"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Goodfellas"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Rauw Alejandro"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "J Balvin"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Tainy"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "KAROL G"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Daddy Yankee"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "One Hundred Years of Solitude"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "The Power of the Dog"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "The Brief Wondrous Life of Oscar Wao"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "The Queen of the South"
+      },
+      {
+        "id": "M19",
+        "domain": "tv_show",
+        "name": "Narcos: Mexico"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Breaking Bad"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "Top Boy"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "El Chapo"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Better Call Saul"
+      },
+      {
+        "id": "M24",
+        "domain": "style",
+        "name": "propulsive pacing"
+      },
+      {
+        "id": "M25",
+        "domain": "style",
+        "name": "slow tension punctuated by bursts of action"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "ensemble storytelling"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "documentary-like immediacy"
+      },
+      {
+        "id": "M28",
+        "domain": "aesthetic",
+        "name": "sun-faded surfaces"
+      },
+      {
+        "id": "M29",
+        "domain": "aesthetic",
+        "name": "saturated accents against earthy neutrals"
+      },
+      {
+        "id": "M30",
+        "domain": "aesthetic",
+        "name": "grainy analogue photography"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "bold poster typography"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "worn tactile materials"
+      },
+      {
+        "id": "M33",
+        "domain": "tone",
+        "name": "swagger"
+      },
+      {
+        "id": "M34",
+        "domain": "tone",
+        "name": "melancholy"
+      },
+      {
+        "id": "M35",
+        "domain": "tone",
+        "name": "dark humour"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "suspense"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "warm camaraderie"
+      },
+      {
+        "id": "M38",
+        "domain": "qualities",
+        "name": "loyalty and belonging"
+      },
+      {
+        "id": "M39",
+        "domain": "qualities",
+        "name": "ambition and its consequences"
+      },
+      {
+        "id": "M40",
+        "domain": "qualities",
+        "name": "rebellious self-expression"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "place-rooted storytelling"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "pleasure alongside vulnerability"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these guesses alone, I would give Common Table a warm, street-facing café page with oversized poster lettering, sun-faded cream and terracotta, a sharp green accent, candid coffee-and-conversation photography and an easy progression from invitation to menu to visiting information.",
+      "palette": [
+        "#f2e5cf",
+        "#25221e",
+        "#bd5038",
+        "#b9d35a",
+        "#73664c"
+      ],
+      "fonts": [
+        "Oswald",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "the-common-table",
+        "on-the-speakers",
+        "visit"
+      ],
+      "motifs": [
+        "oversized poster headlines",
+        "paper menu textures",
+        "candid communal-table photographs",
+        "small stamped labels",
+        "generous pauses between lively sections"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:02:09.584Z",
+    "sha256": "5a6ca07634ca9a95181cd0b4f2a7642818cdca7ba8f1de02fc349f397ba82d92"
+  }
+}

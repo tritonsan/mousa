@@ -1,0 +1,305 @@
+{
+  "audience": "beyonce-pose",
+  "seeds": [
+    "Beyoncé",
+    "Pose"
+  ],
+  "host": "kiro",
+  "hostVersion": "kiro-cli-chat 2.24.0",
+  "model": "claude-opus-5.5",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Beyoncé and Pose. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Fans of Beyoncé and Pose: people who love Black and queer performance culture, ballroom, glamour and self-made family, with a taste for spectacle that carries emotional and political weight.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Fenty Beauty"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Ivy Park"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Telfar"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Savage X Fenty"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "MAC Cosmetics"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Pyer Moss"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Paris Is Burning"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Moonlight"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Dreamgirls"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Black Is King"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Tangerine"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "Kiki"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Rihanna"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Solange"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Lizzo"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Janelle Monáe"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Madonna"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "Frank Ocean"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Redefining Realness"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Becoming"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "The House of Impossible Beauties"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "Sister Outsider"
+      },
+      {
+        "id": "M23",
+        "domain": "book",
+        "name": "Giovanni's Room"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "RuPaul's Drag Race"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Legendary"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Insecure"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "American Horror Story"
+      },
+      {
+        "id": "M28",
+        "domain": "tv_show",
+        "name": "Euphoria"
+      },
+      {
+        "id": "M29",
+        "domain": "tv_show",
+        "name": "Queer Eye"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "theatrical"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "stylized"
+      },
+      {
+        "id": "M32",
+        "domain": "style",
+        "name": "high-energy"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "ensemble-driven"
+      },
+      {
+        "id": "M34",
+        "domain": "style",
+        "name": "glossy"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "glamorous"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "gold and sequins"
+      },
+      {
+        "id": "M37",
+        "domain": "aesthetic",
+        "name": "maximalist"
+      },
+      {
+        "id": "M38",
+        "domain": "aesthetic",
+        "name": "fashion-forward"
+      },
+      {
+        "id": "M39",
+        "domain": "aesthetic",
+        "name": "neon nightlife"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "empowering"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "defiant"
+      },
+      {
+        "id": "M42",
+        "domain": "tone",
+        "name": "celebratory"
+      },
+      {
+        "id": "M43",
+        "domain": "tone",
+        "name": "heartfelt"
+      },
+      {
+        "id": "M44",
+        "domain": "tone",
+        "name": "sassy"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "chosen family"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "self-expression"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "Black excellence"
+      },
+      {
+        "id": "M48",
+        "domain": "qualities",
+        "name": "queer identity"
+      },
+      {
+        "id": "M49",
+        "domain": "qualities",
+        "name": "performance and fierceness"
+      }
+    ],
+    "designSketch": {
+      "summary": "A warm ballroom-night café page: deep plum and gold with a hot pink accent, Didone display headlines like a runway card, menu laid out as ballroom categories, and copy about the café as a house where everyone belongs.",
+      "palette": [
+        "#2a0f2e",
+        "#d4a537",
+        "#ff3d8b",
+        "#f6ede0",
+        "#111111"
+      ],
+      "fonts": [
+        "Bodoni Moda",
+        "Jost",
+        "Pinyon Script"
+      ],
+      "sections": [
+        "hero",
+        "house",
+        "menu",
+        "categories",
+        "events",
+        "visit"
+      ],
+      "motifs": [
+        "ballroom category cards",
+        "gold foil rules",
+        "runway spotlight",
+        "chosen family table"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:10:13.103Z",
+    "sha256": "808668b2d8e69d2a5a0f276e00ca14bbff33dfdce6c541d4828f8e212d549dde"
+  }
+}

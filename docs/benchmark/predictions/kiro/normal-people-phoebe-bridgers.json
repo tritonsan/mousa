@@ -1,0 +1,301 @@
+{
+  "audience": "normal-people-phoebe-bridgers",
+  "seeds": [
+    "Normal People",
+    "Phoebe Bridgers"
+  ],
+  "host": "kiro",
+  "hostVersion": "kiro-cli-chat 2.24.0",
+  "model": "claude-opus-5.5",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Normal People and Phoebe Bridgers. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Literary, emotionally articulate twenty- and thirty-somethings drawn to quiet heartbreak, intimacy and wry melancholy; they like indie folk, Irish and millennial fiction, and A24-style coming-of-age films, and value unpretentious, lived-in places.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Aesop"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Glossier"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Patagonia"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Penguin Classics"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Rough Trade"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Urban Outfitters"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Lady Bird"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Aftersun"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Frances Ha"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Past Lives"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Call Me by Your Name"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "Eternal Sunshine of the Spotless Mind"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Lucy Dacus"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Julien Baker"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "boygenius"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Mitski"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Big Thief"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "Taylor Swift"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Conversations with Friends"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Beautiful World, Where Are You"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "My Year of Rest and Relaxation"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "A Little Life"
+      },
+      {
+        "id": "M23",
+        "domain": "book",
+        "name": "Intermezzo"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Fleabag"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Derry Girls"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Normal People"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Euphoria"
+      },
+      {
+        "id": "M28",
+        "domain": "tv_show",
+        "name": "Ted Lasso"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "quiet"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "slow-paced"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "intimate close-ups"
+      },
+      {
+        "id": "M32",
+        "domain": "style",
+        "name": "naturalistic light"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "understated"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "muted natural light"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "grainy film texture"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "lived-in domestic interiors"
+      },
+      {
+        "id": "M37",
+        "domain": "aesthetic",
+        "name": "soft pastels"
+      },
+      {
+        "id": "M38",
+        "domain": "aesthetic",
+        "name": "handwritten notes"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "melancholic"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "tender"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "introspective"
+      },
+      {
+        "id": "M42",
+        "domain": "tone",
+        "name": "bittersweet"
+      },
+      {
+        "id": "M43",
+        "domain": "tone",
+        "name": "wry"
+      },
+      {
+        "id": "M44",
+        "domain": "qualities",
+        "name": "unspoken longing"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "coming of age"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "emotional vulnerability"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "small-town intimacy"
+      },
+      {
+        "id": "M48",
+        "domain": "qualities",
+        "name": "quiet heartbreak"
+      }
+    ],
+    "designSketch": {
+      "summary": "A quiet, literary one-pager for Common Table: warm off-white paper, muted sage and dusk-blue accents, a book serif with a handwritten note for the specials, grainy natural-light photography of a shared table and slow fade-in reveals.",
+      "palette": [
+        "#f3eee6",
+        "#2f3a40",
+        "#8a9a86",
+        "#c9a98c",
+        "#5b6f8a"
+      ],
+      "fonts": [
+        "Literata",
+        "Instrument Serif",
+        "Caveat"
+      ],
+      "sections": [
+        "hero",
+        "about",
+        "menu",
+        "the-table",
+        "hours",
+        "visit"
+      ],
+      "motifs": [
+        "a shared table seen from above",
+        "handwritten specials board",
+        "late-afternoon window light",
+        "quiet, wry copy",
+        "film grain"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:07:50.735Z",
+    "sha256": "1eb2f55d518e86ca4b774bc5aed4f09c1de2c922ab29d840f9bae2489d55f8a7"
+  }
+}

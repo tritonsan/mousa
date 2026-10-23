@@ -1,0 +1,277 @@
+{
+  "audience": "succession-radiohead",
+  "seeds": [
+    "Succession",
+    "Radiohead"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Succession and Radiohead. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured hypothesis is that people who love Succession and Radiohead enjoy sharp social observation, emotional ambiguity and formally adventurous work. For Common Table I expect an affinity for considered materials and understated cultural character, with the café's everyday welcome tempering the references' unease.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Aesop"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Margaret Howell"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "COS"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Comme des Garçons"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "There Will Be Blood"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "The Social Network"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "The Lobster"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Phantom Thread"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "The Master"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Portishead"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Massive Attack"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Björk"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Talking Heads"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Aphex Twin"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "The Corrections"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "White Noise"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "Normal People"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "Never Let Me Go"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "The Secret History"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Severance"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "Industry"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "The White Lotus"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Mad Men"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Peep Show"
+      },
+      {
+        "id": "M25",
+        "domain": "style",
+        "name": "slow-building tension"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "precise framing"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "abrupt rhythmic interruptions"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "observational realism"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "restrained visual exposition"
+      },
+      {
+        "id": "M30",
+        "domain": "aesthetic",
+        "name": "muted earth tones"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "tactile uncoated paper"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "dark timber"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "brushed metal"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "spare modernist typography"
+      },
+      {
+        "id": "M35",
+        "domain": "tone",
+        "name": "dry wit"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "melancholy"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "unease"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "intimacy"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "moral ambiguity"
+      },
+      {
+        "id": "M40",
+        "domain": "qualities",
+        "name": "social alienation"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "critique of status and power"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "beauty under tension"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "emotional vulnerability"
+      },
+      {
+        "id": "M44",
+        "domain": "qualities",
+        "name": "meticulous craft"
+      }
+    ],
+    "designSketch": {
+      "summary": "From this prediction alone, I would make Common Table a quiet editorial café page with oversized literary headings, a disciplined asymmetric grid, warm paper and charcoal colours, candid close-up photographs of coffee and communal tables, brief dry-witted copy and slow unobtrusive transitions, keeping the menu and visit details easy to find.",
+      "palette": [
+        "#eee9df",
+        "#252522",
+        "#787c70",
+        "#815342"
+      ],
+      "fonts": [
+        "Instrument Serif",
+        "Libre Franklin"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "the-table",
+        "neighbourhood",
+        "visit"
+      ],
+      "motifs": [
+        "fine editorial rules",
+        "generous margins with offset captions",
+        "natural-light photographs with visible grain",
+        "small typeset menu annotations"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:00:40.940Z",
+    "sha256": "ae1d42baf3d0c405f289452340cf29bdf372973d7d180c9ce5bc61d318908e86"
+  }
+}

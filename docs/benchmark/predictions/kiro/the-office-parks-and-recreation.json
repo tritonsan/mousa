@@ -1,0 +1,310 @@
+{
+  "audience": "the-office-parks-and-recreation",
+  "seeds": [
+    "The Office",
+    "Parks and Recreation"
+  ],
+  "host": "kiro",
+  "hostVersion": "kiro-cli-chat 2.24.0",
+  "model": "claude-opus-5.5",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love The Office and Parks and Recreation. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Fans of warm, mockumentary workplace sitcoms: they love ensemble comedy about ordinary small institutions, cringe humour that turns out to be kind, and comfort rewatches; they gravitate to cosy, slightly nerdy, earnest-but-ironic culture.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Dunder Mifflin"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Trader Joe's"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Target"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Starbucks"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Etsy"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Netflix"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Anchorman: The Legend of Ron Burgundy"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Step Brothers"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Superbad"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Bridesmaids"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "The 40-Year-Old Virgin"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "21 Jump Street"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Taylor Swift"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Vampire Weekend"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Andy Grammer"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Lin-Manuel Miranda"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "The Lumineers"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "Yes Please"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Bossypants"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Is Everyone Hanging Out Without Me?"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "The Hitchhiker's Guide to the Galaxy"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "Paddle Your Own Canoe"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Brooklyn Nine-Nine"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Community"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Arrested Development"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Superstore"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Abbott Elementary"
+      },
+      {
+        "id": "M28",
+        "domain": "tv_show",
+        "name": "30 Rock"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "mockumentary"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "talking-head asides"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "fast ensemble banter"
+      },
+      {
+        "id": "M32",
+        "domain": "style",
+        "name": "handheld documentary camera"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "episodic and bingeable"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "fluorescent office beige"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "small-town civic Americana"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "drab-but-warm interiors"
+      },
+      {
+        "id": "M37",
+        "domain": "aesthetic",
+        "name": "bulletin boards and sticky notes"
+      },
+      {
+        "id": "M38",
+        "domain": "aesthetic",
+        "name": "homely retro"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "warm"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "cringe"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "heartfelt"
+      },
+      {
+        "id": "M42",
+        "domain": "tone",
+        "name": "absurd"
+      },
+      {
+        "id": "M43",
+        "domain": "tone",
+        "name": "optimistic"
+      },
+      {
+        "id": "M44",
+        "domain": "tone",
+        "name": "deadpan"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "found family"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "workplace comedy"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "small-town community"
+      },
+      {
+        "id": "M48",
+        "domain": "qualities",
+        "name": "awkward humour"
+      },
+      {
+        "id": "M49",
+        "domain": "qualities",
+        "name": "comfort viewing"
+      },
+      {
+        "id": "M50",
+        "domain": "qualities",
+        "name": "earnest optimism"
+      }
+    ],
+    "designSketch": {
+      "summary": "A warm civic-noticeboard café page: cream paper and corkboard tones, a slab-serif masthead, typewriter memo-style menu and deadpan 'talking head' captions celebrating the regulars as a found family.",
+      "palette": [
+        "#f4ebd9",
+        "#c8a26b",
+        "#2f4a3a",
+        "#d9533b",
+        "#3b3b3b"
+      ],
+      "fonts": [
+        "Zilla Slab",
+        "Courier Prime",
+        "Caveat"
+      ],
+      "sections": [
+        "hero",
+        "menu",
+        "regulars",
+        "events",
+        "visit"
+      ],
+      "motifs": [
+        "corkboard pinned notes",
+        "office memo menu",
+        "talking-head quote cards",
+        "town-hall event flyer",
+        "sticky-note specials"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:03:42.420Z",
+    "sha256": "9e902edfb01b9a471d47a07e60c556cb97439291fced23e56c7ef1c086c935eb"
+  }
+}

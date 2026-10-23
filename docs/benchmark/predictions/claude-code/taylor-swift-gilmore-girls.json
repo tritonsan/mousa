@@ -1,0 +1,316 @@
+{
+  "audience": "taylor-swift-gilmore-girls",
+  "seeds": [
+    "Taylor Swift",
+    "Gilmore Girls"
+  ],
+  "host": "claude-code",
+  "hostVersion": "2.1.284 (Claude Code)",
+  "model": "claude-opus-5-5[1m]",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Taylor Swift and Gilmore Girls. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Mostly millennial and Gen-Z women who love confessional, literate pop and fast-talking small-town comfort TV: they want cosy autumn nostalgia, bookishness, coffee rituals and the feeling of belonging in a close-knit town where everyone knows your order.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Starbucks"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Urban Outfitters"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Free People"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Madewell"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Barnes & Noble"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Polaroid"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "You've Got Mail"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Little Women"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "When Harry Met Sally..."
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Pride & Prejudice"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "The Holiday"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "10 Things I Hate About You"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Phoebe Bridgers"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Olivia Rodrigo"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Lana Del Rey"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Lorde"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Gracie Abrams"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "Sabrina Carpenter"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "The Seven Husbands of Evelyn Hugo"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Normal People"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "Beach Read"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "Jane Eyre"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Gossip Girl"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Friends"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "One Tree Hill"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Grey's Anatomy"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Ginny & Georgia"
+      },
+      {
+        "id": "M28",
+        "domain": "tv_show",
+        "name": "New Girl"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "dialogue-driven"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "quick witty banter"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "slow-burn romance"
+      },
+      {
+        "id": "M32",
+        "domain": "style",
+        "name": "episodic small-town rhythm"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "warm montage"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "cosy autumn"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "vintage"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "cottagecore"
+      },
+      {
+        "id": "M37",
+        "domain": "aesthetic",
+        "name": "plaid and knitwear"
+      },
+      {
+        "id": "M38",
+        "domain": "aesthetic",
+        "name": "handwritten notes"
+      },
+      {
+        "id": "M39",
+        "domain": "aesthetic",
+        "name": "warm film grain"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "nostalgic"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "heartfelt"
+      },
+      {
+        "id": "M42",
+        "domain": "tone",
+        "name": "witty"
+      },
+      {
+        "id": "M43",
+        "domain": "tone",
+        "name": "bittersweet"
+      },
+      {
+        "id": "M44",
+        "domain": "tone",
+        "name": "romantic"
+      },
+      {
+        "id": "M45",
+        "domain": "tone",
+        "name": "comforting"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "small-town community"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "coming of age"
+      },
+      {
+        "id": "M48",
+        "domain": "qualities",
+        "name": "mother-daughter and friendship bonds"
+      },
+      {
+        "id": "M49",
+        "domain": "qualities",
+        "name": "literary references"
+      },
+      {
+        "id": "M50",
+        "domain": "qualities",
+        "name": "seasonal ritual"
+      },
+      {
+        "id": "M51",
+        "domain": "qualities",
+        "name": "heartbreak and healing"
+      }
+    ],
+    "designSketch": {
+      "summary": "A warm autumnal one-page café site styled like a small-town diner chalkboard meets a well-thumbed paperback: cream paper, maple and burgundy accents, a literary serif with handwritten margin notes, sections for the menu, a bookshelf corner, town events and a regulars' wall, with quick witty copy.",
+      "palette": [
+        "#f4ebdd",
+        "#7a2e2e",
+        "#c8742b",
+        "#3e4a3d",
+        "#2b211c"
+      ],
+      "fonts": [
+        "Literata",
+        "DM Serif Display",
+        "Caveat"
+      ],
+      "sections": [
+        "hero",
+        "menu",
+        "book-nook",
+        "town-events",
+        "regulars",
+        "visit"
+      ],
+      "motifs": [
+        "coffee ring stains on paper",
+        "falling autumn leaves",
+        "handwritten margin notes",
+        "chalkboard specials",
+        "friendship-bracelet beads"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T13:58:56.332Z",
+    "sha256": "2bad95475fe2fe1079ceb7a4384fda38b754eaf5277ea049543d0c775374c189"
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "audience": "normal-people-phoebe-bridgers",
+  "seeds": [
+    "Normal People",
+    "Phoebe Bridgers"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Normal People and Phoebe Bridgers. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured prediction is that people who love Normal People and Phoebe Bridgers also gravitate toward intimate stories, emotionally candid songwriting, and ordinary places that leave room for solitude and connection. These are my assumptions from the two references, not measured audience findings.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Aesop"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Toast"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "COS"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Moleskine"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "Aftersun"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Lady Bird"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Past Lives"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Frances Ha"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Before Sunrise"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Julien Baker"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Lucy Dacus"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Adrianne Lenker"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Mitski"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Sufjan Stevens"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "Conversations with Friends"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "Beautiful World, Where Are You"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "Writers & Lovers"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "On Earth We're Briefly Gorgeous"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Just Kids"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Fleabag"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "My Brilliant Friend"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "One Day"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Somebody Somewhere"
+      },
+      {
+        "id": "M24",
+        "domain": "style",
+        "name": "unhurried observation"
+      },
+      {
+        "id": "M25",
+        "domain": "style",
+        "name": "naturalistic dialogue"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "quiet pauses"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "close attention to small gestures"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "elliptical storytelling"
+      },
+      {
+        "id": "M29",
+        "domain": "aesthetic",
+        "name": "muted earth colours"
+      },
+      {
+        "id": "M30",
+        "domain": "aesthetic",
+        "name": "soft daylight"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "visible paper grain"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "worn wood"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "unpolished everyday photography"
+      },
+      {
+        "id": "M34",
+        "domain": "tone",
+        "name": "tender"
+      },
+      {
+        "id": "M35",
+        "domain": "tone",
+        "name": "wistful"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "emotionally candid"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "quietly funny"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "bittersweet"
+      },
+      {
+        "id": "M39",
+        "domain": "qualities",
+        "name": "intimacy in ordinary life"
+      },
+      {
+        "id": "M40",
+        "domain": "qualities",
+        "name": "belonging alongside solitude"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "vulnerability without sentimentality"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "complicated relationships"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "beauty in imperfect things"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these assumptions alone, I would make Common Table a quiet, literary one-page café website with warm paper tones, generous breathing room, candid daylight photographs of shared tables and small daily rituals, a concise menu, and immediately accessible visiting information.",
+      "palette": [
+        "#f3eee5",
+        "#302d2a",
+        "#827b68",
+        "#a16b56",
+        "#c7cdd0"
+      ],
+      "fonts": [
+        "Literata",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "around-the-table",
+        "neighbourhood-notes",
+        "visit"
+      ],
+      "motifs": [
+        "book-page spacing and thin rules",
+        "small photographic scenes of cups and shared tables",
+        "subtle paper grain",
+        "plainspoken invitations to linger",
+        "gentle fades with reduced-motion support"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:07:28.481Z",
+    "sha256": "0c13251247970097a60865fd3465d37102151172ce4f35ac936966c186d813cc"
+  }
+}

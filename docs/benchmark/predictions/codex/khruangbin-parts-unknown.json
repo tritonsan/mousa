@@ -1,0 +1,284 @@
+{
+  "audience": "khruangbin-parts-unknown",
+  "seeds": [
+    "Khruangbin",
+    "Anthony Bourdain: Parts Unknown"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Khruangbin and Anthony Bourdain: Parts Unknown. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured prediction is that people who love Khruangbin and Anthony Bourdain: Parts Unknown seek unhurried musical discovery, everyday food culture, and encounters told with curiosity and candour. I expect them to enjoy a neighbourhood café that feels lived in, convivial, and attentive to the people behind its food.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Patagonia"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Carhartt WIP"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Aesop"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Le Creuset"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "Chef"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Paterson"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "In the Mood for Love"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Coffee and Cigarettes"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "The Darjeeling Limited"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Men I Trust"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "BADBADNOTGOOD"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Mulatu Astatke"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Hermanos Gutiérrez"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Fela Kuti"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Cymande"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "Kitchen Confidential"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "A Cook's Tour"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "Just Kids"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "The Art of Travel"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "The Geography of Bliss"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "Somebody Feed Phil"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Chef's Table"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "The Bear"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Street Food"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "The Mind of a Chef"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "unhurried observational scenes"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "episodic travelogue rhythm"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "intimate conversational framing"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "lingering environmental detail"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "rhythmic musical interludes"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "warm analogue grain"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "sun-faded printed paper"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "worn timber"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "handmade ceramic surfaces"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "deep earthy colour accents"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "curious"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "convivial"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "candid"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "wry"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "reflective"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "cross-cultural discovery"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "respect for everyday craft"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "food as a social connection"
+      },
+      {
+        "id": "M44",
+        "domain": "qualities",
+        "name": "independent creative spirit"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "pleasure in ordinary rituals"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these assumptions alone, I would make Common Table a warm, leisurely one-page café site with oversized serif headlines, candid photographs of shared meals and their makers, a compact seasonal menu, and clear visiting details.",
+      "palette": [
+        "#f3ebdd",
+        "#292d25",
+        "#a64b34",
+        "#c49c53",
+        "#66715a"
+      ],
+      "fonts": [
+        "DM Serif Display",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "seasonal-menu",
+        "our-table",
+        "listening-notes",
+        "visit"
+      ],
+      "motifs": [
+        "printed neighbourhood menu",
+        "candid communal-table photography",
+        "small handwritten marginal notes",
+        "generous pauses between sections",
+        "fine rules and irregular photo crops"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:05:11.578Z",
+    "sha256": "07f9e71682c8421f40bf167855ff2f17ad8a1c6f750eebf7a2f2712ae274cb54"
+  }
+}

@@ -1,0 +1,254 @@
+{
+  "audience": "norwegian-wood-ryuichi-sakamoto",
+  "seeds": [
+    "Norwegian Wood",
+    "Ryuichi Sakamoto"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Norwegian Wood and Ryuichi Sakamoto. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured guess is that people who love Norwegian Wood and Ryuichi Sakamoto are drawn to intimate accounts of ordinary life, unresolved longing, and attentive listening. I expect literary warmth and spare, tactile surroundings to appeal to them; these are predictions from the supplied references, not measured audience findings.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "MUJI"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Aesop"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "A.P.C."
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "HAY"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "In the Mood for Love"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Still Walking"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Perfect Days"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Paterson"
+      },
+      {
+        "id": "M09",
+        "domain": "artist",
+        "name": "Hiroshi Yoshimura"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Harold Budd"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Brian Eno"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Ichiko Aoba"
+      },
+      {
+        "id": "M13",
+        "domain": "book",
+        "name": "Kitchen"
+      },
+      {
+        "id": "M14",
+        "domain": "book",
+        "name": "The Remains of the Day"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "Strange Weather in Tokyo"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "The Book of Disquiet"
+      },
+      {
+        "id": "M17",
+        "domain": "tv_show",
+        "name": "Midnight Diner"
+      },
+      {
+        "id": "M18",
+        "domain": "tv_show",
+        "name": "Mushishi"
+      },
+      {
+        "id": "M19",
+        "domain": "tv_show",
+        "name": "Detectorists"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Normal People"
+      },
+      {
+        "id": "M21",
+        "domain": "style",
+        "name": "unhurried observation"
+      },
+      {
+        "id": "M22",
+        "domain": "style",
+        "name": "elliptical storytelling"
+      },
+      {
+        "id": "M23",
+        "domain": "style",
+        "name": "long quiet pauses"
+      },
+      {
+        "id": "M24",
+        "domain": "style",
+        "name": "intimate everyday detail"
+      },
+      {
+        "id": "M25",
+        "domain": "aesthetic",
+        "name": "uncoated paper"
+      },
+      {
+        "id": "M26",
+        "domain": "aesthetic",
+        "name": "weathered timber"
+      },
+      {
+        "id": "M27",
+        "domain": "aesthetic",
+        "name": "soft window light"
+      },
+      {
+        "id": "M28",
+        "domain": "aesthetic",
+        "name": "muted natural colours"
+      },
+      {
+        "id": "M29",
+        "domain": "aesthetic",
+        "name": "sparse compositions"
+      },
+      {
+        "id": "M30",
+        "domain": "tone",
+        "name": "tender"
+      },
+      {
+        "id": "M31",
+        "domain": "tone",
+        "name": "wistful"
+      },
+      {
+        "id": "M32",
+        "domain": "tone",
+        "name": "contemplative"
+      },
+      {
+        "id": "M33",
+        "domain": "tone",
+        "name": "quietly hopeful"
+      },
+      {
+        "id": "M34",
+        "domain": "tone",
+        "name": "emotionally restrained"
+      },
+      {
+        "id": "M35",
+        "domain": "qualities",
+        "name": "memory and passing time"
+      },
+      {
+        "id": "M36",
+        "domain": "qualities",
+        "name": "beauty in everyday rituals"
+      },
+      {
+        "id": "M37",
+        "domain": "qualities",
+        "name": "solitude alongside companionship"
+      },
+      {
+        "id": "M38",
+        "domain": "qualities",
+        "name": "attention to sound and silence"
+      },
+      {
+        "id": "M39",
+        "domain": "qualities",
+        "name": "human imperfection"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these guesses alone, I would make Common Table a quiet, booklike single page in warm paper, dark brown and moss green, pairing generous literary type with candid window-lit café photographs, a plainly readable menu and an easy-to-find visit section.",
+      "palette": [
+        "#f3eee4",
+        "#302d28",
+        "#727b66",
+        "#b08b71",
+        "#d8d0c3"
+      ],
+      "fonts": [
+        "Literata",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "our-table",
+        "quiet-moments",
+        "visit"
+      ],
+      "motifs": [
+        "wide margins and generous pauses",
+        "small booklike captions",
+        "soft daylight on communal wooden tables",
+        "fine rules between menu entries",
+        "gentle fades respecting reduced motion"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:11:35.696Z",
+    "sha256": "82a649c7e1c1b272fa368c280b5b78864e4131a05de101c702ee0ef7cad2c788"
+  }
+}

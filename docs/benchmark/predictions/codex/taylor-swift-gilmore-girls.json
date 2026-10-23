@@ -1,0 +1,293 @@
+{
+  "audience": "taylor-swift-gilmore-girls",
+  "seeds": [
+    "Taylor Swift",
+    "Gilmore Girls"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Taylor Swift and Gilmore Girls. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured guess is that people who love Taylor Swift and Gilmore Girls enjoy intimate storytelling, quick wit, romantic longing and the comfort of familiar rituals. For Common Table, I expect that to translate into a welcoming, bookish neighbourhood café with room for friendship and quiet reflection.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Anthropologie"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Sézane"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Rifle Paper Co."
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Free People"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Penguin Books"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "You've Got Mail"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Little Women (2019)"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "When Harry Met Sally..."
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Pride & Prejudice (2005)"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "The Holiday"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Phoebe Bridgers"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Lana Del Rey"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Kacey Musgraves"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Gracie Abrams"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Carole King"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "Pride and Prejudice"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "Little Women"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "Normal People"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Book Lovers"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Anne of Green Gables"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "The Marvelous Mrs. Maisel"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Hart of Dixie"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "New Girl"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Dawson's Creek"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Felicity"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "brisk conversational exchanges"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "unhurried everyday interludes"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "ensemble storytelling"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "seasonal rhythms"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "intimate character focus"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "warm wood"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "cream paper"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "autumnal colours"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "handwritten marginalia"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "well-loved books"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "soft window light"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "witty"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "wistful"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "hopeful"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "affectionate"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "confessional"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "belonging through everyday rituals"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "friendship across generations"
+      },
+      {
+        "id": "M44",
+        "domain": "qualities",
+        "name": "romantic yearning"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "finding a home"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "nostalgia"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "personal growth"
+      }
+    ],
+    "designSketch": {
+      "summary": "From this prediction alone, I would make a warm literary café page with a generous window-lit table photograph, cream paper surfaces, burgundy headings, conversational copy and an easy path to the menu and visiting details.",
+      "palette": [
+        "#f5ede0",
+        "#422f28",
+        "#7b3545",
+        "#687158",
+        "#c58a55"
+      ],
+      "fonts": [
+        "Literata",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "our-table",
+        "neighbourhood-notes",
+        "visit"
+      ],
+      "motifs": [
+        "printed menu rules",
+        "small handwritten notes",
+        "subtle paper grain",
+        "bookish chapter spacing"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T13:59:08.642Z",
+    "sha256": "972bdbde409fd9b3af4bdb4dd3aeb455fe6b618c89163b537894993414353398"
+  }
+}

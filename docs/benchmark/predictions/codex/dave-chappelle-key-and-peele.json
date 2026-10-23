@@ -1,0 +1,249 @@
+{
+  "audience": "dave-chappelle-key-and-peele",
+  "seeds": [
+    "Dave Chappelle",
+    "Key & Peele"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Dave Chappelle and Key & Peele. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured guess is that people who love Dave Chappelle and Key & Peele enjoy sharp observational comedy, carefully staged absurdity and stories that turn everyday social friction into recognition. I expect an appreciation for conversational warmth alongside irreverence; these are hypotheses from the named comedy references, not measured audience facts.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Converse"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Carhartt WIP"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Vans"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Levi's"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "Get Out"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Friday"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Sorry to Bother You"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Do the Right Thing"
+      },
+      {
+        "id": "M09",
+        "domain": "artist",
+        "name": "Kendrick Lamar"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "OutKast"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "A Tribe Called Quest"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "D'Angelo"
+      },
+      {
+        "id": "M13",
+        "domain": "book",
+        "name": "Born a Crime"
+      },
+      {
+        "id": "M14",
+        "domain": "book",
+        "name": "The Sellout"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "Me Talk Pretty One Day"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "Between the World and Me"
+      },
+      {
+        "id": "M17",
+        "domain": "tv_show",
+        "name": "Atlanta"
+      },
+      {
+        "id": "M18",
+        "domain": "tv_show",
+        "name": "The Boondocks"
+      },
+      {
+        "id": "M19",
+        "domain": "tv_show",
+        "name": "In Living Color"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Curb Your Enthusiasm"
+      },
+      {
+        "id": "M21",
+        "domain": "style",
+        "name": "Conversational setups with sudden reversals"
+      },
+      {
+        "id": "M22",
+        "domain": "style",
+        "name": "Patient pauses before a punchline"
+      },
+      {
+        "id": "M23",
+        "domain": "style",
+        "name": "Cinematic framing of ordinary situations"
+      },
+      {
+        "id": "M24",
+        "domain": "style",
+        "name": "Short episodic scenes with escalating absurdity"
+      },
+      {
+        "id": "M25",
+        "domain": "aesthetic",
+        "name": "Warm lived-in interiors"
+      },
+      {
+        "id": "M26",
+        "domain": "aesthetic",
+        "name": "Strong typographic contrast"
+      },
+      {
+        "id": "M27",
+        "domain": "aesthetic",
+        "name": "Unpolished tactile surfaces"
+      },
+      {
+        "id": "M28",
+        "domain": "aesthetic",
+        "name": "Everyday objects framed with theatrical care"
+      },
+      {
+        "id": "M29",
+        "domain": "tone",
+        "name": "Wry"
+      },
+      {
+        "id": "M30",
+        "domain": "tone",
+        "name": "Irreverent"
+      },
+      {
+        "id": "M31",
+        "domain": "tone",
+        "name": "Convivial"
+      },
+      {
+        "id": "M32",
+        "domain": "tone",
+        "name": "Observant"
+      },
+      {
+        "id": "M33",
+        "domain": "tone",
+        "name": "Playfully absurd"
+      },
+      {
+        "id": "M34",
+        "domain": "qualities",
+        "name": "Social observation"
+      },
+      {
+        "id": "M35",
+        "domain": "qualities",
+        "name": "Subverted expectations"
+      },
+      {
+        "id": "M36",
+        "domain": "qualities",
+        "name": "Everyday rituals made memorable"
+      },
+      {
+        "id": "M37",
+        "domain": "qualities",
+        "name": "Distinctive personal voices"
+      },
+      {
+        "id": "M38",
+        "domain": "qualities",
+        "name": "Humor with an underlying point of view"
+      }
+    ],
+    "designSketch": {
+      "summary": "From this prediction alone, I would make Common Table a warm, conversational one-page café site with oversized editorial headings, candid table-level photography, a clearly priced menu and short, wry copy punctuating an easy route to visiting.",
+      "palette": [
+        "#f4ebdd",
+        "#29221f",
+        "#b65332",
+        "#d8ac59",
+        "#65705b"
+      ],
+      "fonts": [
+        "Space Grotesk",
+        "Literata"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "around-the-table",
+        "our-story",
+        "visit"
+      ],
+      "motifs": [
+        "Oversized headings paired with brief conversational asides",
+        "Paper-toned menu panels with restrained rule lines",
+        "Candid close-ups of coffee, food and shared tables",
+        "Generous pauses between compact content sections",
+        "A single terracotta accent for menu and directions links"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:04:14.645Z",
+    "sha256": "82f82c54d112107f8fbc81febd5b5121d6aca5e5dac43558d049966ca9945c64"
+  }
+}

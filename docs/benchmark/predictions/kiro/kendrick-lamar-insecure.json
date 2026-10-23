@@ -1,0 +1,304 @@
+{
+  "audience": "kendrick-lamar-insecure",
+  "seeds": [
+    "Kendrick Lamar",
+    "Insecure"
+  ],
+  "host": "kiro",
+  "hostVersion": "kiro-cli-chat 2.24.0",
+  "model": "claude-opus-5.5",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Kendrick Lamar and Insecure. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Culturally engaged, mostly urban adults who follow conscious, lyrical hip-hop and character-driven Black comedy-drama; they value authenticity, neighbourhood pride, wit and warm, sunlit Los Angeles textures.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Nike"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Fenty Beauty"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Telfar"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Aimé Leon Dore"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Apple"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Patagonia"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Moonlight"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Get Out"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Black Panther"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Sorry to Bother You"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Queen & Slim"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "If Beale Street Could Talk"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "SZA"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "J. Cole"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Solange"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Frank Ocean"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Anderson .Paak"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "Childish Gambino"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Between the World and Me"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "The Fire Next Time"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "Their Eyes Were Watching God"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "Beloved"
+      },
+      {
+        "id": "M23",
+        "domain": "book",
+        "name": "Becoming"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Atlanta"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Master of None"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Dear White People"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Black-ish"
+      },
+      {
+        "id": "M28",
+        "domain": "tv_show",
+        "name": "Abbott Elementary"
+      },
+      {
+        "id": "M29",
+        "domain": "tv_show",
+        "name": "Random Acts of Flyness"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "slice of life"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "naturalistic"
+      },
+      {
+        "id": "M32",
+        "domain": "style",
+        "name": "sun-drenched cinematography"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "dialogue-driven"
+      },
+      {
+        "id": "M34",
+        "domain": "style",
+        "name": "unhurried"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "warm golden-hour light"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "saturated skin tones"
+      },
+      {
+        "id": "M37",
+        "domain": "aesthetic",
+        "name": "streetwear"
+      },
+      {
+        "id": "M38",
+        "domain": "aesthetic",
+        "name": "urban vernacular"
+      },
+      {
+        "id": "M39",
+        "domain": "aesthetic",
+        "name": "grainy film"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "introspective"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "witty"
+      },
+      {
+        "id": "M42",
+        "domain": "tone",
+        "name": "candid"
+      },
+      {
+        "id": "M43",
+        "domain": "tone",
+        "name": "defiant"
+      },
+      {
+        "id": "M44",
+        "domain": "tone",
+        "name": "tender"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "Black identity and community"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "coming of age in the city"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "friendship"
+      },
+      {
+        "id": "M48",
+        "domain": "qualities",
+        "name": "social commentary"
+      },
+      {
+        "id": "M49",
+        "domain": "qualities",
+        "name": "authenticity"
+      }
+    ],
+    "designSketch": {
+      "summary": "A warm, golden-hour neighbourhood café page with bold display serif headlines over grainy sunlit photography, conversational candid copy and a community-board feel.",
+      "palette": [
+        "#1c1712",
+        "#f3e6d0",
+        "#d98a3d",
+        "#7a2e1f",
+        "#3f5a3c"
+      ],
+      "fonts": [
+        "DM Serif Display",
+        "Libre Franklin",
+        "Caveat"
+      ],
+      "sections": [
+        "hero",
+        "menu",
+        "story",
+        "community",
+        "visit"
+      ],
+      "motifs": [
+        "golden-hour light",
+        "handwritten chalkboard notes",
+        "neighbourhood map",
+        "table for everyone"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:00:30.301Z",
+    "sha256": "41f5a70b17e8e6e6d5fef650c561dbe8e30aba3863220a35a8208abcdc5bfaa6"
+  }
+}

@@ -1,0 +1,285 @@
+{
+  "audience": "grand-budapest-vampire-weekend",
+  "seeds": [
+    "The Grand Budapest Hotel",
+    "Vampire Weekend"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love The Grand Budapest Hotel and Vampire Weekend. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured prediction is that people who love The Grand Budapest Hotel and Vampire Weekend enjoy meticulous composition, literate wit, buoyant rhythms and nostalgia with an undercurrent of melancholy. For Common Table, I expect them to respond to a welcoming neighbourhood ritual presented with playful editorial care; these are my assumptions, not Qloo findings.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "A.P.C."
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Maison Kitsuné"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "J.Crew"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "MUJI"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Rifle Paper Co."
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Moonrise Kingdom"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "The Royal Tenenbaums"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "The Darjeeling Limited"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Amélie"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Frances Ha"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Phoenix"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Belle and Sebastian"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Sufjan Stevens"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Talking Heads"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "The Shins"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "The Royal Game"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "Franny and Zooey"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "The Dud Avocado"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "A Gentleman in Moscow"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "The Amazing Adventures of Kavalier & Clay"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "The Marvelous Mrs. Maisel"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Pushing Daisies"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Bored to Death"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Gilmore Girls"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Flight of the Conchords"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "carefully balanced framing"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "brisk episodic pacing"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "deliberate chapter breaks"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "rhythmic repetition with small surprises"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "lingering tableaux between lively passages"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "faded pastel surfaces"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "warm paper grain"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "polished wood and brass"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "neatly arranged everyday objects"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "vintage printed ephemera"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "wry"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "warmly sociable"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "wistful"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "lightly mischievous"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "earnest beneath the irony"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "literary curiosity"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "precise craftsmanship"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "cosmopolitan eclecticism"
+      },
+      {
+        "id": "M44",
+        "domain": "qualities",
+        "name": "affection for everyday rituals"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "nostalgia with youthful energy"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these assumptions alone, I would make Common Table a warm, precisely composed one-page café website with a buttercream ground, dusty rose and oxblood accents, literary headings, an illustrated table-setting hero, a compact menu and an inviting visit section, using restrained rhythmic reveals and gently witty copy.",
+      "palette": [
+        "#f6eedc",
+        "#d9a0a7",
+        "#713541",
+        "#4b6354",
+        "#292a26"
+      ],
+      "fonts": [
+        "DM Serif Display",
+        "Literata",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "our-table",
+        "neighbourhood-notes",
+        "visit"
+      ],
+      "motifs": [
+        "symmetrical café place-setting illustration",
+        "thin double-rule menu borders",
+        "small numbered chapter labels",
+        "paper menu cards",
+        "small off-centre handwritten annotations"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:08:16.919Z",
+    "sha256": "4a73a1382db53455809bd339f36c3ed947ef0ec4ff219ac182c6cbb382da0d12"
+  }
+}

@@ -1,0 +1,303 @@
+{
+  "audience": "elden-ring-berserk",
+  "seeds": [
+    "Elden Ring",
+    "Berserk"
+  ],
+  "host": "kiro",
+  "hostVersion": "kiro-cli-chat 2.24.0",
+  "model": "claude-opus-5.5",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Elden Ring and Berserk. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Dark-fantasy devotees who love punishing, lore-dense games and grim seinen manga: they prize melancholy grandeur, hand-crafted detail, endurance and the small warmth of rest between hardships.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "FromSoftware"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Bandai Namco"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Dark Horse Comics"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Games Workshop"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Crunchyroll"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Steam"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "The Lord of the Rings: The Fellowship of the Ring"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Princess Mononoke"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Excalibur"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "The Green Knight"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Conan the Barbarian"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "Berserk: The Golden Age Arc I - The Egg of the King"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Motoi Sakuraba"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Yuka Kitamura"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Susumu Hirasawa"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Shiro Sagisu"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Wardruna"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "Amon Amarth"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "A Song of Ice and Fire"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "The Lord of the Rings"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "Vagabond"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "Vinland Saga"
+      },
+      {
+        "id": "M23",
+        "domain": "book",
+        "name": "Claymore"
+      },
+      {
+        "id": "M24",
+        "domain": "book",
+        "name": "The Black Company"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Game of Thrones"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Attack on Titan"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Castlevania"
+      },
+      {
+        "id": "M28",
+        "domain": "tv_show",
+        "name": "Arcane"
+      },
+      {
+        "id": "M29",
+        "domain": "tv_show",
+        "name": "Berserk"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "slow-burn"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "atmospheric"
+      },
+      {
+        "id": "M32",
+        "domain": "style",
+        "name": "brooding"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "epic scale"
+      },
+      {
+        "id": "M34",
+        "domain": "style",
+        "name": "visceral action"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "gothic ruins"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "weathered stone and rusted iron"
+      },
+      {
+        "id": "M37",
+        "domain": "aesthetic",
+        "name": "candlelit gloom"
+      },
+      {
+        "id": "M38",
+        "domain": "aesthetic",
+        "name": "ink-hatched engraving"
+      },
+      {
+        "id": "M39",
+        "domain": "aesthetic",
+        "name": "gold leaf on black"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "melancholic"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "grim"
+      },
+      {
+        "id": "M42",
+        "domain": "tone",
+        "name": "defiant"
+      },
+      {
+        "id": "M43",
+        "domain": "tone",
+        "name": "solemn"
+      },
+      {
+        "id": "M44",
+        "domain": "tone",
+        "name": "bittersweet hope"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "dark fantasy"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "struggle against fate"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "hidden lore"
+      },
+      {
+        "id": "M48",
+        "domain": "qualities",
+        "name": "decay and grandeur"
+      },
+      {
+        "id": "M49",
+        "domain": "qualities",
+        "name": "lonely wanderer"
+      }
+    ],
+    "designSketch": {
+      "summary": "A candlelit, engraved-ink café page styled like a weathered grace site: near-black stone, tarnished gold rules, Cormorant Garamond headlines and a 'rest here' voice that frames the café as the bonfire between journeys.",
+      "palette": [
+        "#14110f",
+        "#2a2420",
+        "#b08d57",
+        "#e8dcc4",
+        "#7a1f1a"
+      ],
+      "fonts": [
+        "Cormorant Garamond",
+        "EB Garamond"
+      ],
+      "sections": [
+        "hearth",
+        "menu",
+        "rest",
+        "lore",
+        "visit"
+      ],
+      "motifs": [
+        "flickering candle glow",
+        "hatched ink engraving borders",
+        "tarnished gold dividers",
+        "rest-site as café"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:13:36.453Z",
+    "sha256": "894c59476a28cf1735d5565dfe65fe5d564f4aac36f06f0035f1123713ca7c7e"
+  }
+}

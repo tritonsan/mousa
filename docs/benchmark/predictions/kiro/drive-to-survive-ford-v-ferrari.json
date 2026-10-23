@@ -1,0 +1,289 @@
+{
+  "audience": "drive-to-survive-ford-v-ferrari",
+  "seeds": [
+    "Formula 1: Drive to Survive",
+    "Ford v Ferrari"
+  ],
+  "host": "kiro",
+  "hostVersion": "kiro-cli-chat 2.24.0",
+  "model": "claude-opus-5.5",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Formula 1: Drive to Survive and Ford v Ferrari. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Motorsport fans drawn in by the human drama behind racing: rivalries, engineering obsession, team politics and the glamour-plus-grit of the paddock. They like prestige sports documentaries and period racing films, precision brands and a fast, cinematic storytelling rhythm.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Ferrari"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Porsche"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "TAG Heuer"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Puma"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Red Bull"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "McLaren"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Rush"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Le Mans"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Senna"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Grand Prix"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Days of Thunder"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "Top Gun: Maverick"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Hans Zimmer"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "The Black Keys"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Imagine Dragons"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Queen"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "AC/DC"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "Total Competition"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "How to Build a Car"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Go Like Hell"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "The Mechanic: The Secret World of the F1 Pitlane"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "The Last Dance"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Top Gear"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "The Grand Tour"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Break Point"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Full Swing"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Sunderland 'Til I Die"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "fast-paced cutting"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "high-stakes tension"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "behind-the-scenes intimacy"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "slow-motion spectacle"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "glossy carbon and asphalt"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "bold livery colours"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "vintage 1960s motorsport"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "precision engineering"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "chequered and stripe graphics"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "adrenaline"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "rivalry"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "determination"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "nostalgic"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "triumphant"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "competition"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "underdog against giants"
+      },
+      {
+        "id": "M44",
+        "domain": "qualities",
+        "name": "obsessive craftsmanship"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "glamour and danger"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "teamwork under pressure"
+      }
+    ],
+    "designSketch": {
+      "summary": "A pit-wall café page: asphalt-dark ground with Ferrari red and GT40 Gulf-blue racing stripes, condensed poster headlines, a timing-screen menu in monospace with 'lap times' for brew times, and a race-weekend schedule for screenings.",
+      "palette": [
+        "#14161a",
+        "#d7261e",
+        "#f2efe8",
+        "#7fb2d9",
+        "#f0a73a"
+      ],
+      "fonts": [
+        "Big Shoulders Display",
+        "DM Mono",
+        "Libre Franklin"
+      ],
+      "sections": [
+        "hero",
+        "menu",
+        "race-weekends",
+        "the-crew",
+        "visit"
+      ],
+      "motifs": [
+        "racing stripes",
+        "timing-screen menu",
+        "chequered flag divider",
+        "grid-slot numbering"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:06:14.187Z",
+    "sha256": "315c4cc59048383433c532266abf0add506cb3c5d125a94af8fa65deb11de164"
+  }
+}

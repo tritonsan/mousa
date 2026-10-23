@@ -1,0 +1,239 @@
+{
+  "audience": "hollow-knight-spirited-away",
+  "seeds": [
+    "Hollow Knight",
+    "Spirited Away"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Hollow Knight and Spirited Away. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "I expect people who love Hollow Knight and Spirited Away to enjoy richly imagined worlds, small acts of kindness, and beauty tinged with loneliness. For Common Table, I predict an appetite for a welcoming everyday refuge with a quiet sense of discovery; these are my assumptions before any audience measurement.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "MUJI"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Moomin"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Nintendo"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Midori"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "My Neighbor Totoro"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Princess Mononoke"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Howl's Moving Castle"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Song of the Sea"
+      },
+      {
+        "id": "M09",
+        "domain": "artist",
+        "name": "Joe Hisaishi"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Ichiko Aoba"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Nujabes"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Agnes Obel"
+      },
+      {
+        "id": "M13",
+        "domain": "book",
+        "name": "Moominland Midwinter"
+      },
+      {
+        "id": "M14",
+        "domain": "book",
+        "name": "A Wizard of Earthsea"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "The Girl Who Drank the Moon"
+      },
+      {
+        "id": "M16",
+        "domain": "tv_show",
+        "name": "Mushishi"
+      },
+      {
+        "id": "M17",
+        "domain": "tv_show",
+        "name": "Over the Garden Wall"
+      },
+      {
+        "id": "M18",
+        "domain": "tv_show",
+        "name": "Hilda"
+      },
+      {
+        "id": "M19",
+        "domain": "tv_show",
+        "name": "Adventure Time"
+      },
+      {
+        "id": "M20",
+        "domain": "style",
+        "name": "unhurried scene setting"
+      },
+      {
+        "id": "M21",
+        "domain": "style",
+        "name": "quiet interludes punctuated by wonder"
+      },
+      {
+        "id": "M22",
+        "domain": "style",
+        "name": "environmental storytelling"
+      },
+      {
+        "id": "M23",
+        "domain": "style",
+        "name": "intricately layered backgrounds"
+      },
+      {
+        "id": "M24",
+        "domain": "aesthetic",
+        "name": "mossy stone and weathered wood"
+      },
+      {
+        "id": "M25",
+        "domain": "aesthetic",
+        "name": "hand-drawn organic contours"
+      },
+      {
+        "id": "M26",
+        "domain": "aesthetic",
+        "name": "warm lights against deep blue shadows"
+      },
+      {
+        "id": "M27",
+        "domain": "aesthetic",
+        "name": "tactile paper and glazed ceramics"
+      },
+      {
+        "id": "M28",
+        "domain": "tone",
+        "name": "gentle melancholy"
+      },
+      {
+        "id": "M29",
+        "domain": "tone",
+        "name": "quiet wonder"
+      },
+      {
+        "id": "M30",
+        "domain": "tone",
+        "name": "tender companionship"
+      },
+      {
+        "id": "M31",
+        "domain": "tone",
+        "name": "hope amid uncertainty"
+      },
+      {
+        "id": "M32",
+        "domain": "qualities",
+        "name": "hidden worlds within ordinary places"
+      },
+      {
+        "id": "M33",
+        "domain": "qualities",
+        "name": "hospitality as a small ritual"
+      },
+      {
+        "id": "M34",
+        "domain": "qualities",
+        "name": "nature reclaiming built spaces"
+      },
+      {
+        "id": "M35",
+        "domain": "qualities",
+        "name": "small figures in expansive surroundings"
+      },
+      {
+        "id": "M36",
+        "domain": "qualities",
+        "name": "belonging earned through kindness"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these assumptions alone, I would make Common Table a quietly storybook one-page café site, opening on a warm table framed by deep moss and twilight, then unfolding into a readable seasonal menu, a short neighbourhood story, and practical visiting details with generous pauses.",
+      "palette": [
+        "#182d35",
+        "#42594a",
+        "#f1e7d3",
+        "#bf824f",
+        "#d9b969"
+      ],
+      "fonts": [
+        "Literata",
+        "Alegreya Sans"
+      ],
+      "sections": [
+        "welcome",
+        "seasonal-menu",
+        "our-table",
+        "neighbourhood",
+        "visit"
+      ],
+      "motifs": [
+        "a pool of lamplight around a shared table",
+        "hand-drawn botanical margins",
+        "subtle paper grain",
+        "arched doorway framing",
+        "slow steam rising from a cup"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T13:58:40.214Z",
+    "sha256": "32e0411a5aa0f473da29ee2cdac0dd63de7b212d21e1ab52479733e76159be24"
+  }
+}

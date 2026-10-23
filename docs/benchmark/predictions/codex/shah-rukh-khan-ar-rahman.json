@@ -1,0 +1,264 @@
+{
+  "audience": "shah-rukh-khan-ar-rahman",
+  "seeds": [
+    "Shah Rukh Khan",
+    "A. R. Rahman"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Shah Rukh Khan and A. R. Rahman. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "People who love Shah Rukh Khan and A. R. Rahman are the stated audience for Common Table, a small neighbourhood café. My unmeasured prediction is that their shared taste favours emotional storytelling, expressive music, romantic warmth and a sense of belonging; these are guesses from the two references, not measured audience facts.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Fabindia"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Good Earth"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Nicobar"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Blue Tokai Coffee Roasters"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "Dil Se.."
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Swades"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Dilwale Dulhania Le Jayenge"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Rang De Basanti"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Roja"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Shreya Ghoshal"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Sonu Nigam"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Arijit Singh"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Lata Mangeshkar"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Nusrat Fateh Ali Khan"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "The Namesake"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "The God of Small Things"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "A Suitable Boy"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "The Palace of Illusions"
+      },
+      {
+        "id": "M19",
+        "domain": "tv_show",
+        "name": "Gullak"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Panchayat"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "Yeh Jo Hai Zindagi"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Modern Love Mumbai"
+      },
+      {
+        "id": "M23",
+        "domain": "style",
+        "name": "unhurried emotional buildup"
+      },
+      {
+        "id": "M24",
+        "domain": "style",
+        "name": "sweeping musical interludes"
+      },
+      {
+        "id": "M25",
+        "domain": "style",
+        "name": "intimate conversational scenes"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "expansive ensemble storytelling"
+      },
+      {
+        "id": "M27",
+        "domain": "aesthetic",
+        "name": "warm amber light"
+      },
+      {
+        "id": "M28",
+        "domain": "aesthetic",
+        "name": "tactile paper and woven cloth"
+      },
+      {
+        "id": "M29",
+        "domain": "aesthetic",
+        "name": "deep jewel colour accents"
+      },
+      {
+        "id": "M30",
+        "domain": "aesthetic",
+        "name": "weathered timber"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "lush everyday detail"
+      },
+      {
+        "id": "M32",
+        "domain": "tone",
+        "name": "romantic"
+      },
+      {
+        "id": "M33",
+        "domain": "tone",
+        "name": "hopeful"
+      },
+      {
+        "id": "M34",
+        "domain": "tone",
+        "name": "nostalgic"
+      },
+      {
+        "id": "M35",
+        "domain": "tone",
+        "name": "sincere"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "joyful"
+      },
+      {
+        "id": "M37",
+        "domain": "qualities",
+        "name": "belonging across differences"
+      },
+      {
+        "id": "M38",
+        "domain": "qualities",
+        "name": "ordinary lives with emotional scale"
+      },
+      {
+        "id": "M39",
+        "domain": "qualities",
+        "name": "music as a shared language"
+      },
+      {
+        "id": "M40",
+        "domain": "qualities",
+        "name": "affection for familiar rituals"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "homecoming"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these guesses alone, I would make Common Table a warm, intimate one-page café invitation with cream paper surfaces, deep plum headings, amber accents, generous literary type, candid table photography and a gentle rhythm from welcome to menu to visiting information.",
+      "palette": [
+        "#f5ebdd",
+        "#442b3e",
+        "#bc713c",
+        "#40574b",
+        "#292522"
+      ],
+      "fonts": [
+        "Literata",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "our-table",
+        "shared-evenings",
+        "visit"
+      ],
+      "motifs": [
+        "a long shared table as the central photographic subject",
+        "small printed menu rules on warm paper",
+        "plum and amber accents around generous cream space",
+        "quiet fades between sections",
+        "welcoming conversational copy"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:12:58.838Z",
+    "sha256": "790fbce7ace0d3e93c06b04aeaddf6d96bd442acb446f34533449c731b938e4b"
+  }
+}

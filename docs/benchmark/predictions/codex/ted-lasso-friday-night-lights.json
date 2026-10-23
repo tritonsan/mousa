@@ -1,0 +1,273 @@
+{
+  "audience": "ted-lasso-friday-night-lights",
+  "seeds": [
+    "Ted Lasso",
+    "Friday Night Lights"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Ted Lasso and Friday Night Lights. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured prediction is that people who love Ted Lasso and Friday Night Lights value imperfect people finding belonging through everyday kindness, loyalty and shared effort. For Common Table, I expect a welcoming neighbourhood ritual with emotional warmth and an unpolished sense of place to resonate.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Patagonia"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Levi's"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "L.L.Bean"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Converse"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "Remember the Titans"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "The Station Agent"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Chef"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "The Peanut Butter Falcon"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "It's a Wonderful Life"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Explosions in the Sky"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "The Avett Brothers"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Brandi Carlile"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Jason Isbell"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Mumford & Sons"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "A Man Called Ove"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "Beartown"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "The Boys in the Boat"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "Friday Night Lights: A Town, a Team, and a Dream"
+      },
+      {
+        "id": "M19",
+        "domain": "tv_show",
+        "name": "Parenthood"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Parks and Recreation"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "Somebody Somewhere"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Detectorists"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Schitt's Creek"
+      },
+      {
+        "id": "M24",
+        "domain": "style",
+        "name": "character-led storytelling"
+      },
+      {
+        "id": "M25",
+        "domain": "style",
+        "name": "unhurried everyday scenes"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "ensemble interactions"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "quiet emotional payoffs"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "humour alongside dramatic stakes"
+      },
+      {
+        "id": "M29",
+        "domain": "aesthetic",
+        "name": "worn timber"
+      },
+      {
+        "id": "M30",
+        "domain": "aesthetic",
+        "name": "sunlit everyday interiors"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "soft natural textures"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "handwritten community notices"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "familiar utilitarian objects"
+      },
+      {
+        "id": "M34",
+        "domain": "tone",
+        "name": "hopeful"
+      },
+      {
+        "id": "M35",
+        "domain": "tone",
+        "name": "sincere"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "affectionately funny"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "bittersweet"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "reassuring"
+      },
+      {
+        "id": "M39",
+        "domain": "qualities",
+        "name": "belonging through shared rituals"
+      },
+      {
+        "id": "M40",
+        "domain": "qualities",
+        "name": "ordinary people showing up for each other"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "second chances"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "loyalty tempered by empathy"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "pride in a local community"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these guesses alone, I would make Common Table a warm, unhurried one-page café site with sturdy friendly lettering, cream paper-like space, candid photographs of communal tables and a clear invitation to become a regular.",
+      "palette": [
+        "#f5efe3",
+        "#274c3e",
+        "#b76545",
+        "#292c28",
+        "#d6b66e"
+      ],
+      "fonts": [
+        "Zilla Slab",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "our-table",
+        "neighbourhood-board",
+        "visit"
+      ],
+      "motifs": [
+        "shared-table photography in natural light",
+        "printed menu rules and generous margins",
+        "small handwritten daily notes",
+        "plainspoken invitations to come as you are"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:06:46.950Z",
+    "sha256": "d0e56d6a27a9b078645398d073868b715e84b3c04888a6b1faa3d58908723ec6"
+  }
+}

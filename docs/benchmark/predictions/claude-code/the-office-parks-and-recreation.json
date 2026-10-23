@@ -1,0 +1,316 @@
+{
+  "audience": "the-office-parks-and-recreation",
+  "seeds": [
+    "The Office",
+    "Parks and Recreation"
+  ],
+  "host": "claude-code",
+  "hostVersion": "2.1.284 (Claude Code)",
+  "model": "claude-opus-5-5[1m]",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love The Office and Parks and Recreation. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Fans of warm, cringe-but-kind workplace mockumentaries: people who like earnest, small-town or office ensembles, deadpan humour, found family and everyday rituals made funny. Likely millennials who rewatch comfort TV and value sincerity over cool.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Dunder Mifflin (licensed merch)"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Trader Joe's"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Target"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Etsy"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Funko"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Netflix"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Napoleon Dynamite"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Anchorman: The Legend of Ron Burgundy"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Office Space"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Step Brothers"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Superbad"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "Bridesmaids"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Taylor Swift"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Death Cab for Cutie"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Mumford & Sons"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Vampire Weekend"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Lizzo"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "Fleetwood Mac"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Yes Please"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Bossypants"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "Is Everyone Hanging Out Without Me?"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "Paddle Your Own Canoe"
+      },
+      {
+        "id": "M23",
+        "domain": "book",
+        "name": "Good Omens"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Brooklyn Nine-Nine"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Community"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Arrested Development"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Schitt's Creek"
+      },
+      {
+        "id": "M28",
+        "domain": "tv_show",
+        "name": "Superstore"
+      },
+      {
+        "id": "M29",
+        "domain": "tv_show",
+        "name": "Abbott Elementary"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "mockumentary handheld camera"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "talking-head asides"
+      },
+      {
+        "id": "M32",
+        "domain": "style",
+        "name": "quick-cut cringe beats"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "ensemble scenes"
+      },
+      {
+        "id": "M34",
+        "domain": "style",
+        "name": "deadpan pauses"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "fluorescent-lit beige offices"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "small-town civic Americana"
+      },
+      {
+        "id": "M37",
+        "domain": "aesthetic",
+        "name": "wood panelling and municipal signage"
+      },
+      {
+        "id": "M38",
+        "domain": "aesthetic",
+        "name": "everyday mundane interiors"
+      },
+      {
+        "id": "M39",
+        "domain": "aesthetic",
+        "name": "retro 2000s mid-budget"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "warm"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "awkward"
+      },
+      {
+        "id": "M42",
+        "domain": "tone",
+        "name": "earnest"
+      },
+      {
+        "id": "M43",
+        "domain": "tone",
+        "name": "deadpan"
+      },
+      {
+        "id": "M44",
+        "domain": "tone",
+        "name": "optimistic"
+      },
+      {
+        "id": "M45",
+        "domain": "tone",
+        "name": "nostalgic"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "found family"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "workplace comedy"
+      },
+      {
+        "id": "M48",
+        "domain": "qualities",
+        "name": "small-town community"
+      },
+      {
+        "id": "M49",
+        "domain": "qualities",
+        "name": "cringe humour"
+      },
+      {
+        "id": "M50",
+        "domain": "qualities",
+        "name": "kindness under absurdity"
+      },
+      {
+        "id": "M51",
+        "domain": "qualities",
+        "name": "comfort rewatch"
+      }
+    ],
+    "designSketch": {
+      "summary": "A warm civic-noticeboard café page: cream paper, municipal green and waffle-yellow, slab headlines like a town sign, typed memo-style menu and a bulletin-board of regulars and events, with deadpan talking-head copy.",
+      "palette": [
+        "#f4ecd8",
+        "#2f5d3a",
+        "#e8b33c",
+        "#7a4b2a",
+        "#2b2b2b"
+      ],
+      "fonts": [
+        "Zilla Slab",
+        "Courier Prime",
+        "Cabin"
+      ],
+      "sections": [
+        "hero",
+        "menu",
+        "specials",
+        "noticeboard",
+        "regulars",
+        "visit"
+      ],
+      "motifs": [
+        "town hall signage",
+        "typed office memo",
+        "cork bulletin board with pinned notes",
+        "waffle and coffee rings",
+        "talking-head aside captions"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:02:27.840Z",
+    "sha256": "b439b5b1182e32ac0b4b36c41f65ccb64ac0397f3bc4c0e5a22237b3e3a1ab10"
+  }
+}

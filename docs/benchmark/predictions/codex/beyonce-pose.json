@@ -1,0 +1,259 @@
+{
+  "audience": "beyonce-pose",
+  "seeds": [
+    "Beyoncé",
+    "Pose"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Beyoncé and Pose. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured prediction for people who love Beyoncé and Pose is an affinity for expressive performance, self-authorship, chosen family and glamour grounded in everyday care. These guesses come from the named works, not assumptions about the audience's identity.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Telfar"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Pyer Moss"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Savage X Fenty"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Pat McGrath Labs"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "Paris Is Burning"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "The Wiz"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Dreamgirls"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Moonlight"
+      },
+      {
+        "id": "M09",
+        "domain": "artist",
+        "name": "Solange"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Janet Jackson"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Grace Jones"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Janelle Monáe"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Donna Summer"
+      },
+      {
+        "id": "M14",
+        "domain": "book",
+        "name": "All About Love"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "The Color Purple"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "Sister Outsider"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "The House of Impossible Beauties"
+      },
+      {
+        "id": "M18",
+        "domain": "tv_show",
+        "name": "Legendary"
+      },
+      {
+        "id": "M19",
+        "domain": "tv_show",
+        "name": "RuPaul's Drag Race"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Insecure"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "P-Valley"
+      },
+      {
+        "id": "M22",
+        "domain": "style",
+        "name": "choreographed spectacle"
+      },
+      {
+        "id": "M23",
+        "domain": "style",
+        "name": "intimate ensemble storytelling"
+      },
+      {
+        "id": "M24",
+        "domain": "style",
+        "name": "rhythmic shifts between celebration and reflection"
+      },
+      {
+        "id": "M25",
+        "domain": "style",
+        "name": "dramatic entrances"
+      },
+      {
+        "id": "M26",
+        "domain": "aesthetic",
+        "name": "jewel-toned richness"
+      },
+      {
+        "id": "M27",
+        "domain": "aesthetic",
+        "name": "polished metallic accents"
+      },
+      {
+        "id": "M28",
+        "domain": "aesthetic",
+        "name": "theatrical lighting"
+      },
+      {
+        "id": "M29",
+        "domain": "aesthetic",
+        "name": "tactile domestic warmth"
+      },
+      {
+        "id": "M30",
+        "domain": "aesthetic",
+        "name": "bold fashion silhouettes"
+      },
+      {
+        "id": "M31",
+        "domain": "tone",
+        "name": "exuberant"
+      },
+      {
+        "id": "M32",
+        "domain": "tone",
+        "name": "tender"
+      },
+      {
+        "id": "M33",
+        "domain": "tone",
+        "name": "defiant"
+      },
+      {
+        "id": "M34",
+        "domain": "tone",
+        "name": "hopeful"
+      },
+      {
+        "id": "M35",
+        "domain": "tone",
+        "name": "self-assured"
+      },
+      {
+        "id": "M36",
+        "domain": "qualities",
+        "name": "chosen family"
+      },
+      {
+        "id": "M37",
+        "domain": "qualities",
+        "name": "self-expression"
+      },
+      {
+        "id": "M38",
+        "domain": "qualities",
+        "name": "communal celebration"
+      },
+      {
+        "id": "M39",
+        "domain": "qualities",
+        "name": "care and resilience"
+      },
+      {
+        "id": "M40",
+        "domain": "qualities",
+        "name": "everyday life elevated through performance"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these guesses alone, I would give Common Table a warm editorial one-page café site with oversized theatrical headings, plum and cream fields, small brass accents, candid shared-table photography, an easily scanned menu and a welcoming invitation to visit.",
+      "palette": [
+        "#f6eddc",
+        "#371b35",
+        "#be4667",
+        "#be914d",
+        "#25221f"
+      ],
+      "fonts": [
+        "DM Serif Display",
+        "Libre Franklin"
+      ],
+      "sections": [
+        "welcome",
+        "menu",
+        "our-table",
+        "gatherings",
+        "visit"
+      ],
+      "motifs": [
+        "oversized stage-like headlines",
+        "shared-table photographic crops",
+        "thin brass menu rules",
+        "generous cream margins",
+        "gentle staggered text entrances"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:10:38.551Z",
+    "sha256": "ed67c497c950ae8d87c14e2de07d54b246938be1be46daf25b7f228a9eed0e63"
+  }
+}

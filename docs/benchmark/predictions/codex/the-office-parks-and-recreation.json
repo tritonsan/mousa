@@ -1,0 +1,284 @@
+{
+  "audience": "the-office-parks-and-recreation",
+  "seeds": [
+    "The Office",
+    "Parks and Recreation"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love The Office and Parks and Recreation. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured prediction is that fans of The Office and Parks and Recreation enjoy affectionate ensemble comedy, awkward everyday encounters, and people finding belonging through ordinary routines. For Common Table, I expect a welcoming neighbourhood gathering place with modest visual quirks and gently deadpan copy to resonate.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Trader Joe's"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "IKEA"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Converse"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Uniqlo"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "LEGO"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Office Space"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Best in Show"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "School of Rock"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "The Grand Budapest Hotel"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Little Miss Sunshine"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Vampire Weekend"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "The Decemberists"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Death Cab for Cutie"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Belle and Sebastian"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Fleetwood Mac"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "Bossypants"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "Yes Please"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "Is Everyone Hanging Out Without Me? (And Other Concerns)"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "The Hitchhiker's Guide to the Galaxy"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "A Man Called Ove"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "Brooklyn Nine-Nine"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Community"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "30 Rock"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Abbott Elementary"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Schitt's Creek"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "observational everyday scenes"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "unhurried conversational rhythm"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "awkward pauses followed by quick punchlines"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "ensemble storytelling"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "recurring small visual jokes"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "warm wood and paper"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "lived-in communal spaces"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "practical everyday furniture"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "handwritten noticeboards"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "muted colours with cheerful accents"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "affectionate"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "deadpan"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "hopeful"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "gently absurd"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "self-aware"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "belonging through shared routines"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "friendship among imperfect people"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "small local rituals"
+      },
+      {
+        "id": "M44",
+        "domain": "qualities",
+        "name": "ordinary settings with eccentric details"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "sincerity beneath playful humour"
+      }
+    ],
+    "designSketch": {
+      "summary": "From this prediction alone, I would make Common Table a warm, lightly quirky one-page café site with cream paper tones, forest-green headings, soft serif titles, candid table-level photography, and a neighbourly noticeboard rhythm that makes the menu and visit details easy to find.",
+      "palette": [
+        "#f5efdf",
+        "#254d3d",
+        "#c2774d",
+        "#e6bd57",
+        "#292d29"
+      ],
+      "fonts": [
+        "Fraunces",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "menu",
+        "our-table",
+        "neighbourhood-board",
+        "visit"
+      ],
+      "motifs": [
+        "paper menu sheets",
+        "small handwritten margin notes",
+        "communal table photographs",
+        "simple noticeboard rules",
+        "brief deadpan asides"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:03:19.157Z",
+    "sha256": "8448629eb91942489da2468656a51474a89399d9e12a51249e706bd1f2c8e187"
+  }
+}

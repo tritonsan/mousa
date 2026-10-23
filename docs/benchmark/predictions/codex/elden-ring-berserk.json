@@ -1,0 +1,269 @@
+{
+  "audience": "elden-ring-berserk",
+  "seeds": [
+    "Elden Ring",
+    "Berserk"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Elden Ring and Berserk. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured prediction is that people who love Elden Ring and Berserk also enjoy intricate dark fantasy, weathered beauty, hard-earned fellowship and moments of shelter amid danger. For Common Table, I would interpret that taste as a welcoming neighbourhood refuge with tactile materials and quiet gravity; these are assumptions, not Qloo findings.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Rick Owens"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Yohji Yamamoto"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "AllSaints"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Dr. Martens"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "The Green Knight"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "The Lord of the Rings: The Fellowship of the Ring"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Excalibur"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "The Northman"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Angel's Egg"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Susumu Hirasawa"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Yuka Kitamura"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Akira Yamaoka"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Bohren & der Club of Gore"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Chelsea Wolfe"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "The Black Company"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "Between Two Fires"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "The Book of the New Sun"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "The Silmarillion"
+      },
+      {
+        "id": "M19",
+        "domain": "tv_show",
+        "name": "Castlevania"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Claymore"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "Vinland Saga"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Attack on Titan"
+      },
+      {
+        "id": "M23",
+        "domain": "style",
+        "name": "slow atmospheric openings"
+      },
+      {
+        "id": "M24",
+        "domain": "style",
+        "name": "sudden bursts of intensity"
+      },
+      {
+        "id": "M25",
+        "domain": "style",
+        "name": "patient environmental storytelling"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "dense compositions with quiet pauses"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "epic scale balanced with intimate encounters"
+      },
+      {
+        "id": "M28",
+        "domain": "aesthetic",
+        "name": "weathered stone"
+      },
+      {
+        "id": "M29",
+        "domain": "aesthetic",
+        "name": "blackened iron"
+      },
+      {
+        "id": "M30",
+        "domain": "aesthetic",
+        "name": "aged parchment"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "intricate ink hatching"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "warm firelight against deep shadow"
+      },
+      {
+        "id": "M33",
+        "domain": "tone",
+        "name": "melancholic"
+      },
+      {
+        "id": "M34",
+        "domain": "tone",
+        "name": "foreboding"
+      },
+      {
+        "id": "M35",
+        "domain": "tone",
+        "name": "solemn"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "defiant"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "tender amid hardship"
+      },
+      {
+        "id": "M38",
+        "domain": "qualities",
+        "name": "endurance through adversity"
+      },
+      {
+        "id": "M39",
+        "domain": "qualities",
+        "name": "fragile fellowship"
+      },
+      {
+        "id": "M40",
+        "domain": "qualities",
+        "name": "beauty within decay"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "mythic ambiguity"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "sanctuary and shared rituals"
+      }
+    ],
+    "designSketch": {
+      "summary": "I would make Common Table a warm refuge on a single scrolling page, pairing spacious literary typography and charcoal surfaces with parchment menu panels, ember accents and intimate photographs of coffee, bread and a shared wooden table, moving from a welcoming invitation through the menu and neighbourhood story to practical visiting information.",
+      "palette": [
+        "#1d1c19",
+        "#eee4d2",
+        "#b08a52",
+        "#8b4434",
+        "#777b65"
+      ],
+      "fonts": [
+        "Literata",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "the-common-table",
+        "neighbourhood",
+        "visit"
+      ],
+      "motifs": [
+        "fine etched botanical dividers",
+        "warm pools of light",
+        "weathered paper menu surfaces",
+        "long communal table imagery",
+        "restrained slow fades"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:13:50.162Z",
+    "sha256": "c14aa1b7c173a2e74a7cff8d6de668f408d8dda85c9a5b535b8100651acef1fe"
+  }
+}

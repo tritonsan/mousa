@@ -1,0 +1,264 @@
+{
+  "audience": "into-the-wild-bon-iver",
+  "seeds": [
+    "Into the Wild",
+    "Bon Iver"
+  ],
+  "host": "codex",
+  "hostVersion": "codex-cli 0.163.0-alpha.11",
+  "model": "gpt-6.1-sol (reasoning effort high)",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Into the Wild and Bon Iver. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "My unmeasured prediction is that people who love Into the Wild and Bon Iver gravitate toward reflective stories, intimate music, outdoor wandering and imperfect, tactile things. For Common Table, I expect them to value an unhurried neighbourhood refuge where solitude and easy companionship can coexist.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Patagonia"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Fjällräven"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Snow Peak"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Finisterre"
+      },
+      {
+        "id": "M05",
+        "domain": "movie",
+        "name": "Wild"
+      },
+      {
+        "id": "M06",
+        "domain": "movie",
+        "name": "Captain Fantastic"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "The Secret Life of Walter Mitty"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Leave No Trace"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "The Tree of Life"
+      },
+      {
+        "id": "M10",
+        "domain": "artist",
+        "name": "Sufjan Stevens"
+      },
+      {
+        "id": "M11",
+        "domain": "artist",
+        "name": "Fleet Foxes"
+      },
+      {
+        "id": "M12",
+        "domain": "artist",
+        "name": "Iron & Wine"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "The Tallest Man on Earth"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "José González"
+      },
+      {
+        "id": "M15",
+        "domain": "book",
+        "name": "Walden"
+      },
+      {
+        "id": "M16",
+        "domain": "book",
+        "name": "On the Road"
+      },
+      {
+        "id": "M17",
+        "domain": "book",
+        "name": "A Sand County Almanac"
+      },
+      {
+        "id": "M18",
+        "domain": "book",
+        "name": "The Overstory"
+      },
+      {
+        "id": "M19",
+        "domain": "tv_show",
+        "name": "Detectorists"
+      },
+      {
+        "id": "M20",
+        "domain": "tv_show",
+        "name": "Northern Exposure"
+      },
+      {
+        "id": "M21",
+        "domain": "tv_show",
+        "name": "Somebody Somewhere"
+      },
+      {
+        "id": "M22",
+        "domain": "tv_show",
+        "name": "Station Eleven"
+      },
+      {
+        "id": "M23",
+        "domain": "style",
+        "name": "unhurried pacing"
+      },
+      {
+        "id": "M24",
+        "domain": "style",
+        "name": "observational scenes"
+      },
+      {
+        "id": "M25",
+        "domain": "style",
+        "name": "long landscape shots"
+      },
+      {
+        "id": "M26",
+        "domain": "style",
+        "name": "quiet character studies"
+      },
+      {
+        "id": "M27",
+        "domain": "aesthetic",
+        "name": "weathered timber"
+      },
+      {
+        "id": "M28",
+        "domain": "aesthetic",
+        "name": "matte paper"
+      },
+      {
+        "id": "M29",
+        "domain": "aesthetic",
+        "name": "muted earth colours"
+      },
+      {
+        "id": "M30",
+        "domain": "aesthetic",
+        "name": "natural window light"
+      },
+      {
+        "id": "M31",
+        "domain": "aesthetic",
+        "name": "visible film grain"
+      },
+      {
+        "id": "M32",
+        "domain": "tone",
+        "name": "wistful"
+      },
+      {
+        "id": "M33",
+        "domain": "tone",
+        "name": "intimate"
+      },
+      {
+        "id": "M34",
+        "domain": "tone",
+        "name": "contemplative"
+      },
+      {
+        "id": "M35",
+        "domain": "tone",
+        "name": "quietly hopeful"
+      },
+      {
+        "id": "M36",
+        "domain": "tone",
+        "name": "tender"
+      },
+      {
+        "id": "M37",
+        "domain": "qualities",
+        "name": "connection to nature"
+      },
+      {
+        "id": "M38",
+        "domain": "qualities",
+        "name": "search for belonging"
+      },
+      {
+        "id": "M39",
+        "domain": "qualities",
+        "name": "simple daily rituals"
+      },
+      {
+        "id": "M40",
+        "domain": "qualities",
+        "name": "creative independence"
+      },
+      {
+        "id": "M41",
+        "domain": "qualities",
+        "name": "solitude alongside community"
+      }
+    ],
+    "designSketch": {
+      "summary": "From these assumptions alone, I would make Common Table a quiet one-page café website with warm paper tones, forest-green details, literary headings, generous pauses and candid photographs of shared tables, coffee and morning light.",
+      "palette": [
+        "#f3eee4",
+        "#253c32",
+        "#9a6749",
+        "#282923",
+        "#c4b89f"
+      ],
+      "fonts": [
+        "Literata",
+        "Cabin"
+      ],
+      "sections": [
+        "welcome",
+        "daily-menu",
+        "our-table",
+        "neighbourhood-notes",
+        "visit"
+      ],
+      "motifs": [
+        "paper-like surfaces",
+        "large daylight photographs",
+        "fine menu rules",
+        "small handwritten margin notes",
+        "gentle fade-in transitions"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:12:15.240Z",
+    "sha256": "f7ee074f5029280f2da6e8dd01086bb3d0906339869e6d6e3f5648d9bd8adec9"
+  }
+}

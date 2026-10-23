@@ -1,0 +1,301 @@
+{
+  "audience": "norwegian-wood-ryuichi-sakamoto",
+  "seeds": [
+    "Norwegian Wood",
+    "Ryuichi Sakamoto"
+  ],
+  "host": "claude-code",
+  "hostVersion": "2.1.284 (Claude Code)",
+  "model": "claude-opus-5-5[1m]",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Norwegian Wood and Ryuichi Sakamoto. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Readers and listeners drawn to melancholy, quiet Japanese modernism: Murakami's introspective, music-soaked fiction and Sakamoto's ambient piano and film scores. They value solitude, craft, slow attention and analogue rituals like vinyl, coffee and paper books.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Muji"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Uniqlo"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Moleskine"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Aesop"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Leica"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Kinfolk"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "In the Mood for Love"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Lost in Translation"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Drive My Car"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "Perfect Days"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Merry Christmas, Mr. Lawrence"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "Burning"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Brian Eno"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Nils Frahm"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Harold Budd"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Yellow Magic Orchestra"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Bill Evans"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "Haruomi Hosono"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "Kafka on the Shore"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "The Wind-Up Bird Chronicle"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "Kitchen"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "Never Let Me Go"
+      },
+      {
+        "id": "M23",
+        "domain": "book",
+        "name": "The Remains of the Day"
+      },
+      {
+        "id": "M24",
+        "domain": "book",
+        "name": "Convenience Store Woman"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Midnight Diner: Tokyo Stories"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Twin Peaks"
+      },
+      {
+        "id": "M27",
+        "domain": "tv_show",
+        "name": "Normal People"
+      },
+      {
+        "id": "M28",
+        "domain": "tv_show",
+        "name": "Columbo"
+      },
+      {
+        "id": "M29",
+        "domain": "tv_show",
+        "name": "Mushi-Shi"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "slow-paced"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "contemplative long takes"
+      },
+      {
+        "id": "M32",
+        "domain": "style",
+        "name": "minimalist"
+      },
+      {
+        "id": "M33",
+        "domain": "style",
+        "name": "atmospheric"
+      },
+      {
+        "id": "M34",
+        "domain": "style",
+        "name": "quiet dialogue"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "natural light"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "muted earth tones"
+      },
+      {
+        "id": "M37",
+        "domain": "aesthetic",
+        "name": "analogue texture"
+      },
+      {
+        "id": "M38",
+        "domain": "aesthetic",
+        "name": "paper and wood"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "melancholic"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "wistful"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "introspective"
+      },
+      {
+        "id": "M42",
+        "domain": "tone",
+        "name": "nostalgic"
+      },
+      {
+        "id": "M43",
+        "domain": "tone",
+        "name": "serene"
+      },
+      {
+        "id": "M44",
+        "domain": "qualities",
+        "name": "loneliness and longing"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "coming of age"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "memory and loss"
+      },
+      {
+        "id": "M47",
+        "domain": "qualities",
+        "name": "everyday ritual"
+      },
+      {
+        "id": "M48",
+        "domain": "qualities",
+        "name": "understated beauty"
+      }
+    ],
+    "designSketch": {
+      "summary": "A quiet, paper-toned one-page café site set in a literary serif with generous white space, slow fades, a vinyl-and-coffee listening corner section and short wistful copy about lingering over a cup.",
+      "palette": [
+        "#f3efe6",
+        "#2b2a27",
+        "#6b7a5e",
+        "#a8876a",
+        "#c9c2b4"
+      ],
+      "fonts": [
+        "Literata",
+        "Alegreya Sans",
+        "DM Mono"
+      ],
+      "sections": [
+        "hero",
+        "about",
+        "menu",
+        "listening-corner",
+        "hours",
+        "visit"
+      ],
+      "motifs": [
+        "forest green and rain",
+        "vinyl record on a turntable",
+        "steam rising from a cup",
+        "open paperback on a wooden table",
+        "single piano note as rhythm"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:07:56.303Z",
+    "sha256": "5c2605d0493ec986ac30f4c47677ff831bda42c2822455ee16705f3c5676a71e"
+  }
+}

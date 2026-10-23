@@ -1,0 +1,291 @@
+{
+  "audience": "dune-part-two-brian-eno",
+  "seeds": [
+    "Dune: Part Two",
+    "Brian Eno"
+  ],
+  "host": "kiro",
+  "hostVersion": "kiro-cli-chat 2.24.0",
+  "model": "claude-opus-5.5",
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love Dune: Part Two and Brian Eno. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "prediction": {
+    "schemaVersion": "1.0",
+    "audienceSummary": "Patient, contemplative people drawn to vast, slow, monumental sci-fi and to ambient, generative music; they value atmosphere, craft and quiet over spectacle and noise.",
+    "domains": [
+      "brand",
+      "movie",
+      "artist",
+      "book",
+      "tv_show",
+      "style",
+      "aesthetic",
+      "tone",
+      "qualities"
+    ],
+    "entries": [
+      {
+        "id": "M01",
+        "domain": "brand",
+        "name": "Aesop"
+      },
+      {
+        "id": "M02",
+        "domain": "brand",
+        "name": "Teenage Engineering"
+      },
+      {
+        "id": "M03",
+        "domain": "brand",
+        "name": "Muji"
+      },
+      {
+        "id": "M04",
+        "domain": "brand",
+        "name": "Criterion Collection"
+      },
+      {
+        "id": "M05",
+        "domain": "brand",
+        "name": "Bang & Olufsen"
+      },
+      {
+        "id": "M06",
+        "domain": "brand",
+        "name": "Kinfolk"
+      },
+      {
+        "id": "M07",
+        "domain": "movie",
+        "name": "Arrival"
+      },
+      {
+        "id": "M08",
+        "domain": "movie",
+        "name": "Blade Runner 2049"
+      },
+      {
+        "id": "M09",
+        "domain": "movie",
+        "name": "Dune"
+      },
+      {
+        "id": "M10",
+        "domain": "movie",
+        "name": "2001: A Space Odyssey"
+      },
+      {
+        "id": "M11",
+        "domain": "movie",
+        "name": "Stalker"
+      },
+      {
+        "id": "M12",
+        "domain": "movie",
+        "name": "Interstellar"
+      },
+      {
+        "id": "M13",
+        "domain": "artist",
+        "name": "Hans Zimmer"
+      },
+      {
+        "id": "M14",
+        "domain": "artist",
+        "name": "Jóhann Jóhannsson"
+      },
+      {
+        "id": "M15",
+        "domain": "artist",
+        "name": "Harold Budd"
+      },
+      {
+        "id": "M16",
+        "domain": "artist",
+        "name": "Aphex Twin"
+      },
+      {
+        "id": "M17",
+        "domain": "artist",
+        "name": "Talking Heads"
+      },
+      {
+        "id": "M18",
+        "domain": "artist",
+        "name": "David Bowie"
+      },
+      {
+        "id": "M19",
+        "domain": "book",
+        "name": "The Left Hand of Darkness"
+      },
+      {
+        "id": "M20",
+        "domain": "book",
+        "name": "Solaris"
+      },
+      {
+        "id": "M21",
+        "domain": "book",
+        "name": "Foundation"
+      },
+      {
+        "id": "M22",
+        "domain": "book",
+        "name": "Annihilation"
+      },
+      {
+        "id": "M23",
+        "domain": "tv_show",
+        "name": "Severance"
+      },
+      {
+        "id": "M24",
+        "domain": "tv_show",
+        "name": "Station Eleven"
+      },
+      {
+        "id": "M25",
+        "domain": "tv_show",
+        "name": "Westworld"
+      },
+      {
+        "id": "M26",
+        "domain": "tv_show",
+        "name": "Twin Peaks"
+      },
+      {
+        "id": "M27",
+        "domain": "style",
+        "name": "slow-burn"
+      },
+      {
+        "id": "M28",
+        "domain": "style",
+        "name": "visually austere"
+      },
+      {
+        "id": "M29",
+        "domain": "style",
+        "name": "meditative"
+      },
+      {
+        "id": "M30",
+        "domain": "style",
+        "name": "epic in scale"
+      },
+      {
+        "id": "M31",
+        "domain": "style",
+        "name": "long takes"
+      },
+      {
+        "id": "M32",
+        "domain": "aesthetic",
+        "name": "desert ochre and sand"
+      },
+      {
+        "id": "M33",
+        "domain": "aesthetic",
+        "name": "brutalist monumental forms"
+      },
+      {
+        "id": "M34",
+        "domain": "aesthetic",
+        "name": "minimalist"
+      },
+      {
+        "id": "M35",
+        "domain": "aesthetic",
+        "name": "grainy analog texture"
+      },
+      {
+        "id": "M36",
+        "domain": "aesthetic",
+        "name": "vast negative space"
+      },
+      {
+        "id": "M37",
+        "domain": "tone",
+        "name": "contemplative"
+      },
+      {
+        "id": "M38",
+        "domain": "tone",
+        "name": "awe"
+      },
+      {
+        "id": "M39",
+        "domain": "tone",
+        "name": "melancholic"
+      },
+      {
+        "id": "M40",
+        "domain": "tone",
+        "name": "serene"
+      },
+      {
+        "id": "M41",
+        "domain": "tone",
+        "name": "ominous"
+      },
+      {
+        "id": "M42",
+        "domain": "qualities",
+        "name": "vastness and solitude"
+      },
+      {
+        "id": "M43",
+        "domain": "qualities",
+        "name": "ritual and repetition"
+      },
+      {
+        "id": "M44",
+        "domain": "qualities",
+        "name": "atmosphere over plot"
+      },
+      {
+        "id": "M45",
+        "domain": "qualities",
+        "name": "sound as space"
+      },
+      {
+        "id": "M46",
+        "domain": "qualities",
+        "name": "quiet futurism"
+      }
+    ],
+    "designSketch": {
+      "summary": "A slow, sand-toned single page for Common Table with vast negative space, wide futurist headings, ambient drifting gradients like generative music, and the menu set as quiet ritual.",
+      "palette": [
+        "#e8dcc8",
+        "#c58b4e",
+        "#7a4a2a",
+        "#1d1814",
+        "#f4efe6"
+      ],
+      "fonts": [
+        "Syne",
+        "Literata",
+        "DM Mono"
+      ],
+      "sections": [
+        "hero",
+        "ritual",
+        "menu",
+        "listening",
+        "hours",
+        "visit"
+      ],
+      "motifs": [
+        "slow drifting dune gradient",
+        "generous negative space",
+        "ambient long-fade transitions",
+        "sun-disc circle",
+        "tide-like repetition"
+      ]
+    },
+    "sourceType": "model-assumption",
+    "frozenAt": "2026-10-23T14:02:02.573Z",
+    "sha256": "e01a22521a8829e7539b0af377fadebbedd59c058cbeef0372a3860d9ff1b615"
+  }
+}
