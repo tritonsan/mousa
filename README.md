@@ -35,7 +35,7 @@ The site shows recorded sessions from all three agents, a blind vote and a live 
 
 Each comparison builds two designs from one frozen prediction: one with Qloo's measurement, one from the prediction alone. The distance is a heuristic over palette, type, page structure and CSS, from 0 (alike) to 1 (unrelated). It does not rate quality.
 - **The blind vote** shows a visitor both designs without saying which one used Qloo, and asks which the audience would rather have.
-- **The live try** runs Moûsa in Kiro on the server for an audience the juror names. Step one, about 40 seconds, freezes Kiro's prediction and measures the audience. Step two, about 7 minutes, builds both designs.
+- **The live try** runs Moûsa in Kiro on the server for an audience the juror names. Step one, under a minute, freezes Kiro's prediction and measures the audience. Step two, about five to ten minutes, builds both designs.
 
 ## Install the plugin
 

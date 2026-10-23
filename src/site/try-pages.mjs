@@ -15,7 +15,7 @@ const STAGES = Object.freeze({ predicted: 'Starting from the frozen prediction',
 const ageLabel = band => band.replaceAll('_', ' ');
 const minutes = ms => Number.isFinite(ms) ? `${Math.max(1, Math.round(ms / 60000))} min` : '';
 const problemBlock = text => text ? `<p class="try-problem" role="alert">${escape(text)}</p>` : '';
-const intro = '<p class="site-lede">First, in about two minutes, the model writes down its own guess about the audience you name, and Qloo measures that audience here; the page sets the two side by side. Then, if you like, the server builds the design twice from that same guess, once with what Qloo measured and once without, in fifteen to thirty minutes.</p>';
+const intro = '<p class="site-lede">First, in under a minute, the model writes down its own guess about the audience you name, and Qloo measures that audience here; the page sets the two side by side. Then, if you like, the server builds the design twice from that same guess, once with what Qloo measured and once without, in about five to ten minutes.</p>';
 
 /** The page that asks for the jury's access code. */
 export function tryAccessPage({ problem = '', repository = '' } = {}) {
@@ -95,7 +95,7 @@ ${stepOneReport}</section>`;
   let stepTwo = '';
   if (measured) {
     const head = '<div class="mr-section-head"><h2>Step two: with Qloo and without</h2><p>Two Kiro sessions from the same frozen prediction and the same stages; one designs from what Qloo measured, the other from the prediction alone.</p></div>';
-    if (!pair) stepTwo = `${head}<div class="mr-card"><p>The server copies the starter twice, locks one copy to the measurement and the other to the guess, and runs a session in each. It takes fifteen to thirty minutes, and this page follows both.</p>${form(`/try/${id}/design`, 'Build the pair')}</div>`;
+    if (!pair) stepTwo = `${head}<div class="mr-card"><p>The server copies the starter twice, locks one copy to the measurement and the other to the guess, and runs a session in each. It takes about five to ten minutes, longer when several tries run at once, and this page follows both.</p>${form(`/try/${id}/design`, 'Build the pair')}</div>`;
     else {
       const arms = view.arms.length ? view.arms : TRY_ARMS.map(arm => ({ ...arm }));
       const waiting = pair.status === 'queued' ? `<p class="site-small">The pair waits for the one free slot${view.pairPlace ? `: number ${escape(view.pairPlace)} in line` : ''}.</p>` : pair.status === 'preparing' ? '<p class="site-small">Copying the starter into both arms and locking each to its source of taste.</p>' : pair.status === 'reporting' ? '<p class="site-small">Writing the comparison report.</p>' : '';
