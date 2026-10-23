@@ -72,6 +72,18 @@ Each is read three ways:
 - **The predictions are the agents' own words** and hold no Qloo data. They are published in [`predictions/`](predictions/), one file per agent and audience, with their seals.
 - **The results publish the names Qloo measured and the counts, never Qloo's ids, scores or descriptions.** Qloo's answers stay on the machine that asked for them, as Qloo's developer guide requires.
 
+## Amendments
+
+**1. Models, and Codex's skill reads (23 October 2026).** Made before any run of the benchmark, after a pilot on an audience outside the list (The Bear and Fleetwood Mac). The pilot's predictions are not part of the benchmark.
+- **Why "each agent's own default model" had to change.** It could not be recorded for two agents.
+  - Kiro's default is `auto`, which picks a model by task and does not say which one answered.
+  - Codex started without the person's config.toml (as Moûsa's live runs start it) defaults to gpt-6.1-sol at reasoning effort none. The person's own setting is the same model at high effort.
+- **The models each agent now runs with.** Each is the model the person uses with Moûsa:
+  - Claude Code: its default from the person's settings, claude-opus-5-5 with the 1M context window.
+  - Codex: the person's config.toml model and reasoning effort, passed by name, gpt-6.1-sol at high.
+  - Kiro: the hosted try's model, claude-opus-5.5.
+- **Codex's shell.** Codex reads a skill's files with its shell, in a read-only sandbox, because it has no other way to read them. Each Codex command is checked to be such a read. A session that ran any other command is set aside and run once more, and a second such session is a failure.
+
 ## Reproduce
 
 ```sh
