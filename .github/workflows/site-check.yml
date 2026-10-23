@@ -1,0 +1,36 @@
+# The jury's site, checked from outside every six hours through the judging: every public page answers, and the live
+# try's Kiro and Qloo are ready. A failed run is GitHub's own notice to the repository's owner; it reads no secret and
+# changes nothing.
+name: Site check
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SITE: https://d1n6iqgwqs2043.cloudfront.net
+    steps:
+      - name: Every public page answers
+        run: |
+          set -euo pipefail
+          for page in / /judges/ /showcase/ /benchmark/ /gallery/ /vote/ /try/ /qloo/; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 --retry 2 "$SITE$page")
+            echo "$page $code"
+            if [ "$code" != 200 ]; then echo "::error::$page answered $code"; exit 1; fi
+          done
+      - name: The live try's Kiro and Qloo are ready
+        run: |
+          set -euo pipefail
+          curl -fsS --max-time 30 --retry 2 "$SITE/api/status" > status.json
+          node -e '
+          const status = JSON.parse(require("fs").readFileSync("status.json", "utf8"));
+          const kiro = status.kiro || {}, qloo = status.qloo || {};
+          const problems = [["Kiro is not available", kiro.available], ["Kiro is not signed in", kiro.authenticated], ["Qloo is not configured", qloo.configured]].filter(([, ok]) => !ok).map(([name]) => name);
+          console.log("kiro", kiro.version, "| qloo configured", qloo.configured);
+          if (problems.length) { console.log("::error::" + problems.join("; ")); process.exit(1); }
+          '
