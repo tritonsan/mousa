@@ -77,6 +77,19 @@ The whole server is one CloudFormation stack, made in the console in one form. `
 - `node scripts/verify-site.mjs --app <AppUrl>` from any machine.
 - `/api/health/deep` with the token, from two networks: `caller.address` must differ between them.
 
+**Moving the running server to a new commit or bundle,** without a stack update. Systems Manager runs [deploy/aws/redeploy.sh](../deploy/aws/redeploy.sh) as root, because the instance has no SSH. The command checks the ref out first, since a server on an older commit may not hold the script:
+
+```sh
+aws ssm send-command --instance-ids <id> --document-name AWS-RunShellScript --parameters 'commands=["cd /opt/mousa && git fetch -q --depth 1 origin <ref> && git checkout -q --detach FETCH_HEAD && bash deploy/aws/redeploy.sh <ref> <bundle url> <bundle sha256>"]'
+```
+
+- It builds the new image while the site keeps running. A build that fails, for example on Kiro's major-version guard, leaves the site as it was.
+- It checks the bundle's SHA-256 before anything stops.
+- It replaces only the gallery folder of the volume; the tries, votes and jobs stay.
+- It points `MOUSA_COMMIT` at the new commit and waits for the health check. The site is down for about a minute while the container restarts.
+
+The stack's own parameters (`RepositoryRef`, `DataBundleUrl`, `DataBundleSha256`) keep naming what the first boot used until they are updated. A later first boot, on a replaced instance, would use them.
+
 **During the judging,** do not update the stack: a change that replaces the instance builds the image again, with whatever Kiro is then current. **After 16 November,** delete the stack, delete the snapshots the policy made, revoke the Kiro key at app.kiro.dev and rotate the Qloo key.
 
 **Its cost,** on demand in us-east-1, roughly: the t3.large about $60 a month, the disk about $5, the public IPv4 address about $3.60, the secrets $1.20, and the snapshots, CloudFront and the Lambda a little each.
