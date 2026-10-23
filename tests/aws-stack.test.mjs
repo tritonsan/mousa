@@ -180,6 +180,7 @@ test('the redeploy builds before it stops the site, checks a bundle\'s SHA-256 a
   assert.match(text, /rm -rf \/data\/jobs\/gallery && mkdir -p \/data\/jobs && cp -R \/import\/\. \/data\/jobs\//u, 'only the gallery folder is replaced');
   assert.doesNotMatch(text, /rm -rf \/data\/jobs(?:\/)?(?:\s|'|$)/u, 'the jobs, tries and votes stay');
   assert.match(text, /s\/\^MOUSA_COMMIT=\.\*\//u, 'the site reports the commit it runs');
+  assert.ok(at('s/^MOUSA_COMMIT=') < at('"${COMPOSE[@]}" build'), 'the commit is a build argument of the image, so it is named before the build');
   assert.doesNotMatch(text, /cat\s+"?\$ENV_FILE|cat \/etc\/mousa/u, 'the environment file is never printed');
   if (bash) assert.equal(spawnSync('bash', ['-n', path.join(repo, 'deploy', 'aws', 'redeploy.sh')]).status, 0);
 });

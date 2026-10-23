@@ -31,6 +31,8 @@ step "fetching $REF"
 git fetch -q --depth 1 origin "$REF"
 git checkout -q --detach FETCH_HEAD
 commit=$(git rev-parse --short=12 HEAD)
+# The commit the site reports is a build argument of the image, so the environment file names it before the build.
+sed -i "s/^MOUSA_COMMIT=.*/MOUSA_COMMIT='$commit'/" "$ENV_FILE"
 
 step "building the image for $commit, while the site keeps running on its own"
 "${COMPOSE[@]}" build --progress plain
@@ -47,7 +49,6 @@ if [ -n "$DATA_URL" ]; then
 fi
 
 step "restarting the site on $commit"
-sed -i "s/^MOUSA_COMMIT=.*/MOUSA_COMMIT='$commit'/" "$ENV_FILE"
 "${COMPOSE[@]}" stop app
 if [ -n "$DATA_URL" ]; then
   # The gallery is replaced whole, so an entry the bundle no longer holds is gone; everything else in the volume stays.
