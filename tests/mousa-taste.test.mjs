@@ -8,6 +8,7 @@ import { buildTasteProfile } from '../plugin/server/culture/taste.mjs';
 import { planTaste, MEDIUM_RECIPES, TASTE_QUESTIONS } from '../plugin/server/taste/questions.mjs';
 import { createCachingClient, readQlooUsage } from '../plugin/server/taste/cache.mjs';
 import { BRIEF_LIMIT_BYTES } from '../plugin/server/taste/brief.mjs';
+import { sealHolds } from '../plugin/server/taste/seal.mjs';
 import { createMousaServer } from '../plugin/server/mcp/mousa.mjs';
 import { createConnectionStore, plainProtector } from '../plugin/server/connections/store.mjs';
 
@@ -121,6 +122,12 @@ test('the taste flow plans without a request, freezes the prediction, measures o
     const frozen = await call('design_validate', { stage: 'prediction', artifact: prediction() });
     assert.equal(frozen.status, 'frozen');
     assert.equal(frozen.designSketch.fonts.join(), 'Literata,Courier Prime');
+    const saved = JSON.parse(await readFile(path.join(project, '.mousa', 'taste', 'prediction.json'), 'utf8'));
+    assert.match(saved.sha256, /^[0-9a-f]{64}$/u, 'the prediction is sealed as it is frozen');
+    assert.equal(frozen.sha256, saved.sha256);
+    assert.equal(sealHolds(saved), true);
+    assert.equal(sealHolds({ ...saved, entries: saved.entries.slice(1) }), false, 'a prediction rewritten later no longer matches its seal');
+    assert.equal(sealHolds({ ...saved, frozenAt: '2026-01-01T00:00:00.000Z' }), false, 'nor does one given another time');
     assert.equal((await call('design_validate', { stage: 'prediction', artifact: prediction() })).error.code, 'PREDICTION_FROZEN');
     assert.equal(JSON.parse(await readFile(path.join(project, '.mousa', 'session.json'), 'utf8')).stage, 'predicted');
 

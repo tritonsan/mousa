@@ -13,6 +13,7 @@ import { readState, writeState, STATE_DIR, WORKSPACE_FIELD } from '../production
 import { fontsForDna } from '../production/fonts.mjs';
 import { planTaste, MEDIA, TASTE_QUESTIONS, MEDIUM_RECIPES } from './questions.mjs';
 import { createCachingClient } from './cache.mjs';
+import { predictionSeal } from './seal.mjs';
 
 /** The Qloo request budget a person set for each project folder (MOUSA_QLOO_BUDGET), or null for none. */
 export function qlooBudget(env) {
@@ -186,11 +187,13 @@ export function createTasteTools(context) {
     let archived = null;
     if (existing) archived = await archiveSession(root);
     const frozenAt = new Date(now()).toISOString();
-    await writeState(root, 'taste/prediction', { ...prediction, frozenAt });
+    // Sealed as it is frozen, so the record can show it was not rewritten after the measurement.
+    const sha256 = predictionSeal({ ...prediction, frozenAt });
+    await writeState(root, 'taste/prediction', { ...prediction, frozenAt, sha256 });
     // How the project styles itself as the session finds it, before the write gate opens, for the check to compare.
     await writeState(root, 'design/start', { savedAt: frozenAt, ...styleFootprint(await collectProjectFiles(root)) });
     await session(root, 'predicted');
-    return { status: 'frozen', stage: 'prediction', domains: prediction.domains, entries: prediction.entries.length, designSketch: prediction.designSketch, frozenAt,
+    return { status: 'frozen', stage: 'prediction', domains: prediction.domains, entries: prediction.entries.length, designSketch: prediction.designSketch, frozenAt, sha256,
       ...(archived ? { archived } : {}), next: 'Call taste_profile without dryRun to measure the audience with Qloo.' };
   }
 

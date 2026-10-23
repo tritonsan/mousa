@@ -12,6 +12,7 @@ import { readState, STATE_DIR } from '../production/project-files.mjs';
 import { colorDistance, scalePng } from '../production/image-files.mjs';
 import { serveDirectory, captureShots } from '../production/capture.mjs';
 import { TASTE_QUESTIONS } from '../taste/questions.mjs';
+import { sealHolds } from '../taste/seal.mjs';
 import { collectProjectFiles, detectDesignSystem } from './systems.mjs';
 
 export const REPORT_SCHEMA_VERSION = '1.0';
@@ -167,7 +168,10 @@ function predictionOf(records) {
     group.entries.push(compact({ name: entry.name, measured: measured ? Boolean(match) : null,
       as: match && normalizeTasteName(match.name) !== normalizeTasteName(entry.name) ? `${match.name}${match.domain !== entry.domain ? ` (${kindOf(match)})` : ''}` : null }));
   }
-  return compact({ frozenAt: prediction.frozenAt || null, summary: prediction.audienceSummary || null, groups, sketch: sketchOf(prediction.designSketch) });
+  // A prediction frozen before seals existed has none; a seal that no longer matches says so rather than hiding it.
+  const seal = sealHolds(prediction);
+  return compact({ frozenAt: prediction.frozenAt || null, ...(seal === null ? {} : { sha256: prediction.sha256, sealHolds: seal }),
+    summary: prediction.audienceSummary || null, groups, sketch: sketchOf(prediction.designSketch) });
 }
 
 /** What Qloo measured, by the same cuts as the Taste Brief: qualities by family, ranked tags and the works per domain. */
@@ -439,7 +443,9 @@ const asset = (base, file) => escape(`${base}${file}`);
 
 function masthead(record) {
   const meta = [KIND_LABELS[record.kind], MEDIUM_LABELS[record.medium] || record.medium, HOST_LABELS[record.host] || record.host,
-    record.prediction?.frozenAt ? `Prediction frozen ${day(record.prediction.frozenAt)}` : null, record.surface ? `Recorded with the ${record.surface}` : null].filter(Boolean);
+    record.prediction?.frozenAt ? `Prediction frozen ${day(record.prediction.frozenAt)}` : null,
+    record.prediction?.sha256 ? (record.prediction.sealHolds === false ? 'Prediction seal broken' : `Sealed ${record.prediction.sha256.slice(0, 12)}`) : null,
+    record.surface ? `Recorded with the ${record.surface}` : null].filter(Boolean);
   const lede =record.dna?.thesis || (record.kind === 'measurement' ? 'What the model expected of this audience, set beside what Qloo measured, before any design was made.' : null);
   return `<header class="mr-masthead"><p class="mr-kicker">Moûsa · Taste Provenance</p><h1>${escape(record.title)}</h1>${lede ? `<p class="mr-lede">${escape(lede)}</p>` : ''}
 <p class="mr-meta">${meta.map(item => `<span>${escape(item)}</span>`).join('')}</p></header>`;
@@ -465,9 +471,12 @@ function predictionSection(record) {
 ${sketch.fonts.length ? `<p class="mr-small">Type: ${escape(listText(sketch.fonts))}</p>` : '<p class="mr-small">Type: none sketched</p>'}${codes(sketch.sections, id => `#${id}`)}
 ${sketch.motifs.length ? `<ul class="mr-motifs">${sketch.motifs.map(item => `<li>${escape(item)}</li>`).join('')}</ul>` : ''}</div>` : '';
   const expected = `<div class="mr-card">${prediction.summary ? `<p class="mr-label">The audience it expected</p><p>${escape(prediction.summary)}</p>` : ''}${groups(qualities)}</div>`;
+  const seal = prediction.sha256 ? `<p class="mr-small mr-seal">${prediction.sealHolds === false
+    ? 'Sealed at the freeze, but this prediction no longer matches its seal: it was changed afterwards.'
+    : `Sealed at the freeze: SHA-256 <code class="mr-code">${escape(prediction.sha256)}</code>. The prediction shown here still matches it.`}</p>` : '';
   return section('prediction', 'Before any data: the model\'s own prediction',
     measured ? 'Frozen before Qloo was asked, so what Qloo adds can be told apart from what the model already assumed. An entry a measured name matches is marked; the match is liberal, so it only lowers what counts as new.' : 'Frozen before the design began. Without Qloo it is the whole taste input.',
-    `<div class="mr-grid two">${sketchCard}${expected}</div>${works.length ? `<div class="mr-card mr-predicted-works"><p class="mr-label">The works it expected them to love</p><div class="mr-columns">${groups(works)}</div></div>` : ''}`);
+    `<div class="mr-grid two">${sketchCard}${expected}</div>${works.length ? `<div class="mr-card mr-predicted-works"><p class="mr-label">The works it expected them to love</p><div class="mr-columns">${groups(works)}</div></div>` : ''}${seal}`);
 }
 
 function measuredSection(record) {
@@ -635,7 +644,7 @@ export const REPORT_CSS = `.mr{--paper:#f7f7fc;--surface:#fff;--ink:#202139;--in
 .mr-section{margin-top:64px}.mr-section-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 32px;padding-bottom:12px;margin-bottom:24px;border-bottom:1px solid var(--line)}
 .mr h2{font:600 30px/1.15 var(--display);letter-spacing:-.01em}.mr-section-head p{color:var(--muted);font-size:14.5px;max-width:620px}.mr h3{font:600 16px/1.35 var(--text)}
 .mr-label{display:block;font:600 11.5px/1.4 var(--text);letter-spacing:.11em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.mr-small{font-size:13.5px;color:var(--ink-soft)}
+.mr-small{font-size:13.5px;color:var(--ink-soft)}.mr-seal{margin-top:12px}.mr-seal .mr-code{overflow-wrap:anywhere}
 .mr-grid{display:grid;gap:20px}.mr-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.mr-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.mr-grid + *{margin-top:20px}
 .mr-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 24px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .mr-chips{display:flex;flex-wrap:wrap;gap:6px}.mr-chip{display:inline-flex;align-items:baseline;gap:6px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:13.5px;line-height:1.35}

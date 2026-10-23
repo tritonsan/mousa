@@ -256,7 +256,7 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
       const prediction = await readJson(path.join(project, '.mousa', 'taste', 'prediction.json'));
       if (!prediction) throw new StepError(sessionProblem(session) || 'The model ended its session without freezing a prediction.');
       if ((prediction.domains || []).join() !== step.plan.domains.join()) throw new StepError('The model froze a prediction for other domains than the plan asked for.');
-      step.prediction = { frozenAt: prediction.frozenAt || null, entries: prediction.entries?.length ?? 0 };
+      step.prediction = { frozenAt: prediction.frozenAt || null, entries: prediction.entries?.length ?? 0, ...(prediction.sha256 ? { sha256: prediction.sha256 } : {}) };
       await mark('measuring');
       const measurer = hostServer(project, { qloo: true, usage: usageOf(run.id) });
       const brief = await call(measurer, 'taste_profile', {});
