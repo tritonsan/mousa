@@ -3,7 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { landingPage, galleryPage } from '../src/site/render.mjs';
-import { judgesPage, qlooPage, benchmarkPage, galleryBlindSpot, benchmarkSentence } from '../src/site/judge-pages.mjs';
+import { judgesPage, qlooPage, benchmarkPage, showcasePage, SHOWCASE_ID, galleryBlindSpot, benchmarkSentence } from '../src/site/judge-pages.mjs';
 
 const record = (works, known, guessed, confirmed, frozenAt) => ({ kind: 'session', prediction: { frozenAt, groups: [] }, measured: { counts: { works, worksPredicted: known, predictions: guessed, predictionsMeasured: confirmed } } });
 function gallery() {
@@ -53,5 +53,16 @@ test('the benchmark page shows each agent\'s measures and every audience, and wa
     runs: [run('claude-code', 'paterson-nujabes', 2, 69)] };
   const html = benchmarkPage({ benchmark, repository: 'https://github.com/tritonsan/mousa' });
   for (const text of ['How well do AI agents know an audience?', '2.9%', '1.0% to 5.0%', 'supported', 'Paterson and Nujabes', 'named 2 of the 69 works', 'Anomalisa', 'Lost in Translation', 'docs/benchmark/README.md', 'What it does not show']) assert.ok(html.includes(text), text);
+  assert.doesNotMatch(html, /<script/u);
+});
+
+test('the showcase shows the Qloo design large and the guess-only design beneath, or says it is being recorded', () => {
+  assert.match(showcasePage({ gallery: gallery() }), /being recorded/u);
+  const g = gallery();
+  g.entries.set(SHOWCASE_ID, { id: SHOWCASE_ID, kind: 'comparison', host: 'claude-code', title: 'Moûsa, for the jury', record: record(70, 2, 30, 2, 'T3'),
+    play: [{ label: 'With Qloo', path: 'out/with-qloo/index.html' }, { label: 'Without Qloo', path: 'out/without-qloo/index.html' }] });
+  const html = showcasePage({ gallery: g, previewBase: 'https://preview.example' });
+  assert.ok(html.indexOf('https://preview.example/gallery/showcase-claude-code/out/with-qloo/index.html') < html.indexOf('out/without-qloo/index.html'), 'the Qloo arm comes first');
+  for (const text of ['Moûsa, explained by Moûsa', '2 of 70', 'The same facts, from the guess alone', `/gallery/${SHOWCASE_ID}/`]) assert.ok(html.includes(text), text);
   assert.doesNotMatch(html, /<script/u);
 });

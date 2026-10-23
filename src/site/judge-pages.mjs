@@ -144,6 +144,34 @@ ${repository ? `<p class="site-small"><a class="site-link" href="${escape(protoc
   return layout({ title: 'Benchmark · Moûsa', description: 'How well do AI agents know an audience? A pre-registered benchmark of Claude Code, Codex and Kiro against Qloo\'s measurement.', body, active: 'benchmark', repository });
 }
 
+/** The gallery entry of Moûsa's own showcase page: a comparison Moûsa designed in Claude Code for the jury. */
+export const SHOWCASE_ID = 'showcase-claude-code';
+
+/**
+ * The showcase: the page that explains Moûsa, designed by Moûsa for its audience (the jury, described to Qloo by works
+ * the judges are known for), shown large as the Qloo arm built it, with the arm built from the guess alone beneath it
+ * and the record of how each was made.
+ */
+export function showcasePage({ gallery, previewBase = '', repository = '' } = {}) {
+  const entry = gallery?.entries?.get(SHOWCASE_ID);
+  const hero = `<section class="site-hero small"><p class="mr-kicker">Showcase</p><h1>Moûsa, explained by Moûsa</h1>
+<p class="site-lede">This page explains Moûsa, and Moûsa designed it in Claude Code, twice, from one sealed guess about its audience: you, the jury, described to Qloo by works our judges are known for. One design used what Qloo measured; the other, the guess alone. Both state the same facts.</p>`;
+  if (!entry) return layout({ title: 'Showcase · Moûsa', body: `${hero}</section><section class="site-section"><p>The showcase is being recorded. <a class="site-link" href="/judges/">Start with the jury's page</a>.</p></section>`, active: 'showcase', repository });
+  const url = file => `${previewBase}/gallery/${entry.id}/${file}`;
+  const plays = entry.play || [];
+  const qloo = plays.find(item => /with-qloo|qloo/u.test(item.path) && !/without/u.test(item.path)) || plays[0];
+  const guess = plays.find(item => item !== qloo);
+  const spot = entry.blindSpot || blindSpotOf(entry.record);
+  const frame = (item, tall) => item ? `<figure class="site-showcase-frame${tall ? ' tall' : ''}"><iframe src="${escape(url(item.path))}" title="${escape(`${item.label}: ${entry.title}`)}" sandbox="allow-scripts allow-forms" ${tall ? '' : 'loading="lazy" '}referrerpolicy="no-referrer"></iframe>
+<figcaption><b>${escape(item.label)}</b> <a href="${escape(url(item.path))}" target="_blank" rel="noopener noreferrer">Open full screen</a></figcaption></figure>` : '';
+  const body = `${hero}
+<p class="site-actions">${qloo ? `<a class="site-button" href="${escape(url(qloo.path))}" target="_blank" rel="noopener noreferrer">Open the Qloo design full screen</a>` : ''}<a class="site-button quiet" href="/gallery/${escape(entry.id)}/">Read how each was made</a></p>
+${spot ? `<p class="site-hero-stat"><b>${escape(spot.known)} of ${escape(spot.works)}</b><span>works Qloo measured for this audience were in the agent's own sealed guess.</span></p>` : ''}</section>
+<section class="site-section">${frame(qloo, true)}</section>
+${guess ? `<section class="site-section"><div class="site-head-row"><h2>The same facts, from the guess alone</h2><p>The other arm: the same brief, the same sealed guess and the same stages, with no Qloo data.</p></div>${frame(guess, false)}</section>` : ''}`;
+  return layout({ title: 'Showcase · Moûsa', description: 'The page that explains Moûsa, designed by Moûsa for the jury, with Qloo and without.', body, active: 'showcase', repository });
+}
+
 /** How Moûsa uses Qloo: each request, what it decides, the budget and cache, the data rule and what the live API taught it. */
 export function qlooPage({ repository = '' } = {}) {
   const body = `<section class="site-hero small"><p class="mr-kicker">Qloo in Moûsa</p><h1>Request by request</h1>

@@ -16,7 +16,7 @@ const hex = value => (/^#[0-9a-f]{6}$/u.test(value || '') ? value : null);
 
 /** A page of the site: its header and navigation, the body and the footer. `refresh` reloads it every so many seconds. */
 export function layout({ title, description = '', body, active = '', repository = '', image = '', refresh = 0 }) {
-  const nav = [['/judges/', 'For the jury', 'judges'], ['/#how', 'How it works', 'how'], ['/gallery/', 'Evidence', 'gallery'], ['/benchmark/', 'Benchmark', 'benchmark'], ['/vote/', 'Blind vote', 'vote'], ['/try/', 'Try it', 'try']];
+  const nav = [['/judges/', 'For the jury', 'judges'], ['/showcase/', 'Showcase', 'showcase'], ['/gallery/', 'Evidence', 'gallery'], ['/benchmark/', 'Benchmark', 'benchmark'], ['/vote/', 'Blind vote', 'vote'], ['/try/', 'Try it', 'try']];
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escape(title)}</title>${description ? `<meta name="description" content="${escape(description)}">` : ''}${image ? `<meta property="og:image" content="${escape(image)}">` : ''}${Number.isInteger(refresh) && refresh > 0 ? `<meta http-equiv="refresh" content="${refresh}">` : ''}
 <link rel="stylesheet" href="/site/report.css"><link rel="stylesheet" href="/site/site.css"><link rel="stylesheet" href="/brand.css"></head>
