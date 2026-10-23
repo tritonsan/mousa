@@ -4,6 +4,40 @@ This record describes the tested scope of the local application. It does not est
 
 The reports it names under `output/` stay on the machine that made them. Several hold Qloo's answers, which the public repository does not.
 
+## The blind spot benchmark, the showcase and five new pairs — October 23, 2026
+
+**The benchmark** ran under its [pre-registered protocol](benchmark/README.md):
+- Protocol: d200ff2, 16:44.
+- Amendment 1 on the models, after a pilot outside the list: d8d7645.
+- All 60 sealed predictions: f87401e, 17:14, before Qloo measured any audience.
+- Results: 0deed15. Every run measured with 12 Qloo requests, 720 in all.
+
+The known share, mean over 20 audiences with 95% interval:
+
+| Agent | Known share |
+| --- | --- |
+| Claude Code (claude-opus-5-5) | 6.8% (5.2% to 8.5%) |
+| Kiro (claude-opus-5.5) | 6.6% (5.2% to 8.0%) |
+| Codex (gpt-6.1-sol, high effort) | 4.7% (3.2% to 6.1%) |
+
+- H1 and H2 were supported for every agent. The [results](benchmark/results.md) give the confirmed shares, domains and pairs.
+- Each prediction session took 27 to 76 seconds, one attempt each, and made no Qloo request. By agent: Claude Code 29 to 53 seconds, Codex 27 to 76, Kiro 43 to 59.
+
+**Three comparisons in Claude Code** (claude-opus-5-5), each with two subagents from one sealed guess:
+
+| Comparison | Time | Qloo requests | Distance | What the record shows |
+| --- | --- | --- | --- | --- |
+| The showcase: the page that explains Moûsa, for people who love This Week in Startups, The Original Kings of Comedy, the Los Angeles Dodgers, Chelsea F.C. and Live Nation | 7.9 min | 16 | 0.60 | The guess sketched a navy stadium scoreboard; with Qloo, 1 of 68 measured works was in it, all 12 qualities were new (Intimate, Realistic, Reflective among them), and the page became a quiet editorial one. |
+| The Lamplight, a live music venue | 7.8 min | 14 | 0.40 | Both arms captured and reviewed. |
+| Second Drink, a stand-up night | 8.5 min | 15 | 0.55 | Both arms captured and reviewed. |
+
+**The venue's first run captured nothing.** It built both arms in 6.3 minutes but captured and reviewed nothing. The runner had cleared `MOUSA_BROWSER` with the session's other `MOUSA_*` variables, and the engine fell back to Edge, which cannot capture headless here. The runners now pass the browser on. That run is kept aside, out of the gallery.
+
+**An audience swap in Kiro**, with the live try's own runner and the record shop starter (exploratory, measured with `scripts/audience-swap.mjs`):
+- Three new pairs: Taylor Swift and Gilmore Girls (0.68), Elden Ring and Berserk (0.74), and Bad Bunny and Narcos (0.65). Each took 12 Qloo requests and about six minutes, with both arms reviewed.
+- With the 14 October pair (Paterson and Nujabes, 0.60), each audience's Qloo design is 0.67 from its guess-only design on average.
+- Across audiences, the Qloo designs are 0.65 apart and the guess-only designs 0.59 apart. The guesses already differ by audience, so the guess-only designs do not collapse into one look. Measuring an audience moved its design further than swapping the audience moved the guess-only designs.
+
 ## Qloo's answers taken out of the public repository — October 23, 2026
 
 Qloo's developer guide allows private server-side caching, but asks: "Do not store Qloo response data in a public repository". This repository held two recorded runs with Qloo's answers in them, and a few of Qloo's ids in tests and live scripts.
