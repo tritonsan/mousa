@@ -34,6 +34,14 @@ commit=$(git rev-parse --short=12 HEAD)
 # The commit the site reports is a build argument of the image, so the environment file names it before the build.
 sed -i "s/^MOUSA_COMMIT=.*/MOUSA_COMMIT='$commit'/" "$ENV_FILE"
 
+# A redeploy keeps the Kiro the site runs. Its version goes to the build as KIRO_EXPECTED_VERSION (the shell's value
+# wins over the environment file's in Compose), so a build that fetches another version from the stable channel stops,
+# and the site is left as it was. The environment file naming a version moves Kiro on purpose.
+if ! grep -qE "^KIRO_EXPECTED_VERSION='?[0-9]" "$ENV_FILE"; then
+  running_kiro=$(docker run --rm --entrypoint cat qloo-design-demo:local /opt/kiro/version.txt 2>/dev/null | awk '{print $NF}') || running_kiro=''
+  if [ -n "$running_kiro" ]; then export KIRO_EXPECTED_VERSION="$running_kiro"; step "keeping Kiro $running_kiro"; fi
+fi
+
 step "building the image for $commit, while the site keeps running on its own"
 "${COMPOSE[@]}" build --progress plain
 docker run --rm --entrypoint cat qloo-design-demo:local /opt/kiro/version.txt

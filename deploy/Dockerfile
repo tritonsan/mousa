@@ -7,8 +7,6 @@ ARG KIRO_EXPECTED_VERSION=""
 # The major version the live try was tested with. The installer takes a channel, not a version, so an image built
 # after CLI 3.0 reaches the stable channel would get its new engine untested; the build stops instead. Empty allows any.
 ARG KIRO_EXPECTED_MAJOR="2"
-# The commit the image is built from (git rev-parse --short HEAD), which each live try records: the image has no git.
-ARG MOUSA_COMMIT=""
 
 USER root
 # Chromium captures each design for the designing model's self-review. Its sandbox needs user namespaces, which
@@ -60,6 +58,10 @@ COPY --chown=root:root examples/long-dusk/ ./examples/long-dusk/
 COPY --chown=root:root deploy/entrypoint.sh /usr/local/bin/qloo-demo-entrypoint
 RUN chmod 0555 /usr/local/bin/qloo-demo-entrypoint
 
+# The commit the image is built from (git rev-parse --short HEAD), which each live try records: the image has no git.
+# It is declared here, after the system packages and Kiro: every RUN after an ARG depends on its value, so declared at
+# the top a new commit rebuilt those layers and fetched Kiro's stable channel again on each redeploy (23 October 2026).
+ARG MOUSA_COMMIT=""
 # A hosted server has no Codex: no image generator is offered, and plans make imagery without one.
 # Kiro's launcher finds kiro-cli-chat on PATH; without /opt/kiro/bin there, every session stopped at once with
 # "failed to launch kiro-cli-chat" (22 October 2026). Each try session also puts Kiro's folder on its own PATH.
