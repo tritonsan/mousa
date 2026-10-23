@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "brief": "Design a one-page website for Common Table, a small neighbourhood café. It is for people who love {audience}. Use the Moûsa plugin, so the design rests on what this audience actually loves.",
+  "medium": "web",
+  "hosts": ["claude-code", "codex", "kiro"],
+  "audiences": [
+    { "id": "paterson-nujabes", "seeds": ["Paterson", "Nujabes"] },
+    { "id": "hollow-knight-spirited-away", "seeds": ["Hollow Knight", "Spirited Away"] },
+    { "id": "taylor-swift-gilmore-girls", "seeds": ["Taylor Swift", "Gilmore Girls"] },
+    { "id": "kendrick-lamar-insecure", "seeds": ["Kendrick Lamar", "Insecure"] },
+    { "id": "succession-radiohead", "seeds": ["Succession", "Radiohead"] },
+    { "id": "dune-part-two-brian-eno", "seeds": ["Dune: Part Two", "Brian Eno"] },
+    { "id": "bad-bunny-narcos", "seeds": ["Bad Bunny", "Narcos"] },
+    { "id": "the-office-parks-and-recreation", "seeds": ["The Office", "Parks and Recreation"] },
+    { "id": "dave-chappelle-key-and-peele", "seeds": ["Dave Chappelle", "Key & Peele"] },
+    { "id": "khruangbin-parts-unknown", "seeds": ["Khruangbin", "Anthony Bourdain: Parts Unknown"] },
+    { "id": "drive-to-survive-ford-v-ferrari", "seeds": ["Formula 1: Drive to Survive", "Ford v Ferrari"] },
+    { "id": "ted-lasso-friday-night-lights", "seeds": ["Ted Lasso", "Friday Night Lights"] },
+    { "id": "normal-people-phoebe-bridgers", "seeds": ["Normal People", "Phoebe Bridgers"] },
+    { "id": "grand-budapest-vampire-weekend", "seeds": ["The Grand Budapest Hotel", "Vampire Weekend"] },
+    { "id": "minecraft-mrbeast", "seeds": ["Minecraft", "MrBeast"] },
+    { "id": "beyonce-pose", "seeds": ["Beyoncé", "Pose"] },
+    { "id": "norwegian-wood-ryuichi-sakamoto", "seeds": ["Norwegian Wood", "Ryuichi Sakamoto"] },
+    { "id": "into-the-wild-bon-iver", "seeds": ["Into the Wild", "Bon Iver"] },
+    { "id": "shah-rukh-khan-ar-rahman", "seeds": ["Shah Rukh Khan", "A. R. Rahman"] },
+    { "id": "elden-ring-berserk", "seeds": ["Elden Ring", "Berserk"] }
+  ]
+}
