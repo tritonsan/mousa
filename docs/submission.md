@@ -11,7 +11,7 @@ AI coding agents now make a large share of the web's new interfaces, and they de
 - Anthropic itself wrote that a model asked for a landing page without guidance almost always produces Inter, purple gradients on white and minimal animation. It called the result "immediately recognizable—and dismissible".
 
 The deeper problem is the audience. An agent asked to design "for people who love Paterson and Nujabes" designs from its own idea of those people, and that idea is never tested.
-- **In the 11 sessions we recorded** in Claude Code, Codex and Kiro, the agents' sealed guesses named 22 of the 714 works Qloo measured for their audiences.
+- **In the 17 sessions we recorded** in Claude Code, Codex and Kiro, the agents' sealed guesses named 39 of the 1,151 works Qloo measured for their audiences.
 - **In our pre-registered benchmark,** with 20 audiences and three agents, the sealed guesses named 6.8% (Claude Code), 6.6% (Kiro) and 4.7% (Codex) of the works Qloo measured. The predictions were public before Qloo measured anything. Claude Code and Kiro run the same model and differ by 0.2 points, so the blind spot is the model's, not the tool's.
 
 ## What it does
@@ -76,7 +76,7 @@ This is the live try recorded on 14 October: a record shop's website, Wax & Wane
 
 ## The evidence, and what each kind does not show
 
-1. **The blind spot.** In 11 sessions, 692 of 714 measured works were not in the guesses. Anyone can recount it from the release's gallery bundle with `node scripts/blind-spot-stats.mjs`. It says nothing about the design.
+1. **The blind spot.** In 17 recorded sessions, 1,112 of 1,151 measured works were not in the guesses. Anyone can recount it from the release's gallery bundle with `node scripts/blind-spot-stats.mjs`. It says nothing about the design.
 2. **The pre-registered benchmark.** Twenty audiences and three agents: Claude Code, Codex and Kiro. The protocol and all 60 sealed predictions were committed to the public repository before Qloo measured any audience. The guesses named 6.8% (Claude Code), 6.6% (Kiro) and 4.7% (Codex) of the works Qloo measured, and 14% to 16% of the works they guessed were among those measured. Both pre-registered hypotheses held for every agent. The agents knew music and TV best (about 10%) and films, brands and books least (2% to 6%). It measures what the agents assume, not whether a design is better.
    - The protocol, one amendment and every agent's sealed prediction were committed before Qloo measured any audience.
    - Qloo's measurement is aggregate affinity, not ground truth about any person.

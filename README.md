@@ -38,7 +38,7 @@ So Qloo's contribution is visible as a difference: what was measured, against wh
 
 Each kind shows something different, and none shows everything. The [jury page](https://d1n6iqgwqs2043.cloudfront.net/judges/) sets them side by side, each with what it does not show.
 
-1. **The blind spot.** The benchmark above. Separately, in the 11 recorded sessions in the gallery, the guesses named 22 of the 714 works Qloo measured. Anyone can recount that from the release's gallery bundle with `node scripts/blind-spot-stats.mjs <folder>`.
+1. **The blind spot.** The benchmark above. Separately, in the 17 recorded sessions in the gallery, the guesses named 39 of the 1,151 works Qloo measured. Anyone can recount that from the release's gallery bundle with `node scripts/blind-spot-stats.mjs <folder>`.
 2. **The mechanism.** Each comparison builds two designs from one frozen prediction: one with Qloo's measurement, one from the prediction alone.
 
 | Comparison | Agent | Distance between the two designs | Devices resting on what the prediction missed |

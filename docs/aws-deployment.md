@@ -88,7 +88,11 @@ aws ssm send-command --instance-ids <id> --document-name AWS-RunShellScript --pa
 - It replaces only the gallery folder of the volume; the tries, votes and jobs stay.
 - It points `MOUSA_COMMIT` at the new commit and waits for the health check. The site is down for about a minute while the container restarts.
 
-The stack's own parameters (`RepositoryRef`, `DataBundleUrl`, `DataBundleSha256`) keep naming what the first boot used until they are updated. A later first boot, on a replaced instance, would use them.
+The stack's own parameters (`RepositoryRef`, `DataBundleUrl`, `DataBundleSha256`) keep naming what the first boot used. A later first boot, on a replaced instance, would use them. Updating them is a stack update, with two costs:
+- The user data changes, so the instance is stopped and started.
+- The Ubuntu image comes from the `/current` SSM parameter, so the update may resolve a newer image. That replaces the instance with a fresh disk: the tries and votes are gone, and Kiro is reinstalled at whatever version is then current.
+
+So the running server moves with `redeploy.sh`. The stack is updated only together with a planned rebuild, and never during the judging.
 
 **During the judging,** do not update the stack: a change that replaces the instance builds the image again, with whatever Kiro is then current. **After 16 November,** delete the stack, delete the snapshots the policy made, revoke the Kiro key at app.kiro.dev and rotate the Qloo key.
 
