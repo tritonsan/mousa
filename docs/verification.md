@@ -4,6 +4,34 @@ This record describes the tested scope of the local application. It does not est
 
 The reports it names under `output/` stay on the machine that made them. Several hold Qloo's answers, which the public repository does not.
 
+## The two arms of every comparison, kept apart — October 24, 2026
+
+**The question:** was each design shown as With Qloo made from Qloo's measurement, and each design shown as Without Qloo from the sealed guess alone, with nothing measured reaching it?
+
+**Checked** by `scripts/verify-comparison-arms.mjs` over the raw runs of all 10 comparisons in the gallery: 4 in Claude Code, 2 in Codex and 4 live tries in Kiro. The raw runs hold Qloo's answers, so they stay on this machine. The checks are in `src/gallery/arm-isolation.mjs`; `tests/arm-isolation.test.mjs` shows each leak they catch. All 10 pass:
+- **Records.** In every pair the With Qloo arm's taste input is `qloo-profile`, with a Qloo profile. The Without Qloo arm's is `model-assumption`, with no profile and no Qloo request. Both hold the same guess, identical apart from when each copy was frozen. Each anchor of the guess-only Design DNA (11 to 24 a pair) is a work in its guess, and each anchor of the Qloo Design DNA is a measured work.
+- **Time.** Every Qloo answer a run saved came after the last copy of its guess was frozen: 23 to 187 seconds after in the local runs, 9 to 10 seconds in the tries, whose first step measures right after the seal. No Qloo answer is in any Without Qloo folder.
+- **Published.** The gallery, the blind vote and the showcase page show each arm under the label its own record gives, one Qloo arm a pair. The live `/showcase/` shows With Qloo first, from `out/with-qloo`.
+- **Claude Code.**
+  - The guess-only subagent started before anything asked Qloo; the first call to Qloo came later, inside the Qloo subagent.
+  - The guess-only subagent made 39 to 52 calls. None asked Qloo, named the Qloo arm or its records, or searched folders outside its own, and its brief named no work only Qloo measured.
+  - Nothing was sent to it while it ran, and nobody else wrote into its folder after the measurement.
+- **Codex**, one agent building the arms in turn: no file in the guess-only folder changed after its first call to Qloo. Its last edit came 13.7 and 19.2 seconds before the first Qloo answer existed. Before that call it read only the plugin's own skill files.
+- **Kiro.** The server locks each arm before its session starts: it measures the Qloo arm, and it gives the other arm `baseline:true` and no Qloo key. It also denies each session the other arm's folder. The guess-only sessions made 16 to 27 calls, and none asked Qloo or named the Qloo arm, Qloo's address or its key.
+
+**What enforces it.** Once a workspace takes the guess as its taste (`taste_profile` with `baseline:true`), the engine refuses `taste_profile`, `taste_ask` and `qloo_query` there with `BASELINE_SESSION`. In Claude Code and Codex the two arms share one MCP server, which holds the key, so a call naming another workspace is stopped only by the protocol; the stream check is what shows that none was made. A try's guess-only session has no key at all.
+
+**Early passes flagged things that were not leaks.** Each was checked against the data:
+- Names are now matched as whole words, leaving out the brief's own: "The Fall" had matched "the fallback", and "Love" the brief's "who love".
+- Codex keeps the plugin's files in `.codex/plugins/cache`, which a first pattern took for Qloo's answer cache.
+- Answers saved during the measuring call are older than the profile written at its end. They are now compared with the moment the guess was frozen, and Codex's last guess-only edit with the first answer.
+- A two-byte `.gitignore` in each answer cache carried no date.
+- A first pattern for folder searches missed `grep -rn`. The test caught it, and the real runs were checked again with the fixed one.
+
+**Fixed.** The showcase page picked its Qloo arm by folder name. It now takes the label from the arm's record, and a test shows the arm labelled With Qloo comes first whatever its folder is called. The live page was already right; the change reaches the server with its next deployment.
+
+**Not shown.** These checks show what each arm was given and what it did. They do not show that the designs differ because of Qloo rather than the model's own variance: one pair is one sample. The repeated pairs in [development-notes.md](development-notes.md) address that.
+
 ## The blind spot benchmark, the showcase and five new pairs — October 23, 2026
 
 **The benchmark** ran under its [pre-registered protocol](benchmark/README.md):

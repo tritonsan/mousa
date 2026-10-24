@@ -65,4 +65,12 @@ test('the showcase shows the Qloo design large and the guess-only design beneath
   assert.ok(html.indexOf('https://preview.example/gallery/showcase-claude-code/out/with-qloo/index.html') < html.indexOf('out/without-qloo/index.html'), 'the Qloo arm comes first');
   for (const text of ['Moûsa, explained by Moûsa', '2 of 70', 'The same facts, from the guess alone', `/gallery/${SHOWCASE_ID}/`]) assert.ok(html.includes(text), text);
   assert.doesNotMatch(html, /<script/u);
+  // The arms are placed by the label taken from their taste records, not by their folders' names or their order.
+  g.entries.get(SHOWCASE_ID).play = [{ label: 'Without Qloo', path: 'out/qloo-notes/index.html' }, { label: 'With Qloo', path: 'out/second/index.html' }];
+  const swapped = showcasePage({ gallery: g });
+  assert.ok(swapped.indexOf('out/second/index.html') < swapped.indexOf('out/qloo-notes/index.html'), 'the arm labelled With Qloo comes first');
+  assert.match(swapped, /<b>With Qloo<\/b>[\s\S]*<b>Without Qloo<\/b>/u);
+  // A pair with no measured arm presents nothing as the Qloo design.
+  g.entries.get(SHOWCASE_ID).play = [{ label: 'Without Qloo', path: 'out/a/index.html' }, { label: 'Without Qloo', path: 'out/b/index.html' }];
+  assert.doesNotMatch(showcasePage({ gallery: g }), /Open the Qloo design|<b>With Qloo<\/b>/u);
 });

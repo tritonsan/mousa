@@ -160,9 +160,10 @@ export function showcasePage({ gallery, previewBase = '', repository = '' } = {}
 <p class="site-lede">This page explains Moûsa, and Moûsa designed it in Claude Code, twice, from one sealed guess about its audience: you, the jury, described to Qloo by works our judges are known for. One design used what Qloo measured; the other, the guess alone. Both state the same facts.</p>`;
   if (!entry) return layout({ title: 'Showcase · Moûsa', body: `${hero}</section><section class="site-section"><p>The showcase is being recorded. <a class="site-link" href="/judges/">Start with the jury's page</a>.</p></section>`, active: 'showcase', repository });
   const url = file => `${previewBase}/gallery/${entry.id}/${file}`;
+  // Each arm is placed by its label, which the gallery took from the arm's own taste record, never by its folder's name.
   const plays = entry.play || [];
-  const qloo = plays.find(item => /with-qloo|qloo/u.test(item.path) && !/without/u.test(item.path)) || plays[0];
-  const guess = plays.find(item => item !== qloo);
+  const qloo = plays.find(item => item.label === 'With Qloo') || null;
+  const guess = plays.find(item => item.label === 'Without Qloo') || null;
   const spot = entry.blindSpot || blindSpotOf(entry.record);
   const frame = (item, tall) => item ? `<figure class="site-showcase-frame${tall ? ' tall' : ''}"><iframe src="${escape(url(item.path))}" title="${escape(`${item.label}: ${entry.title}`)}" sandbox="allow-scripts allow-forms" ${tall ? '' : 'loading="lazy" '}referrerpolicy="no-referrer"></iframe>
 <figcaption><b>${escape(item.label)}</b> <a href="${escape(url(item.path))}" target="_blank" rel="noopener noreferrer">Open full screen</a></figcaption></figure>` : '';
