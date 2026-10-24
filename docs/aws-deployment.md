@@ -14,7 +14,7 @@ ECS on Fargate is a later option for running the same container. Before adding m
 
 The jury's server shows four things:
 - the public site: the landing page, the gallery of recorded sessions and the blind vote;
-- the live try at `/try/`, behind `TRY_ACCESS_CODE`;
+- the live try at `/try/`, open to anyone since October 24 (`TRY_ACCESS=open`, since the hackathon gives jurors no field for a code), with 100 first steps and 10 pairs a day;
 - the recorded Studio jobs, readable;
 - the Studio itself, whose own paid job runs are closed with `LEGACY_JOBS=off`, the Compose default.
 
@@ -239,10 +239,11 @@ For a repeatable AWS demo, build once, inspect the version record, and deploy th
 | `PUBLIC_APP_BASE_URL` | The app's public origin behind CloudFront, such as `https://<app>.cloudfront.net`, which forms may post from |
 | `DEMO_BIND` | The host address Compose publishes the ports on: `127.0.0.1` for Caddy, `0.0.0.0` behind CloudFront |
 | `SITE_REPOSITORY_URL` | The public repository the site links to (https only); optional |
-| `TRY_ACCESS_CODE` | The jury's code for `/try/`, 12 characters or more; empty keeps the try closed |
+| `TRY_ACCESS_CODE` | The jury's code for `/try/`, 12 characters or more; empty keeps the try closed unless `TRY_ACCESS` is `open` |
+| `TRY_ACCESS` | `code` (the default) asks for `TRY_ACCESS_CODE`; `open` asks for no code, as the stack writes it. An open try needs the daily caps below |
 | `TRY_ARMS_PARALLEL` | `on` runs a pair's two Kiro sessions at once, `off` one after the other |
 | `TRY_QLOO_BUDGET` | Qloo requests one try may send in all; default `24` |
-| `TRY_DAILY_RUNS`, `TRY_DAILY_PAIRS`, `TRY_DAILY_CREDITS` | Optional caps on the server's own rolling day for the try, whoever asks: first steps, pairs and Kiro credits as its stream meters them. All off at `0`, the default, as decided for the jury's six members; a cap that is set refuses a new step with 503 and the recorded sessions stay open. One live pair cost about 87 credits on 14 October 2026; a try's record keeps each session's `credits` and `contextPeak` either way |
+| `TRY_DAILY_RUNS`, `TRY_DAILY_PAIRS`, `TRY_DAILY_CREDITS` | Optional caps on the server's own rolling day for the try, whoever asks: first steps, pairs and Kiro credits as its stream meters them. All off at `0` in Compose; the stack writes `100` first steps and `10` pairs for the open try. A cap that is set refuses a new step with 503 and the recorded sessions stay open. One live pair cost about 87 credits on 14 October 2026; a try's record keeps each session's `credits` and `contextPeak` either way |
 | `TRY_PRIVATE_RETENTION_DAYS` | Compose: `14`. At start, a finished try older than this keeps its record, reports and designs; its Kiro homes and session streams are removed. `0` keeps them |
 | `MOUSA_CAPTURE_INLINE_SIDE` | The longer side a review capture is scaled to before the model sees it (512-2400). Empty is the engine's choice: 1024 on a hosted server, 1568 locally, since a round of 1568-pixel captures took two live arms to 95% of their context |
 | `LOG_FORMAT`, `REQUEST_LOG` | Compose: `json` and `on`: one JSON object a line with the secrets redacted, and a record per request with its route pattern, status and time, never a try's id, a preview token or a ballot. Locally `text` and `off` |

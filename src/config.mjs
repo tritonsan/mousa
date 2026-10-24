@@ -32,6 +32,7 @@ export function getConfig(env = process.env) {
   if (env.PRODUCTION_STAGES && !['on', 'off'].includes(env.PRODUCTION_STAGES)) throw new Error('Invalid PRODUCTION_STAGES. Use on or off.');
   if (env.MOUSA_ENVIRONMENT && !['local', 'hosted'].includes(env.MOUSA_ENVIRONMENT)) throw new Error('Invalid MOUSA_ENVIRONMENT. Use local or hosted.');
   if (env.TRY_ACCESS_CODE && env.TRY_ACCESS_CODE.length < 12) throw new Error('TRY_ACCESS_CODE must be at least 12 characters.');
+  if (env.TRY_ACCESS && !['code', 'open'].includes(env.TRY_ACCESS)) throw new Error('Invalid TRY_ACCESS. Use code or open.');
   if (env.TRY_ARMS_PARALLEL && !['on', 'off'].includes(env.TRY_ARMS_PARALLEL)) throw new Error('Invalid TRY_ARMS_PARALLEL. Use on or off.');
   if (env.LEGACY_JOBS && !['on', 'off'].includes(env.LEGACY_JOBS)) throw new Error('Invalid LEGACY_JOBS. Use on or off.');
   if (env.LOG_FORMAT && !['text', 'json'].includes(env.LOG_FORMAT)) throw new Error('Invalid LOG_FORMAT. Use text or json.');
@@ -75,12 +76,13 @@ export function getConfig(env = process.env) {
     appBaseUrl: publicOrigin(env.PUBLIC_APP_BASE_URL),
     // The public repository the site links to, once there is one.
     siteRepository: /^https:\/\/[^\s"'<>]+$/u.test(env.SITE_REPOSITORY_URL || '') ? env.SITE_REPOSITORY_URL : '',
-    // The live try: the code jurors enter, whether a pair's two arms run at once, and the Qloo requests one try may send.
-    tryAccessCode: env.TRY_ACCESS_CODE || '', tryArmsParallel: (env.TRY_ARMS_PARALLEL || 'on') === 'on', tryQlooBudget: number('TRY_QLOO_BUDGET', 24, 1, 60),
+    // The live try: the code jurors enter, or none when TRY_ACCESS is open (the hackathon gives jurors no field for a
+    // code), whether a pair's two arms run at once, and the Qloo requests one try may send.
+    tryAccessCode: env.TRY_ACCESS_CODE || '', tryOpen: env.TRY_ACCESS === 'open',
+    tryArmsParallel: (env.TRY_ARMS_PARALLEL || 'on') === 'on', tryQlooBudget: number('TRY_QLOO_BUDGET', 24, 1, 60),
     // What the whole server may spend on the try in any rolling day, whoever asks: first steps, pairs and Kiro credits.
-    // All three are off (0) unless set: the jury's server runs with the code and the per-address limits alone, as was
-    // decided for six jurors. The credits are what Kiro's stream meters for each session; a host that meters nothing
-    // counts 0.
+    // All three are off (0) unless set. A try open to anyone needs them: the jury's server allows 100 first steps and
+    // 10 pairs a day. The credits are what Kiro's stream meters for each session; a host that meters nothing counts 0.
     tryDailyRuns: number('TRY_DAILY_RUNS', 0, 0, 100000), tryDailyPairs: number('TRY_DAILY_PAIRS', 0, 0, 100000), tryDailyCredits: number('TRY_DAILY_CREDITS', 0, 0, 10000000),
     // After this many days a finished try keeps its record, reports and designs but not its Kiro homes and session
     // streams, which only the operator reads; 0 keeps them for good, as a study on this machine wants.

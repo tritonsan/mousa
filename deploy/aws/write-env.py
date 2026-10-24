@@ -18,7 +18,7 @@ def settings(env, read, commit):
     keys = json.loads(read(env["MOUSA_KEYS_SECRET"]))
     url = env.get("MOUSA_REPOSITORY_URL", "")
     return {
-        "QLOO_API_KEY": keys["QLOO_API_KEY"], "KIRO_API_KEY": keys["KIRO_API_KEY"], "TRY_ACCESS_CODE": keys["TRY_ACCESS_CODE"],
+        "QLOO_API_KEY": keys["QLOO_API_KEY"], "KIRO_API_KEY": keys["KIRO_API_KEY"], "TRY_ACCESS_CODE": keys["TRY_ACCESS_CODE"], "TRY_ACCESS": "open",
         "SITE_SECRET": read(env["MOUSA_SITE_SECRET"]), "DEMO_ACCESS_TOKEN": read(env["MOUSA_TOKEN_SECRET"]),
         "QLOO_API_BASE_URL": "https://hackathon.api.qloo.com", "KIRO_MODEL": env.get("MOUSA_KIRO_MODEL") or "claude-opus-5.5",
         "KIRO_EFFORT": "medium", "KIRO_RUN_TIMEOUT_MS": "900000", "MAX_JOBS": "60", "PRODUCTION_STAGES": "on",
@@ -27,7 +27,7 @@ def settings(env, read, commit):
         "PUBLIC_APP_BASE_URL": "https://" + env["MOUSA_APP_DOMAIN"], "PUBLIC_PREVIEW_BASE_URL": "https://" + env["MOUSA_PREVIEW_DOMAIN"],
         "TRUST_PROXY": "1", "KIRO_RELEASE_CHANNEL": "stable", "KIRO_EXPECTED_VERSION": "", "KIRO_EXPECTED_MAJOR": "2",
         "MOUSA_COMMIT": commit, "SITE_REPOSITORY_URL": re.sub(r"\.git$", "", url) if url.startswith("https://") else "",
-        "TRY_ARMS_PARALLEL": "on", "TRY_QLOO_BUDGET": "24", "TRY_DAILY_RUNS": "0", "TRY_DAILY_PAIRS": "0", "TRY_DAILY_CREDITS": "0",
+        "TRY_ARMS_PARALLEL": "on", "TRY_QLOO_BUDGET": "24", "TRY_DAILY_RUNS": "100", "TRY_DAILY_PAIRS": "10", "TRY_DAILY_CREDITS": "0",
         "TRY_PRIVATE_RETENTION_DAYS": "14", "LOG_FORMAT": "json", "REQUEST_LOG": "on", "LEGACY_JOBS": "off",
     }
 

@@ -128,7 +128,7 @@ test('the environment file the server writes sets every variable the server\'s e
     MOUSA_REPOSITORY_URL: 'https://github.com/owner/name.git', MOUSA_KIRO_MODEL: 'claude-opus-5.5' } });
   const done = run({ 'arn:keys': JSON.stringify(keys), 'arn:site': 's'.repeat(64), 'arn:token': 't'.repeat(40) });
   assert.equal(done.status, 0, done.stderr);
-  assert.match(done.stdout, /^34 settings written, commit [0-9a-f]{12}/u);
+  assert.match(done.stdout, /^35 settings written, commit [0-9a-f]{12}/u);
   assert.doesNotMatch(done.stdout, /qloo-test-only|ksk_test_only|test-only-code|s{64}/u, 'nothing secret is printed');
   const text = await fs.readFile(path.join(out, 'demo.env'), 'utf8');
   const written = Object.fromEntries(text.split('\n').filter(line => /^[A-Z_]+=/u.test(line)).map(line => [line.slice(0, line.indexOf('=')), line.slice(line.indexOf('=') + 1)]));
@@ -137,7 +137,7 @@ test('the environment file the server writes sets every variable the server\'s e
   assert.equal(written.PUBLIC_APP_BASE_URL, "'https://d1.cloudfront.net'");
   assert.equal(written.PUBLIC_PREVIEW_BASE_URL, "'https://d2.cloudfront.net'");
   assert.equal(written.SITE_REPOSITORY_URL, "'https://github.com/owner/name'");
-  for (const [name, value] of Object.entries({ TRUST_PROXY: '1', LEGACY_JOBS: 'off', DEMO_BIND: '0.0.0.0', KIRO_EXPECTED_MAJOR: '2', LOG_FORMAT: 'json', TRY_DAILY_CREDITS: '0' })) assert.equal(written[name], `'${value}'`, name);
+  for (const [name, value] of Object.entries({ TRUST_PROXY: '1', LEGACY_JOBS: 'off', DEMO_BIND: '0.0.0.0', KIRO_EXPECTED_MAJOR: '2', LOG_FORMAT: 'json', TRY_DAILY_CREDITS: '0', TRY_ACCESS: 'open', TRY_DAILY_RUNS: '100', TRY_DAILY_PAIRS: '10' })) assert.equal(written[name], `'${value}'`, name);
   if (process.platform !== 'win32') assert.equal((await fs.stat(path.join(out, 'demo.env'))).mode & 0o777, 0o600);
   // Every variable the server's example lists, and every one the Compose file reads, is set.
   const example = (await read('deploy/demo.env.example')).split('\n').filter(line => /^[A-Z_]+=/u.test(line)).map(line => line.split('=')[0]);
@@ -158,7 +158,7 @@ test('the health summary the stack reports carries the deep check without the to
     if (req.url !== '/api/health/deep' || req.headers['x-demo-token'] !== 'token-test-only') { res.writeHead(401); res.end(); return; }
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ status: 'ok', kiro: { version: 'kiro-cli 2.33.1', authenticated: true }, capture: { available: true, label: 'Chromium' },
-      try: { open: true, missing: [] }, gallery: { entries: 11, vote: 4 }, commit: 'abcdef123456', caller: { address: '127.0.0.1' } }));
+      try: { open: true, missing: [], access: 'open' }, gallery: { entries: 11, vote: 4 }, commit: 'abcdef123456', caller: { address: '127.0.0.1' } }));
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   t.after(async () => { server.close(); await fs.rm(out, { recursive: true, force: true }); });
@@ -166,7 +166,7 @@ test('the health summary the stack reports carries the deep check without the to
   // Asynchronously, so this process's server can answer while the summary waits for it.
   const result = await promisify(execFile)(python, [path.join(repo, 'deploy', 'aws', 'health-summary.py')], { encoding: 'utf8',
     env: { ...process.env, MOUSA_ENV_FILE: path.join(out, 'demo.env'), MOUSA_APP_URL: `http://127.0.0.1:${server.address().port}` } });
-  assert.deepEqual(JSON.parse(result.stdout), { status: 'ok', kiro: 'kiro-cli 2.33.1', kiroKey: true, captures: 'Chromium', tryOpen: true, tryMissing: [], gallery: 11, commit: 'abcdef123456' });
+  assert.deepEqual(JSON.parse(result.stdout), { status: 'ok', kiro: 'kiro-cli 2.33.1', kiroKey: true, captures: 'Chromium', tryOpen: true, tryAccess: 'open', tryMissing: [], gallery: 11, commit: 'abcdef123456' });
   assert.doesNotMatch(result.stdout, /token-test-only/u);
   assert.deepEqual(seen, ['token-test-only']);
 });

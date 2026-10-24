@@ -21,7 +21,7 @@ def summary(health):
     return {
         "status": health.get("status"), "kiro": health.get("kiro", {}).get("version"), "kiroKey": health.get("kiro", {}).get("authenticated"),
         "captures": health.get("capture", {}).get("label") or health.get("capture", {}).get("reason"),
-        "tryOpen": health.get("try", {}).get("open"), "tryMissing": health.get("try", {}).get("missing", []),
+        "tryOpen": health.get("try", {}).get("open"), "tryAccess": health.get("try", {}).get("access"), "tryMissing": health.get("try", {}).get("missing", []),
         "gallery": health.get("gallery", {}).get("entries"), "commit": health.get("commit"),
     }
 

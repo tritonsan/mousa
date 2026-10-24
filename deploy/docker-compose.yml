@@ -51,8 +51,10 @@ services:
       # proxy sends its own Host.
       PUBLIC_APP_BASE_URL: ${PUBLIC_APP_BASE_URL:-}
       SITE_REPOSITORY_URL: ${SITE_REPOSITORY_URL:-}
-      # The jury's live try; empty keeps it closed. Two first steps and one pair (two Kiro sessions) run at a time.
+      # The jury's live try; empty keeps it closed unless TRY_ACCESS is open, which asks for no code. Two first steps
+      # and one pair (two Kiro sessions) run at a time.
       TRY_ACCESS_CODE: ${TRY_ACCESS_CODE:-}
+      TRY_ACCESS: ${TRY_ACCESS:-code}
       TRY_ARMS_PARALLEL: ${TRY_ARMS_PARALLEL:-on}
       TRY_QLOO_BUDGET: ${TRY_QLOO_BUDGET:-24}
       # Optional caps on the server's own day for the try (first steps, pairs, Kiro credits); all off at 0, the default.

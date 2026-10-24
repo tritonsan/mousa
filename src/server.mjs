@@ -119,11 +119,11 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
     .map(entry => ({ id: entry.id, arms: entry.record.arms || [] }));
   if (votePairs.length && !config.siteSecret) logger.warn('Vote: SITE_SECRET is not set, so ballots last only as long as this process.');
   const voteBox = votePairs.length ? await createVoteBox({ dataDir: config.dataDir, secret: config.siteSecret, pairs: votePairs }) : null;
-  // The jury's live try in Kiro, behind its access code; its runs live in DATA_DIR/try.
-  const trial = createTryManager({ config, kiro: () => kiro, log: logger, ...tryOptions });
+  // The jury's live try in Kiro, behind its access code unless TRY_ACCESS is open; its runs live in DATA_DIR/try.
+  const trial = createTryManager({ config, kiro: () => kiro, log: logger, requireAccess: !config.tryOpen, ...tryOptions });
   await trial.initialize();
   const tryAccess = createTryAccess({ code: config.tryAccessCode, secret: config.siteSecret });
-  if (config.tryAccessCode && !trial.readiness().open) logger.warn(`Try: not open. ${trial.readiness().missing.join(' ')}`);
+  if ((config.tryAccessCode || config.tryOpen) && !trial.readiness().open) logger.warn(`Try: not open. ${trial.readiness().missing.join(' ')}`);
   let previewBaseUrl = config.previewBaseUrl;
   // A network client of /mcp gets the validators and the font catalog, but no file, image or capture tool: those act on
   // this machine, so the endpoint reports them as a hosted server would.
@@ -283,7 +283,7 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         const forwarded = String(req.headers['x-forwarded-for'] || '').split(',').map(item => item.trim()).filter(Boolean);
         return send(res, 200, { status: tryView.open && disk && disk.freeBytes > 2 * 1024 ** 3 ? 'ok' : 'degraded', checkedAt: new Date().toISOString(),
           kiro: { available: Boolean(kiro.available), authenticated: Boolean(kiro.authenticated), version: kiro.version || null, model: config.model || kiro.defaultModel || null },
-          capture: manager.captureStatus(), disk, try: { ...tryView, paused: await trial.paused(), ...trial.queues(), ...trial.usage() },
+          capture: manager.captureStatus(), disk, try: { ...tryView, access: config.tryOpen ? 'open' : 'code', paused: await trial.paused(), ...trial.queues(), ...trial.usage() },
           caller: { address: addressKey(voterAddress(req, config.trustProxy)), forwardedEntries: forwarded.length, trustProxy: config.trustProxy },
           gallery: { entries: gallery.index?.entries.length ?? 0, vote: votePairs.length }, legacyJobs: Boolean(config.legacyJobs), commit: config.commit || null,
           log: { format: config.logFormat || 'text', requests: Boolean(config.requestLog) } });
@@ -441,13 +441,13 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
         const address = addressKey(voterAddress(req, config.trustProxy));
         try {
           if (pathname === '/try/access') {
-            if (req.method !== 'POST') return redirect('/try/');
+            if (req.method !== 'POST' || config.tryOpen) return redirect('/try/');
             checkOrigin(req, config);
             const form = new URLSearchParams(await readBody(req, 2048));
             try { return redirect('/try/', { 'Set-Cookie': tryAccess.enter(form.get('code'), { address, secure: !isLoopback(config.host) }) }); }
             catch (error) { if (error instanceof AccessError) return page(tryAccessPage({ problem: error.message, repository }), error.status); throw error; }
           }
-          if (!tryAccess.granted(req)) {
+          if (!config.tryOpen && !tryAccess.granted(req)) {
             if (api) throw new HttpError(401, 'The try\'s access code is required.');
             return page(tryAccessPage({ repository }), req.method === 'GET' ? 200 : 401);
           }

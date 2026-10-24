@@ -1,6 +1,6 @@
 # Moûsa: the submission text
 
-The text of the Devpost entry, kept here so it can be read beside the code. The jury's access code for the live try is not here: it is in the entry's private testing instructions.
+The text of the Devpost entry, kept here so it can be read beside the code.
 
 **Tagline:** AI agents design for audiences they have never met. Moûsa makes the agent write down its guess first, measures the real audience with Qloo, and ties every design choice to what the guess missed.
 
@@ -121,7 +121,7 @@ This is a live try recorded on 24 October with the hosted try's own runner in Ki
 ## Try it
 
 - **For the jury:** https://d1n6iqgwqs2043.cloudfront.net/judges/ shows the numbers, a four-minute path through the evidence, and what each kind does and does not show.
-- **The live try:** open /try/ with the access code from the testing instructions, then name two or three works you love. In under a minute you see Kiro's sealed guess beside Qloo's measurement. Building both designs takes about five to ten minutes more.
+- **The live try:** open https://d1n6iqgwqs2043.cloudfront.net/try/ (no code needed), then name two or three works you love. In under a minute you see Kiro's sealed guess beside Qloo's measurement. Building both designs takes about five to ten minutes more. The try is open to anyone, up to 100 first steps and 10 design pairs a day across all visitors.
 - **The plugin**, with your own Qloo key:
   - Claude Code: `/plugin marketplace add tritonsan/mousa`, then `/plugin install mousa@mousa`.
   - Codex: `codex plugin marketplace add tritonsan/mousa`, then `codex plugin add mousa@mousa`.
@@ -134,6 +134,7 @@ This is a live try recorded on 24 October with the hosted try's own runner in Ki
 - The benchmark measures what each agent assumes when Moûsa asks it, with one prompt and one run per audience.
 - Qloo's measurement is aggregate data, and each design choice is the agent's interpretation of the names measured.
 - The anchors and the critique are the agent's own judgment. Moûsa requires and records them, but cannot judge whether a choice truly needs its anchor.
+- The live try builds at most 10 design pairs a day across all visitors, so that strangers cannot spend the Kiro budget the jury needs.
 - The hosted server has no image generator, so designs made there draw their imagery in SVG and CSS.
 
 ## Built with

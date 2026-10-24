@@ -184,7 +184,7 @@ ${playBlock(entry, previewBase, arm)}
 /** The live try before it opens: what it will do, and the recorded sessions meanwhile. */
 export function tryPendingPage({ repository = '' } = {}) {
   const body = `<section class="site-hero small"><p class="mr-kicker">Try it live</p><h1>The live try is not open yet.</h1>
-<p class="site-lede">It will run Moûsa in Kiro on this server for the jury, behind an access code. First, in under a minute, the model's frozen guess about the audience you name is set beside what Qloo measures. Then, if you like, the server builds a design with Qloo and one without, from the same guess.</p>
+<p class="site-lede">It will run Moûsa in Kiro on this server. First, in under a minute, the model's frozen guess about the audience you name is set beside what Qloo measures. Then, if you like, the server builds a design with Qloo and one without, from the same guess.</p>
 <p class="site-actions"><a class="site-button" href="/gallery/">See the recorded sessions</a></p></section>`;
   return layout({ title: 'Try it live · Moûsa', body, active: 'try', repository });
 }

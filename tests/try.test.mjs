@@ -163,6 +163,21 @@ test('behind a proxy that sends its own Host, forms may post from the app\'s pub
   assert.throws(() => getConfig({ ...base, TRUST_PROXY: 'yes' }), /TRUST_PROXY/u);
 });
 
+test('with TRY_ACCESS open, the try asks for no code: its request page opens and a try starts without a cookie', async t => {
+  assert.throws(() => getConfig({ HOST: '127.0.0.1', DATA_DIR: os.tmpdir(), TRY_ACCESS: 'public' }), /TRY_ACCESS/u);
+  const { app } = await setup(t, { env: { TRY_ACCESS: 'open', TRY_ACCESS_CODE: '' } });
+  const start = await request(`${app}/try/`);
+  assert.equal(start.status, 200);
+  noScript(start, 'the open request page');
+  assert.doesNotMatch(start.body, /name="code"/u, 'no access code is asked');
+  assert.match(start.body, /value="fixture-shop" checked/u);
+  assert.equal((await request(`${app}/try/access`, { method: 'POST', form: { code: 'anything' }, origin: app })).location, '/try/', 'the access form only leads on');
+  const created = await request(`${app}/try/`, { method: 'POST', origin: app, form: { starter: 'fixture-shop', references: 'Paterson\nNujabes' } });
+  assert.equal(created.status, 303);
+  assert.match(created.location, /^\/try\/[a-f0-9]{32}\/$/u);
+  assert.equal(JSON.parse((await request(`${app}/api/try/${created.location.split('/')[2]}`)).body).input.starter, 'fixture-shop');
+});
+
 test('the try\'s pages run no script and sit behind the access code; a try runs both steps from its forms and its designs play only by token', async t => {
   const { app, preview } = await setup(t, { env: { PUBLIC_APP_BASE_URL: 'https://d111111abcdef8.cloudfront.net' } });
   assert.equal((await request(`${app}/try/access`, { method: 'POST', form: { code: CODE }, origin: 'https://d111111abcdef8.cloudfront.net' })).status, 303, 'a post from the public address CloudFront serves');
