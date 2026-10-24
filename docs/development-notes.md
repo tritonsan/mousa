@@ -128,6 +128,7 @@ Each cause got its own change (October 24, 2026):
 - **The house style.** `design_check` finds twelve habits of the looks models default to. A page keeps at most two, and the review is refused while it carries more.
 - **A critique.** The review names the page's three most generic choices and keeps each only for an anchor of the DNA, then asks whether a fan of the audience's best-loved works would take the page for theirs.
 - **The font library.** It grew from 33 to 55 families across the genres it lacked: varsity and wood type, blackletter, stencil, techno, pixel and graffiti. Families are tagged by genre and era, and the ones models default to are marked overused and ranked last.
+- **The site itself.** The jury site's frame carried three of the habits: Fraunces headings, pill buttons and a frosted header. The Studio carried four. Both now carry none, and a test keeps it so. They use headings in League Spartan, the geometric sans of the wordmark, square corners and plain numbers.
 
 ## Game character
 

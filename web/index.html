@@ -25,7 +25,7 @@
 
   <main id="workspace">
     <section class="page-intro" aria-labelledby="page-title">
-      <div><p class="eyebrow"><span class="tiny-cross" aria-hidden="true">✳</span> CULTURAL DESIGN WORKSPACE</p><h1 id="page-title">From culture to ideas.<br><em>From ideas to products.</em></h1></div>
+      <div><p class="eyebrow"><span class="tiny-cross" aria-hidden="true">✳</span> CULTURAL DESIGN WORKSPACE</p><h1 id="page-title">From culture to ideas.<br><span class="title-follow">From ideas to products.</span></h1></div>
       <div class="intro-copy"><p id="intro-text" data-sites="Save your cultural brief, choose a design direction, and create for different audiences. Inspect the reasoning behind a working site and refine it with focused changes." data-game="Design one playable character for a fixed RPG world from the same brief, with and without Qloo. Play both side by side and trace every design device to its source." data-app="A mobile app the Moûsa plugin redesigned in Kiro, outside this Studio, for an audience named by its references. Tap through the app before and after, and follow how the agent read the taste data and reviewed its own screens.">Save your cultural brief, choose a design direction, and create for different audiences. Inspect the reasoning behind a working site and refine it with focused changes.</p><div class="system-line"><span id="model-label">Checking model</span><span class="line-divider" aria-hidden="true"></span><span id="kiro-version">Kiro CLI</span></div></div>
     </section>
 
@@ -47,13 +47,13 @@
     <div class="studio-grid">
       <aside class="brief-panel" aria-label="Generation settings">
         <form id="generation-form">
-          <div class="panel-heading" id="starter-step"><span class="section-number">01</span><h2>Choose your starting point</h2><span class="small-tag">6 templates</span></div>
+          <div class="panel-heading" id="starter-step"><span class="section-number">1</span><h2>Choose your starting point</h2><span class="small-tag">6 templates</span></div>
           <div class="template-grid" id="template-grid" role="group" aria-label="Starter template"><p class="loading-copy">Loading templates…</p></div>
           <p class="template-description" id="template-description">Every starter includes a working mini-site.</p>
           <p class="context-origin-note" id="context-origin-note" role="status" hidden></p>
 
           <div class="section-divider" id="divider-brief"></div>
-          <div class="panel-heading" id="brief-step"><span class="section-number">02</span><h2>Design brief</h2><span class="brief-count" id="brief-count">0</span></div>
+          <div class="panel-heading" id="brief-step"><span class="section-number">2</span><h2>Design brief</h2><span class="brief-count" id="brief-count">0</span></div>
           <label class="sr-only" for="brief">Describe your product, audience, and cultural references</label>
           <textarea id="brief" name="brief" rows="9" minlength="10" maxlength="3500" placeholder="Describe your product, audience, what they enjoy, and the features to preserve…" required disabled></textarea>
           <p class="field-hint">Describe your product and the features to preserve. Creative preparation can help you choose cultural references. Demo outputs are produced in English.</p>
@@ -61,7 +61,7 @@
           <details id="context-panel" class="context-panel"><summary>Cultural brief <span id="audience-count">0 audiences</span></summary><div class="context-content"><p class="context-hint">Define each audience separately. Add up to 6 references per audience. Location alone does not indicate taste or personality.</p><div id="audience-editors"></div><button type="button" class="subtle-button" id="add-audience">＋ Add audience</button><label class="context-label" for="brand-notes">Brand and product constraints</label><textarea id="brand-notes" rows="3" maxlength="2500" placeholder="Brand voice, fixed facts, associations to avoid…"></textarea><fieldset class="protected-files"><legend>Protected files</legend><label><input type="checkbox" value="index.html"> HTML</label><label><input type="checkbox" value="styles.css"> CSS</label><label><input type="checkbox" value="app.js" checked> JS interactions</label></fieldset><details class="advanced-context"><summary>Protected text snippets</summary><label class="context-label" for="protected-snippets">File path and protected text · JSON</label><textarea id="protected-snippets" rows="4" spellcheck="false" placeholder='[{"path":"index.html","text":"Protected brand name"}]'></textarea><p class="field-hint">Optional. Each entry includes <code>path</code> and <code>text</code> fields.</p></details></div></details>
 
           <div class="section-divider" id="divider-mode"></div>
-          <div class="panel-heading" id="mode-step"><span class="section-number">03</span><h2>Generation path</h2></div>
+          <div class="panel-heading" id="mode-step"><span class="section-number">3</span><h2>Generation path</h2></div>
           <fieldset class="mode-selector"><legend class="sr-only">Generation mode</legend>
             <label class="mode-option" data-mode="compare"><input type="radio" name="mode" value="compare" checked><span class="radio-mark" aria-hidden="true"></span><span><strong>Compare side by side</strong><small>Two generations from the same starting point</small></span><span class="mode-icon" aria-hidden="true">↔</span></label>
             <label class="mode-option" data-mode="qloo"><input type="radio" name="mode" value="qloo"><span class="radio-mark" aria-hidden="true"></span><span><strong>Qloo on</strong><small>Agent with access to cultural data</small></span></label>
@@ -105,7 +105,7 @@
           <div class="starter-footnote">Both generations begin with these files. Content and local interactions belong to the template.</div>
         </details>
 
-        <div class="results-toolbar" id="results-toolbar"><div><span class="section-number">04</span><h2>Generated sites</h2><span class="showcase-badge" id="showcase-badge" hidden></span></div><span class="job-status" id="job-status">Start when ready</span></div>
+        <div class="results-toolbar" id="results-toolbar"><div><span class="section-number">4</span><h2>Generated sites</h2><span class="showcase-badge" id="showcase-badge" hidden></span></div><span class="job-status" id="job-status">Start when ready</span></div>
         <section class="taste-panel" id="taste-panel" hidden aria-labelledby="taste-heading">
           <div class="workflow-heading"><div><span class="section-number">TASTE</span><h2 id="taste-heading">Where each design’s taste came from</h2></div><span id="taste-status" role="status"></span></div>
           <p class="taste-headline" id="taste-headline"></p>
@@ -149,11 +149,11 @@
       <div class="studio-grid">
         <aside class="game-panel" aria-label="Character pair settings">
           <form id="game-form" novalidate>
-            <div class="panel-heading"><span class="section-number">01</span><h2>The world</h2><span class="small-tag">Fixed in both runs</span></div>
+            <div class="panel-heading"><span class="section-number">1</span><h2>The world</h2><span class="small-tag">Fixed in both runs</span></div>
             <div class="game-world" id="game-world"><p class="loading-copy">Loading the world…</p></div>
 
             <div class="section-divider"></div>
-            <div class="panel-heading"><span class="section-number">02</span><h2>Character brief</h2><span class="brief-count" id="game-brief-count">0</span></div>
+            <div class="panel-heading"><span class="section-number">2</span><h2>Character brief</h2><span class="brief-count" id="game-brief-count">0</span></div>
             <label class="sr-only" for="game-brief">Describe the character and the audience it is for</label>
             <textarea id="game-brief" rows="8" minlength="40" maxlength="3500" placeholder="Who the character is for, and what they should feel like to play…" required disabled></textarea>
             <label class="context-label" for="game-references">Audience references · one per line, up to 8</label>
@@ -167,7 +167,7 @@
             <p class="field-hint" id="game-audience-hint">A place and an age band weight the Qloo taste pass, so they reach the data, and both runs are told them. Neither is used to guess identity.</p>
 
             <div class="section-divider"></div>
-            <div class="panel-heading"><span class="section-number">03</span><h2>What to compare</h2></div>
+            <div class="panel-heading"><span class="section-number">3</span><h2>What to compare</h2></div>
             <label class="game-select-label" for="game-pair-kind">Pair<select id="game-pair-kind" disabled><option value="off-on">Qloo off and Qloo on</option><option value="swap">Qloo on and a swapped profile</option></select></label>
             <label class="game-select-label" for="game-swap-from" id="game-swap-field" hidden>Swapped profile from<select id="game-swap-from" disabled><option value="">Choose a recorded pair…</option></select></label>
             <label class="game-select-label" for="game-profile-from">Taste data<select id="game-profile-from" disabled><option value="">A new Qloo taste pass</option></select></label>
@@ -175,7 +175,7 @@
             <p class="field-hint" id="game-compare-hint">A swap pair keeps the brief and the prompt and gives the second run another pair’s measured profile, so any difference comes from the data. Turning the departure rule off is an ablation: it shows how far the data moves the design without being told to.</p>
 
             <div class="section-divider"></div>
-            <div class="panel-heading"><span class="section-number">04</span><h2>Making the characters</h2></div>
+            <div class="panel-heading"><span class="section-number">4</span><h2>Making the characters</h2></div>
             <p class="field-hint game-production-hint">Both designers read the same list of methods, plan how to make each part of their design, and review captures of their own character before they finish. Pictures are methods a plan may choose.</p>
             <label class="game-select-label" for="game-portraits">Portraits a designer may paint<select id="game-portraits" disabled><option value="0">None</option><option value="1">Up to one per character</option><option value="2">Up to two per character</option></select></label>
             <label class="game-check-label" for="game-paint"><input id="game-paint" type="checkbox" disabled>Designers may paint their character as finished game art</label>
@@ -195,7 +195,7 @@
         </aside>
 
         <section class="canvas-panel" aria-label="Character pairs">
-          <div class="results-toolbar game-toolbar"><div><span class="section-number">05</span><h2>Two lamplighters, one moment</h2></div><label class="game-pair-field"><span class="sr-only">Recorded character pair</span><select id="game-pair-select" disabled><option value="">Recorded pairs…</option></select></label><span class="job-status" id="game-status">No pair open</span></div>
+          <div class="results-toolbar game-toolbar"><div><span class="section-number">5</span><h2>Two lamplighters, one moment</h2></div><label class="game-pair-field"><span class="sr-only">Recorded character pair</span><select id="game-pair-select" disabled><option value="">Recorded pairs…</option></select></label><span class="job-status" id="game-status">No pair open</span></div>
           <section class="taste-panel" id="game-summary" hidden aria-labelledby="game-summary-heading">
             <div class="workflow-heading"><div><span class="section-number">TASTE</span><h2 id="game-summary-heading">Where each character’s taste came from</h2></div><span id="game-summary-tag"></span></div>
             <p class="taste-headline" id="game-headline"></p>

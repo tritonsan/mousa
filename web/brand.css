@@ -30,6 +30,10 @@
   letter-spacing: .12em;
 }
 .footer-brand { color: #34334e; }
+/* The brand's display face, League Spartan from the font library: the geometric sans of the wordmark. The site's
+   report.css declares every library face; the Studio loads only this one, for its title and its dialogs. */
+@font-face { font-family: 'League Spartan'; src: url('/library/fonts/league-spartan-latin-wght-normal.woff2') format('woff2'); font-weight: 100 900; font-style: normal; font-display: swap; }
+#page-title, dialog h2 { font-family: 'League Spartan', 'Century Gothic', system-ui, sans-serif; letter-spacing: -.02em; }
 @media (max-width: 680px) {
   .wordmark { gap: 8px; }
   .brand-lockup { --brand-width: 153px; }

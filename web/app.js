@@ -201,7 +201,7 @@ async function loadTemplates() {
       const button = node('button', 'template-button');
       button.type = 'button'; button.dataset.template = template.id; button.setAttribute('aria-pressed', 'false');
       const top = node('span', 'template-button-top');
-      top.append(node('span', 'template-button-number', String(index + 1).padStart(2, '0')), node('span', 'template-button-icon', templateSymbols[template.id] || '◇'));
+      top.append(node('span', 'template-button-number', String(index + 1)), node('span', 'template-button-icon', templateSymbols[template.id] || '◇'));
       top.lastChild.setAttribute('aria-hidden', 'true');
       button.append(top, node('strong', '', template.name));
       button.title = template.description || template.name;
@@ -1541,7 +1541,7 @@ function renderDirections() {
   entries.forEach(({ direction, run }, index) => {
     const card = node('article', 'direction-card');
     card.classList.toggle('selected', state.selectedDirection?.planJobId === plan.id && state.selectedDirection?.directionId === direction.id && state.selectedDirection?.planMode === run.mode);
-    const heading = node('div', 'record-card-header'); heading.append(node('span', 'direction-index', String(index + 1).padStart(2, '0')), node('span', `event-mode ${run.mode}`, runLabel(run.mode, run))); card.append(heading);
+    const heading = node('div', 'record-card-header'); heading.append(node('span', 'direction-index', String(index + 1)), node('span', `event-mode ${run.mode}`, runLabel(run.mode, run))); card.append(heading);
     card.append(node('h3', '', direction.title || 'Design direction'), node('p', '', direction.summary || ''));
     // Taste-led plans: d0 is the model's own default; the host scores every direction by measured Qloo support.
     const scores = run.taste?.directionScores; const score = scores?.scores?.find((entry) => entry.id === direction.id);

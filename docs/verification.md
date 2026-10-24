@@ -44,6 +44,11 @@ The reports it names under `output/` stay on the machine that made them. Several
 
 **What went wrong first.** Two Claude Code runs of this morning captured nothing. Their command did not name `MOUSA_BROWSER`, and the engine fell back to Edge, which cannot capture headless here. They are kept aside as `claude-code-showcase-compare-nocapture-2` and `claude-code-venue-compare-nocapture-3`, and both runners now capture a test page before a session starts.
 
+**The site's own frame.** After the redeploy, the same check was run on the jury site itself.
+- **Before.** Every page carried 3 of the 12 signatures: Fraunces headings, pill buttons and a frosted header. The Studio carried 4: zero-padded section numbers, round icon buttons, a blurred dialog backdrop, and an `<em>` in its title. That `<em>` was set upright in violet, so it was an italic accent in markup only.
+- **Now.** The site sets its headings in League Spartan, the geometric sans of the wordmark, with square corners and a solid white header. The Studio takes the same title face and plain numbers.
+- **Kept.** `tests/site-house-style.test.mjs` reads both with the engine's check and finds no signatures.
+
 **Not shown.**
 - **Distances.** Each pair is one sample. Distances rose in all four pairs, which fits looks drawn from genres rather than defaults, but does not isolate that cause.
 - **The critique is the agent's own judgment.** Codex kept all three of its generic choices by naming anchors. A guess-only arm kept "the stock comedy-club picture" for its own predicted quality. Moûsa can require an anchor, not judge whether it truly requires the choice.
