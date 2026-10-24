@@ -232,9 +232,9 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
   const cancelled = signal => { if (signal.aborted) throw new StepError('The try was cancelled.'); };
 
   /** Step one: the plan, the frozen prediction, the measurement and its report. */
-  async function quickStep(run, signal) {
+  async function quickStep(run, signal, release = () => {}) {
     const project = projectOf(run.id), starter = starters[run.input.starter], step = run.quick;
-    const mark = async (status, extra = {}) => { Object.assign(step, { status }, extra); await save(run); };
+    const mark = async (status, extra = {}) => { Object.assign(step, { status }, extra); if (!QUICK_ACTIVE.includes(status)) release(); await save(run); };
     try {
       await mark('planning', { startedAt: stamp() });
       await fs.mkdir(project, { recursive: true });
@@ -275,12 +275,12 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
   }
 
   /** Step two: the two arms from one frozen prediction, their sessions side by side, and the comparison report. */
-  async function pairStep(run, signal) {
+  async function pairStep(run, signal, release = () => {}) {
     const project = projectOf(run.id), starter = starters[run.input.starter], step = run.pair;
     const timeout = AbortSignal.timeout(limits.pairMs), sibling = new AbortController();
     // One arm that cannot go on stops the other, so no session runs on for a pair that cannot finish.
     const both = AbortSignal.any([signal, timeout, sibling.signal]);
-    const mark = async (status, extra = {}) => { Object.assign(step, { status }, extra); await save(run); };
+    const mark = async (status, extra = {}) => { Object.assign(step, { status }, extra); if (!PAIR_ACTIVE.includes(status)) release(); await save(run); };
     try {
       await mark('preparing', { startedAt: stamp() });
       const source = starter.source ? path.resolve(config.rootDir, starter.source) : null;
@@ -371,11 +371,20 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
       while (lane.running.size < lane.slots && lane.waiting.length) {
         const run = runs.get(lane.waiting.shift());
         if (!run) continue;
-        const controller = new AbortController();
-        lane.running.add(run.id); controllers.set(`${run.id}:${name}`, controller);
-        const task = (name === 'quick' ? quickStep(run, controller.signal) : pairStep(run, controller.signal))
+        const controller = new AbortController(), key = `${run.id}:${name}`;
+        lane.running.add(run.id); controllers.set(key, controller);
+        // A step gives up its slot and its address's place in the moment its status says it ended, before that status
+        // is saved, so no page, request or waiting step sees an ended step still hold them. close() still waits for the save.
+        let held = true;
+        const release = () => {
+          if (!held) return;
+          held = false;
+          lane.running.delete(run.id); controllers.delete(key); askers.delete(key);
+          pump();
+        };
+        const task = (name === 'quick' ? quickStep(run, controller.signal, release) : pairStep(run, controller.signal, release))
           .catch(error => log.error?.(`Try: ${String(error?.message || error).slice(0, 300)}`))
-          .finally(() => { lane.running.delete(run.id); controllers.delete(`${run.id}:${name}`); askers.delete(`${run.id}:${name}`); tasks.delete(task); pump(); });
+          .finally(() => { release(); tasks.delete(task); });
         tasks.add(task);
       }
     }
@@ -493,7 +502,7 @@ export function createTryManager({ config, kiro = {}, requireAccess = true, star
     async design(id, { address = 'unknown' } = {}) {
       const run = get(id);
       if (run.quick?.status !== 'done' || run.quick.measured?.status !== 'ok') throw new TryError(409, 'The pair is built from a finished measurement; this try has none.');
-      // A finished pair is never built again, even in the moment after its save when its lane still lists it.
+      // A finished pair is never built again. Its lane lets it go the moment it ends, so this is what stops a second one.
       if (run.pair && ['done', 'partial'].includes(run.pair.status)) throw new TryError(409, 'This pair is finished. Start a new try to build another.');
       // One request at a time decides, so two quick posts cannot both queue the pair.
       if (reserving.has(id) || lanes.pair.waiting.includes(id) || lanes.pair.running.has(id) || (run.pair && PAIR_ACTIVE.includes(run.pair.status))) return run;
