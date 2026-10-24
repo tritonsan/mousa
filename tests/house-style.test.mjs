@@ -121,3 +121,11 @@ test('design_check reports the default look, a review is refused over the limit,
     await fs.rm(project, { recursive: true, force: true }); await fs.rm(config, { recursive: true, force: true });
   }
 });
+
+test('the night pole: a near-black ground lit by one warm amber lamp, and its near misses', () => {
+  assert.deepEqual(ids({ 'index.html': '<h1>Doors at seven</h1>', 'styles.css': ':root{--night:#120f0c;--lamp:#d9822b}body{background:var(--night);color:#e8dcc8}a{color:var(--lamp)}' }), ['lamp-dark']);
+  assert.match(houseStyleSignatures({ 'a.css': 'html{background-color:#0d0b0a}.cta{border:1px solid #ffb300}' })[0].evidence, /^html #0d0b0a lit by #ffb300$/u);
+  // A dark page lit in another colour, and a lamp on a light page, are not it.
+  assert.deepEqual(ids({ 'a.css': 'body{background:#101418}a{color:#5aa9e6}' }), []);
+  assert.deepEqual(ids({ 'a.css': 'body{background:#f4f4f4}a{color:#d9822b}' }), []);
+});

@@ -16,6 +16,12 @@ import { readPluginRun, readKiroRun, readTryRun } from './records.mjs';
 import { copyPublic, rebaseRootUrls, leakPatterns, leakScan, PUBLIC_TYPES, PUBLIC_LIMITS, PublishError } from './sanitize.mjs';
 import { blindSpotOf, blindSpotTotals } from './blind-spot.mjs';
 
+// The signatures of the look models default to that each design kept, read from its files when its report was written:
+// one count per arm of a comparison.
+const houseStyleOf = record => record.kind === 'comparison'
+  ? ((record.records || []).length && record.records.every(arm => arm.houseStyle) ? record.records.map((arm, index) => ({ label: record.arms[index].label, count: arm.houseStyle.count, of: arm.houseStyle.of })) : null)
+  : record.houseStyle ? { count: record.houseStyle.count, of: record.houseStyle.of } : null;
+
 const exec = promisify(execFile);
 export const GALLERY_SCHEMA_VERSION = '1.0';
 export const ENTRY_ID = /^[a-z0-9][a-z0-9-]{2,60}$/u;
@@ -133,7 +139,7 @@ export async function buildEntry({ entry, run, dir, repo, runsDir, library, brow
     ...(run.legacy ? { surface: 'earlier tool surface (0.4)' } : {}), ...(run.origin === 'try' ? { origin: 'try', tryBy: run.tryBy } : {}), medium: record.medium || null, startedAt: run.startedAt, minutes: run.minutes, turns: run.turns,
     qlooRequests: run.qlooRequests, pictures: entry.images ? 'Codex image generation' : 'none: imagery drawn in SVG or CSS',
     brief: scrubText(run.brief, { user }), headline: record.headline, ...(record.kind === 'comparison' ? { distance: record.distance, samePrediction: record.samePrediction, arms } : {}),
-    ...(blindSpotOf(record) ? { blindSpot: blindSpotOf(record) } : {}),
+    ...(blindSpotOf(record) ? { blindSpot: blindSpotOf(record) } : {}), ...(houseStyleOf(record) ? { houseStyle: houseStyleOf(record) } : {}),
     play, ...(before ? { before } : {}),
     report: { page: 'report/index.html', card: await exists('report/card.png') ? 'report/card.png' : null, cardSmall: await exists('report/card-small.png') ? 'report/card-small.png' : null,
       picture: await exists('report/report.png') ? 'report/report.png' : null },
@@ -166,7 +172,7 @@ export async function buildGallery({ config, runsDir, triesDir = null, repo, out
   const index = { schemaVersion: GALLERY_SCHEMA_VERSION, builtAt: new Date(now()).toISOString(), featured: config.featured || entries[0]?.id || null, vote: config.vote || [],
     entries: entries.map(entry => ({ id: entry.id, kind: entry.kind, title: entry.title, host: entry.host, medium: entry.medium, startedAt: entry.startedAt,
       headline: entry.headline, ...(entry.distance ? { distance: entry.distance.overall } : {}), card: entry.report.cardSmall || entry.report.card,
-      ...(entry.blindSpot ? { blindSpot: entry.blindSpot } : {}), ...(entry.surface ? { surface: entry.surface } : {}), ...(entry.origin ? { origin: entry.origin } : {}) })),
+      ...(entry.blindSpot ? { blindSpot: entry.blindSpot } : {}), ...(entry.houseStyle ? { houseStyle: entry.houseStyle } : {}), ...(entry.surface ? { surface: entry.surface } : {}), ...(entry.origin ? { origin: entry.origin } : {}) })),
     blindSpot: blindSpotTotals(entries) };
   if (!findings.length) await fs.writeFile(path.join(out, 'gallery.json'), `${JSON.stringify(index, null, 2)}\n`);
   else await fs.rm(path.join(out, 'gallery.json'), { force: true });

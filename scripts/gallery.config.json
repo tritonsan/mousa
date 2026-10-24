@@ -12,22 +12,36 @@
   "entries": [
     {
       "id": "showcase-claude-code",
-      "run": "claude-code-showcase-compare-1",
+      "run": "claude-code-showcase-compare-3",
       "title": "Moûsa, explained to the jury: Claude Code",
-      "summary": "The page that explains Moûsa, designed by Moûsa for its audience: the jury, described to Qloo by works the judges are known for. One sealed guess, two arms, the same facts.",
+      "summary": "The page that explains Moûsa, designed by Moûsa for its audience: the jury, described to Qloo by works the judges are known for. One sealed guess, two arms, the same facts, through genre conventions and a critique of the generic.",
+      "from": "examples/showcase"
+    },
+    {
+      "id": "showcase-claude-code-first",
+      "run": "claude-code-showcase-compare-1",
+      "title": "Moûsa, explained to the jury, first build: Claude Code",
+      "summary": "The same page built on 23 October, before Moûsa ranked qualities by how distinctive they are and checked the looks models default to. Its Qloo arm carried seven of those habits: kept as the before.",
       "from": "examples/showcase"
     },
     {
       "id": "venue-claude-code",
-      "run": "claude-code-venue-compare-2",
+      "run": "claude-code-venue-compare-4",
       "title": "The Lamplight, a live music venue, with Qloo and without: Claude Code",
       "summary": "An autumn season page for people who love Khruangbin, Anderson .Paak and Tame Impala, built twice from one sealed guess."
     },
     {
       "id": "comedy-night-claude-code",
-      "run": "claude-code-comedy-compare-1",
+      "run": "claude-code-comedy-compare-2",
       "title": "Second Drink, a stand-up night, with Qloo and without: Claude Code",
       "summary": "A weekly comedy night for people who love The Original Kings of Comedy, Def Comedy Jam and The Bernie Mac Show, built twice from one sealed guess."
+    },
+    {
+      "id": "comedy-night-codex",
+      "run": "codex-comedy-single-1",
+      "title": "Second Drink, a stand-up night: Codex",
+      "summary": "The comedy night in one Codex session with Qloo: soul-sleeve conventions, and a critique of its three most generic choices.",
+      "model": "the Codex CLI's default model"
     },
     {
       "id": "long-dusk-compare-claude-code",

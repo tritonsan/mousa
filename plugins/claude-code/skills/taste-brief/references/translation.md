@@ -27,7 +27,7 @@ In your reading, give each cluster 1-3 **conventions**: the visual habits its wo
 
 ## Leave the house style behind
 
-Models that design fall into one look when nothing else decides, whatever the audience: a warm cream ground, a condensed display serif with one italic word in an accent colour, small uppercase monospace labels after a short hairline, numbered sections and pill buttons; or violet gradients, frosted cards and one neutral sans. `design_check` finds these signatures and a page keeps at most two. If your translation of a quality lands on one, it came from the model, not the audience: go back to the works' genre.
+Models that design fall into a few looks when nothing else decides, whatever the audience: a warm cream ground, a condensed display serif with one italic word in an accent colour, small uppercase monospace labels after a short hairline, numbered sections and pill buttons; a near-black page lit by one amber lamp; or violet gradients, frosted cards and one neutral sans. `design_check` finds these signatures and a page keeps at most two. If your translation of a quality lands on one, it came from the model, not the audience: go back to the works' genre.
 
 ## Layer by layer
 

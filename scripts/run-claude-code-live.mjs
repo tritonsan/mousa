@@ -22,6 +22,7 @@ import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { createInterface } from 'node:readline';
 import { loadDotEnv, rootDir } from '../src/config.mjs';
+import { inspectBrowser, verifyBrowser } from '../plugin/server/production/capture.mjs';
 
 export const BRIEF = `Design a one-page website for Wax & Wane, a small record shop in Moda, Istanbul. It is for people who love the film Paterson and the music of Nujabes. Use the Moûsa plugin, so the design rests on what this audience actually loves.
 
@@ -178,6 +179,10 @@ async function main() {
   // Subagents run in the foreground, so a print-mode session waits for the arms it gave them.
   Object.assign(env, { QLOO_API_KEY: dotenv.QLOO_API_KEY, MOUSA_QLOO_BUDGET: String(budget), MOUSA_IMAGES: 'off', CODEX_IMAGES: 'off', CLAUDE_CODE_DISABLE_BACKGROUND_TASKS: '1', ...(browser ? { MOUSA_BROWSER: browser } : {}),
     ...(dotenv.QLOO_API_BASE_URL ? { QLOO_BASE_URL: dotenv.QLOO_API_BASE_URL } : {}) });
+  // A session that cannot capture reviews nothing and writes its report without pictures. Two runs of 24 October
+  // 2026 found that out after twenty minutes each, so the browser the session will use captures a test page first.
+  const capture = await verifyBrowser(await inspectBrowser({ env }), { env });
+  if (!capture.available) throw new Error(`Captures would not work in this session: ${capture.reason} Set MOUSA_BROWSER to a Chromium browser that captures headless, such as Chrome.`);
   const stream = createWriteStream(path.join(folder, 'session.jsonl'));
   const stderr = createWriteStream(path.join(folder, 'session.stderr.log'));
   const started = Date.now();

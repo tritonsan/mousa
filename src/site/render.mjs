@@ -35,9 +35,11 @@ const chip = (item, small = '') => `<span class="mr-chip" data-mark="${escape(it
 /** An index entry's blind spot: from the index when the gallery carries it, else from the entry's loaded record. */
 const spotOf = (gallery, entry) => entry.blindSpot || blindSpotOf(gallery?.entries?.get(entry.id)?.record);
 const spotSentence = spot => spot ? `The agent's guess named ${spot.known} of the ${spot.works} works Qloo measured.` : '';
+const houseSentence = house => !house ? '' : Array.isArray(house) ? `Signatures of the look models default to: ${house.map(item => `${item.label} ${item.count}`).join(', ')} of ${house[0].of}.`
+  : `Signatures of the look models default to: ${house.count} of ${house.of}.`;
 const card = (entry, { base = '/gallery/', spot = null } = {}) => `<a class="site-card" href="${base}${escape(entry.id)}/"><span class="site-card-image">${entry.card ? `<img src="/gallery/${escape(entry.id)}/${escape(entry.card)}" alt="" width="1200" height="630">` : ''}</span>
 <span class="site-card-text"><span class="site-tags"><span>${escape(HOSTS[entry.host] || entry.host)}</span><span>${escape(MEDIA[entry.medium] || entry.medium || '')}</span>${entry.kind === 'comparison' ? '<span>Comparison</span>' : ''}${entry.origin === 'try' ? '<span>Live try</span>' : ''}${entry.surface ? '<span>0.4 surface</span>' : ''}</span>
-<b>${escape(entry.title)}</b><span>${escape(spotSentence(spot) || entry.headline?.sentence || '')}</span></span></a>`;
+<b>${escape(entry.title)}</b><span>${escape(spotSentence(spot) || entry.headline?.sentence || '')}</span>${entry.houseStyle ? `<span>${escape(houseSentence(entry.houseStyle))}</span>` : ''}</span></a>`;
 
 /** The steps of the featured session, in its own data: what the model guessed, what Qloo found and what the design rests on. */
 function howItWorks(entry) {

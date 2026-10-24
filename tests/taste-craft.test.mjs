@@ -114,3 +114,11 @@ test('every default-look signature still on the page is named among the three, a
   assert.throws(() => review(critique(), { input: wide }), message(/name at least 2 of its highest-affinity works, such as Fixture Hit 0/u));
   assert.equal(review(critique({ fan: { ...critique().fan, works: ['Fixture Hit 0', 'Fixture Hit 1', 'Fixture Rapper'] } }), { input: wide }).critique.fan.works.length, 3);
 });
+
+test('a critique may name its anchors as the brief lists them, and an unknown name is refused', async () => {
+  const { resolveTasteRefs } = await import('../plugin/server/design/tools.mjs');
+  const named = (anchor) => REVIEW(critique({ generic: critique().generic.map((item, at) => at === 2 ? { ...item, anchor } : item) }));
+  assert.equal(resolveTasteRefs('review', named('Determined'), INPUT).critique.generic[2].anchor, 'quality:mood:determined');
+  assert.equal(resolveTasteRefs('review', named('quality:mood:determined'), INPUT).critique.generic[2].anchor, 'quality:mood:determined', 'a ref stays as it is');
+  assert.throws(() => resolveTasteRefs('review', named('A Name Nobody Measured'), INPUT), /review\.critique\.generic\[2\]\.anchor: A Name Nobody Measured is not a name in this session's taste input/u);
+});

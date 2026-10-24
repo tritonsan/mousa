@@ -65,7 +65,7 @@ Tokens are the literal values the check finds. Leave unused kinds out or empty, 
    Devices anchored to your own confirmed predictions may follow the sketch.
 9. **Required anchors.** Every one anchors a device or is rejected with a reason, and at most two are rejected.
 10. **Materials.** Fonts come from the Moûsa library. This surface has no photo library: pictures come from the `image` tool, or the imagery is drawn in SVG or CSS.
-11. **Leave the house style.** `design_check` finds the habits models fall into when nothing else decides: a warm cream ground, a stock display serif (Instrument Serif, Fraunces, DM Serif Display, Cormorant), uppercase letter-spaced monospace labels, one italic word in a heading, numbered sections, pill buttons, a short hairline before a label, violet gradients, frosted glass, one neutral sans everywhere, emoji icons. A page keeps at most two. Write the DNA so it does not need them: the fonts the library marks as overused come last in `materials find` for a reason.
+11. **Leave the house style.** `design_check` finds the habits models fall into when nothing else decides: a warm cream ground, a stock display serif (Instrument Serif, Fraunces, DM Serif Display, Cormorant), uppercase letter-spaced monospace labels, one italic word in a heading, numbered sections, pill buttons, a short hairline before a label, a near-black page lit by one amber accent, violet gradients, frosted glass, one neutral sans everywhere, emoji icons. A page keeps at most two. Write the DNA so it does not need them: the fonts the library marks as overused come last in `materials find` for a reason.
 
 ## One device per layer, as examples
 

@@ -26,6 +26,7 @@ import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 import { loadDotEnv, rootDir } from '../src/config.mjs';
 import { readBrief, copyProject, compareProjects, qlooRequestsIn } from './run-claude-code-live.mjs';
+import { inspectBrowser, verifyBrowser } from '../plugin/server/production/capture.mjs';
 
 const HOST_VARIABLES = /^(?:CLAUDECODE|CLAUDE_CODE_.*|CLAUDE_AGENT_SDK_.*|CLAUDE_PID|CLAUDE_EFFORT|CLAUDE_PREVIEW_.*|ANTHROPIC_.*|MOUSA_.*|QLOO_.*|KIRO_.*|CODEX_HOME)$/u;
 
@@ -131,6 +132,12 @@ async function main() {
   await fs.writeFile(path.join(folder, 'brief.md'), brief);
 
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !HOST_VARIABLES.test(name)));
+  // The browser the session captures with is the one this run names, as the Claude Code runner passes it, and it
+  // captures a test page before the plugin is installed: a session that cannot capture reviews nothing.
+  const browser = process.env.MOUSA_BROWSER || dotenv.MOUSA_BROWSER || '';
+  const captureEnv = { ...env, ...(browser ? { MOUSA_BROWSER: browser } : {}) };
+  const capture = await verifyBrowser(await inspectBrowser({ env: captureEnv }), { env: captureEnv });
+  if (!capture.available) throw new Error(`Captures would not work in this session: ${capture.reason} Set MOUSA_BROWSER to a Chromium browser that captures headless, such as Chrome.`);
   if (from && install) {
     const packages = await npmCi(project, env);
     await fs.writeFile(path.join(folder, 'npm-ci.log'), `exit ${packages.code}\n${packages.out}`);
@@ -143,8 +150,6 @@ async function main() {
   await fs.writeFile(path.join(folder, 'install.log'), installed.map(item => `exit ${item.code}\n${item.out}`).join('\n---\n'));
   if (installed.at(-1).code !== 0) throw new Error(`The plugin did not install: ${installed.at(-1).out.slice(0, 300)}`);
 
-  // The browser the session captures with is the one this run names, as the Claude Code runner passes it.
-  const browser = process.env.MOUSA_BROWSER || dotenv.MOUSA_BROWSER || '';
   Object.assign(env, { QLOO_API_KEY: dotenv.QLOO_API_KEY, MOUSA_QLOO_BUDGET: String(budget), ...(images ? {} : { MOUSA_IMAGES: 'off' }), ...(browser ? { MOUSA_BROWSER: browser } : {}), ...(dotenv.QLOO_API_BASE_URL ? { QLOO_BASE_URL: dotenv.QLOO_API_BASE_URL } : {}) });
   const stream = createWriteStream(path.join(folder, 'session.jsonl'));
   const stderr = createWriteStream(path.join(folder, 'session.stderr.log'));

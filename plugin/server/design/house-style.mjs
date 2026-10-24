@@ -1,7 +1,8 @@
 // The look models give a page when nothing else decides it, found in a design's own files. Recorded Moûsa designs
 // fell into it whatever the audience: the showcase built for a sports, hip-hop and business audience became a warm
 // cream page with a condensed display serif, one italic word in clay, small uppercase monospace labels after a short
-// rule and numbered cards; the other pole is violet gradients, frosted cards and one neutral sans. Each signature here
+// rule and numbered cards; the other poles are a near-black page lit by one amber lamp (the venue, the comedy night and
+// the record shop drew "Atmospheric" that way), and violet gradients, frosted cards and one neutral sans. Each signature here
 // is one such habit, read from the stylesheets and pages; a page keeps at most HOUSE_STYLE_LIMIT of them, so its look
 // comes from the audience's works, not from the model. The checks read code, not pixels: they find the habit where it
 // is written, and say where.
@@ -17,6 +18,7 @@ export const HOUSE_STYLE = Object.freeze([
   Object.freeze({ id: 'numbered-sections', label: 'zero-padded section or card numbers (01, 02, 03)' }),
   Object.freeze({ id: 'pill-buttons', label: 'fully rounded pill buttons' }),
   Object.freeze({ id: 'hairline-kicker', label: 'a short hairline rule before a label' }),
+  Object.freeze({ id: 'lamp-dark', label: 'a near-black ground lit by one warm amber accent' }),
   Object.freeze({ id: 'violet-gradient', label: 'a purple or violet gradient' }),
   Object.freeze({ id: 'frosted-glass', label: 'frosted glass panels' }),
   Object.freeze({ id: 'neutral-sans-only', label: 'one neutral sans for headings and text' }),
@@ -105,14 +107,17 @@ function isCream(hex) {
   const [r, g, b] = rgb(hex), high = Math.max(r, g, b), low = Math.min(r, g, b);
   return high >= 232 && r - b >= 6 && high - low <= 40 && g >= b;
 }
-function isViolet(hex) {
+/** Hue in degrees, saturation and lightness of a #rrggbb colour, or null for a grey. */
+function hsl(hex) {
   const [r, g, b] = rgb(hex).map(value => value / 255), high = Math.max(r, g, b), low = Math.min(r, g, b), light = (high + low) / 2;
-  if (high === low) return false;
+  if (high === low) return null;
   const saturation = light > 0.5 ? (high - low) / (2 - high - low) : (high - low) / (high + low);
   const hue = high === r ? 60 * (((g - b) / (high - low)) % 6) : high === g ? 60 * ((b - r) / (high - low) + 2) : 60 * ((r - g) / (high - low) + 4);
-  const degrees = (hue + 360) % 360;
-  return degrees >= 250 && degrees <= 300 && saturation >= 0.35 && light >= 0.25 && light <= 0.8;
+  return { hue: (hue + 360) % 360, saturation, light };
 }
+const isViolet = hex => { const c = hsl(hex); return Boolean(c) && c.hue >= 250 && c.hue <= 300 && c.saturation >= 0.35 && c.light >= 0.25 && c.light <= 0.8; };
+const isAmber = hex => { const c = hsl(hex); return Boolean(c) && c.hue >= 18 && c.hue <= 45 && c.saturation >= 0.45 && c.light >= 0.38 && c.light <= 0.68; };
+const isNearBlack = hex => Math.max(...rgb(hex)) <= 48;
 /** A length in pixels at a 16px root, or null for one that is not a length. */
 function pixels(value) {
   const match = /^(-?[\d.]+)(px|rem|em)?$/iu.exec(value.trim());
@@ -128,6 +133,7 @@ function pixels(value) {
 export function houseStyleSignatures(files) {
   const rules = rulesOf(files), variables = variablesOf(rules), html = htmlOf(files), text = visibleText(html);
   const found = new Map();
+  let dark = null, amber = null;
   const note = (id, evidence) => { if (!found.has(id)) found.set(id, String(evidence).replace(/\s+/gu, ' ').trim().slice(0, 140)); };
 
   for (const rule of rules) {
@@ -136,7 +142,9 @@ export function houseStyleSignatures(files) {
       const value = declarations.get(property);
       const color = value && colorsIn(resolve(value, variables))[0];
       if (color && isCream(color)) note('cream-ground', `${selector} ${property}: ${color}`);
+      if (color && isNearBlack(color)) dark ||= `${selector} ${color}`;
     }
+    for (const value of declarations.values()) if (!amber) amber = colorsIn(resolve(value, variables)).find(isAmber) || null;
     const family = fontFamilyOf(rule, variables);
     if (HEADING.test(selector) && family[0] && STOCK_SERIFS.has(family[0])) note('stock-display-serif', `${selector} in ${family[0]}`);
     const spacing = declarations.get('letter-spacing');
@@ -166,6 +174,7 @@ export function houseStyleSignatures(files) {
     if (Array.from(declarations.values()).some(value => /decimal-leading-zero/iu.test(value))) note('numbered-sections', `${selector} counts with decimal-leading-zero`);
   }
 
+  if (dark && amber) note('lamp-dark', `${dark} lit by ${amber}`);
   // One neutral sans everywhere: the page's own family, inherited by headings that set none of their own.
   const bodyFamily = rules.filter(rule => ROOT.test(rule.selector)).map(rule => fontFamilyOf(rule, variables)).filter(list => list.length).at(-1) || [];
   const headingFamily = rules.filter(rule => HEADING.test(rule.selector)).map(rule => fontFamilyOf(rule, variables)).filter(list => list.length).at(-1) || bodyFamily;

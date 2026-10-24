@@ -6,13 +6,13 @@
       "prompt": "The Taste Brief for Wax & Wane is measured. Build the landing page from it.",
       "expected_output": "Save the reading, the Design DNA and the production plan with design_validate, fetch only the planned fonts, build in the project's design system, check, capture and review.",
       "expectations": [
-        "Saves a reading of 2-4 clusters, citing entries by the names the brief lists, before the DNA",
-        "Saves a DNA whose palette and typography devices anchor to quality entries",
+        "Saves a reading of 2-4 clusters, citing entries by the names the brief lists and naming 1-3 visual conventions per cluster, before the DNA",
+        "Saves a DNA whose palette and typography devices anchor to quality entries, with the palette or typography device naming one of the reading's conventions",
         "Saves a production plan with one step per device and 2-6 review criteria",
         "Fetches only the fonts the plan uses with materials fetch",
         "Declares each palette colour and font in a CSS custom property used through var()",
-        "Calls design_check and repairs missing devices before design_capture",
-        "Judges every review criterion on a capture of the same round with design_validate stage review"
+        "Calls design_check, repairs missing devices and keeps at most two default-look signatures before design_capture",
+        "Judges every review criterion on a capture of the same round with design_validate stage review, with a critique of three generic choices and a fan's verdict"
       ],
       "files": []
     },

@@ -63,7 +63,7 @@ export const DESIGN_TOOLS = Object.freeze([
   },
   {
     name: 'design_check',
-    description: 'Check that every device of the saved DNA is really in the project: colors, fonts and their files, CSS values, keyframes with a reduced-motion fallback and a pause control for endless loops, SVG drawings, element ids, copy and pictures. In a project with CSS custom properties it also checks that each palette and typography value is held by a custom property the styles use through var(), and names it. On pages it also finds the signatures of the look models default to (a cream ground, a stock display serif, uppercase monospace labels, an italic accent word, numbered sections, pill buttons, hairline rules, violet gradients, frosted glass, one neutral sans, emoji icons); a page keeps at most two. Reads the project\'s pages, styles and scripts unless paths are given. Shows presence, not quality.',
+    description: 'Check that every device of the saved DNA is really in the project: colors, fonts and their files, CSS values, keyframes with a reduced-motion fallback and a pause control for endless loops, SVG drawings, element ids, copy and pictures. In a project with CSS custom properties it also checks that each palette and typography value is held by a custom property the styles use through var(), and names it. On pages it also finds the signatures of the look models default to (a cream ground, a stock display serif, uppercase monospace labels, an italic accent word, numbered sections, pill buttons, hairline rules, a near-black page lit by one amber accent, violet gradients, frosted glass, one neutral sans, emoji icons); a page keeps at most two. Reads the project\'s pages, styles and scripts unless paths are given. Shows presence, not quality.',
     inputSchema: { type: 'object', properties: {
       paths: { type: 'array', minItems: 1, maxItems: 20, items: { type: 'string', minLength: 1, maxLength: 200 } },
       medium: { type: 'string', enum: PRODUCTION_MEDIA }, workspace: WORKSPACE_FIELD,
@@ -136,10 +136,10 @@ function planDna(dna, profile) {
 }
 // The marks the Taste Brief puts after a name: new (a surprise) or predicted.
 const BRIEF_MARK = / \((?:new|predicted)\)$/u;
-const REF_FIELDS = Object.freeze({ reading: [['clusters', 'refs'], ['setAside', 'ref']], dna: [['devices', 'anchors'], ['rejected', 'ref']] });
+const REF_FIELDS = Object.freeze({ reading: [['clusters', 'refs'], ['setAside', 'ref']], dna: [['devices', 'anchors'], ['rejected', 'ref']], review: [['critique.generic', 'anchor']] });
 
 /**
- * The refs of a reading or DNA, which the agent may give as the Taste Brief names them. A name resolves to the one
+ * The refs of a reading, a DNA or a critique's anchors, which the agent may give as the Taste Brief names them. A name resolves to the one
  * entity of the taste input that carries it, a measured one before the agent's own prediction of the same name; a name
  * two measured entities share asks for the ref, and an unknown name is refused with where the names are listed.
  */
@@ -167,8 +167,9 @@ export function resolveTasteRefs(stage, artifact, input) {
   };
   const copy = structuredClone(source);
   for (const [list, field] of REF_FIELDS[stage]) {
-    if (!Array.isArray(copy[list])) continue;
-    copy[list].forEach((item, index) => {
+    const items = list.split('.').reduce((node, key) => (node && typeof node === 'object' ? node[key] : undefined), copy);
+    if (!Array.isArray(items)) continue;
+    items.forEach((item, index) => {
       if (!item || typeof item !== 'object') return;
       const at = `${stage}.${list}[${index}].${field}`;
       if (Array.isArray(item[field])) item[field] = item[field].map((value, position) => resolve(value, `${at}[${position}]`));
@@ -271,7 +272,7 @@ export function createDesignTools(context) {
       // The page as it is now, not as it was at the last check: repairs after a round change it.
       const house = ['web', 'app-ui'].includes(dnaRecord.medium) ? houseStyleReport(await collectProjectFiles(root)) : null;
       if (house?.over) refuse('HOUSE_STYLE', `The page carries ${house.count} signatures of the look models default to: ${house.signatures.map(item => `${item.label} (${item.id}: ${item.evidence})`).join('; ')}. Keep at most ${house.limit}: replace the others with choices your anchors and conventions call for, run design_check, capture again and review.`);
-      const review = normalizeReview(args.artifact, { plan: planRecord.plan, captures, opened, rounds: CAPTURE_LIMITS.rounds,
+      const review = normalizeReview(resolveTasteRefs('review', args.artifact, input), { plan: planRecord.plan, captures, opened, rounds: CAPTURE_LIMITS.rounds,
         taste: { input, dna: dnaRecord.dna, signatures: house?.signatures || [] } });
       const recorded = { ...review, ...(house ? { houseStyle: { signatures: house.signatures.map(item => item.id), limit: house.limit } } : {}) };
       const reviews = (await readState(root, 'design/reviews'))?.reviews || [];
