@@ -10,9 +10,9 @@ An entry to the [Qloo Agentic Hackathon](https://qloo.devpost.com).
 
 ## The problem
 
-AI coding agents now build much of the web's new interfaces, and they design for audiences they have never met. Ask one for a record shop's website "for people who love Paterson and Nujabes", and it designs from its own idea of those people: in a live run, Kiro's sealed guess named one of the 69 works Qloo measured for that audience. The site looks plausible and generic, because that idea was never tested.
+Teams now build interfaces with AI coding agents, and those agents design for audiences they have never met. Ask one for a record shop's website "for people who love Paterson and Nujabes", and it designs from its own idea of those people: in a live run, Kiro's sealed guess named one of the 69 works Qloo measured for that audience. The site looks plausible and generic, because that idea was never tested.
 
-**How large the gap is, measured.** In a [pre-registered benchmark](docs/benchmark/README.md), three agents froze their own predictions for 20 audiences. Every prediction was committed to this repository before Qloo measured anything. The guesses named this share of the works Qloo then measured:
+**How large the gap is, measured.** In a [pre-registered benchmark](docs/benchmark/README.md), three agents froze their own predictions for 20 audiences. Every prediction was committed to this repository before the benchmark asked Qloo: GitHub's push log shows them arriving at 14:14 UTC on 23 October, and the analysis is stamped 14:21. Pooled, the guesses missed 94.0% of the works Qloo then measured. Each agent's guesses named this share:
 
 | Agent | Known share (95% interval) | Guessed works Qloo measured |
 | --- | --- | --- |
@@ -20,17 +20,16 @@ AI coding agents now build much of the web's new interfaces, and they design for
 | Kiro (claude-opus-5.5) | 6.6% (5.2% to 8.0%) | 15.8% |
 | Codex (gpt-6.1-sol, high effort) | 4.7% (3.2% to 6.1%) | 13.9% |
 
-Both pre-registered hypotheses held for every agent. The agents knew music and TV best (about 10%) and films, brands and books least (2% to 6%). Claude Code and Kiro run the same model and differ by 0.2 points, so the blind spot is the model's, not the tool's. [Results](docs/benchmark/results.md), [predictions](docs/benchmark/predictions/).
+Both pre-registered thresholds held for every agent: under 15% of the measured works named, and under 25% of the guesses measured. The agents knew music and TV best (about 10%) and films, brands and books least (2% to 6%). Claude Code and Kiro run the same model and differ by 0.2 points, which suggests the blind spot belongs to the model rather than the tool. [Results](docs/benchmark/results.md), [predictions](docs/benchmark/predictions/).
 
 Designers, brand teams and game studios who work with agents need the agent to know its audience beyond the obvious, and to show its evidence. Moûsa does this inside the agent a team already uses, on the project it already has: a website, an app's design tokens, a game character.
 
 ## How it works
 
-1. **Plan.** Moûsa picks the taste questions for the medium: which Qloo domains to measure (films, music, books, TV, brands, places, games) and which tags.
-2. **Freeze the guess.** Before any Qloo data, the agent writes its own prediction of what the audience loves, and the design it would make from that alone. The prediction is frozen and sealed with its SHA-256.
-3. **Measure.** Moûsa asks Qloo for insights in each domain, for the audience's style and aesthetic tags, and for the qualities its measured works share, ranked by how distinctive each is for this audience against 28 others. A session sends at most 24 requests, and the answers are cached for a week.
-4. **Design from the difference.** The agent reads the measurement, names how the audience's works look as a genre (broadcast score bugs, mixtape covers, hand-painted market signs), and writes a Design DNA: concrete devices for palette, type, motion, illustration and voice, each anchored to what Qloo measured, with the palette or type drawn through one of those conventions. Moûsa checks every device in the project's own design system and flags the looks models default to (a cream page, a stock display serif, monospace labels, pill buttons, a near-black page lit by one amber lamp and the like; at most two may stay). The agent reviews screenshots of what it built, names its three most generic choices and asks whether a fan of the audience's best-loved works would take the page for theirs.
-5. **Report.** The Taste Provenance report sets the guess beside the measurement, marks each measured name as new or predicted, and follows it to each device and to the screenshots reviewed.
+1. **The agent guesses first.** Moûsa picks the taste questions for the medium: which Qloo domains to measure (films, music, books, TV, brands, places, games) and which tags. Before any Qloo data, the agent writes its own prediction of what the audience loves, and the design it would make from that alone. The prediction is frozen and sealed with its SHA-256.
+2. **Qloo measures the audience.** Moûsa asks Qloo for insights in each domain and for the audience's style and aesthetic tags. It then groups the measured works' own tags into shared qualities, ranked by how distinctive each is for this audience against 28 others. A session sends at most 24 requests, and the answers are cached for a week.
+3. **The design must rest on what the guess missed.** The agent reads the measurement, names how the audience's works look as a genre (broadcast score bugs, mixtape covers, hand-painted market signs), and writes a Design DNA: concrete devices for palette, type, motion, illustration and voice, each anchored to what Qloo measured, with the palette or type drawn through one of those conventions. Moûsa checks every device in the project's own design system and flags the looks models default to (a cream page, a stock display serif, monospace labels, pill buttons, a near-black page lit by one amber lamp and the like; at most two may stay). The agent reviews screenshots of what it built, names its three most generic choices and asks whether a fan of the audience's best-loved works would take the page for theirs.
+4. **The record shows it.** The Taste Provenance report sets the guess beside the measurement, marks each measured name as new or predicted, and follows it to each device and to the screenshots reviewed.
 
 So Qloo's contribution is visible as a difference: what was measured, against what the agent would have assumed.
 
@@ -38,18 +37,26 @@ So Qloo's contribution is visible as a difference: what was measured, against wh
 
 Each kind shows something different, and none shows everything. The [jury page](https://d1n6iqgwqs2043.cloudfront.net/judges/) sets them side by side, each with what it does not show.
 
-1. **The blind spot.** The benchmark above. Separately, in the 20 recorded sessions in the gallery, the guesses named 45 of the 1,368 works Qloo measured. Anyone can recount that from the release's gallery bundle with `node scripts/blind-spot-stats.mjs <folder>`.
+1. **The blind spot.** The benchmark above. Separately, in the 20 recorded sessions in the gallery, the guesses named 45 of the 1,368 works Qloo measured, and 45 of the 492 works they guessed were measured. The sessions share a few audiences, so the counts overlap. Anyone can recount that from the release's gallery bundle with `node scripts/blind-spot-stats.mjs <folder>`.
 2. **The mechanism.** Each comparison builds two designs from one frozen prediction: one with Qloo's measurement, one from the prediction alone.
 
 | Comparison | Agent | Distance between the two designs | Devices resting on what the prediction missed |
 | --- | --- | --- | --- |
+| Moûsa, explained to the jury (the showcase) | Claude Code | 0.63 | 10 of 10 |
+| Moûsa, explained to the jury, first build | Claude Code | 0.60 | 8 of 8 |
+| The Lamplight, a live music venue | Claude Code | 0.62 | 7 of 7 |
+| Second Drink, a stand-up night | Claude Code | 0.69 | 8 of 8 |
 | Ilo, a game character | Claude Code | 0.53 | 9 of 9 |
 | Ilo, a game character | Codex | 0.57 | 7 of 7 |
 | Ilo, with painted portraits | Codex | 0.58 | 5 of 5 |
-| A record shop's website, from the live try | Kiro | 0.60 | 7 of 7 |
+| A record shop for Paterson and Nujabes, live try, 24 October | Kiro | 0.65 | 7 of 7 |
+| A record shop for Paterson and Nujabes, live try, 14 October | Kiro | 0.60 | 7 of 7 |
+| A record shop for Taylor Swift and Gilmore Girls, live try | Kiro | 0.68 | 7 of 8 |
+| A record shop for Bad Bunny and Narcos, live try | Kiro | 0.65 | 7 of 7 |
+| A record shop for Elden Ring and Berserk, live try | Kiro | 0.74 | 7 of 7 |
 
    The distance is a heuristic over palette, type, page structure and CSS, from 0 (alike) to 1 (unrelated). It does not rate quality.
-3. **Beyond the model's own variance.** In repeated pairs of one website brief (12 generations), the blind sketches of both arms were alike (p = 0.81). After Qloo, typography, structure, palette and overall distance separated (exact permutation test, p = 0.005 each). For game characters, the finished characters separated (p = 0.0079) and the blind sketches did not. See the [development notes](docs/development-notes.md).
+3. **Beyond the model's own variance.** In repeated pairs of one website brief (12 generations), the blind sketches of both arms showed no detectable difference (p = 0.81). After Qloo, typography, structure, palette and overall distance separated (exact permutation test, p = 0.005 each). For game characters, the finished characters separated (p = 0.0079) and the blind sketches did not. See the [development notes](docs/development-notes.md).
 4. **Preference.** The blind vote shows a visitor both designs without saying which one used Qloo, and asks which the audience would rather have.
 
 **The live try** runs Moûsa in Kiro on the server for an audience the juror names. Step one, under a minute, freezes Kiro's prediction and measures the audience. Step two, about five to ten minutes, builds both designs.
@@ -79,7 +86,7 @@ The plugin brings 13 tools, four skills (`taste-brief`, `design`, `compare` and 
 - **`plugins/`** holds the Claude Code, Codex and Kiro packages, generated byte for byte from `plugin/`.
 - **`src/`** is the hosted site: the gallery, the blind vote with sealed ballots, and the live try. The try runs each Kiro session with an agent file of its own: Moûsa's tools, no shell, and write access to the starter's design files only.
 - **`deploy/`** holds the Docker image, the Compose file and one CloudFormation stack for AWS. The image runs with a read-only root and no capabilities, under a seccomp profile that keeps Chromium's sandbox.
-- **`tests/`** holds 553 tests, with no network or model call, run on Ubuntu and Windows in CI.
+- **`tests/`** holds 554 tests, with no network or model call, run on Ubuntu and Windows in CI.
 
 ## Run it locally
 
@@ -109,6 +116,7 @@ The server is one CloudFormation stack: an instance behind two CloudFront names,
 - [The benchmark](docs/benchmark/README.md): its protocol and amendment, the sealed predictions and the results.
 - [The submission text](docs/submission.md), with one request traced from start to result.
 - [Qloo integration](docs/qloo-integration.md) and [creative policy](docs/creative-policy.md).
+- [Qloo findings](docs/qloo-findings.md): what the live API taught us, what the measurements showed, and what we would ask of the API.
 - [Development notes](docs/development-notes.md): the earlier, detailed README, with the protocol's history and the Studio.
 
 ## License

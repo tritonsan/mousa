@@ -35,6 +35,17 @@ test('the jury page gives the numbers, the path and what each kind of evidence d
   assert.ok(judgesPage({ gallery: gallery(), benchmark }).includes('Claude Code 3.1%'));
 });
 
+test('the jury page says every device rests on what the guess missed only when every pair\'s record says so', () => {
+  const g = gallery();
+  g.entries.get('try-one').headline = { sentence: '7 of 7 devices rest on what the prediction did not contain.' };
+  assert.match(judgesPage({ gallery: g }), /every device of each Qloo design rests on a name the guess missed/u);
+  g.entries.set('try-two', { id: 'try-two', kind: 'comparison', host: 'kiro', record: { ...record(69, 1, 28, 1, 'T3'), kind: 'comparison' }, distance: { overall: 0.68 },
+    headline: { sentence: '7 of 8 devices rest on what the prediction did not contain.' } });
+  const html = judgesPage({ gallery: g });
+  assert.match(html, /2 recorded pairs[\s\S]*in 1 of them every device of the Qloo design rests on a name the guess missed/u);
+  assert.doesNotMatch(html, /every device of each Qloo design/u);
+});
+
 test('the Qloo page names each request and what the live API taught, with no id', () => {
   const html = qlooPage({ repository: 'https://github.com/tritonsan/mousa' });
   for (const text of ['/search', '/v2/tags', '/v2/audiences', '/v2/insights, entities', 'filter.results.entities', 'X-Api-Key', 'at most 24 requests', 'video_game', 'docs/qloo-integration.md']) assert.ok(html.includes(text), text);

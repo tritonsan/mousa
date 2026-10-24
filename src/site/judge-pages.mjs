@@ -21,8 +21,17 @@ function distances(gallery) {
     .map(entry => Number(entry.distance.overall)).sort((a, b) => a - b);
 }
 
+/** How many comparisons have a Qloo design whose every device rests on a name the guess missed, from each record's headline. */
+function anchoredPairs(gallery) {
+  const counts = [...(gallery?.entries?.values() || [])].filter(entry => entry.kind === 'comparison')
+    .map(entry => /^(\d+) of (\d+) devices/u.exec(entry.headline?.sentence || '')).filter(Boolean);
+  return { counted: counts.length, whole: counts.filter(match => match[1] === match[2]).length };
+}
+
 function ladder(spot, gallery, benchmark) {
-  const range = distances(gallery);
+  const range = distances(gallery), anchored = anchoredPairs(gallery);
+  const anchoring = !anchored.counted ? '' : anchored.whole === anchored.counted ? ', and every device of each Qloo design rests on a name the guess missed'
+    : `; in ${anchored.whole} of them every device of the Qloo design rests on a name the guess missed`;
   const rows = [
     ['The blind spot', spot.sessions ? `In ${spot.sessions} recorded sessions in Claude Code, Codex and Kiro, the agents' frozen guesses named ${spot.known} of the ${spot.works} works Qloo measured, and ${spot.confirmed} of the ${spot.guessed} works they guessed were measured.` : '',
       'Counted from each session\'s own record; anyone can recount them from the release\'s gallery bundle with scripts/blind-spot-stats.mjs.',
@@ -30,10 +39,10 @@ function ladder(spot, gallery, benchmark) {
     ['The pre-registered benchmark', benchmark?.hosts ? benchmarkSentence(benchmark) : 'Twenty audiences and three agents. The protocol and the agents\' sealed predictions were committed to the public repository before Qloo measured any audience.',
       'Protocol, amendments and predictions are public and dated; every run is reported, whatever it shows.',
       'One prompt, one brief and one run per agent and audience. Qloo\'s measurement is aggregate affinity, not ground truth about any person.'],
-    ['The mechanism', range.length ? `${range.length} recorded pairs, each built twice from one frozen guess: once with Qloo's measurement, once from the guess alone. Distance between the two designs: ${range[0].toFixed(2)} to ${range.at(-1).toFixed(2)}, and every device of each Qloo design rests on a name the guess missed. In an exploratory audience swap (one record shop, four audiences), each Qloo design moved 0.67 from its own guess-only design on average, further than the guess-only designs of different audiences were apart (0.59).` : '',
+    ['The mechanism', range.length ? `${range.length} recorded pairs, each built twice from one frozen guess: once with Qloo's measurement, once from the guess alone. Distance between the two designs: ${range[0].toFixed(2)} to ${range.at(-1).toFixed(2)}${anchoring}. In an exploratory audience swap (one record shop, four audiences), each Qloo design moved 0.67 from its own guess-only design on average, further than the guess-only designs of different audiences were apart (0.59).` : '',
       'Both arms share the brief, the guess and every stage; only the source of the taste differs.',
       'The distance is a heuristic over palette, type, structure and CSS, from 0 (alike) to 1 (unrelated). It does not rate quality.'],
-    ['Beyond the model\'s own variance', 'Repeated pairs of one website brief (3 October, 12 generations): the blind sketches of both arms were alike (p = 0.81), and after Qloo the typography, structure, palette and overall distance separated beyond the model\'s variance (exact permutation test, p = 0.005 each). For game characters, the finished characters separated (p = 0.0079) while the blind sketches did not.',
+    ['Beyond the model\'s own variance', 'Repeated pairs of one website brief (3 October, 12 generations): the blind sketches of both arms showed no detectable difference (p = 0.81), and after Qloo the typography, structure, palette and overall distance separated beyond the model\'s variance (exact permutation test, p = 0.005 each). For game characters, the finished characters separated (p = 0.0079) while the blind sketches did not.',
       'Both arms start from comparable blind sketches and only the Qloo arm moves, so the difference is attributable to the measurement.',
       'One brief and one model per study; it shows difference, not preference. Recorded in the development notes.'],
     ['Preference', 'The blind vote shows a visitor both designs of a pair without saying which used Qloo, and asks which the audience would rather have.',
