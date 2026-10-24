@@ -27,12 +27,13 @@ const INPUT = { source: 'qloo-profile', entities: [
   { ref: 'M01', name: 'Kinfolk', domain: 'brand', source: 'model-assumption' },
 ], requiredAnchors: ['quality:mood:atmospheric', 'quality:look:minimalist', 'quality:meaning:solitude', 'E-PATERSON', 'E-KINGS'] };
 const READING = { schemaVersion: '1.0', clusters: [
-  { id: 'c1', name: 'Late light', refs: ['quality:mood:atmospheric', 'E-PATERSON', 'E-ENO'], layers: ['palette', 'imagery', 'voice'], reading: 'The audience likes evening, ambient works that let a scene breathe.' },
-  { id: 'c2', name: 'Spare solitude', refs: ['quality:look:minimalist', 'quality:meaning:solitude', 'E-MUJI'], layers: ['typography', 'layout'], reading: 'Spare objects and solitary routines: room around each thing.' },
+  { id: 'c1', name: 'Late light', refs: ['quality:mood:atmospheric', 'E-PATERSON', 'E-ENO'], layers: ['palette', 'imagery', 'voice'], reading: 'The audience likes evening, ambient works that let a scene breathe.',
+    conventions: ['Night-shot film stills lit by sodium streetlamps', 'Ambient record sleeves with one photograph and a small title'] },
+  { id: 'c2', name: 'Spare solitude', refs: ['quality:look:minimalist', 'quality:meaning:solitude', 'E-MUJI'], layers: ['typography', 'layout'], reading: 'Spare objects and solitary routines: room around each thing.', conventions: ['Catalogue pages with one object per spread and a light geometric caption'] },
 ], setAside: [{ ref: 'E-KINGS', reason: 'A sports team whose catalogue tags share nothing with the qualities.' }],
 approach: 'The design carries late light in its palette and pictures, and solitude in single-column cards with spare type and a quiet voice.' };
 const DNA = { schemaVersion: '1.0', thesis: 'Quiet evening walks told in dusk colours and hushed type.', devices: [
-  { id: 'dna1', layer: 'palette', device: 'Dusk harbour palette', anchors: ['quality:mood:atmospheric'], qualities: ['Atmospheric'], translation: 'Low evening light becomes slate blue and sodium amber.', tokens: { colors: ['#1d2a33', '#e0a458'] } },
+  { id: 'dna1', layer: 'palette', device: 'Dusk harbour palette', anchors: ['quality:mood:atmospheric'], qualities: ['Atmospheric'], translation: 'Low evening light becomes slate blue and sodium amber.', convention: 'c1.1', tokens: { colors: ['#1d2a33', '#e0a458'] } },
   { id: 'dna2', layer: 'typography', device: 'Spare geometric headings', anchors: ['quality:look:minimalist'], qualities: ['Minimalist'], translation: 'Spare objects become a light geometric face with wide spacing.', tokens: { fonts: ['Jost'] } },
   { id: 'dna3', layer: 'layout', device: 'Single-column walk cards', anchors: ['quality:meaning:solitude', 'E-PATERSON'], qualities: ['Solitude'], translation: 'Solitary routines become one card at a time with room around it.', tokens: { ids: ['walk-list'], css: [{ property: 'grid-template-columns', value: '1fr' }] } },
   { id: 'dna4', layer: 'imagery', device: 'Night street picture', anchors: ['E-PATERSON'], qualities: ['Poetic'], translation: 'A poetic street at dusk, in the palette.', tokens: { svg: ['street-art'], colors: ['#1d2a33', '#e0a458'] } },
@@ -46,7 +47,7 @@ const PLAN = { schemaVersion: '1.0', steps: [
   { device: 'dna5', method: 'copy', cluster: 'c1', why: 'The voice carries the ambient register.' },
 ], review: [{ id: 'r1', device: 'dna1', look: 'The first screen reads as dusk: slate blue ground with amber accents.' },
   { id: 'r2', device: 'dna3', look: 'At 390 pixels the walk cards sit in one column with room around each.', view: 'mobile' }] };
-const CAPABILITIES = { schemaVersion: '1.0', medium: 'web', materials: { fonts: { available: true, count: 33 } }, generators: { image: { available: true, perRun: 2 } }, review: { capture: { available: true } } };
+const CAPABILITIES = { schemaVersion: '1.0', medium: 'web', materials: { fonts: { available: true, count: 55 } }, generators: { image: { available: true, perRun: 2 } }, review: { capture: { available: true } } };
 const clone = value => structuredClone(value);
 const message = pattern => error => { assert.match(error.message, pattern); return true; };
 const validDna = (raw = DNA, reading = normalizeTasteReading(READING, { input: INPUT })) => normalizeDesignDna(applyReadingToDna(raw, reading), { input: INPUT });
@@ -149,9 +150,9 @@ test('a production plan makes every device with an available method, realizes ev
 
 test('a plan realizes every cluster of the reading', () => {
   const reading = normalizeTasteReading({ ...READING, clusters: [
-    { id: 'c1', name: 'Late light', refs: ['quality:mood:atmospheric', 'E-PATERSON'], layers: ['palette', 'imagery'], reading: 'Evening works that let a scene breathe.' },
-    { id: 'c2', name: 'Spare sound', refs: ['quality:look:minimalist', 'E-ENO'], layers: ['typography', 'voice'], reading: 'Spare, ambient forms with room in them.' },
-    { id: 'c3', name: 'Solitary routines', refs: ['quality:meaning:solitude', 'E-MUJI'], layers: ['layout'], reading: 'Solitary routines among plain, useful things.' },
+    { id: 'c1', name: 'Late light', refs: ['quality:mood:atmospheric', 'E-PATERSON'], layers: ['palette', 'imagery'], reading: 'Evening works that let a scene breathe.', conventions: ['Night-shot film stills lit by sodium streetlamps'] },
+    { id: 'c2', name: 'Spare sound', refs: ['quality:look:minimalist', 'E-ENO'], layers: ['typography', 'voice'], reading: 'Spare, ambient forms with room in them.', conventions: ['Ambient record sleeves with one photograph and a small title'] },
+    { id: 'c3', name: 'Solitary routines', refs: ['quality:meaning:solitude', 'E-MUJI'], layers: ['layout'], reading: 'Solitary routines among plain, useful things.', conventions: ['Catalogue pages with one object per spread'] },
   ] }, { input: INPUT });
   const dna = normalizeDesignDna(applyReadingToDna(DNA, reading), { input: INPUT });
   const plan = clone(PLAN); plan.steps[1].cluster = 'c2'; plan.steps[2].cluster = 'c1'; plan.steps[4].cluster = 'c2';
@@ -367,7 +368,7 @@ async function projectTools(t, { image = { available: false, reason: 'No Codex C
 test('standalone tools list capabilities and validate a reading, a DNA bound to it, and a plan against this machine', async t => {
   const { call } = await projectTools(t);
   const listed = await call('culture_list_capabilities', { medium: 'web' });
-  assert.equal(listed.capabilities.materials.fonts.available, true); assert.equal(listed.capabilities.materials.fonts.count, 33);
+  assert.equal(listed.capabilities.materials.fonts.available, true); assert.equal(listed.capabilities.materials.fonts.count, 55);
   assert.match(listed.capabilities.methods.find(item => item.id === 'generated-image').reason, /No Codex CLI was found/u);
   assert.deepEqual(listed.medium.requiredLayers, ['palette', 'typography', 'voice']);
   const reading = await call('culture_validate_reading', { reading: READING, tasteInput: INPUT });
@@ -387,7 +388,7 @@ test('standalone tools list capabilities and validate a reading, a DNA bound to 
 test('standalone tools find and fetch planned fonts into the project with their licences', async t => {
   const { root, call } = await projectTools(t);
   const found = await call('culture_find_materials', { kind: 'fonts', words: ['condensed', 'poster'] });
-  assert.equal(found.families.length, 33); assert.deepEqual(found.families[0].matches, ['condensed', 'poster']);
+  assert.equal(found.families.length, 55); assert.deepEqual(found.families[0].matches, ['condensed', 'poster']);
   assert.ok(found.forDna.every(family => family.files.every(file => file.startsWith('fonts/'))));
   const plan = { uses: { methods: ['library-font'], generators: {}, materials: { fonts: ['Jost'] } }, steps: [], review: [] };
   const refused = await call('culture_fetch_materials', { fonts: ['Fraunces'], plan });

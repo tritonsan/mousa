@@ -50,7 +50,7 @@ Every fact the page states is here. Keep each one exactly. Invent no claim, numb
 ## How it is built
 
 - One MCP server in Node 22, with no dependencies, packaged for Claude Code, Codex and Kiro from one source.
-- Four skills (taste-brief, design, compare, connect), 13 tools and 33 open-licence font families.
+- Four skills (taste-brief, design, compare, connect), 13 tools and 55 open-licence font families.
 - A write gate holds a design's files until its Design DNA is valid, in Claude Code and Codex.
 - Captures in a headless Chromium that can reach only the page it captures.
 - More than 500 tests, with no network or model call, run on Ubuntu and Windows.

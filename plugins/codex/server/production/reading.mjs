@@ -1,12 +1,16 @@
 // The taste reading: the agent's own judgment of the taste input before it specifies a design. It gathers the refs
-// that belong together into two to four clusters, each resting on a quality, sets aside refs it judges to be noise
-// with a reason, and says how the medium will carry the clusters. The DNA then anchors only to refs the reading kept.
+// that belong together into two to four clusters, each resting on a quality, names the visual conventions each
+// cluster's works share as a genre or medium, sets aside refs it judges to be noise with a reason, and says how the
+// medium will carry the clusters. The DNA then anchors only to refs the reading kept, and its palette or type
+// translates one of the conventions, so a quality is drawn the way its works' genre draws it.
 
 import { TASTE_SCHEMA_VERSION, TASTE_LIMITS, isQualityDomain } from '../culture/taste.mjs';
 import { mediumProfile } from './media.mjs';
 import { fail, plain, parsed, object, text, list, ident } from './fields.mjs';
 
-export const READING_LIMITS = Object.freeze({ minClusters: 2, maxClusters: 4, minRefs: 2, maxRefs: 8, maxLayers: 4, maxSetAside: 12 });
+export const READING_LIMITS = Object.freeze({ minClusters: 2, maxClusters: 4, minRefs: 2, maxRefs: 8, maxLayers: 4, maxSetAside: 12, minConventions: 1, maxConventions: 3 });
+// A convention names how a genre or medium looks, never one brand's identity: these words mark the second.
+const MARKS = /\b(logos?|mascots?|trade ?dress|trademarks?|team colou?rs?|brand colou?rs?)\b/iu;
 const listed = entities => entities.slice(0, 6).map(entity => `${entity.name} (${entity.ref})`).join(', ');
 
 /**
@@ -29,7 +33,7 @@ export function normalizeTasteReading(raw, { input, medium = 'web', requiredLaye
   const placed = new Map(), ids = new Set();
   const clusters = list(source.clusters, 'reading.clusters', { min: READING_LIMITS.minClusters, max: READING_LIMITS.maxClusters }).map((cluster, index) => {
     const at = `reading.clusters[${index}]`;
-    object(cluster, at, ['id', 'name', 'refs', 'layers', 'reading']);
+    object(cluster, at, ['id', 'name', 'refs', 'layers', 'reading', 'conventions']);
     const id = ident(cluster.id, `${at}.id`, { max: 20 });
     if (ids.has(id)) fail(`${at}.id`, 'Use a unique cluster ID such as c1.');
     ids.add(id);
@@ -51,7 +55,18 @@ export function normalizeTasteReading(raw, { input, medium = 'web', requiredLaye
       return layer;
     }))];
     const surprise = entities.some(entity => entity.source === 'qloo' && entity.surprise);
-    return { id, name: text(cluster.name, `${at}.name`, { min: 3, max: 80 }), refs: members, layers, reading: text(cluster.reading, `${at}.reading`, { min: 20, max: 600 }), ...(surprise ? { surprise: true } : {}) };
+    // How these works look as a genre or medium: the designer's knowledge that turns an adjective into a visual language.
+    const seen = new Set();
+    const conventions = list(cluster.conventions, `${at}.conventions`, { min: READING_LIMITS.minConventions, max: READING_LIMITS.maxConventions }).map((value, conventionIndex) => {
+      const path = `${at}.conventions[${conventionIndex}]`;
+      const convention = text(value, path, { min: 10, max: 200 });
+      if (MARKS.test(convention)) fail(path, 'Name how the genre or medium looks, such as "broadcast score bugs: boxed condensed capitals on a dark bar", not a brand\'s logo, mascot, colours or trade dress.');
+      const key = convention.toLowerCase();
+      if (seen.has(key)) fail(path, 'Name each convention once.');
+      seen.add(key);
+      return convention;
+    });
+    return { id, name: text(cluster.name, `${at}.name`, { min: 3, max: 80 }), refs: members, layers, reading: text(cluster.reading, `${at}.reading`, { min: 20, max: 600 }), conventions, ...(surprise ? { surprise: true } : {}) };
   });
   const aside = new Set();
   const setAside = list(source.setAside, 'reading.setAside', { max: READING_LIMITS.maxSetAside }).map((item, index) => {
@@ -83,6 +98,7 @@ export function normalizeTasteReading(raw, { input, medium = 'web', requiredLaye
   return { schemaVersion: TASTE_SCHEMA_VERSION, medium: profile.id, clusters, setAside, approach,
     coverage: { required, clustered: required.filter(ref => placed.has(ref)), setAside: requiredAside },
     stats: { clusters: clusters.length, refs: placed.size, surpriseClusters: clusters.filter(cluster => cluster.surprise).length, setAside: setAside.length,
+      conventions: clusters.reduce((sum, cluster) => sum + cluster.conventions.length, 0),
       qualityRefs: [...placed.keys()].filter(ref => isQualityDomain(refs.get(ref).domain)).length },
     sourceType: 'model-interpretation' };
 }
@@ -98,7 +114,10 @@ export function applyReadingToDna(raw, reading) {
   if (!plain(reading) || !plain(source) || !Array.isArray(source.devices)) return source;
   const aside = new Map(reading.setAside.map(item => [item.ref, item.reason]));
   const clustered = new Set(reading.clusters.flatMap(cluster => cluster.refs));
-  source.devices.forEach((device, index) => {
+  // A reading saved before conventions existed has none, and its DNA is validated as it was.
+  const conventions = reading.clusters.flatMap(cluster => (cluster.conventions || []).map((text, index) => ({ cluster, key: `${cluster.id}.${index + 1}`, text })));
+  const listedConventions = () => conventions.map(item => `${item.key} "${item.text}"`).join('; ');
+  const devices = source.devices.map((device, index) => {
     const anchors = Array.isArray(device?.anchors) ? device.anchors.filter(ref => typeof ref === 'string').map(ref => ref.trim()) : [];
     anchors.forEach((ref, anchorIndex) => {
       if (aside.has(ref)) fail(`dna.devices[${index}].anchors[${anchorIndex}]`, `Your taste reading set ${ref} aside (${aside.get(ref)}), so no device anchors to it. Anchor to a ref a cluster gathers.`);
@@ -106,10 +125,26 @@ export function applyReadingToDna(raw, reading) {
     if (anchors.length && !anchors.some(ref => clustered.has(ref))) {
       fail(`dna.devices[${index}].anchors`, `Anchor each device to at least one ref of a reading cluster, so it realizes part of your reading: ${reading.clusters.map(cluster => `${cluster.id} (${cluster.refs.slice(0, 4).join(', ')})`).join('; ')}.`);
     }
+    if (!plain(device) || device.convention === undefined) return device;
+    // A convention is named by its key, such as c1.2, or by its words (a saved DNA keeps {cluster, text}); the device
+    // then anchors a ref of that cluster.
+    const at = `dna.devices[${index}].convention`;
+    const given = plain(device.convention) ? device.convention : { text: device.convention };
+    const wanted = typeof given.text === 'string' ? given.text.trim() : '';
+    const words = wanted.replace(/\s+/gu, ' ').toLowerCase();
+    const found = conventions.find(item => item.key === wanted && given.cluster === undefined)
+      || conventions.find(item => item.text.toLowerCase() === words && (given.cluster === undefined || given.cluster === item.cluster.id));
+    if (!found) fail(at, conventions.length ? `Name a convention of your reading by its key or its words: ${listedConventions()}.` : 'Your reading names no conventions; save it again with conventions for each cluster.');
+    if (!anchors.some(ref => found.cluster.refs.includes(ref))) fail(at, `${found.key} belongs to cluster ${found.cluster.id}; anchor this device to one of its refs too (${found.cluster.refs.slice(0, 4).join(', ')}), so it translates a convention of the works it rests on.`);
+    return { ...device, convention: { cluster: found.cluster.id, text: found.text } };
   });
-  if (source.rejected !== undefined && !Array.isArray(source.rejected)) return source;
+  // The look is drawn the way the works' genre draws it: the palette or the type translates a convention.
+  if (conventions.length && !devices.some(device => ['palette', 'typography'].includes(device?.layer) && device.convention !== undefined)) {
+    fail('dna.devices', `Let the palette or the typography device translate a convention of your reading, naming it in convention: ${listedConventions()}. A quality drawn without one tends toward the model's own default look.`);
+  }
+  if (source.rejected !== undefined && !Array.isArray(source.rejected)) return { ...source, devices };
   const rejected = [...(source.rejected || [])];
   const named = new Set(rejected.map(item => typeof item?.ref === 'string' ? item.ref.trim() : null));
   for (const ref of reading.coverage.setAside) if (!named.has(ref)) rejected.push({ ref, reason: `Set aside in the taste reading: ${aside.get(ref)}`.slice(0, 400) });
-  return { ...source, rejected };
+  return { ...source, devices, rejected };
 }

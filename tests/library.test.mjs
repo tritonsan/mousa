@@ -8,6 +8,9 @@ import { LIBRARY_LICENSES, loadLibrary, libraryArtifact, libraryForDna, libraryP
 import { FONT_FILE_PATH, loadFontLibrary, clearFontLibraryCache, fontsArtifact, fontsForDna, fontLibraryFile, fontFilesUsed } from '../src/fonts.mjs';
 import { getTemplate } from '../src/templates.mjs';
 import { rootDir } from '../src/config.mjs';
+import { createDesignTools } from '../plugin/server/design/tools.mjs';
+import { FAMILIES, checkFamilies, reservedNames, mergeCatalog } from '../scripts/fetch-font-library.mjs';
+import { fontWordMatch } from '../plugin/server/production/fonts.mjs';
 
 test('the local food photo library is complete, openly licensed and matches the starter catalogue', async () => {
   const library = await loadLibrary(rootDir, 'local-food');
@@ -73,14 +76,15 @@ test('a library loads only JPEGs whose name, size, license and tags match its ca
 
 test('the font library ships open-licence WOFF2 families, and culture-fonts.json gives each its @font-face rules', async () => {
   const library = await loadFontLibrary(rootDir);
-  assert.equal(library.families.length, 33);
+  assert.equal(library.families.length, 55);
   assert.ok(library.families.every(family => family.license === 'OFL-1.1' && /^library\/fonts\/[a-z0-9-]+\.OFL\.txt$/u.test(family.licenseRepositoryPath)
     && family.faces.length && family.faces.every(face => FONT_FILE_PATH.test(face.path) && face.bytes <= 200 * 1024)));
   const bytes = library.families.flatMap(family => family.faces).reduce((sum, face) => sum + face.bytes, 0);
   assert.ok(bytes < 3 * 1024 * 1024, 'The library stays small enough to ship in the repository.');
   const artifact = fontsArtifact(library);
   assert.equal(artifact.provenance, 'host-font-library');
-  assert.ok(Buffer.byteLength(JSON.stringify(artifact, null, 2)) < 32000, 'The agent-facing catalog stays compact.');
+  // About 590 bytes a family: the 60 families the loader accepts come to some 36 KB.
+  assert.ok(Buffer.byteLength(JSON.stringify(artifact, null, 2)) < 40000, 'The agent-facing catalog stays compact.');
   const jost = artifact.families.find(family => family.family === 'Jost');
   assert.deepEqual([jost.category, jost.similarTo, jost.weights, jost.italic], ['geometric sans', ['Futura', 'Century Gothic'], '100-900', true]);
   assert.deepEqual(jost.fontFace, ["@font-face{font-family:'Jost';src:url('fonts/jost-latin-wght-normal.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}",
@@ -94,6 +98,116 @@ test('the font library ships open-licence WOFF2 families, and culture-fonts.json
   assert.deepEqual(used.map(item => [item.path, item.family, item.repositoryPath, item.license, item.licenseRepositoryPath]),
     [['fonts/jost-latin-wght-normal.woff2', 'Jost', 'library/fonts/jost-latin-wght-normal.woff2', 'OFL-1.1', 'library/fonts/jost.OFL.txt']], 'Culture records do not count as loading a font.');
   assert.deepEqual(fontFilesUsed(null, {}), []);
+});
+
+test('the font catalog is the script\'s list: the same families in the same order with the same category, character words, stand-ins and overused flags', async () => {
+  checkFamilies();
+  const catalog = JSON.parse(await fs.readFile(path.join(rootDir, 'library', 'fonts', 'fonts.json'), 'utf8'));
+  assert.deepEqual(catalog.families.map(family => family.id), FAMILIES.map(spec => spec.id), 'Run scripts/fetch-font-library.mjs --add after changing its list.');
+  for (const [index, spec] of FAMILIES.entries()) {
+    const family = catalog.families[index];
+    assert.deepEqual([family.category, family.character, family.similarTo, family.overused], [spec.category, spec.character, spec.similarTo, spec.overused], spec.id);
+    assert.ok(family.character.length >= 3 && family.character.length <= 6, `${spec.id} has 3-6 character words`);
+    assert.equal([family.category, ...family.character, family.family].some(value => /editorial/iu.test(value)), false, `${spec.id} is not tagged editorial`);
+  }
+  assert.deepEqual(catalog.families.filter(family => family.overused).map(family => family.family).sort(),
+    ['DM Mono', 'DM Serif Display', 'Fraunces', 'Instrument Serif', 'Inter', 'Libre Franklin', 'Space Grotesk'], 'The families designs reach for by default are flagged, not removed.');
+});
+
+test('no family in the font library has its own name reserved by its licence, because a Latin subset may not keep a Reserved Font Name', async () => {
+  const catalog = JSON.parse(await fs.readFile(path.join(rootDir, 'library', 'fonts', 'fonts.json'), 'utf8'));
+  const squash = value => value.toLowerCase().replace(/[^a-z0-9]+/gu, '');
+  for (const family of catalog.families) {
+    const license = await fs.readFile(path.join(rootDir, 'library', 'fonts', family.licenseFile), 'utf8');
+    assert.deepEqual(reservedNames(license).filter(name => squash(family.family).includes(squash(name))), [], family.family);
+  }
+  const dmSerif = catalog.families.find(family => family.id === 'dm-serif-display');
+  assert.deepEqual(reservedNames(await fs.readFile(path.join(rootDir, 'library', 'fonts', dmSerif.licenseFile), 'utf8')), ['Source'], 'A reserved name that is not the family\'s own is no obstacle.');
+});
+
+test('the font script reads every wording of a Reserved Font Name and refuses a list the catalog cannot hold', () => {
+  const header = line => `${line}\n\nThis Font Software is licensed under the SIL Open Font License, Version 1.1.`;
+  assert.deepEqual(reservedNames(header('Copyright 2012 The Graduate Project Authors (https://github.com/etunni/graduate) with Reserved Font Name "Graduate"')), ['Graduate']);
+  assert.deepEqual(reservedNames(header('Copyright 2018 The Orbitron Project Authors (https://github.com/theleagueof/orbitron), with Reserved Font Name: "Orbitron"')), ['Orbitron'], 'A colon after Name is still a reservation.');
+  assert.deepEqual(reservedNames(header("Copyright (c) 2011 Foo, with Reserved Font Names 'Alpha' and 'Beta'")), ['Alpha', 'Beta']);
+  assert.deepEqual(reservedNames(header('Copyright (c) 2011 by Sorkin Type Co, with Reserved Font Name Rye.')), ['Rye']);
+  assert.deepEqual(reservedNames(header('Copyright 2020 The Anton Project Authors (https://github.com/googlefonts/AntonFont.git)')), []);
+  assert.deepEqual(reservedNames('Copyright 2020 Foo.\n\nThis Font Software is licensed under the SIL Open Font License.\nThe Reserved Font Name "Elsewhere" is described in the licence text, not here.'), [], 'Only the copyright header reserves names.');
+  const spec = { id: 'sample', category: 'sample class', character: ['one', 'two', 'three'] };
+  assert.doesNotThrow(() => checkFamilies([spec]));
+  for (const [bad, pattern] of [
+    [[spec, spec], /own id/u],
+    [[{ ...spec, id: 'Bad Id' }], /own id/u],
+    [[{ ...spec, category: '' }], /category/u],
+    [[{ ...spec, character: ['one', 'two'] }], /3-6 character words/u],
+    [[{ ...spec, character: ['a', 'b', 'c', 'd', 'e', 'f', 'g'] }], /3-6 character words/u],
+    [[{ ...spec, character: ['one', 'two', 'x'.repeat(41)] }], /3-6 character words/u],
+    [[{ ...spec, overused: 'yes' }], /overused/u],
+    [Array.from({ length: 61 }, (_, index) => ({ ...spec, id: `sample-${index}` })), /more than the 60/u],
+  ]) assert.throws(() => checkFamilies(bad), pattern);
+});
+
+test('an incremental font run keeps catalogued files, refreshes their metadata and merges new families in list order', () => {
+  const face = name => ({ style: 'normal', weight: '400', file: `${name}.woff2`, bytes: 10, sha256: 'a'.repeat(64) });
+  const entry = (id, extra = {}) => ({ id, family: id.toUpperCase(), category: 'old class', character: ['old', 'words', 'here'], files: [face(id)], license: 'OFL-1.1', licenseFile: `${id}.OFL.txt`,
+    copyright: 'Copyright 2020 Sample', version: 'v1', source: `https://fonts.example/${id}`, ...extra });
+  const catalogued = [entry('b', { similarTo: ['Old Face'], overused: true }), entry('a'), entry('gone')];
+  const specs = [
+    { id: 'a', category: 'new class', character: ['one', 'two', 'three'], similarTo: ['New Face'], overused: true },
+    { id: 'c', category: 'c class', character: ['x', 'y', 'z'] },
+    { id: 'b', category: 'old class', character: ['old', 'words', 'here'] },
+    { id: 'd', category: 'd class', character: ['x', 'y', 'z'] },
+  ];
+  const added = [{ ...entry('c'), category: 'c class', character: ['x', 'y', 'z'] }];
+  const merged = mergeCatalog({ catalogued, specs, added });
+  assert.deepEqual(merged.map(item => item.id), ['a', 'c', 'b', 'gone'], 'Specs in order, a failed download left out, a family no spec lists kept at the end.');
+  const [a, c, b, gone] = merged;
+  assert.deepEqual([a.category, a.character, a.similarTo, a.overused], ['new class', ['one', 'two', 'three'], ['New Face'], true], 'A catalogued family takes its metadata from its spec.');
+  assert.deepEqual([b.similarTo, b.overused], [undefined, undefined], 'A stand-in or flag the spec no longer has is dropped.');
+  for (const family of [a, b]) {
+    const old = catalogued.find(item => item.id === family.id);
+    assert.deepEqual([family.files, family.license, family.licenseFile, family.copyright, family.version, family.source], [old.files, old.license, old.licenseFile, old.copyright, old.version, old.source], `${family.id} keeps its files`);
+  }
+  assert.deepEqual(Object.keys(a), ['id', 'family', 'category', 'character', 'similarTo', 'overused', 'files', 'license', 'licenseFile', 'copyright', 'version', 'source'], 'Fields keep the order fonts.json lists them in.');
+  assert.equal(c, added[0], 'A downloaded family is taken as fetched.');
+  assert.equal(gone, catalogued[2]);
+  assert.deepEqual(mergeCatalog({ catalogued: [], specs, added: [] }), [], 'With nothing catalogued and nothing downloaded there is nothing to list.');
+  assert.deepEqual(mergeCatalog({ catalogued: merged, specs: specs.slice(0, 3), added: [] }).map(item => item.id), ['a', 'c', 'b', 'gone'], 'A second run changes nothing.');
+});
+
+test('the genre words designs search for reach the families made for them, and editorial reaches none', async () => {
+  const library = await loadFontLibrary(rootDir);
+  const tools = createDesignTools({ fonts: async () => library });
+  const find = words => tools.handle('materials', { action: 'find', words }, {});
+  const REACHES = {
+    sports: ['Anton', 'Barlow Condensed', 'Bebas Neue', 'Chakra Petch', 'Oswald'],
+    broadcast: ['Anton', 'Barlow Condensed', 'Bebas Neue'],
+    varsity: ['Bevan', 'Holtwood One SC'],
+    mixtape: ['Anton', 'Caveat', 'Sedgwick Ave Display'],
+    arcade: ['Pixelify Sans', 'Silkscreen'],
+    western: ['Holtwood One SC', 'Sancreek'],
+    blackletter: ['Fruktur', 'Grenze Gotisch'],
+    stencil: ['Big Shoulders Stencil Display', 'Black Ops One'],
+    techno: ['Chakra Petch', 'Oxanium', 'Zen Dots'],
+    zine: ['Caveat', 'Courier Prime', 'Cutive Mono', 'Sedgwick Ave Display'],
+    civic: ['Barlow Condensed', 'Big Shoulders Display', 'Big Shoulders Stencil Display'],
+    signage: ['Barlow Condensed', 'Big Shoulders Display', 'Big Shoulders Stencil Display', 'Bungee'],
+    screenplay: ['Courier Prime', 'Cutive Mono'],
+    newspaper: ['Gelasio', 'Grenze Gotisch', 'Libre Franklin'],
+    fashion: ['Bodoni Moda', 'Cormorant Garamond', 'Poiret One', 'Prata'],
+    '70s': ['Fraunces', 'Shrikhand'],
+    y2k: ['Fredoka', 'Unbounded', 'Zen Dots'],
+    luxury: ['Bodoni Moda', 'Cormorant Garamond', 'Prata'],
+    literary: ['Alegreya Sans', 'EB Garamond', 'Literata'],
+    children: ['Fredoka', 'Nunito'],
+  };
+  for (const [word, expected] of Object.entries(REACHES)) {
+    const found = await find([word]);
+    const reached = found.families.filter(family => family.matches?.length).map(family => family.family);
+    for (const name of expected) assert.ok(reached.includes(name), `${word} reaches ${name}`);
+    assert.ok(expected.includes(found.families[0].family), `${word} is led by ${found.families[0].family}`);
+  }
+  assert.equal((await find(['editorial'])).families.some(family => family.matches?.length), false, 'No family carries the word designs use for taste in general.');
 });
 
 test('a font library loads only OFL families whose WOFF2 files match their checksums', async t => {
@@ -131,4 +245,13 @@ test('a font library loads only OFL families whose WOFF2 files match their check
   const loaded = await loadFontLibrary(root);
   assert.deepEqual(loaded.families.map(item => [item.family, item.faces.map(file => file.path), item.licenseRepositoryPath]), [['Jost', ['fonts/jost-latin-wght-normal.woff2'], 'library/fonts/jost.OFL.txt']]);
   assert.equal(await loadFontLibrary(root), loaded, 'A valid library is loaded once per process.');
+});
+
+test('a font search word matches a whole word, a phrase or a variant of its stem, never five shared letters alone', () => {
+  for (const [word, value] of [['luxury', 'luxurious'], ['minimal', 'minimalist'], ['condense', 'condensed'], ['sport', 'sports'], ['high-contrast', 'high-contrast'], ['art deco', 'art deco'], ['retro', 'retro-futurist'], ['Black', 'Archivo Black']]) {
+    assert.equal(fontWordMatch(word, value), true, `${word} names ${value}`);
+  }
+  for (const [word, value] of [['blackletter', 'Archivo Black'], ['basketball', 'Baskervville'], ['deco', 'decorative'], ['wedding', 'wedge'], ['art deco', 'art'], ['', 'serif']]) {
+    assert.equal(fontWordMatch(word, value), false, `${word} does not name ${value}`);
+  }
 });

@@ -125,13 +125,20 @@ function readingFor(revealed, dna, { aside = null } = {}) {
   const [first, second] = [...refs.filter(ref => pool.includes(ref)), ...pool.filter(ref => !refs.includes(ref))];
   const rest = refs.filter(ref => ref !== first && ref !== second);
   const clusters = [
-    { id: 'c1', name: 'Lamp-lit evenings', refs: [first, ...rest.filter((ref, index) => index % 2 === 0)], layers: ['palette', 'typography', 'imagery'], reading: 'Test-only: these refs share a slow, lamp-lit evening mood.' },
-    { id: 'c2', name: 'Spoken softly', refs: [second, ...rest.filter((ref, index) => index % 2 === 1)], layers: ['voice', 'layout', 'motion'], reading: 'Test-only: these refs share a quiet, unhurried way of speaking.' },
+    { id: 'c1', name: 'Lamp-lit evenings', refs: [first, ...rest.filter((ref, index) => index % 2 === 0)], layers: ['palette', 'typography', 'imagery'], reading: 'Test-only: these refs share a slow, lamp-lit evening mood.', conventions: ['Test-only: lamp-lit film stills with warm practical light'] },
+    { id: 'c2', name: 'Spoken softly', refs: [second, ...rest.filter((ref, index) => index % 2 === 1)], layers: ['voice', 'layout', 'motion'], reading: 'Test-only: these refs share a quiet, unhurried way of speaking.', conventions: ['Test-only: radio-play scripts set in plain type'] },
   ];
   const surprises = revealed.entities.filter(entity => entity.source === 'qloo' && entity.surprise).map(entity => entity.ref);
   if (surprises.length && !clusters.some(cluster => cluster.refs.some(ref => surprises.includes(ref)))) clusters[0].refs.push(surprises.find(ref => ref !== aside));
   return { schemaVersion: '1.0', clusters, setAside: aside ? [{ ref: aside, reason: 'Test-only: a catalogue label outside what the audience shares.' }] : [],
     approach: 'Test-only: the first cluster sets the palette and the type, the second the copy, the layout and the motion of the site.' };
+}
+/** The DNA with its palette device translating the first convention of the cluster that holds one of its anchors. */
+function withConvention(dna, reading) {
+  return { ...dna, devices: dna.devices.map(device => {
+    const cluster = device.layer === 'palette' && reading.clusters.find(item => device.anchors.some(ref => item.refs.includes(ref)));
+    return cluster ? { ...device, convention: `${cluster.id}.1` } : device;
+  }) };
 }
 const METHODS = { palette: 'css-palette', typography: 'library-font', layout: 'css-layout', structure: 'css-layout', interaction: 'css-layout', voice: 'copy', imagery: 'css-art', motion: 'css-motion' };
 function planFor(dna, reading, { methods = {}, images = {}, review = true } = {}) {
@@ -210,8 +217,9 @@ function productionAgent(log, live) {
     const dropped = entry.dropped = required.find(ref => !reading.clusters.some(cluster => cluster.refs[0] === ref));
     entry.probes.uncovered = await write(call, 'culture-reading.json', { ...reading, clusters: reading.clusters.map(cluster => ({ ...cluster, refs: cluster.refs.filter(ref => ref !== dropped) })) });
     entry.probes.reading = await write(call, 'culture-reading.json', reading);
-    entry.probes.asideAnchor = await write(call, 'culture-dna.json', { ...dna, devices: dna.devices.map((device, index) => index === 2 ? { ...device, anchors: [aside] } : device) });
-    entry.probes.dna = await write(call, 'culture-dna.json', dna);
+    const bound = withConvention(dna, reading);
+    entry.probes.asideAnchor = await write(call, 'culture-dna.json', { ...bound, devices: bound.devices.map((device, index) => index === 2 ? { ...device, anchors: [aside] } : device) });
+    entry.probes.dna = await write(call, 'culture-dna.json', bound);
     entry.probes.readingLate = await write(call, 'culture-reading.json', reading);
     const site = siteFor(mode);
     entry.probes.siteEarly = await write(call, 'index.html', site.html);
@@ -391,8 +399,8 @@ test('a plan that generates pictures gets them only for its generated-image step
     const dna = { ...plain, devices: [...plain.devices, imageryDevice(required[0])] };
     const reading = readingFor(revealed, dna);
     await write(call, 'culture-reading.json', reading);
-    entry.probes.noImagery = await write(call, 'culture-dna.json', plain);
-    assert.equal((await write(call, 'culture-dna.json', dna)).structuredContent.status, 'written');
+    entry.probes.noImagery = await write(call, 'culture-dna.json', withConvention(plain, reading));
+    assert.equal((await write(call, 'culture-dna.json', withConvention(dna, reading))).structuredContent.status, 'written');
     entry.probes.imageEarly = await call('project_generate_image', { device: 'dna7', subject });
     entry.probes.notRequired = await write(call, 'culture-production.json', planFor(dna, reading, { review: false }));
     const plan = planFor(dna, reading, { methods: { dna7: 'generated-image' }, images: { dna7: 2 }, review: false });
@@ -463,7 +471,7 @@ test('a hosted Studio offers no image generator, so no study can require picture
     const dna = { ...plain, devices: [...plain.devices, imageryDevice(required[0])] };
     const reading = readingFor(revealed, dna);
     await write(call, 'culture-reading.json', reading);
-    await write(call, 'culture-dna.json', dna);
+    await write(call, 'culture-dna.json', withConvention(dna, reading));
     entry.probes.generated = await write(call, 'culture-production.json', planFor(dna, reading, { methods: { dna7: 'generated-image' }, images: { dna7: 1 } }));
     entry.probes.plan = await write(call, 'culture-production.json', planFor(dna, reading));
     entry.probes.image = await call('project_generate_image', { device: 'dna7', subject: 'Olive oil bottles on a dark marble counter at night' });

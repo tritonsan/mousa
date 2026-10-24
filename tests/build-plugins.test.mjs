@@ -151,7 +151,7 @@ test('each packaged server starts on its own in a bare environment and finds its
         assert.deepEqual(listed.result.tools.map(tool => tool.name), TOOLS, `${name} lists the thirteen tools`);
         const status = JSON.parse((await server.request('tools/call', { name: 'mousa_status', arguments: {}, ...(meta ? { _meta: meta } : {}) })).result.content[0].text);
         assert.equal(status.host, name);
-        assert.equal(status.materials.fonts, 33, `${name} reads the font library it carries`);
+        assert.equal(status.materials.fonts, 55, `${name} reads the font library it carries`);
         assert.equal(status.project.folder, await import('node:fs/promises').then(fs => fs.realpath(project)));
         assert.equal(status.project.source, name === 'codex' ? 'host' : 'environment');
         assert.equal(status.qloo.connected, false, 'no key in a bare environment and an empty connections folder');
@@ -225,7 +225,7 @@ test('the power\'s server learns the project from the folders Kiro lists as root
     assert.equal(opened.host, 'kiro');
     assert.deepEqual([opened.project.folder, opened.project.source], [await real(first), 'client']);
     assert.equal(opened.qloo.connected, false, 'an unset key reference is no key');
-    assert.equal(opened.materials.fonts, 33, 'the power reads the font library it carries');
+    assert.equal(opened.materials.fonts, 55, 'the power reads the font library it carries');
     await status();
     assert.equal(asked, 1, 'the roots are asked once');
     listed = second;

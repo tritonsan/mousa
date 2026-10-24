@@ -82,6 +82,20 @@ Five later passes for the same audience, with `qualities`, each made 17 requests
 
 The character pair also lists the derived `art_style` domain. Each `art_style` tag on a measured work, such as Hand-Drawn or Pixel Art, becomes an art-style ref with no request. The ref records the works that carry it (one is enough), their domains, three examples and the evidence records, and ranks like a quality; its name then stays with that ref instead of joining the look family. The game maps an art style to one of its eight frame styles by its words, such as Hand-Drawn to ink, Pixel Art to pixel and Cel-Shaded to cel. The mapping is the host's; the tags and the works carrying them are Qloo's. Profiles recorded before the domain are read again from their saved responses. For Hollow Knight, Spirited Away, Sigur Rós, Nujabes and Paterson, the strongest frame style is pixel art, carried by Hyper Light Drifter, Eastward and Owlboy ([verification record](verification.md#art-direction-music-and-comparison-variants--october-5-2026)).
 
+### Distinctive qualities, and required works from the head
+
+Ranked by affinity times spread, the same few tags led nearly every audience. Over the 20 benchmark audiences, Intimate and Atmospheric were each derived for 13, and the brief pointed the palette or the type at them for 9 each. In the gallery's 11 audiences they set the palette or the type for 7 and 4. The designing model then drew those adjectives the way it draws them for anyone: the showcase, made for an audience of sports leagues, hip-hop and sports documentaries, became a warm cream page with an editorial serif.
+
+Since October 24, 2026 a quality ranks by how distinctive it is for this audience. Its **lift** is how many times more often this audience's tagged works carry the tag than the works of 28 reference audiences measured in Moûsa sessions do (`plugin/server/culture/quality-base-rates.mjs`, built by `scripts/build-quality-base-rates.mjs` from saved profiles, keeping tag names and shares only). The score weighs lift^1.5 by the carriers' summed affinity and the square root of their domains. Left out one audience at a time, the share of family leaders that are near-universal tags fell from 58% to 21%.
+
+| Audience | Leaders before | Leaders now |
+| --- | --- | --- |
+| The showcase (This Week in Startups, The Original Kings of Comedy, the Dodgers, Chelsea, Live Nation) | Intimate, Emotional, Reflective | Bold Typography ×2.7, Determined ×2.9, Resilience ×3.3 |
+| Bad Bunny and Narcos | Gritty, Character driven, Loyal | Gritty ×3.5, Urban ×4.7, Consequences ×3.9 |
+| The Lamplight (a live music venue) | Intimate, Character driven, Identity | Alternative R&B ×4.6, Soulful ×3.0, Open-Minded ×2.3 |
+
+The required works change too. In each domain only the five works the audience loves most compete, and the most central of them is taken. The showcase's were a CrossFit documentary, a cable comedy and Jeremih, chosen for carrying Intimate; now Jeremih, the audience's top artist, stands beside Gatorade G2 and Men of a Certain Age. A look quality carried mostly by brands is no longer cautioned as describing the brands rather than the audience: it is the design the audience sees every day, to be translated as a genre (broadcast graphics, packaging type, signage) and never as a brand's marks.
+
 ## Supported tool inputs
 
 | Tool | Inputs and purpose |

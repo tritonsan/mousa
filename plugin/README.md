@@ -10,7 +10,7 @@ Successful standalone Qloo replies receive an `evidence.id` beginning with `cult
 
 Set `QLOO_API_KEY` in the MCP process environment or the host's secret environment facility. The default base URL is `https://hackathon.api.qloo.com`. Do not put a credential into this plugin, client configuration examples, artifacts, browser code, or logs. Without a key, tool discovery works and a Qloo tool returns an explicit `QLOO_KEY_MISSING` error. Set `QLOO_BASE_URL` only when using a credential issued for another documented Qloo environment.
 
-## The mousa entry (0.6.0)
+## The mousa entry (0.7.0)
 
 `server/mousa.mjs` starts the server that the Claude Code and Codex packages will run. The server is named `mousa`, and its surface is built to be cheap to load:
 - Instructions stay under 2,048 characters, because Claude Code cuts server instructions there.
@@ -211,7 +211,7 @@ The marketplaces are `.claude-plugin/marketplace.json` for Claude Code and `.age
 - **Codex 0.162.0-alpha.17, in a temporary `CODEX_HOME`.** Codex adds the marketplace from the repository root, installs `plugins/codex` as 0.5.0, and reads its MCP server with its command, `env_vars`, `cwd` and timeouts.
 - **The tests:**
   - build the packages into a temporary folder and compare every copied file with its source;
-  - start each packaged server in a bare environment. Each lists the twelve tools, reads its own 33 font families, and takes its project folder from `MOUSA_PROJECT_DIR` or from Codex's sandbox state;
+  - start each packaged server in a bare environment. Each lists the twelve tools, reads its own 55 font families, and takes its project folder from `MOUSA_PROJECT_DIR` or from Codex's sandbox state;
   - check the marketplaces, the Kiro template and the eval suites;
   - fail when the committed packages differ from what the sources build.
 
@@ -276,7 +276,7 @@ The production stages add the designer's own judgment between the taste input an
 1. `culture_list_capabilities({medium})` lists what this session can make for the medium: `web` (a website), `app-ui` (screens whose values live in a design token file such as `tokens/tokens.json`, consumed through CSS custom properties) or `generic` (any text project, checked by finding each token as written). It names each method per DNA layer and the reason any is unavailable, and the views a capture shows: desktop 1440×900 and mobile 390×844 for `web`, phone 390×844 and board 1440×900 for `app-ui`.
 2. After the taste input, `culture_validate_reading({reading, tasteInput, medium})` checks the clusters, the set-aside refs and the required anchors. Pass the valid reading to `culture_validate_design_dna`, with `medium`.
 3. `culture_validate_production_plan({plan, dna, reading, tasteInput, medium})` checks that each step's method is available here and makes the device's layer, that generator steps have a count and a fallback, and that every cluster is realized.
-4. `culture_find_materials({kind:'fonts', words})` ranks the 33 open-licence (SIL OFL 1.1) families the plugin carries; `culture_fetch_materials({fonts, plan})` copies the planned ones into the project with their licence files and returns their `@font-face` rules. `culture_generate_image({dna, device, subject, plan})` makes one picture for a planned imagery device where Codex is installed and signed in, up to `MOUSA_IMAGES_PER_RUN` (4 by default, at most 8) per session.
+4. `culture_find_materials({kind:'fonts', words})` ranks the 55 open-licence (SIL OFL 1.1) families the plugin carries; `culture_fetch_materials({fonts, plan})` copies the planned ones into the project with their licence files and returns their `@font-face` rules. `culture_generate_image({dna, device, subject, plan})` makes one picture for a planned imagery device where Codex is installed and signed in, up to `MOUSA_IMAGES_PER_RUN` (4 by default, at most 8) per session.
 5. After `culture_check_dna_conformance({dna, paths, medium})`, `culture_capture({medium, views?, target?, full?})` renders a project page in a headless Chromium-based browser that can reach only the project, and `culture_validate_review({review, plan})` checks a review against the captures this session issued: two rounds of at most six captures. Open every capture you cite with your own image-reading tool; this session cannot confirm which ones you opened, and the reply says so.
 
 The server's environment configures the session; a tool never takes a folder from the agent:

@@ -1,4 +1,4 @@
-# Moûsa 0.6.0 for Claude Code
+# Moûsa 0.7.0 for Claude Code
 
 Moûsa grounds design work in measured cultural taste from Qloo: what an audience loves, what those works share, and what that means for palette, type, imagery, motion, voice and structure.
 

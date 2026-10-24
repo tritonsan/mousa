@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { normalizeTasteName } from '../culture/taste.mjs';
 
 /**
  * Host font library: open-licence (SIL OFL 1.1) families as Latin-subset WOFF2 files under library/fonts/, read-only
@@ -11,6 +12,25 @@ import { fileURLToPath } from 'node:url';
  * The Studio reads it from the repository; the portable plugin carries a copy in its own library/ folder.
  */
 export const FONT_FILE_PATH = /^fonts\/[a-z0-9][a-z0-9-]{0,80}\.woff2$/u;
+
+/**
+ * Whether a search word names a family's category, a character word or its name: as a whole word or phrase, such as
+ * "art deco" or "high-contrast", or as a variant of the same stem, such as minimal and minimalist or luxury and luxurious:
+ * the shorter word, at least five letters, shares at least four fifths of itself with the longer, which is at most two
+ * thirds longer. Five shared letters alone used to match "blackletter" to Archivo Black and "basketball" to Baskervville.
+ */
+export function fontWordMatch(word, value) {
+  const a = normalizeTasteName(word), b = normalizeTasteName(value);
+  if (!a || !b) return false;
+  if (` ${b} `.includes(` ${a} `)) return true;
+  const stem = (x, y) => {
+    const [short, long] = x.length <= y.length ? [x, y] : [y, x];
+    let shared = 0;
+    while (shared < short.length && short[shared] === long[shared]) shared++;
+    return short.length >= 5 && shared >= 5 && shared >= 0.8 * short.length && short.length / long.length >= 0.6;
+  };
+  return !a.includes(' ') && b.split(' ').some(part => stem(a, part));
+}
 const FAMILY_NAME = /^[A-Za-z0-9][A-Za-z0-9 ]{0,58}$/u;
 const FILE_NAME = /^[a-z0-9][a-z0-9-]{0,80}\.woff2$/u;
 const MAX_FONT_BYTES = 200 * 1024;
@@ -51,7 +71,9 @@ async function readFonts(rootDir) {
     families.push(Object.freeze({ family, category: entry.category, character: Object.freeze([...entry.character]),
       similarTo: Object.freeze((Array.isArray(entry.similarTo) ? entry.similarTo : []).filter(name => typeof name === 'string' && name.trim()).slice(0, 6)),
       faces: Object.freeze(faces), license: entry.license, licenseRepositoryPath: `library/fonts/${entry.licenseFile}`,
-      copyright: typeof entry.copyright === 'string' ? entry.copyright : null, source: typeof entry.source === 'string' ? entry.source : null }));
+      copyright: typeof entry.copyright === 'string' ? entry.copyright : null, source: typeof entry.source === 'string' ? entry.source : null,
+      // A family model-made pages default to, which materials find ranks after the others that match as well.
+      ...(entry.overused === true ? { overused: true } : {}) }));
   }
   return Object.freeze({ source: typeof catalog.source === 'string' ? catalog.source : '', families: Object.freeze(families) });
 }
@@ -94,7 +116,7 @@ export function fontsArtifact(library) {
     usage: 'Open-licence fonts served with every site, identical in every run. Typography uses only these families, with a generic fallback such as serif or sans-serif. Copy the fontFace rules of each family you use into your CSS; the files are local, so the type you choose is the type every visitor sees.',
     character: 'category and character describe each typeface; they are not taste data. similarTo names system fonts the family can stand in for.',
     families: library.families.map(family => ({ family: family.family, category: family.category, character: [...family.character],
-      ...(family.similarTo.length ? { similarTo: [...family.similarTo] } : {}),
+      ...(family.similarTo.length ? { similarTo: [...family.similarTo] } : {}), ...(family.overused ? { overused: true } : {}),
       weights: [...new Set(family.faces.map(face => face.weight.replace(' ', '-')))].join(', '), italic: family.faces.some(face => face.style === 'italic'),
       fontFace: family.faces.map(face => fontFaceRule(family, face)) })) };
 }

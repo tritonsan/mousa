@@ -80,9 +80,14 @@ During the review, the DNA and the plan stay as they are: repairs change the bui
 
 - **Rounds.** Each holds six captures, and a session has two. `design_capture({})` takes round 1; after your repairs, `design_capture({ round: 2 })` starts the next.
 - **Seen.** The pictures arrive in the capture's result, so Moûsa records them as seen. Cite only captures of the round you review.
-- **The review.** `{ schemaVersion: '1.0', round, criteria: [{ id, capture, verdict, observed, repair? }], summary }`:
+- **The review.** `{ schemaVersion: '1.0', round, criteria: [{ id, capture, verdict, observed, repair? }], summary, critique }`:
   - every criterion of the plan, once;
   - `verdict` is `met`, `partly` or `missed`;
   - `observed` describes what the capture shows;
   - `partly` and `missed` name the `repair`, which you then make in the files.
-- **After a round.** The result says whether a round remains. When every criterion is met, finish.
+- **The critique.** `{ generic: [3 × { choice, capture, signature?, anchor?, action }], fan: { works, verdict, why } }`, written as the audience would see the page:
+  - `generic` names the three choices on the page that any page could have, each on a capture of this round. `action` is `kept` only with the `anchor` of your DNA that requires the choice; otherwise `replaced`, and you replace it in the build.
+  - Each default-look signature `design_check` still finds is among the three, with its `signature` id, such as `pill-buttons`. The review is refused while the page carries more than two.
+  - `fan` pictures someone who loves the audience's best-loved works: name 3-5 works of the brief, at least two from its top, and say `yes`, `partly` or `no` with `why`.
+  - A replaced choice, or a fan verdict other than yes, calls for another round, as a partly criterion does.
+- **After a round.** The result says whether a round remains. When every criterion is met and the critique keeps nothing generic, finish.

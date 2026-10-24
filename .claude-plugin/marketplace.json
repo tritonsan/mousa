@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "Moûsa: measured cultural taste for design work.",
-    "version": "0.6.0"
+    "version": "0.7.0"
   },
   "plugins": [
     {
       "name": "mousa",
       "source": "./plugins/claude-code",
       "description": "Design for an audience from what Qloo measures it loves: Moûsa plans the taste questions, freezes your own prediction first, measures the audience and checks each design stage against the result, through review captures.",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "author": {
         "name": "tritonsan"
       },

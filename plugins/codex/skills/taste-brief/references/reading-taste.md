@@ -24,7 +24,7 @@ Each work Qloo returns carries tags, and each tag has a type. Moûsa sorts the t
 | left out | platform, business model, brand type, age ranges, competitor brand, Wikipedia category, influenced by | nothing: catalogue metadata, not taste |
 
 - **What becomes a quality.** A tag carried by two or more measured works, such as `Atmospheric (look)` carried by 8 works across films, music and TV.
-- **How qualities rank.** By the summed affinity of their works times the number of domains they span. A quality running through film, music and TV outranks one repeated within a single domain. The brief keeps the strongest four of each family.
+- **How qualities rank.** By how distinctive they are for this audience: a quality's **lift** is how many times more often this audience's works carry it than the works of other audiences Moûsa has measured, weighed by the affinity of its works and the domains they span. Qloo puts some tags, such as Intimate, Atmospheric and Minimalist, on works of almost every audience; they lead only an audience whose works carry them unusually often. The brief keeps the four highest of each family and shows each one's lift.
 - **Tags in the brief.** The tags listed after a work lead with its look, mood and meaning tags. Other keyword tags follow and are noisier: a film tagged "The forest" or "Electronic translator" is describing its plot, not its look.
 
 ## Surprises and confirmations
@@ -39,9 +39,9 @@ Each work Qloo returns carries tags, and each tag has a type. Moûsa sorts the t
 ## Required anchors
 
 Six entries are required. The design uses each one or rejects it with a specific reason, and at most two may be rejected.
-- **With qualities:** three are the strongest quality of each family. Three are the works most central to the qualities, one per domain, where centrality is the summed score of the qualities a work carries. The artifact's own medium comes first: games for a game, places for a café.
+- **With qualities:** three are the most distinctive quality of each family. Three are works, one per domain: in each domain the five works the audience loves most compete, and the one most central to the qualities is taken, where centrality is the summed score of the qualities a work carries. The artifact's own medium comes first: games for a game, places for a café.
 - **Without qualities:** the highest-affinity works across domains, surprises first.
-- **A work that carries none of the qualities** comes last, whatever its affinity. An ice hockey team that happens to rank highly does not set a food shop's palette.
+- **A work that carries none of the qualities** comes last, whatever its affinity. A brand that is required stands for its genre's look, such as broadcast graphics for a sports league: translate the genre, never its logo, colours or products.
 
 ## Noise and weak signals
 

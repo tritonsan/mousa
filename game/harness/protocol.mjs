@@ -329,7 +329,7 @@ export function normalizeCharacterDna(raw, { input, sketch, portraits = false, m
   const ids = new Set();
   const devices = list(source.devices, 'dna.devices', { min: CHARACTER_LIMITS.minDevices, max: CHARACTER_LIMITS.maxDevices }).map((device, index) => {
     const at = `dna.devices[${index}]`;
-    object(device, at, ['id', 'layer', 'device', 'anchors', 'qualities', 'translation', 'tokens']);
+    object(device, at, ['id', 'layer', 'device', 'anchors', 'qualities', 'translation', 'tokens', 'convention']);
     const id = text(device.id, `${at}.id`, { max: 40 });
     if (!/^[A-Za-z][A-Za-z0-9_-]{0,39}$/u.test(id) || ids.has(id)) fail(`${at}.id`, 'Use a unique ID such as dna1.');
     ids.add(id);
@@ -387,6 +387,9 @@ export function normalizeCharacterDna(raw, { input, sketch, portraits = false, m
     }
     return { id, layer, device: text(device.device, `${at}.device`, { min: 3, max: 200 }), anchors, ...(qualities.length ? { qualities } : {}),
       translation: text(device.translation, `${at}.translation`, { min: 10, max: 900 }), tokens, ...(surprise ? { surprise: true } : {}),
+      // The genre convention it translates, as the reading named it and bound it (see applyReadingToDna).
+      ...(device.convention !== undefined ? { convention: plain(device.convention) ? { ...(device.convention.cluster ? { cluster: text(device.convention.cluster, `${at}.convention.cluster`, { max: 20 }) } : {}), text: text(device.convention.text, `${at}.convention.text`, { min: 3, max: 200 }) }
+        : { text: text(device.convention, `${at}.convention`, { min: 3, max: 200 }) } } : {}),
       ...(preset ? { presetFrom: anchors.find(ref => refPreset(refs.get(ref))) } : {}), ...(moods ? { moods } : {}),
       ...(frozen ? { novel: sketchNovelty(tokens, frozen) } : {}) };
   });

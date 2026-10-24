@@ -1,4 +1,5 @@
 import { QLOO_RESULT_TYPES, QLOO_AGE_BANDS, QLOO_AUDIENCE_WEIGHTS, AUDIENCE_ID } from '../qloo/client.mjs';
+import { QUALITY_BASE_RATES, QUALITY_BASE_RATES_CORPUS } from './quality-base-rates.mjs';
 
 export const TASTE_SCHEMA_VERSION = '1.0';
 /**
@@ -43,7 +44,7 @@ export const STRUCTURAL_DNA_LAYERS = Object.freeze(['layout', 'structure', 'inte
 export const TASTE_LIMITS = Object.freeze({
   references: 8, calls: 24, perDomain: 10, perTagDomain: 8, domains: 10, requiredAnchors: 6, maxRequiredRejections: 2,
   minDevices: 5, maxDevices: 10, deepCutPopularityMax: 0.6, conformanceThreshold: 0.75, sketchDeltaE: 20, illustrationShapes: 8,
-  qualitiesPerFamily: 6, qualityAnchors: 3, artStyles: 8,
+  qualitiesPerFamily: 6, qualityAnchors: 3, artStyles: 8, headWorks: 5,
 });
 export const isTagDomain = domain => Object.hasOwn(TASTE_TAG_DOMAINS, domain);
 /** Domains the host derives from the measured works' typed tags instead of requesting them. */
@@ -57,11 +58,15 @@ Use this workflow when a host or user chooses measured cultural taste to govern 
 
 1. Predict before you look. Before reading any taste data, record what you expect this audience to like in the same domains the profile covers, such as brands, films, music artists, books and TV: three to six real names per domain, from your own knowledge only. For the style and aesthetic domains, predict three to six qualities instead: the pacing and look of the films and TV the audience likes, and the visual and material properties of what it likes. For the qualities domain, predict three to six moods, themes or looks you expect its favorite works to share. Then sketch the design you would make from that expectation alone: one sentence, a palette, one to three font families, the major sections and a few visual motifs. Prediction and sketch are frozen once saved. In a run without Qloo the prediction is the entire taste input and the sketch is your own starting point. In a Qloo run they separate measured signal from what you already assumed and would have designed.
 
-2. Read the measured profile. A Qloo taste profile contains resolved seeds, cross-domain neighbors with affinity, popularity and tags, and a lower-popularity band. It also contains style and aesthetic tags ranked by affinity for the audience as a whole, and qualities: the look, mood and meaning tags that two or more measured works share, ranked by the affinity of those works and the number of domains they span. Measured entities, tags and qualities your prediction did not contain, and that the brief did not already name, form the surprise set: signal that exists only because Qloo was consulted. When the profile has qualities, the host requires the strongest quality of each family and the works most central to the qualities; otherwise it selects required anchors from the highest-affinity entities across domains, favoring surprises.
+2. Read the measured profile. A Qloo taste profile contains resolved seeds, cross-domain neighbors with affinity, popularity and tags, and a lower-popularity band. It also contains style and aesthetic tags ranked by affinity for the audience as a whole, and qualities: the look, mood and meaning tags that two or more measured works share, ranked by how distinctive they are for this audience, that is how much more often its works carry them than the works of other measured audiences, weighed by the affinity and spread of those works. Tags Qloo puts on almost every work, such as Intimate or Atmospheric, lead only an audience whose works carry them unusually often. Measured entities, tags and qualities your prediction did not contain, and that the brief did not already name, form the surprise set: signal that exists only because Qloo was consulted. When the profile has qualities, the host requires the most distinctive quality of each family and, in each domain, the most central of the works the audience loves most; otherwise it selects required anchors from the highest-affinity entities across domains, favoring surprises.
+
+Read the works as a designer would: before the specification, name for each group of works you gather the visual conventions they share as a genre or medium, how such works look, such as broadcast score bugs in boxed condensed capitals, record sleeves with one full-bleed portrait and small type, or the hand-painted signs of a market. Conventions belong to a genre, never to one brand: its logo, mascot, exact colors, packaging and trade dress stay out.
 
 3. Compile a Design DNA. Translate the taste input into five to ten named, concrete design devices across at least four layers: palette, typography, layout, imagery, voice, structure, interaction and motion. Palette and typography are required, plus at least one of layout, structure, interaction or imagery. Each device names its anchor entities, explains the translation as your interpretation and declares literal tokens a host can check: hex colors, font families every visitor can load, CSS property values, keyframes names, element IDs, SVG illustration IDs or visible copy. Adjectives are not devices. "Calm and minimal" is not a device; "square 1:1 frames that widen on selection", anchored to a specific film, is. Every required anchor becomes a device or is rejected with a specific reason; at most two required anchors may be rejected.
 
-Qualities come first. When the taste input has qualities, the palette and the typography each anchor to a quality, a measured one in a measured run, so the colors and the type translate what the audience's works share; the entities are evidence of it. Never take an entity's own brand or team colors, logo, packaging or trade dress.
+Qualities come first. When the taste input has qualities, the palette and the typography each anchor to a quality, a measured one in a measured run, so the colors and the type translate what the audience's works share; the entities are evidence of it. At least one of the two also translates a convention you named for the works it anchors, so the quality is drawn the way that genre draws it rather than the way a model draws an adjective. Never take an entity's own brand or team colors, logo, packaging or trade dress.
+
+Leave the house style behind. Models that design have a default look of their own: a warm cream page, a condensed display serif with one italic word, small uppercase monospace labels after a short rule, numbered sections and pill buttons; or violet gradients and frosted cards. A page may keep at most two of these signatures, so the look comes from the audience, not the model.
 
 When the taste input contains surprises, they must move the design, not just relabel it. Devices anchored to surprise entities or qualities name the returned tags they translate. Together they depart from your frozen sketch in three places: palette colors far from every sketch color, a type system outside the sketch fonts used for headings or body text, and at least one new major section or component. Devices anchored to your own predictions may follow the sketch. A run without surprises keeps its sketch as its starting point, so the departure measures what the measured data changed.
 
@@ -78,6 +83,8 @@ When the host can also generate images, the DNA includes at least one imagery de
 4. Build to the DNA. The DNA is binding. Implement every device with its declared tokens, keep product facts, protected files and accessibility intact, and do not fall back to a generic default look where a device specifies otherwise. Transform qualities, never copy logos, artwork, stills, lyrics or trade dress. Visitor-facing pages never mention Qloo, agents or APIs.
 
 5. Check conformance. Compare the saved files with the DNA and repair missing devices before finishing. Conformance shows that declared tokens exist in the artifact, not that the design is good or that visitors prefer it.
+
+6. Critique the result as its audience would. Look at the rendered page and name its three most generic choices, the ones any page could have; each that no anchor of the DNA requires is replaced. Then ask whether someone who loves the audience's best-loved works would take the page for theirs, and repair what says no.
 
 Keep provenance honest. Qloo supplies entities, tags and relationships, never design tokens: every color, font, layout, motion or copy choice is your labeled interpretation of an entity or tag. Never invent entities, seeds, affinities or explainability; an unresolved reference stays unresolved and an empty profile is reported, not replaced. A run without Qloo follows the same steps with its own prediction as the taste input, so the only difference between the two arms is where taste comes from. Attribution metrics such as the share of devices anchored to surprise entities, prediction overlap and design distance are bounded heuristics: they show that measured data changed the specification and the output, not that the result is better.
 `;
@@ -359,14 +366,21 @@ function tasteSignature(entities) {
 }
 
 /**
- * Qualities the measured works share: each look, mood or meaning tag that at least two of them carry, ranked by the
- * summed affinity of those works times the number of domains they span, so a quality running through films, books and
- * music outranks one repeated inside a single domain. A name the style or aesthetic ranking already returned stays with
- * that ref. Recorded Gather and Echo Atlas passes give, for example, Atmospheric, Reflective, Identity and Melancholic,
- * and Stylized, wonder and exploration-focused.
+ * Qualities the measured works share: each look, mood or meaning tag that at least two of them carry, ranked by how
+ * distinctive it is for this audience. Its lift is how much more often this audience's tagged works carry it than the
+ * works of the reference audiences in QUALITY_BASE_RATES, smoothed by one work so that two works are a bounded signal;
+ * the score weighs lift^1.5 by the summed affinity of the carriers and the square root of the domains they span. A name
+ * the style or aesthetic ranking already returned stays with that ref.
+ *
+ * Ranked by affinity times spread alone, the same few tags led nearly every audience: Intimate and Atmospheric were
+ * derived for 13 of the benchmark's 20 audiences and set the palette or type in 7 of 11 gallery audiences, which the
+ * designing model drew as the same warm paper and editorial serif. On the reference audiences, left out one at a time,
+ * the share of family leaders that are such near-universal tags fell from 58% to 21%; Bad Bunny and Narcos now lead
+ * with Gritty, Trap Latino and Urban, where Atmospheric and Character driven led before.
  */
-function tasteQualities(works, ranked = []) {
+export function tasteQualities(works, ranked = [], { rates = QUALITY_BASE_RATES, floor = QUALITY_BASE_RATES_CORPUS.floor } = {}) {
   const skip = new Set(ranked.map(normalizeTasteName));
+  const tagged = works.filter(work => Object.values(work.facets || {}).some(values => values?.length)).length || 1;
   const found = new Map();
   for (const work of works) {
     const names = new Map();
@@ -387,8 +401,9 @@ function tasteQualities(works, ranked = []) {
     const family = [...item.families.entries()].sort((a, b) => b[1] - a[1] || families.indexOf(a[0]) - families.indexOf(b[0]))[0][0];
     const works = [...item.works].sort((a, b) => (b.affinity ?? -1) - (a.affinity ?? -1));
     const weight = works.reduce((sum, work) => sum + (work.affinity ?? 0.5), 0), domains = [...new Set(works.map(work => work.domain))];
+    const lift = (works.length + 1) / (tagged * Math.max(rates[key] ?? 0, floor) + 1);
     return { ref: `quality:${family}:${key.replaceAll(' ', '-')}`, name: item.name, domain: QUALITY_DOMAIN, band: 'derived', family, count: works.length, domains,
-      score: round(weight * domains.length, 3), affinity: round(weight / works.length), examples: works.slice(0, 3).map(work => work.name),
+      score: round(weight * Math.sqrt(domains.length) * lift ** 1.5, 3), lift: round(lift, 2), affinity: round(weight / works.length), examples: works.slice(0, 3).map(work => work.name),
       refs: works.slice(0, 8).map(work => work.ref), evidenceIds: [...new Set(works.map(work => work.evidenceId).filter(id => typeof id === 'string'))].slice(0, 8), tags: [item.name] };
   });
   return families.flatMap(family => qualities.filter(quality => quality.family === family)
@@ -722,9 +737,16 @@ export function selectQualityAnchors(works, qualities, count = TASTE_LIMITS.requ
   const rows = works.map(work => ({ work, centrality: central(work) }));
   const order = (a, b) => b.centrality - a.centrality || (b.work.affinity ?? -1) - (a.work.affinity ?? -1) || Number(Boolean(b.work.surprise)) - Number(Boolean(a.work.surprise));
   const groups = new Map();
-  for (const row of rows.filter(item => item.centrality > 0)) { if (!groups.has(row.work.domain)) groups.set(row.work.domain, []); groups.get(row.work.domain).push(row); }
+  for (const row of rows) { if (!groups.has(row.work.domain)) groups.set(row.work.domain, []); groups.get(row.work.domain).push(row); }
+  // The works must stand for the audience: in each domain only its highest-affinity works compete, and the most central
+  // of them is taken. Ranked by centrality alone, the showcase audience of hip-hop artists and sports documentaries was
+  // anchored to a CrossFit film and a cable comedy far down their rankings.
+  const heads = [...groups.values()].map(group => {
+    const head = [...group].sort((a, b) => (b.work.affinity ?? -1) - (a.work.affinity ?? -1)).slice(0, TASTE_LIMITS.headWorks).filter(row => row.centrality > 0);
+    return (head.length ? head : group.filter(row => row.centrality > 0)).sort(order);
+  }).filter(group => group.length);
   const own = group => Number(medium.includes(group[0].work.domain));
-  const ordered = [...groups.values()].map(group => group.sort(order)).sort((a, b) => own(b) - own(a) || order(a[0], b[0]));
+  const ordered = heads.sort((a, b) => own(b) - own(a) || order(a[0], b[0]));
   for (let pass = 0; picks.length < count; pass++) {
     let added = false;
     for (const group of ordered) if (group[pass] && picks.length < count) { picks.push(group[pass].work.ref); added = true; }
@@ -820,7 +842,7 @@ export function compactTasteInput(input) {
   const view = entity => ({ ref: entity.ref, name: entity.name, domain: entity.domain, source: entity.source,
     ...(entity.band && entity.band !== 'core' ? { band: entity.band } : {}),
     // A quality says how widely the measured works share it: its family, how many works carry it, their domains and a few of them.
-    ...(entity.family ? { family: entity.family } : {}), ...(Number.isInteger(entity.count) ? { count: entity.count } : {}),
+    ...(entity.family ? { family: entity.family } : {}), ...(Number.isInteger(entity.count) ? { count: entity.count } : {}), ...(typeof entity.lift === 'number' ? { lift: entity.lift } : {}),
     ...(Array.isArray(entity.domains) ? { domains: entity.domains } : {}), ...(entity.examples?.length ? { examples: entity.examples } : {}),
     ...(entity.affinity !== undefined ? { affinity: entity.affinity } : {}), ...(entity.popularity !== undefined ? { popularity: entity.popularity } : {}),
     ...(entity.tags?.length ? { tags: entity.tags.slice(0, 5) } : {}), ...(entity.description ? { description: entity.description.slice(0, 200) } : {}),
@@ -946,7 +968,7 @@ export function normalizeDesignDna(raw, { input, sketch, existingIds = [], libra
   const ids = new Set();
   const devices = list(source.devices, 'dna.devices', { min: TASTE_LIMITS.minDevices, max: TASTE_LIMITS.maxDevices }).map((device, index) => {
     const at = `dna.devices[${index}]`;
-    object(device, at, ['id', 'layer', 'device', 'anchors', 'qualities', 'translation', 'tokens']);
+    object(device, at, ['id', 'layer', 'device', 'anchors', 'qualities', 'translation', 'tokens', 'convention']);
     const id = text(device.id, `${at}.id`, { max: 40 });
     if (!/^[A-Za-z][A-Za-z0-9_-]{0,39}$/u.test(id) || ids.has(id)) fail(`${at}.id`, 'Use a unique ID such as dna1.');
     ids.add(id);
@@ -972,8 +994,15 @@ export function normalizeDesignDna(raw, { input, sketch, existingIds = [], libra
     if (layer === 'motion' && !movesBy(tokens, rules)) fail(`${at}.tokens`, rules.motion === 'css' ? 'A motion device declares what moves: tokens.keyframes for the @keyframes it defines and uses, or an animation or transition CSS value.'
       : 'A motion device declares what moves: tokens.keyframes, an animation or transition value in tokens.css, or the literal code of the motion in tokens.literals, such as a spring or duration call.');
     checkDeviceImages({ tokens, qualities }, at, photos);
+    // The genre convention the device translates, as the reading named it; the reading checks it before this does.
+    let convention = null;
+    if (device.convention !== undefined) {
+      const given = plain(device.convention) ? device.convention : { text: device.convention };
+      if (plain(device.convention)) object(device.convention, `${at}.convention`, ['cluster', 'text']);
+      convention = { ...(given.cluster !== undefined ? { cluster: text(given.cluster, `${at}.convention.cluster`, { max: 20 }) } : {}), text: text(given.text, `${at}.convention${plain(device.convention) ? '.text' : ''}`, { min: 3, max: 200 }) };
+    }
     return { id, layer, device: text(device.device, `${at}.device`, { min: 3, max: 200 }), anchors, ...(qualities.length ? { qualities } : {}),
-      translation: text(device.translation, `${at}.translation`, { min: 10, max: 900 }), tokens, ...(surprise ? { surprise: true } : {}),
+      translation: text(device.translation, `${at}.translation`, { min: 10, max: 900 }), tokens, ...(convention ? { convention } : {}), ...(surprise ? { surprise: true } : {}),
       ...(frozen ? { novel: sketchNovelty(tokens, frozen, starterIds) } : {}) };
   });
   const layers = new Set(devices.map(device => device.layer));

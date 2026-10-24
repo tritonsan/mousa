@@ -324,7 +324,7 @@ test('a finished pair its juror agreed to publish joins the gallery as a Kiro co
   const built = await buildGallery({ config: { entries, featured: entries[0].id, vote: [entries[0].id] }, runsDir: runs, triesDir: tries, repo, out, library: await loadFontLibrary(repo) });
   assert.equal(built.written, true, JSON.stringify(built.findings));
   const entry = await readJson(path.join(out, entries[0].id, 'entry.json'));
-  assert.deepEqual([entry.kind, entry.host, entry.origin, entry.surfaceVersion, entry.model], ['comparison', 'kiro', 'try', '0.6.0', 'fixed-test-model']);
+  assert.deepEqual([entry.kind, entry.host, entry.origin, entry.surfaceVersion, entry.model], ['comparison', 'kiro', 'try', '0.7.0', 'fixed-test-model']);
   assert.equal(entry.surface, undefined, 'a try runs the current surface');
   assert.deepEqual(entry.timeline.lanes.map(lane => lane.label), ['The prediction session', 'The arm with Qloo', 'The arm without Qloo']);
   assert.ok(entry.timeline.totals.mousa > 0 && entry.timeline.totals.writes > 0);

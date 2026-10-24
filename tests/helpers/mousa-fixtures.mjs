@@ -93,12 +93,14 @@ export function designFor(input) {
   const works = input.requiredAnchors.filter(anchor => anchor.domain !== 'qualities').map(anchor => input.entities.find(entity => entity.ref === anchor.ref));
   const tagsOf = entity => entity?.tags?.length ? [entity.tags[0]] : [];
   const reading = { schemaVersion: '1.0', clusters: [
-    { id: 'c1', name: 'Misty look', refs: [look.ref, style.ref, aesthetic.ref, works[0].ref], layers: ['palette', 'motion', 'imagery'], reading: 'What they love is hazy, slow and sculpted, seen through soft weather.' },
-    { id: 'c2', name: 'Quiet voice', refs: [mood.ref, tone.ref, works[1].ref], layers: ['typography', 'voice'], reading: 'They listen for thoughtful, reflective voices that leave room between lines.' },
-    { id: 'c3', name: 'Small routines', refs: [meaning.ref, works[2].ref], layers: ['structure'], reading: 'Their stories are about routine and who you become in it.' },
+    { id: 'c1', name: 'Misty look', refs: [look.ref, style.ref, aesthetic.ref, works[0].ref], layers: ['palette', 'motion', 'imagery'], reading: 'What they love is hazy, slow and sculpted, seen through soft weather.',
+      conventions: ['Long-lens landscape stills washed in haze, horizon low in the frame', 'Ambient record sleeves: one soft photograph and a small set title'] },
+    { id: 'c2', name: 'Quiet voice', refs: [mood.ref, tone.ref, works[1].ref], layers: ['typography', 'voice'], reading: 'They listen for thoughtful, reflective voices that leave room between lines.',
+      conventions: ['Poetry chapbooks set in an open sans with wide margins'] },
+    { id: 'c3', name: 'Small routines', refs: [meaning.ref, works[2].ref], layers: ['structure'], reading: 'Their stories are about routine and who you become in it.', conventions: ['Day-by-day diary films titled with the weekday on a plain card'] },
   ], setAside: [], approach: 'The site carries the misty look in palette, motion and drawing, the quiet voice in type and copy, and routine in a weekly structure.' };
   const dna = { schemaVersion: '1.0', thesis: 'A misty hillside pantry that moves slowly and speaks quietly.', devices: [
-    { id: 'dna1', layer: 'palette', device: 'Mist and sea-glass palette', anchors: [look.ref, works[0].ref], qualities: [look.name, ...tagsOf(works[0])], translation: 'Atmospheric works become cool, hazy colours.', tokens: { colors: ['#3e5c6b', '#8fb0a9'] } },
+    { id: 'dna1', layer: 'palette', device: 'Mist and sea-glass palette', anchors: [look.ref, works[0].ref], qualities: [look.name, ...tagsOf(works[0])], translation: 'Atmospheric works become cool, hazy colours.', convention: 'c1.1', tokens: { colors: ['#3e5c6b', '#8fb0a9'] } },
     { id: 'dna2', layer: 'typography', device: 'Calm geometric type', anchors: [mood.ref], qualities: [mood.name], translation: 'A reflective mood becomes an even, open sans.', tokens: { fonts: ['Jost'] } },
     { id: 'dna3', layer: 'motion', device: 'Slow mist drift', anchors: [style.ref], qualities: [style.name], translation: 'Pensive pacing becomes a forty-second drift with no overshoot.', tokens: { keyframes: ['mist-drift'], css: [{ property: 'animation', value: 'mist-drift 40s ease-in-out infinite' }] } },
     { id: 'dna4', layer: 'imagery', device: 'Sculpted terrace drawing', anchors: [aesthetic.ref], qualities: [aesthetic.name], translation: 'Sculptural forms become stepped terraces drawn in line.', tokens: { svg: ['terrace'], ids: ['terrace-figure'], images: ['generated/dna4-1.png'] } },
@@ -152,7 +154,7 @@ export function gameDesignFor(input) {
     { ...web.clusters[2], layers: ['structure'] },
   ], approach: 'The character carries the misty look in its palette, gait and render style, the quiet voice in its lines, and routine in what it carries.' };
   const dna = { schemaVersion: '1.0', thesis: 'A slow lamplighter in mist and sea glass who speaks in short, quiet lines.', devices: [
-    { id: 'dna1', layer: 'palette', device: 'Mist and sea-glass cloak', anchors: [look.ref, works[0].ref], qualities: [look.name, ...tagsOf(works[0])], translation: 'Atmospheric works become a cool, hazy cloak.', tokens: { colors: ['#3e5c6b', '#8fb0a9'] } },
+    { id: 'dna1', layer: 'palette', device: 'Mist and sea-glass cloak', anchors: [look.ref, works[0].ref], qualities: [look.name, ...tagsOf(works[0])], translation: 'Atmospheric works become a cool, hazy cloak.', convention: 'c1.1', tokens: { colors: ['#3e5c6b', '#8fb0a9'] } },
     { id: 'dna2', layer: 'motion', device: 'An unhurried walk', anchors: [style.ref], qualities: [style.name], translation: 'Pensive pacing becomes a slow cadence with little bounce.', tokens: { literals: ['"cadence": 0.9'] } },
     { id: 'dna3', layer: 'imagery', device: 'Drawn in ink', anchors: [aesthetic.ref], qualities: [aesthetic.name], translation: 'Sculptural forms become an inked frame.', tokens: { literals: ['"preset": "ink"'] } },
     { id: 'dna4', layer: 'voice', device: 'Short lines with room between them', anchors: [tone.ref, mood.ref, works[1].ref], qualities: [tone.name, mood.name, ...tagsOf(works[1])], translation: 'A thoughtful tone becomes short lines with pauses.', tokens: { copy: ['The road is quiet tonight.', 'Rest. I will carry it.'] } },
@@ -190,12 +192,13 @@ export function baselineDesign(input) {
   const ref = name => input.entities.find(entity => entity.name === name).ref;
   const required = input.requiredAnchors.map(item => item.name);
   const reading = { schemaVersion: '1.0', clusters: [
-    { id: 'c1', name: 'Warm paper', refs: ['nostalgic', 'paper texture', 'slow pacing', 'Lost in Translation'], layers: ['palette', 'motion', 'imagery'], reading: 'I expect them to love the warmth of old paper and a slow, unhurried pace.' },
-    { id: 'c2', name: 'Everyday poems', refs: ['everyday poetry', 'warm', 'Muji'], layers: ['typography', 'voice'], reading: 'I expect a quiet, plain voice that finds poetry in daily objects.' },
-    { id: 'c3', name: 'Gentle routines', refs: ['gentle', 'J Dilla'], layers: ['structure'], reading: 'I expect them to like gentle routines and loops that come back around.' },
+    { id: 'c1', name: 'Warm paper', refs: ['nostalgic', 'paper texture', 'slow pacing', 'Lost in Translation'], layers: ['palette', 'motion', 'imagery'], reading: 'I expect them to love the warmth of old paper and a slow, unhurried pace.',
+      conventions: ['Letterpress notebook covers on uncoated stock with one rust stamp'] },
+    { id: 'c2', name: 'Everyday poems', refs: ['everyday poetry', 'warm', 'Muji'], layers: ['typography', 'voice'], reading: 'I expect a quiet, plain voice that finds poetry in daily objects.', conventions: ['Pocket poetry editions set in a bookish serif'] },
+    { id: 'c3', name: 'Gentle routines', refs: ['gentle', 'J Dilla'], layers: ['structure'], reading: 'I expect them to like gentle routines and loops that come back around.', conventions: ['Beat-tape tracklists that loop back to the first song'] },
   ], setAside: [], approach: 'From my own prediction alone: paper colours and a slow drift, plain type and copy, and a weekly loop as the structure.' };
   const dna = { schemaVersion: '1.0', thesis: 'A warm notebook shop, from my own expectation of this audience.', devices: [
-    { id: 'dna1', layer: 'palette', device: 'Old paper and rust', anchors: ['nostalgic', 'Lost in Translation'], qualities: ['nostalgic'], translation: 'Nostalgia becomes aged paper with a rust accent.', tokens: { colors: ['#f3ead8', '#b5653a'] } },
+    { id: 'dna1', layer: 'palette', device: 'Old paper and rust', anchors: ['nostalgic', 'Lost in Translation'], qualities: ['nostalgic'], translation: 'Nostalgia becomes aged paper with a rust accent.', convention: 'c1.1', tokens: { colors: ['#f3ead8', '#b5653a'] } },
     { id: 'dna2', layer: 'typography', device: 'Bookish serif', anchors: ['everyday poetry', 'Muji'], qualities: ['everyday poetry'], translation: 'Everyday poetry becomes a calm reading serif.', tokens: { fonts: ['Literata'] } },
     { id: 'dna3', layer: 'motion', device: 'Slow record turn', anchors: ['slow pacing'], qualities: ['slow pacing'], translation: 'A slow pace becomes a record that turns once a minute.', tokens: { keyframes: ['turn'], css: [{ property: 'animation', value: 'turn 60s linear infinite' }] } },
     { id: 'dna4', layer: 'imagery', device: 'Hand-drawn record', anchors: ['paper texture'], qualities: ['paper texture'], translation: 'Paper texture becomes a drawn record sleeve.', tokens: { svg: ['record'] } },
@@ -205,6 +208,17 @@ export function baselineDesign(input) {
   for (const name of required) assert.ok(dna.devices.some(device => device.anchors.includes(name)), `${name} is used`);
   void ref;
   return { reading, dna };
+}
+
+/** A review's critique of designFor's site: three generic choices it replaces, and the fan of the audience's best-loved works. */
+export function critiqueFor(input, { round = 1, anchor } = {}) {
+  const works = input.entities.filter(entity => entity.source === (input.source === 'qloo-profile' ? 'qloo' : 'model-assumption') && !['qualities', 'style', 'aesthetic', 'tone', 'art_style'].includes(entity.domain))
+    .sort((a, b) => (b.affinity ?? -1) - (a.affinity ?? -1)).slice(0, 3).map(entity => entity.name);
+  return { generic: [
+    { choice: 'A centred headline over a plain colour field, as any page has.', capture: `r${round}-desktop`, action: 'replaced' },
+    { choice: 'Body text in one even sans at a single size.', capture: `r${round}-mobile`, action: 'replaced' },
+    { choice: 'The pause control as a plain text button.', capture: `r${round}-desktop`, ...(anchor ? { anchor, action: 'kept' } : { action: 'replaced' }) },
+  ], fan: { works, verdict: 'partly', why: 'The mist palette reads as theirs; the type still reads as any shop.' } };
 }
 
 export const PLAN = { dryRun: true, medium: 'web', references: [{ name: 'Paterson' }, { name: 'Nujabes' }] };
@@ -260,6 +274,6 @@ export async function measuredSession(call, project, workspace) {
   assert.equal((await call('design_validate', { stage: 'review', artifact: { schemaVersion: '1.0', round: 1, criteria: [
     { id: 'r1', capture: 'r1-desktop', verdict: 'met', observed: 'The first screen is mist blue on sea glass, with no white ground.' },
     { id: 'r2', capture: 'r1-mobile', verdict: 'partly', observed: 'The headline wraps onto two lines at phone width.', repair: 'Shorten the headline size at phone width.' },
-  ], summary: 'The palette lands; the headline needs a smaller size on phones.' }, ...at })).status, 'valid');
+  ], summary: 'The palette lands; the headline needs a smaller size on phones.', critique: critiqueFor(input) }, ...at })).status, 'valid');
   return input;
 }

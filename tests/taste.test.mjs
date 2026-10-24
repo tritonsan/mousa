@@ -332,7 +332,7 @@ test('a tag seed joins entity seeds only where Qloo answers: tag rankings leave 
   assert.equal(tagOnly.limitations.some(item => /entity seeds alone/.test(item)), false);
 });
 
-test('typed tags: works lead with their look, mood and meaning, metadata is left out, and shared qualities rank by their spread', async () => {
+test('typed tags: works lead with their look, mood and meaning, metadata is left out, and shared qualities rank by how distinctive they are', async () => {
   const calls = [];
   const profile = await buildTasteProfile({ client: typedQloo(calls), references, knownNames: references.map(ref => ref.name) });
   assert.equal(calls.filter(call => call.tool === 'insights').length, 9, 'Qualities cost no request.');
@@ -343,10 +343,12 @@ test('typed tags: works lead with their look, mood and meaning, metadata is left
   assert.equal(work('Fixture Workwear Co').facets, undefined);
   assert.deepEqual(work('Fixture Detective Show').tags, ['Routine', 'Night markets', 'tv_show fixture tag'], 'So is a business model.');
   const qualities = profile.entities.filter(entity => entity.domain === 'qualities');
-  // Spread outranks weight: Reflective, in three domains, leads Memory, whose works have more affinity in two.
-  assert.deepEqual(qualities.map(quality => [quality.family, quality.name, quality.count, quality.domains.length, quality.score]), [
-    ['look', 'Atmospheric', 5, 3, 13.35], ['look', 'Minimalist', 2, 1, 1.6], ['mood', 'Melancholic', 3, 2, 5.5], ['mood', 'Lo-Fi', 2, 1, 1.8],
-    ['meaning', 'Reflective', 3, 3, 7.35], ['meaning', 'Memory', 3, 2, 5.5], ['meaning', 'Routine', 2, 1, 1.8]]);
+  // Distinctiveness outranks spread: Memory, rare across the reference audiences, leads Reflective, which Qloo puts on
+  // works of most audiences, though Reflective spans three domains. Atmospheric still leads its family: five of these
+  // works carry it, far more than its base rate.
+  assert.deepEqual(qualities.map(quality => [quality.family, quality.name, quality.count, quality.domains.length, quality.score, quality.lift]), [
+    ['look', 'Atmospheric', 5, 3, 29.688, 2.46], ['look', 'Minimalist', 2, 1, 1.917, 1.13], ['mood', 'Melancholic', 3, 2, 14.422, 2.4], ['mood', 'Lo-Fi', 2, 1, 8.158, 2.74],
+    ['meaning', 'Memory', 3, 2, 23.151, 3.28], ['meaning', 'Reflective', 3, 3, 10.835, 1.87], ['meaning', 'Routine', 2, 1, 8.427, 2.8]]);
   const [atmospheric] = qualities;
   assert.deepEqual([atmospheric.ref, atmospheric.band, atmospheric.affinity, atmospheric.domains, atmospheric.examples, atmospheric.tags],
     ['quality:look:atmospheric', 'derived', 0.89, ['movie', 'artist', 'tv_show'], ['Fixture Film Alpha', 'Fixture Ambient Duo', 'Fixture Kitchen Series'], ['Atmospheric']]);
@@ -366,10 +368,10 @@ test('typed tags: works lead with their look, mood and meaning, metadata is left
   assert.deepEqual(bare.results.at(-1), { domain: 'qualities', band: 'derived', status: 'empty', count: 0 });
 });
 
-test('with shared qualities, the required anchors are the strongest quality of each family and the works most central to them', async () => {
+test('with shared qualities, the required anchors are the most distinctive quality of each family and the most central works the audience loves most', async () => {
   const { profile, assumption, input } = await typedInput();
   // The music and TV works are equally central and equally liked; the TV work is a surprise, while the brief's Ambient Music names the duo.
-  assert.deepEqual(input.requiredAnchors, ['quality:look:atmospheric', 'quality:mood:melancholic', 'quality:meaning:reflective', 'movie-core-0', 'tv_show-core-0', 'artist-core-0']);
+  assert.deepEqual(input.requiredAnchors, ['quality:look:atmospheric', 'quality:mood:melancholic', 'quality:meaning:memory', 'movie-core-0', 'tv_show-core-0', 'artist-core-0']);
   // Chosen by surprise and affinity alone, the anchors would include the brand that carries none of the qualities.
   const works = input.entities.filter(entity => entity.source === 'qloo' && !['style', 'aesthetic', 'qualities'].includes(entity.domain));
   assert.ok(selectRequiredAnchors(works).includes('brand-core-0'));
@@ -386,7 +388,7 @@ test('with shared qualities, the required anchors are the strongest quality of e
   assert.deepEqual(profile.entities.find(entity => entity.ref === 'movie-core-0').facets, { look: ['Atmospheric'], mood: ['Melancholic'], meaning: ['Memory'] });
   // The agent reads each quality with its family, how many works carry it, their domains and a few of them.
   const view = compactTasteInput(input);
-  assert.deepEqual(view.requiredAnchors[0], { ref: 'quality:look:atmospheric', name: 'Atmospheric', domain: 'qualities', source: 'qloo', band: 'derived', family: 'look', count: 5,
+  assert.deepEqual(view.requiredAnchors[0], { ref: 'quality:look:atmospheric', name: 'Atmospheric', domain: 'qualities', source: 'qloo', band: 'derived', family: 'look', count: 5, lift: 2.46,
     domains: ['movie', 'artist', 'tv_show'], examples: ['Fixture Film Alpha', 'Fixture Ambient Duo', 'Fixture Kitchen Series'], affinity: 0.89, tags: ['Atmospheric'],
     predictedByModel: true, surprise: false, required: true });
   // A selected direction's anchors stay as they are.
@@ -524,7 +526,7 @@ test('qualities first: palette and type anchor to a quality in both arms, and mo
   // A work carrying the same tag is evidence, not the quality itself.
   const onWork = layer => ({ ...source, devices: source.devices.map(device => device.layer === layer ? { ...device, anchors: ['movie-core-0'], qualities: ['Atmospheric'] } : device) });
   for (const layer of ['palette', 'typography']) {
-    assert.throws(() => normalizeDesignDna(onWork(layer), { input }), new RegExp(`Qualities first: anchor a ${layer} device to at least one measured quality ref, such as Atmospheric \\(quality:look:atmospheric\\), Reflective \\(quality:meaning:reflective\\), Melancholic.*never take an entity's own brand or team colors, logo, packaging or trade dress\\.`));
+    assert.throws(() => normalizeDesignDna(onWork(layer), { input }), new RegExp(`Qualities first: anchor a ${layer} device to at least one measured quality ref, such as Atmospheric \\(quality:look:atmospheric\\), Memory \\(quality:meaning:memory\\), Melancholic.*never take an entity's own brand or team colors, logo, packaging or trade dress\\.`));
   }
   // The model's own predicted quality cannot stand in for a measured one; a measured style tag can.
   const ownQuality = input.entities.find(entity => entity.source === 'model-assumption' && entity.domain === 'qualities').ref;
@@ -1083,7 +1085,7 @@ test('a taste-led comparison predicts blind, reveals measured taste, binds a DNA
     // Both arms read the same host font library and may name only its families.
     assert.match(entry.probes.fontsFile.content[0].text, /culture-fonts\.json is written by the host/);
     assert.match(entry.probes.systemFont.content[0].text, /Futura is not in culture-fonts\.json.*Jost stands in for Futura/);
-    assert.equal(entry.fonts.provenance, 'host-font-library'); assert.equal(entry.fonts.families.length, 33);
+    assert.equal(entry.fonts.provenance, 'host-font-library'); assert.equal(entry.fonts.families.length, 55);
     assert.ok(entry.fonts.families.every(family => family.category && family.fontFace.length && family.fontFace.every(rule => /^@font-face\{font-family:'[^']+';src:url\('fonts\/[a-z0-9-]+\.woff2'\) format\('woff2'\)/u.test(rule))));
     assert.match(entry.prompt, /1\. Read index\.html, styles\.css, app\.js, culture-brief\.json, culture-fonts\.json and culture-library\.json\./);
     // Motion and illustration are required in both arms, from measured tags in one and predicted qualities in the other.
@@ -1165,7 +1167,7 @@ test('a taste-led comparison predicts blind, reveals measured taste, binds a DNA
   assert.equal(Buffer.from(await font.arrayBuffer()).subarray(0, 4).toString('latin1'), 'wOF2');
   for (const name of ['fonts/gelasio-missing.woff2', 'fonts/fonts.json', 'fonts/gelasio.OFL.txt', 'fonts%2F..%2Fpackage.json']) assert.equal((await fetch(qloo.previewUrl.replace(/index\.html$/u, name))).status >= 400, true, name);
   const families = await (await fetch(`${studio.appUrl}/api/fonts`)).json();
-  assert.equal(families.length, 33); assert.deepEqual(families.find(item => item.family === 'Jost').files.map(file => file.path), ['fonts/jost-latin-wght-normal.woff2', 'fonts/jost-latin-wght-italic.woff2']);
+  assert.equal(families.length, 55); assert.deepEqual(families.find(item => item.family === 'Jost').files.map(file => file.path), ['fonts/jost-latin-wght-normal.woff2', 'fonts/jost-latin-wght-italic.woff2']);
   assert.equal((await fetch(`${studio.appUrl}/library/fonts/jost-latin-wght-normal.woff2`)).headers.get('content-type'), 'font/woff2');
   for (const name of ['fonts/fonts.json', 'fonts/jost.OFL.txt', 'fonts/absent.woff2']) assert.equal((await fetch(`${studio.appUrl}/library/${name}`)).status, 404, name);
 });
@@ -1218,7 +1220,7 @@ test('a taste-led pair with typed tags requires shared qualities in both arms, a
   const done = await finished(studio, job.id);
   assert.equal(done.status, 'completed', done.error);
   const [baseline, qloo] = log;
-  assert.deepEqual(qloo.revealed.requiredAnchors.map(anchor => anchor.ref), ['quality:look:atmospheric', 'quality:mood:melancholic', 'quality:meaning:reflective', 'movie-core-0', 'tv_show-core-0', 'artist-core-0']);
+  assert.deepEqual(qloo.revealed.requiredAnchors.map(anchor => anchor.ref), ['quality:look:atmospheric', 'quality:mood:melancholic', 'quality:meaning:memory', 'movie-core-0', 'tv_show-core-0', 'artist-core-0']);
   assert.deepEqual(baseline.revealed.requiredAnchors.map(anchor => anchor.name), ['Cheerful', 'Sporty', 'Loud', 'Patagonia', 'Fixture Film Alpha', 'Nujabes']);
   assert.deepEqual(qloo.revealed.requiredAnchors.slice(0, 3).map(anchor => [anchor.family, anchor.count, anchor.surprise]), [['look', 5, true], ['mood', 3, true], ['meaning', 3, true]]);
   assert.match(qloo.revealed.guidance, /Refs in the qualities domain are look, mood and meaning tags that two or more measured works share: anchor the palette and the typography device each to a measured quality, style or aesthetic ref/);

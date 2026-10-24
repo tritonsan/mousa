@@ -92,7 +92,7 @@ This is the live try recorded on 14 October: a record shop's website, Wax & Wane
 
 ## How it is built
 
-- **The engine.** One MCP server in Node 22 with no dependencies. It is packaged byte for byte for Claude Code, Codex and Kiro from one source, with four skills, 13 tools and 33 open-licence font families.
+- **The engine.** One MCP server in Node 22 with no dependencies. It is packaged byte for byte for Claude Code, Codex and Kiro from one source, with four skills, 13 tools and 55 open-licence font families.
 - **The write gate.** In Claude Code and Codex, it holds a design's files until its Design DNA is valid.
 - **The checks.** Each device is checked through the project's CSS custom properties, token files or Tailwind theme. Captures run in a headless Chromium that can reach only the page it captures.
 - **The hosted site.** It runs the live try in Kiro, with one agent file per session: Moûsa's tools, no shell, and write access to the starter's design files only. It is one AWS CloudFormation stack: an instance behind CloudFront, the keys in Secrets Manager, a read-only container root and a seccomp profile that keeps Chromium's sandbox.

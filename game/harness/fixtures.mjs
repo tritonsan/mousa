@@ -183,7 +183,8 @@ export function fixtureDna({ input, character, measures, measured, sketch, delta
     }
   }
   return JSON.stringify({ schemaVersion: '1.0', thesis: `Fixture thesis for the dry run: ${character.description}`, devices: [
-    device('dna1', 'palette', 'Fixture palette', [required[0]], { colors: colors.slice(0, 3) }),
+    // The palette's anchor lands in the reading's look cluster, c1, whose first convention it translates.
+    { ...device('dna1', 'palette', 'Fixture palette', [required[0]], { colors: colors.slice(0, 3) }), convention: 'c1.1' },
     device('dna2', 'silhouette', 'Fixture silhouette', [required[1]], { proportions: { height: measures.figureHeight, headShare: measures.headShare },
       parts: [character.parts.find(part => part.bone === 'head' && !part.role && (!measured || !sketch.elements.includes(part.id)))?.id].filter(Boolean) }),
     device('dna3', 'costume', 'Fixture costume', [aesthetic.ref, required[2]], { parts: costume }),
@@ -209,8 +210,10 @@ export function fixtureReading({ input, dna, layers }) {
   const measured = entities.some(entity => entity.source === 'qloo');
   const pool = entities.filter(entity => isQualityDomain(entity.domain) && (!measured || entity.source === 'qloo'));
   const clusters = [
-    { id: 'c1', name: 'Fixture look and moment', refs: [], layers: [], reading: 'Fixture reading for the dry run: the refs that set the colours, the figure and the moment.' },
-    { id: 'c2', name: 'Fixture motion and voice', refs: [], layers: [], reading: 'Fixture reading for the dry run: the refs that set the gait, the signature move and the lines.' },
+    { id: 'c1', name: 'Fixture look and moment', refs: [], layers: [], reading: 'Fixture reading for the dry run: the refs that set the colours, the figure and the moment.',
+      conventions: ['Fixture convention: lantern-lit woodcut prints with two inks'] },
+    { id: 'c2', name: 'Fixture motion and voice', refs: [], layers: [], reading: 'Fixture reading for the dry run: the refs that set the gait, the signature move and the lines.',
+      conventions: ['Fixture convention: stage puppetry with slow, weighted steps'] },
   ];
   const placed = new Set();
   const place = (cluster, ref) => { if (!placed.has(ref) && cluster.refs.length < 8) { cluster.refs.push(ref); placed.add(ref); } };

@@ -11,7 +11,7 @@ import { inspectBrowser, verifyBrowser, serveDirectory, captureViews } from '../
 import { loadFontLibrary, fontLibraryRoot } from '../plugin/server/production/fonts.mjs';
 import { createMousaServer } from '../plugin/server/mcp/mousa.mjs';
 import { createConnectionStore, plainProtector } from '../plugin/server/connections/store.mjs';
-import { qlooFixture, prediction, parse, exists, png, designFor, siteFiles } from './helpers/mousa-fixtures.mjs';
+import { qlooFixture, prediction, parse, exists, png, designFor, siteFiles, critiqueFor } from './helpers/mousa-fixtures.mjs';
 
 const device = (id, layer, tokens) => ({ id, layer, device: `${layer} device`, tokens: { colors: [], fonts: [], css: [], ids: [], copy: [], images: [], keyframes: [], svg: [], ...tokens } });
 
@@ -228,7 +228,7 @@ test('the design stages run end to end: reading, DNA, plan, fonts, pictures, che
     const review = await call('design_validate', { stage: 'review', artifact: { schemaVersion: '1.0', round: 1, criteria: [
       { id: 'r1', capture: 'r1-desktop', verdict: 'met', observed: 'The first screen is mist blue on sea glass, with no white ground.' },
       { id: 'r2', capture: 'r1-mobile', verdict: 'partly', observed: 'The headline wraps onto two lines at phone width.', repair: 'Shorten the headline size at phone width.' },
-    ], summary: 'The palette lands; the headline needs a smaller size on phones.' } });
+    ], summary: 'The palette lands; the headline needs a smaller size on phones.', critique: critiqueFor(input) } });
     assert.equal(review.status, 'valid', JSON.stringify(review));
     assert.equal(review.audited, true, 'captures returned in the result count as seen');
     assert.match(review.next, /round 2/u);

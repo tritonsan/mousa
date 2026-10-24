@@ -229,7 +229,7 @@ test('the mousa surface stays lean: short instructions, few tools and the Codex 
   const init = server.initialize({ protocolVersion: '2025-06-18' });
   assert.equal(init.protocolVersion, '2025-06-18');
   assert.equal(server.initialize({ protocolVersion: '2099-01-01' }).protocolVersion, '2025-11-25');
-  assert.deepEqual(init.serverInfo, { name: 'mousa', version: '0.6.0' });
+  assert.deepEqual(init.serverInfo, { name: 'mousa', version: '0.7.0' });
   assert.deepEqual(init.capabilities.experimental, { [CODEX_SANDBOX_META]: {} });
   assert.equal(init.instructions, MOUSA_INSTRUCTIONS);
   assert.deepEqual(server.listTools().map(tool => tool.name), MOUSA_TOOL_NAMES);

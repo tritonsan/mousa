@@ -9,14 +9,14 @@ Moûsa checks each stage of the design against the measured taste and saves it i
 
 | Stage | Call | Result |
 | --- | --- | --- |
-| 1. Read the taste | `design_validate({ stage: 'reading', artifact })` | Clusters of what belongs together |
+| 1. Read the taste | `design_validate({ stage: 'reading', artifact })` | Clusters of what belongs together, and how their works look |
 | 2. Specify | `design_validate({ stage: 'dna', artifact })` | The binding Design DNA, and the methods this session offers per layer |
 | 3. Plan the production | `design_validate({ stage: 'plan', artifact })` | How each device is made, and the review criteria |
 | 4. Gather materials | `materials({ action: 'fetch', fonts })`, `image(...)` | Fonts and pictures the plan names |
 | 5. Build | your own edits, in the project's design system | The design |
-| 6. Check | `design_check({})` | Each device present, partial or missing |
+| 6. Check | `design_check({})` | Each device present, partial or missing, and the default-look signatures on the page |
 | 7. Capture | `design_capture({})` | Pictures of the result, in the tool result |
-| 8. Review | `design_validate({ stage: 'review', artifact })` | Your verdict on each criterion |
+| 8. Review | `design_validate({ stage: 'review', artifact })` | Your verdict on each criterion, and your critique as the audience |
 | 9. Report | `design_report({})` | The Taste Provenance page in `.mousa/report/` |
 
 The **medium** decides what is checked, and Moûsa detects it from the project:
@@ -34,13 +34,15 @@ Group what the brief measured into what belongs together, before deciding anythi
 ```
 { schemaVersion: '1.0',
   clusters: [ { id: 'c1', name: 'A short name', refs: ['2-8 entries, named as the brief lists them'], layers: ['1-4 layers'],
-                reading: 'One or two sentences: what these share, as a reading of the audience.' } ],
+                reading: 'One or two sentences: what these share, as a reading of the audience.',
+                conventions: ['1-3: how these works look as a genre or medium'] } ],
   setAside: [ { ref: 'an entry you judge to be noise', reason: 'why, specifically' } ],
   approach: 'A paragraph: how this medium will carry the clusters.' }
 ```
 
 - **Clusters.** Make 2-4, and put each entry in only one cluster.
-- **Each cluster rests on a quality.** That is a quality, pacing, surface, tone or art-style entry, and a measured one when the brief has measured qualities. The works in the cluster are its evidence.
+- **Each cluster rests on a quality.** That is a quality, pacing, surface, tone or art-style entry, and a measured one when the brief has measured qualities. The works in the cluster are its evidence. A quality's `lift` in the brief says how much more often this audience's works carry it than other audiences' do: lean on the high ones.
+- **Name how the works look.** Give each cluster 1-3 `conventions`: the visual habits its works share as a genre or medium, as a designer who knows them would name them. For a sports and hip-hop audience: "broadcast score bugs: boxed condensed capitals on a dark bar", "mixtape covers: one monochrome portrait and a single heavy word". For a café audience: "hand-lettered chalk menus", "film stills of steamed windows at dusk". A convention belongs to a genre, never to one brand: no logo, mascot, team or brand colours, packaging or trade dress. An adjective such as Intimate drawn without a convention lands on the look models default to; the convention is what makes it this audience's.
 - **Set aside noise** with a specific reason, such as a brand's catalogue label or a work outside what the audience shares.
 - **Required anchors.** Each one sits in a cluster or is set aside. At most two are set aside, and those count as rejected in the DNA.
 - **Surprises.** When the brief has them, at least one cluster gathers one.
@@ -64,6 +66,7 @@ The rules Moûsa checks:
 - **Anchors.** Each device anchors at least one entry your reading clustered, and never one it set aside.
 - **qualities** names tags of the device's measured anchors, exactly as the brief lists them: a quality's or tag's own name, or a work's listed tags. It is required when an anchor is a surprise that has tags.
 - **Qualities first.** The palette device and the typography device each anchor to a quality, never to one work's own colours.
+- **Conventions.** The palette device or the typography device (or both) names in `convention` one of your reading's conventions, by its key (`c1.2`: cluster c1, its second) or its words, and anchors a ref of that cluster: the quality is drawn the way that genre draws it.
 - **Motion** anchors to a pacing tag, or to a mood quality when no pacing tags came back, and declares keyframes or an animation or transition value.
 - **Illustration** anchors to a surface tag, or to a look quality when none came back. On the web it draws an inline SVG of at least eight shapes, listed in `tokens.svg`.
 - **Voice** anchors to a measured entry and declares at least two lines you wrote, in `tokens.copy`.
@@ -72,7 +75,7 @@ The rules Moûsa checks:
   - a typography device with only families outside the sketch's;
   - a layout, structure, interaction or imagery device with a new element id, one that is not a sketch section and not an id already in the project.
 - **Required anchors.** Each one anchors a device or is rejected with a reason, at most two.
-- **Fonts** come only from the Moûsa library (`materials({ action: 'find', words })`). **Pictures** are only ones made with the `image` tool, named `generated/<device id>-<n>.png`.
+- **Fonts** come only from the Moûsa library (`materials({ action: 'find', words })`). Search it with your conventions' words, such as broadcast, varsity, mixtape, signage or screenplay, rather than editorial or elegant; a family marked `overused` is one model-made pages default to, so take it only when a convention calls for it. **Pictures** are only ones made with the `image` tool, named `generated/<device id>-<n>.png`.
 
 A refusal names the field and the fix, so repair it and save again. The result lists the methods this session offers for each layer, how many pictures it can make, and whether captures work.
 
@@ -110,6 +113,8 @@ The methods of each medium and the review rules are in [references/production.md
 
 `design_check({})` reads the project's pages, styles and scripts. It reports each device as present, partial or missing, says which token is missing and why, and on the web adds the motion checks and the custom property behind each value. Repair what is missing and check again before you capture. The check shows presence, not quality.
 
+On pages it also lists the **default-look signatures** it finds (`houseStyle`): the habits models fall into when nothing else decides, whatever the audience. They are a warm cream page ground, a stock display serif (Instrument Serif, Fraunces, DM Serif Display, Cormorant), small uppercase letter-spaced monospace labels, one italic word set apart in a heading, numbered sections (01, 02, 03), pill buttons, a short hairline rule before a label, violet gradients, frosted glass, one neutral sans for everything, and emoji as icons. A page keeps **at most two**; replace the others with choices your anchors and conventions call for. The review is refused while the page carries more.
+
 ## 7. Capture, and look at what you made
 
 `design_capture({})` renders the entry page at the medium's views (desktop and mobile for a site, phone and board for an app) and returns the pictures in the result itself. Options:
@@ -127,10 +132,13 @@ A round holds six captures, and a session has two rounds.
 ```
 { schemaVersion: '1.0', round: 1,
   criteria: [ { id: 'r1', capture: 'r1-mobile', verdict: 'met' | 'partly' | 'missed', observed: 'What the capture shows.', repair: 'For partly or missed: the repair it needs.' } ],
-  summary: 'Two or three sentences.' }
+  summary: 'Two or three sentences.',
+  critique: { generic: [ { choice: 'A choice any page could have.', capture: 'r1-desktop', signature: 'pill-buttons', anchor: 'an anchor of your DNA that requires it', action: 'kept' | 'replaced' } ],
+              fan: { works: ['3-5 best-loved works of the audience'], verdict: 'yes' | 'partly' | 'no', why: 'What they would recognize, or not.' } } }
 ```
 
 - Judge every criterion once, on a capture of this round, by what the picture shows rather than what you meant to build.
+- **Critique the page as its audience would.** A page can meet every criterion of its plan and still look like any page. Name its **three most generic choices**, each on a capture of this round. Keep one only when an anchor of your DNA requires it (name the anchor); otherwise mark it `replaced` and replace it in the build. Every default-look signature the check still finds is among the three, with its `signature` id. Then picture someone who loves the audience's best-loved works (name 3-5, at least two from the top of the brief's worlds) and say whether they would take the page for theirs. A replaced choice or a verdict other than yes calls for another round.
 - Then make the repairs, check again, and capture round 2 with `design_capture({ round: 2 })`.
 - The DNA and the plan stay frozen. Repairs change the build, not the specification.
 

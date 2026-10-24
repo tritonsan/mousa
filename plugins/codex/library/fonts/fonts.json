@@ -2,7 +2,7 @@
   "schemaVersion": "1.0",
   "source": "Google Fonts families as Latin-subset WOFF2 files from Fontsource (https://fontsource.org); licence files from https://github.com/google/fonts.",
   "license": "SIL Open Font License 1.1",
-  "retrievedAt": "2026-10-04T08:09:48.452Z",
+  "retrievedAt": "2026-10-24T08:50:07.210Z",
   "families": [
     {
       "id": "literata",
@@ -10,8 +10,10 @@
       "category": "book serif",
       "character": [
         "literary",
-        "warm",
-        "bookish"
+        "bookish",
+        "novel",
+        "ebook",
+        "warm"
       ],
       "similarTo": [
         "Iowan Old Style",
@@ -45,8 +47,10 @@
       "category": "old-style serif",
       "character": [
         "classical",
-        "elegant",
-        "literary"
+        "literary",
+        "renaissance",
+        "scholarly",
+        "poetry"
       ],
       "similarTo": [
         "Garamond"
@@ -80,7 +84,9 @@
       "character": [
         "refined",
         "traditional",
-        "crisp"
+        "crisp",
+        "academic",
+        "heritage"
       ],
       "similarTo": [
         "Baskerville"
@@ -114,6 +120,8 @@
       "character": [
         "sturdy",
         "familiar",
+        "newspaper",
+        "news",
         "plain"
       ],
       "similarTo": [
@@ -146,8 +154,11 @@
       "family": "Cormorant Garamond",
       "category": "display old-style serif",
       "character": [
-        "delicate",
         "luxurious",
+        "delicate",
+        "fashion",
+        "wedding",
+        "romantic",
         "high-contrast"
       ],
       "similarTo": [
@@ -182,7 +193,9 @@
       "character": [
         "dramatic",
         "fashion",
-        "high-contrast"
+        "glamour",
+        "high-contrast",
+        "luxurious"
       ],
       "similarTo": [
         "Didot"
@@ -208,8 +221,10 @@
       "category": "didone serif",
       "character": [
         "luxurious",
+        "fashion",
+        "formal",
         "sharp",
-        "formal"
+        "couture"
       ],
       "similarTo": [
         "Bodoni"
@@ -243,8 +258,9 @@
       "character": [
         "bold",
         "warm",
-        "editorial"
+        "headline"
       ],
+      "overused": true,
       "files": [
         {
           "style": "normal",
@@ -274,12 +290,14 @@
       "character": [
         "soft",
         "retro",
+        "70s",
         "quirky"
       ],
       "similarTo": [
         "Cooper Black",
         "Windsor"
       ],
+      "overused": true,
       "files": [
         {
           "style": "normal",
@@ -309,7 +327,8 @@
       "character": [
         "heavy",
         "poster",
-        "theatrical"
+        "theatrical",
+        "cinema"
       ],
       "files": [
         {
@@ -331,10 +350,11 @@
       "family": "Instrument Serif",
       "category": "condensed display serif",
       "character": [
-        "editorial",
         "condensed",
-        "contemporary"
+        "high-contrast",
+        "tall"
       ],
+      "overused": true,
       "files": [
         {
           "style": "normal",
@@ -363,8 +383,9 @@
       "category": "slab serif",
       "character": [
         "solid",
+        "friendly",
         "mechanical",
-        "friendly"
+        "Americana"
       ],
       "similarTo": [
         "Rockwell"
@@ -399,13 +420,166 @@
       "source": "https://fonts.google.com/specimen/Zilla+Slab"
     },
     {
+      "id": "bevan",
+      "family": "Bevan",
+      "category": "heavy slab serif",
+      "character": [
+        "varsity",
+        "collegiate",
+        "Americana",
+        "poster",
+        "bold",
+        "vintage"
+      ],
+      "similarTo": [
+        "Rockwell Extra Bold",
+        "Clarendon"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "bevan-latin-400-normal.woff2",
+          "bytes": 21008,
+          "sha256": "b2f840ba287ab2e6d74139b9646d6decd2548a24da7cf8519e828d31f5a6ca84"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "bevan.OFL.txt",
+      "copyright": "Copyright 2016 The Bevan Project Authors (https://github.com/googlefonts/BevanFont)",
+      "version": "v26",
+      "source": "https://fonts.google.com/specimen/Bevan"
+    },
+    {
+      "id": "holtwood-one-sc",
+      "family": "Holtwood One SC",
+      "category": "wood type slab serif",
+      "character": [
+        "western",
+        "varsity",
+        "poster",
+        "rodeo",
+        "heavy"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "holtwood-one-sc-latin-400-normal.woff2",
+          "bytes": 18568,
+          "sha256": "3cab993b4431f7a8be7d481e341b5d27214c1a0872d1a688cbbea515d7ec08b0"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "holtwood-one-sc.OFL.txt",
+      "copyright": "Copyright 2011 The Holtwood Project Authors (https://github.com/googlefonts/HoltwoodFont)",
+      "version": "v23",
+      "source": "https://fonts.google.com/specimen/Holtwood+One+SC"
+    },
+    {
+      "id": "sancreek",
+      "family": "Sancreek",
+      "category": "tuscan display serif",
+      "character": [
+        "western",
+        "saloon",
+        "ornate",
+        "vintage",
+        "wood type",
+        "rodeo"
+      ],
+      "similarTo": [
+        "Playbill"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "sancreek-latin-400-normal.woff2",
+          "bytes": 20172,
+          "sha256": "e653a9e25ddf39934c3f22be285e8f53ed056abe3d27396922db289c718ade3a"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "sancreek.OFL.txt",
+      "copyright": "Copyright 2011 The Sancreek Project Authors (https://github.com/googlefonts/sancreek)",
+      "version": "v27",
+      "source": "https://fonts.google.com/specimen/Sancreek"
+    },
+    {
+      "id": "grenze-gotisch",
+      "family": "Grenze Gotisch",
+      "category": "blackletter serif",
+      "character": [
+        "blackletter",
+        "gothic",
+        "medieval",
+        "fantasy",
+        "newspaper",
+        "streetwear"
+      ],
+      "similarTo": [
+        "Old English Text MT"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "grenze-gotisch-latin-400-normal.woff2",
+          "bytes": 15984,
+          "sha256": "a616f95684c78cfb94dacab7b74fbd0f7b9209272e3aa541dd7ebe60c6512745"
+        },
+        {
+          "style": "normal",
+          "weight": "700",
+          "file": "grenze-gotisch-latin-700-normal.woff2",
+          "bytes": 17112,
+          "sha256": "09fb5ce19eeee944bf8d90155ffd1d74709f586cda22182ad28f015b6746c39b"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "grenze-gotisch.OFL.txt",
+      "copyright": "Copyright 2020 The Grenze Gotisch Project Authors (https://github.com/Omnibus-Type/Grenze-Gotisch)",
+      "version": "v20",
+      "source": "https://fonts.google.com/specimen/Grenze+Gotisch"
+    },
+    {
+      "id": "fruktur",
+      "family": "Fruktur",
+      "category": "blackletter display",
+      "character": [
+        "blackletter",
+        "fraktur",
+        "medieval",
+        "masthead",
+        "gothic",
+        "fantasy"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "fruktur-latin-400-normal.woff2",
+          "bytes": 50080,
+          "sha256": "84f36c1494f88afeff4f24ab2400612666b54735f79fd7ef81b36b2c38b179e8"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "fruktur.OFL.txt",
+      "copyright": "Copyright 2022 The Fruktur Project Authors (https://github.com/SorkinType/Fruktur)",
+      "version": "v28",
+      "source": "https://fonts.google.com/specimen/Fruktur"
+    },
+    {
       "id": "jost",
       "family": "Jost",
       "category": "geometric sans",
       "character": [
         "geometric",
         "modernist",
-        "clean"
+        "clean",
+        "Bauhaus",
+        "minimal"
       ],
       "similarTo": [
         "Futura",
@@ -440,7 +614,8 @@
       "character": [
         "bold",
         "constructivist",
-        "poster"
+        "poster",
+        "manifesto"
       ],
       "similarTo": [
         "Futura Bold"
@@ -467,7 +642,8 @@
       "character": [
         "humanist",
         "warm",
-        "British"
+        "British",
+        "wayfinding"
       ],
       "similarTo": [
         "Gill Sans",
@@ -502,7 +678,8 @@
       "character": [
         "calligraphic",
         "literary",
-        "friendly"
+        "friendly",
+        "craft"
       ],
       "similarTo": [
         "Optima",
@@ -543,13 +720,15 @@
       "category": "neo-grotesque sans",
       "character": [
         "neutral",
-        "technical",
-        "contemporary"
+        "interface",
+        "dashboard",
+        "software"
       ],
       "similarTo": [
         "Helvetica",
         "Arial"
       ],
+      "overused": true,
       "files": [
         {
           "style": "normal",
@@ -578,12 +757,13 @@
       "category": "grotesque sans",
       "character": [
         "sturdy",
-        "editorial",
-        "American"
+        "American",
+        "newspaper"
       ],
       "similarTo": [
         "Franklin Gothic"
       ],
+      "overused": true,
       "files": [
         {
           "style": "normal",
@@ -612,9 +792,10 @@
       "category": "grotesque sans",
       "character": [
         "quirky",
-        "technical",
-        "contemporary"
+        "wonky",
+        "proportional"
       ],
+      "overused": true,
       "files": [
         {
           "style": "normal",
@@ -637,7 +818,8 @@
       "character": [
         "expressive",
         "playful",
-        "contemporary"
+        "contemporary",
+        "indie"
       ],
       "files": [
         {
@@ -655,13 +837,141 @@
       "source": "https://fonts.google.com/specimen/Bricolage+Grotesque"
     },
     {
+      "id": "familjen-grotesk",
+      "family": "Familjen Grotesk",
+      "category": "grotesque sans",
+      "character": [
+        "Scandinavian",
+        "quirky",
+        "indie",
+        "contemporary"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "familjen-grotesk-latin-400-normal.woff2",
+          "bytes": 11700,
+          "sha256": "3d6a8c01c6c02ddf0978cba8290f58bd44cec83cc6e22af4b906238313073a45"
+        },
+        {
+          "style": "normal",
+          "weight": "700",
+          "file": "familjen-grotesk-latin-700-normal.woff2",
+          "bytes": 11820,
+          "sha256": "e1ebaed103ed999431a836736057a12e8e2d2b1e97d79c751cd1cb75776d5bee"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "familjen-grotesk.OFL.txt",
+      "copyright": "Copyright 2021 The Familjen Grotesk Project Authors (https://github.com/Familjen-Sthlm/Familjen-Grotesk)",
+      "version": "v11",
+      "source": "https://fonts.google.com/specimen/Familjen+Grotesk"
+    },
+    {
+      "id": "archivo-black",
+      "family": "Archivo Black",
+      "category": "heavy grotesque sans",
+      "character": [
+        "poster",
+        "streetwear",
+        "brutalist",
+        "loud"
+      ],
+      "similarTo": [
+        "Arial Black"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "archivo-black-latin-400-normal.woff2",
+          "bytes": 18604,
+          "sha256": "25f33e61cf995abd6be62931cf03bf427286259177b43618cc410ee0157cfd30"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "archivo-black.OFL.txt",
+      "copyright": "Copyright 2017 The Archivo Black Project Authors (https://github.com/Omnibus-Type/ArchivoBlack)",
+      "version": "v23",
+      "source": "https://fonts.google.com/specimen/Archivo+Black"
+    },
+    {
+      "id": "anton",
+      "family": "Anton",
+      "category": "heavy condensed sans",
+      "character": [
+        "broadcast",
+        "sports",
+        "headline",
+        "loud",
+        "mixtape",
+        "tabloid"
+      ],
+      "similarTo": [
+        "Impact"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "anton-latin-400-normal.woff2",
+          "bytes": 18612,
+          "sha256": "d0fa07ff63dd60cbc0e2f58e29c802dca2a5ae0276c999f59c6111ab7bbaec3b"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "anton.OFL.txt",
+      "copyright": "Copyright 2020 The Anton Project Authors (https://github.com/googlefonts/AntonFont.git)",
+      "version": "v27",
+      "source": "https://fonts.google.com/specimen/Anton"
+    },
+    {
+      "id": "barlow-condensed",
+      "family": "Barlow Condensed",
+      "category": "condensed grotesque sans",
+      "character": [
+        "sports",
+        "broadcast",
+        "stats",
+        "signage",
+        "civic",
+        "dashboard"
+      ],
+      "similarTo": [
+        "Arial Narrow"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "barlow-condensed-latin-400-normal.woff2",
+          "bytes": 21164,
+          "sha256": "7fff1bb22e5773f0d1a55d3093068b6dac4539e8bb3ac23fb9f0a729df2c7bb4"
+        },
+        {
+          "style": "normal",
+          "weight": "700",
+          "file": "barlow-condensed-latin-700-normal.woff2",
+          "bytes": 22444,
+          "sha256": "3787a5a419171630e6890cfa47c4da067474d005cd0ff8dc11ec090fdc3ee2b8"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "barlow-condensed.OFL.txt",
+      "copyright": "Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow)",
+      "version": "v13",
+      "source": "https://fonts.google.com/specimen/Barlow+Condensed"
+    },
+    {
       "id": "oswald",
       "family": "Oswald",
       "category": "condensed gothic sans",
       "character": [
         "condensed",
         "bold",
-        "poster"
+        "poster",
+        "sports"
       ],
       "similarTo": [
         "Alternate Gothic",
@@ -688,8 +998,10 @@
       "category": "condensed capitals",
       "character": [
         "condensed",
+        "headline",
         "loud",
-        "headline"
+        "broadcast",
+        "sports"
       ],
       "files": [
         {
@@ -712,8 +1024,9 @@
       "category": "condensed display sans",
       "character": [
         "industrial",
-        "tall",
-        "civic"
+        "civic",
+        "signage",
+        "tall"
       ],
       "files": [
         {
@@ -731,13 +1044,78 @@
       "source": "https://fonts.google.com/specimen/Big+Shoulders+Display"
     },
     {
+      "id": "big-shoulders-stencil-display",
+      "family": "Big Shoulders Stencil Display",
+      "category": "condensed stencil display sans",
+      "character": [
+        "stencil",
+        "industrial",
+        "civic",
+        "signage",
+        "tall"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "big-shoulders-stencil-display-latin-400-normal.woff2",
+          "bytes": 14508,
+          "sha256": "bd8f885ae35376ef1273b38a7e1b3026d3bf5fa27f6d2b3b0d81ddf420bd097d"
+        },
+        {
+          "style": "normal",
+          "weight": "700",
+          "file": "big-shoulders-stencil-display-latin-700-normal.woff2",
+          "bytes": 14672,
+          "sha256": "6cdc32d2c273d3eb27fd11b5cec7d0a81eb7b43396f018f056c492a0e00bec04"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "big-shoulders-stencil-display.OFL.txt",
+      "copyright": "Copyright 2019 The Big Shoulders Project Authors (https://github.com/xotypeco/big_shoulders)",
+      "version": "v28",
+      "source": "https://fonts.google.com/specimen/Big+Shoulders+Stencil+Display"
+    },
+    {
+      "id": "black-ops-one",
+      "family": "Black Ops One",
+      "category": "heavy stencil display",
+      "character": [
+        "stencil",
+        "military",
+        "tactical",
+        "gaming",
+        "streetwear",
+        "loud"
+      ],
+      "similarTo": [
+        "Stencil"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "black-ops-one-latin-400-normal.woff2",
+          "bytes": 31408,
+          "sha256": "6e4c5eb97c2b5a41ebe33f4462385d551dabef7aa28cae7b3d6b77e63529eee5"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "black-ops-one.OFL.txt",
+      "copyright": "Copyright 2022 The Black-Ops Project Authors (https://github.com/googlefonts/googlefonts-project-template)",
+      "version": "v21",
+      "source": "https://fonts.google.com/specimen/Black+Ops+One"
+    },
+    {
       "id": "syne",
       "family": "Syne",
       "category": "wide display sans",
       "character": [
         "artistic",
         "wide",
-        "avant-garde"
+        "avant-garde",
+        "gallery",
+        "experimental"
       ],
       "files": [
         {
@@ -761,7 +1139,8 @@
       "character": [
         "wide",
         "rounded",
-        "futurist"
+        "futurist",
+        "Y2K"
       ],
       "files": [
         {
@@ -779,13 +1158,102 @@
       "source": "https://fonts.google.com/specimen/Unbounded"
     },
     {
+      "id": "zen-dots",
+      "family": "Zen Dots",
+      "category": "wide techno display sans",
+      "character": [
+        "Y2K",
+        "futuristic",
+        "synthwave",
+        "neon",
+        "techno",
+        "bold"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "zen-dots-latin-400-normal.woff2",
+          "bytes": 13856,
+          "sha256": "aaad72a24e4047bf39cac4bca3c5de075c83b11476b3b162e2a3939b9fe5fceb"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "zen-dots.OFL.txt",
+      "copyright": "Copyright 2021 The Dots Project Authors (https://github.com/googlefonts/zen-dots)",
+      "version": "v14",
+      "source": "https://fonts.google.com/specimen/Zen+Dots"
+    },
+    {
+      "id": "oxanium",
+      "family": "Oxanium",
+      "category": "squared techno sans",
+      "character": [
+        "techno",
+        "futuristic",
+        "gaming",
+        "scifi",
+        "cyber"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "200 800",
+          "file": "oxanium-latin-wght-normal.woff2",
+          "bytes": 14044,
+          "sha256": "3aa555c528430aab19bb2693dc206bab557767d3082dba66400784c9cc90cfbb"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "oxanium.OFL.txt",
+      "copyright": "Copyright 2019 The Oxanium Project Authors (https://github.com/sevmeyer/oxanium)",
+      "version": "v21",
+      "source": "https://fonts.google.com/specimen/Oxanium"
+    },
+    {
+      "id": "chakra-petch",
+      "family": "Chakra Petch",
+      "category": "angular techno sans",
+      "character": [
+        "techno",
+        "esports",
+        "gaming",
+        "futuristic",
+        "sports",
+        "cyber"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "chakra-petch-latin-400-normal.woff2",
+          "bytes": 9756,
+          "sha256": "7d75be85dd1627e27ec151e9a3701e661bc4f8c2a93611bdd92f3a05d6bbd942"
+        },
+        {
+          "style": "normal",
+          "weight": "700",
+          "file": "chakra-petch-latin-700-normal.woff2",
+          "bytes": 9900,
+          "sha256": "ce5095dc1cb200aaa939e38067a0677018d10e9f26ec38cdcf1557ac524fc775"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "chakra-petch.OFL.txt",
+      "copyright": "Copyright 2018 The Chakra Petch Project Authors (https://github.com/m4rc1e/Chakra-Petch.git)",
+      "version": "v13",
+      "source": "https://fonts.google.com/specimen/Chakra+Petch"
+    },
+    {
       "id": "poiret-one",
       "family": "Poiret One",
       "category": "art deco display sans",
       "character": [
         "art deco",
         "elegant",
-        "light"
+        "light",
+        "twenties",
+        "fashion"
       ],
       "files": [
         {
@@ -803,13 +1271,41 @@
       "source": "https://fonts.google.com/specimen/Poiret+One"
     },
     {
+      "id": "bungee",
+      "family": "Bungee",
+      "category": "urban signage display sans",
+      "character": [
+        "signage",
+        "urban",
+        "neon",
+        "loud",
+        "streetwear"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "bungee-latin-400-normal.woff2",
+          "bytes": 14344,
+          "sha256": "126eec706b7931682dbcf6c6efc274132c603f181fbf912678e6cfeb341e721b"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "bungee.OFL.txt",
+      "copyright": "Copyright 2023 The Bungee Project Authors (https://github.com/djrrb/Bungee)",
+      "version": "v17",
+      "source": "https://fonts.google.com/specimen/Bungee"
+    },
+    {
       "id": "courier-prime",
       "family": "Courier Prime",
       "category": "typewriter monospace",
       "character": [
         "typewriter",
         "screenplay",
-        "classic"
+        "classic",
+        "zine",
+        "manuscript"
       ],
       "similarTo": [
         "Courier New",
@@ -851,7 +1347,10 @@
       "character": [
         "typewriter",
         "vintage",
-        "light"
+        "light",
+        "archive",
+        "screenplay",
+        "zine"
       ],
       "similarTo": [
         "American Typewriter"
@@ -877,9 +1376,10 @@
       "category": "monospace",
       "character": [
         "engineered",
-        "technical",
-        "calm"
+        "calm",
+        "tabular"
       ],
+      "overused": true,
       "files": [
         {
           "style": "normal",
@@ -916,7 +1416,8 @@
       "character": [
         "retro-futurist",
         "geometric",
-        "technical"
+        "quirky",
+        "scifi"
       ],
       "files": [
         {
@@ -948,13 +1449,142 @@
       "source": "https://fonts.google.com/specimen/Space+Mono"
     },
     {
+      "id": "jetbrains-mono",
+      "family": "JetBrains Mono",
+      "category": "coding monospace",
+      "character": [
+        "code",
+        "developer",
+        "brutalist",
+        "terminal",
+        "technical",
+        "precise"
+      ],
+      "similarTo": [
+        "Consolas",
+        "Menlo",
+        "SF Mono"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "jetbrains-mono-latin-400-normal.woff2",
+          "bytes": 21168,
+          "sha256": "14425ba9c695763c1547f48a206b7aa60350a33ae23de09f0407877f3fcd89eb"
+        },
+        {
+          "style": "normal",
+          "weight": "700",
+          "file": "jetbrains-mono-latin-700-normal.woff2",
+          "bytes": 21908,
+          "sha256": "d0d4e818808f2a0ba39b2b09d1989366f63494e295f003c7ef436697378507e8"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "jetbrains-mono.OFL.txt",
+      "copyright": "Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono)",
+      "version": "v24",
+      "source": "https://fonts.google.com/specimen/JetBrains+Mono"
+    },
+    {
+      "id": "vt323",
+      "family": "VT323",
+      "category": "pixel monospace",
+      "character": [
+        "terminal",
+        "CRT",
+        "hacker",
+        "retro",
+        "80s",
+        "code"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "vt323-latin-400-normal.woff2",
+          "bytes": 17936,
+          "sha256": "8ddbebcc1048154132e1d78eb9b1f7850bca1b7d857035ccf1cb4318ebc615b6"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "vt323.OFL.txt",
+      "copyright": "Copyright 2011, The VT323 Project Authors (peter.hull@oikoi.com)",
+      "version": "v18",
+      "source": "https://fonts.google.com/specimen/VT323"
+    },
+    {
+      "id": "silkscreen",
+      "family": "Silkscreen",
+      "category": "pixel capitals",
+      "character": [
+        "arcade",
+        "pixel",
+        "bitmap",
+        "retro",
+        "game"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "silkscreen-latin-400-normal.woff2",
+          "bytes": 8404,
+          "sha256": "e6c72ea4702249202bcdd79d3343057e4e25ef1f04e3fcffd8602ab53b40b4cc"
+        },
+        {
+          "style": "normal",
+          "weight": "700",
+          "file": "silkscreen-latin-700-normal.woff2",
+          "bytes": 7524,
+          "sha256": "5741b7f01a127f40ed70281fa2f686e8fc2cfe241930a120e4d1a1cebe78f995"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "silkscreen.OFL.txt",
+      "copyright": "Copyright 2001 The Silkscreen Project Authors (https://github.com/googlefonts/silkscreen)",
+      "version": "v6",
+      "source": "https://fonts.google.com/specimen/Silkscreen"
+    },
+    {
+      "id": "pixelify-sans",
+      "family": "Pixelify Sans",
+      "category": "pixel sans",
+      "character": [
+        "arcade",
+        "pixel",
+        "gaming",
+        "retro",
+        "blocky",
+        "playful"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400 700",
+          "file": "pixelify-sans-latin-wght-normal.woff2",
+          "bytes": 12016,
+          "sha256": "4a5633a0c9c1b73abd133a56d3716c2d8df2ed03cb987346f72194aeb224f382"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "pixelify-sans.OFL.txt",
+      "copyright": "Copyright 2021 The Pixelify Sans Project Authors (https://github.com/eifetx/Pixelify-Sans)",
+      "version": "v3",
+      "source": "https://fonts.google.com/specimen/Pixelify+Sans"
+    },
+    {
       "id": "caveat",
       "family": "Caveat",
       "category": "handwriting",
       "character": [
         "handwritten",
         "casual",
-        "notebook"
+        "notebook",
+        "diary",
+        "mixtape",
+        "zine"
       ],
       "files": [
         {
@@ -972,12 +1602,41 @@
       "source": "https://fonts.google.com/specimen/Caveat"
     },
     {
+      "id": "sedgwick-ave-display",
+      "family": "Sedgwick Ave Display",
+      "category": "graffiti handwriting",
+      "character": [
+        "graffiti",
+        "mixtape",
+        "street",
+        "zine",
+        "urban",
+        "rap"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "sedgwick-ave-display-latin-400-normal.woff2",
+          "bytes": 34632,
+          "sha256": "33a12de3b608a011d3caad5bfd4e529f0f8d177cc5ba184c68ed6ba998fe02dc"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "sedgwick-ave-display.OFL.txt",
+      "copyright": "Copyright 2017 The Sedgwick Ave Project Authors (https://github.com/googlefonts/sedgwickave)",
+      "version": "v23",
+      "source": "https://fonts.google.com/specimen/Sedgwick+Ave+Display"
+    },
+    {
       "id": "pinyon-script",
       "family": "Pinyon Script",
       "category": "formal script",
       "character": [
         "formal",
         "calligraphic",
+        "wedding",
+        "invitation",
         "elegant"
       ],
       "files": [
@@ -996,13 +1655,41 @@
       "source": "https://fonts.google.com/specimen/Pinyon+Script"
     },
     {
+      "id": "shrikhand",
+      "family": "Shrikhand",
+      "category": "heavy italic display",
+      "character": [
+        "70s",
+        "80s",
+        "retro",
+        "disco",
+        "groovy",
+        "bold"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "400",
+          "file": "shrikhand-latin-400-normal.woff2",
+          "bytes": 15940,
+          "sha256": "ae958e0da508cb9c0094ce2a2cd2ce142756cc434d88ecd3f353c3f80749da9d"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "shrikhand.OFL.txt",
+      "copyright": "Copyright (c) 2015 Jonny Pinhorn (jonpinhorn.typedesign@gmail.com)",
+      "version": "v17",
+      "source": "https://fonts.google.com/specimen/Shrikhand"
+    },
+    {
       "id": "nunito",
       "family": "Nunito",
       "category": "rounded sans",
       "character": [
         "rounded",
         "soft",
-        "friendly"
+        "friendly",
+        "children"
       ],
       "similarTo": [
         "VAG Rounded"
@@ -1028,6 +1715,36 @@
       "copyright": "Copyright 2014 The Nunito Project Authors (https://github.com/googlefonts/nunito)",
       "version": "v32",
       "source": "https://fonts.google.com/specimen/Nunito"
+    },
+    {
+      "id": "fredoka",
+      "family": "Fredoka",
+      "category": "rounded display sans",
+      "character": [
+        "children",
+        "playful",
+        "bubbly",
+        "Y2K",
+        "toy",
+        "friendly"
+      ],
+      "similarTo": [
+        "Arial Rounded MT Bold"
+      ],
+      "files": [
+        {
+          "style": "normal",
+          "weight": "300 700",
+          "file": "fredoka-latin-wght-normal.woff2",
+          "bytes": 29732,
+          "sha256": "99d6c78e043710d4f83ed90716779798b7b04eb690f73e0ad0e8f32d1f0e98c2"
+        }
+      ],
+      "license": "OFL-1.1",
+      "licenseFile": "fredoka.OFL.txt",
+      "copyright": "Copyright 2016 The Fredoka Project Authors (https://github.com/hafontia/Fredoka-One)",
+      "version": "v17",
+      "source": "https://fonts.google.com/specimen/Fredoka"
     }
   ]
 }

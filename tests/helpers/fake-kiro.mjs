@@ -7,7 +7,7 @@ import { EventEmitter } from 'node:events';
 import { PassThrough, Writable } from 'node:stream';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createMousaServer } from '../../plugin/server/mcp/mousa.mjs';
-import { prediction, designFor, byName, siteFiles, baselineDesign, fakeCapture, fakeShoot, parse } from './mousa-fixtures.mjs';
+import { prediction, designFor, byName, siteFiles, baselineDesign, fakeCapture, fakeShoot, parse, critiqueFor } from './mousa-fixtures.mjs';
 
 /** The session's kind, as the agent file the try wrote describes it. */
 export const sessionKind = agent => /frozen prediction/u.test(agent.description) ? 'predict' : /without Qloo/u.test(agent.description) ? 'baseline' : 'qloo';
@@ -94,7 +94,7 @@ export async function qlooArmScript({ call, write, cwd }) {
   assert.equal((await call('design_validate', { stage: 'review', artifact: { schemaVersion: '1.0', round: 1, criteria: [
     { id: 'r1', capture: 'r1-desktop', verdict: 'met', observed: 'The first screen is mist blue on sea glass, with no white ground.' },
     { id: 'r2', capture: 'r1-mobile', verdict: 'met', observed: 'The headline sits on one short line at phone width.' },
-  ], summary: 'The palette and the headline land.' } })).status, 'valid');
+  ], summary: 'The palette and the headline land.', critique: critiqueFor(input) } })).status, 'valid');
   assert.equal((await call('design_report', { picture: false })).status, 'written');
 }
 

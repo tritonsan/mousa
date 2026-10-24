@@ -16,11 +16,12 @@ import { standaloneCapabilities, CAPTURE_LIMITS } from '../production/capabiliti
 import { serveDirectory, captureViews } from '../production/capture.mjs';
 import { buildImageBrief, buildImagePrompt, createCodexImageGenerator, IMAGE_ASPECTS, IMAGE_LIMITS } from '../production/images.mjs';
 import { pngSize, jpegSize, imagePalette, colorDistance, scalePng } from '../production/image-files.mjs';
-import { fontsForDna } from '../production/fonts.mjs';
+import { fontsForDna, fontWordMatch } from '../production/fonts.mjs';
 import { readState, writeState, resolveInProject, relativePath, readProjectFiles, STATE_DIR, WORKSPACE_FIELD } from '../production/project-files.mjs';
 import { tasteInputArgument } from '../production/tools.mjs';
 import { collectProjectFiles, detectDesignSystem, mergedPages, checkDesignSystem, checkFontFiles, styleFootprint, styleNotes } from './systems.mjs';
 import { buildSpecimen } from './specimen.mjs';
+import { houseStyleReport } from './house-style.mjs';
 import { pairDistance } from './pair.mjs';
 import { readRecords, writeSessionReport, writeComparisonReport, captureReport, REPORT_FOLDERS } from './report.mjs';
 
@@ -51,7 +52,7 @@ const STAGES = ['prediction', 'reading', 'dna', 'plan', 'review'];
 export const DESIGN_TOOLS = Object.freeze([
   {
     name: 'design_validate',
-    description: 'Validate and save one design stage; each stage is frozen once the next one rests on it. prediction: before any Qloo data, your own guess at what the audience loves in each planned domain and the design you would make from it (designSketch, library fonts); restart:true starts a new session. reading: 2-4 clusters of refs that belong together (name them as the Taste Brief lists them), each resting on a quality, the layers each carries, refs set aside with reasons, and how the medium carries them. dna: 5-10 concrete devices anchored to refs your reading kept, with literal tokens (hex colors, library fonts, CSS values, keyframes, SVG ids, element ids, copy, pictures); surprises must move it away from your sketch; the result lists the methods this session offers per layer. plan: one step per device with its method, the cluster it realizes and why, a count and fallback for generated pictures, and 2-6 review criteria. review: your verdict on each criterion from captures of this round. revise:true replaces a saved reading, DNA or plan and drops the stages after it.',
+    description: 'Validate and save one design stage; each stage is frozen once the next one rests on it. prediction: before any Qloo data, your own guess at what the audience loves in each planned domain and the design you would make from it (designSketch, library fonts); restart:true starts a new session. reading: 2-4 clusters of refs that belong together (name them as the Taste Brief lists them), each resting on a quality, with 1-3 visual conventions its works share as a genre or medium (how such works look, never a brand\'s logo or colours), the layers each carries, refs set aside with reasons, and how the medium carries them. dna: 5-10 concrete devices anchored to refs your reading kept, with literal tokens (hex colors, library fonts, CSS values, keyframes, SVG ids, element ids, copy, pictures); the palette or typography device names in convention a convention of your reading (by key, such as c1.2); surprises must move it away from your sketch; the result lists the methods this session offers per layer. plan: one step per device with its method, the cluster it realizes and why, a count and fallback for generated pictures, and 2-6 review criteria. review: your verdict on each criterion from captures of this round, and a critique: the page\'s three most generic choices (each kept only for an anchor that requires it, or replaced; every default-look signature still on the page among them) and whether someone who loves the audience\'s best-loved works would take the page for theirs. revise:true replaces a saved reading, DNA or plan and drops the stages after it.',
     inputSchema: { type: 'object', properties: {
       stage: { type: 'string', enum: STAGES },
       artifact: { type: 'object', description: 'The stage\'s artifact as JSON.' },
@@ -62,7 +63,7 @@ export const DESIGN_TOOLS = Object.freeze([
   },
   {
     name: 'design_check',
-    description: 'Check that every device of the saved DNA is really in the project: colors, fonts and their files, CSS values, keyframes with a reduced-motion fallback and a pause control for endless loops, SVG drawings, element ids, copy and pictures. In a project with CSS custom properties it also checks that each palette and typography value is held by a custom property the styles use through var(), and names it. Reads the project\'s pages, styles and scripts unless paths are given. Shows presence, not quality.',
+    description: 'Check that every device of the saved DNA is really in the project: colors, fonts and their files, CSS values, keyframes with a reduced-motion fallback and a pause control for endless loops, SVG drawings, element ids, copy and pictures. In a project with CSS custom properties it also checks that each palette and typography value is held by a custom property the styles use through var(), and names it. On pages it also finds the signatures of the look models default to (a cream ground, a stock display serif, uppercase monospace labels, an italic accent word, numbered sections, pill buttons, hairline rules, violet gradients, frosted glass, one neutral sans, emoji icons); a page keeps at most two. Reads the project\'s pages, styles and scripts unless paths are given. Shows presence, not quality.',
     inputSchema: { type: 'object', properties: {
       paths: { type: 'array', minItems: 1, maxItems: 20, items: { type: 'string', minLength: 1, maxLength: 200 } },
       medium: { type: 'string', enum: PRODUCTION_MEDIA }, workspace: WORKSPACE_FIELD,
@@ -96,7 +97,7 @@ export const DESIGN_TOOLS = Object.freeze([
   },
   {
     name: 'materials',
-    description: 'The open-licence font library (SIL OFL 1.1) the plugin carries. find: families ranked by words for the character you want, such as condensed, warm, editorial or typewriter, with the system fonts each stands in for. fetch: copy the families your plan uses into the project (default folder fonts) with their licence files, and get the @font-face rules to paste into your stylesheet, with URLs written from the stylesheet you name.',
+    description: 'The open-licence font library (SIL OFL 1.1) the plugin carries. find: families ranked by words for the character you want, such as broadcast, varsity, blackletter, screenplay or Y2K: the words of a convention your reading named, with the system fonts each stands in for. fetch: copy the families your plan uses into the project (default folder fonts) with their licence files, and get the @font-face rules to paste into your stylesheet, with URLs written from the stylesheet you name.',
     inputSchema: { type: 'object', properties: {
       action: { type: 'string', enum: ['find', 'fetch'] },
       words: { type: 'array', maxItems: 8, items: { type: 'string', minLength: 2, maxLength: 40 } },
@@ -177,10 +178,7 @@ export function resolveTasteRefs(stage, artifact, input) {
   return copy;
 }
 
-const stemMatch = (word, value) => {
-  const a = normalizeTasteName(word), b = normalizeTasteName(value);
-  return Boolean(a && b) && (b.split(' ').includes(a) || (a.length >= 5 && b.split(' ').some(part => part.length >= 5 && part.slice(0, 5) === a.slice(0, 5))));
-};
+const stemMatch = fontWordMatch;
 
 /**
  * The tools. `context`: env, host, version (the surface's, for reports), project(meta) for the folder, fonts() for the
@@ -266,16 +264,23 @@ export function createDesignTools(context) {
     }
     if (args.stage === 'review') {
       const planRecord = await needed(root, 'design/plan', 'Save the production plan first: design_validate with stage plan.');
+      const dnaRecord = await needed(root, 'design/dna', 'Save the Design DNA first: design_validate with stage dna.');
       const captures = (await readState(root, 'captures'))?.captures || [];
       // Captures this surface returned inside its result were seen; reads a host records (Claude Code's Read audit) also count.
       const opened = new Set([...captures.filter(item => item.delivered).map(item => item.id), ...((await readState(root, 'opened'))?.opened || [])]);
-      const review = normalizeReview(args.artifact, { plan: planRecord.plan, captures, opened, rounds: CAPTURE_LIMITS.rounds });
+      // The page as it is now, not as it was at the last check: repairs after a round change it.
+      const house = ['web', 'app-ui'].includes(dnaRecord.medium) ? houseStyleReport(await collectProjectFiles(root)) : null;
+      if (house?.over) refuse('HOUSE_STYLE', `The page carries ${house.count} signatures of the look models default to: ${house.signatures.map(item => `${item.label} (${item.id}: ${item.evidence})`).join('; ')}. Keep at most ${house.limit}: replace the others with choices your anchors and conventions call for, run design_check, capture again and review.`);
+      const review = normalizeReview(args.artifact, { plan: planRecord.plan, captures, opened, rounds: CAPTURE_LIMITS.rounds,
+        taste: { input, dna: dnaRecord.dna, signatures: house?.signatures || [] } });
+      const recorded = { ...review, ...(house ? { houseStyle: { signatures: house.signatures.map(item => item.id), limit: house.limit } } : {}) };
       const reviews = (await readState(root, 'design/reviews'))?.reviews || [];
-      await writeState(root, 'design/reviews', { reviews: [...reviews.filter(item => item.round !== review.round), review] });
+      await writeState(root, 'design/reviews', { reviews: [...reviews.filter(item => item.round !== review.round), recorded] });
       await session(root, 'reviewed');
-      const open = review.stats.partly || review.stats.missed;
+      const open = review.stats.partly || review.stats.missed || review.critique?.open;
+      const repairs = review.critique?.open ? 'Make the repairs you named and replace the generic choices you marked replaced' : 'Make the repairs you named';
       return { status: 'valid', stage: 'review', round: review.round, stats: review.stats, audited: review.audited,
-        next: !open ? 'Every criterion is met. Finish, keeping the DNA as it is.' : review.round < CAPTURE_LIMITS.rounds ? `Make the repairs you named, then design_capture with round ${review.round + 1} and review it.` : 'Make the repairs you named; this was the last review round.' };
+        next: !open ? 'Every criterion is met and the critique keeps nothing generic. Finish, keeping the DNA as it is.' : review.round < CAPTURE_LIMITS.rounds ? `${repairs}, then design_capture with round ${review.round + 1} and review it.` : `${repairs}; this was the last review round.` };
     }
     return refuse('TOOL_INPUT_INVALID', 'Use a stage: prediction, reading, dna, plan or review.');
   }
@@ -311,16 +316,21 @@ export function createDesignTools(context) {
     const start = await readState(root, 'design/start');
     const now = styleFootprint(files), drift = styleNotes(start, now);
     const style = { ...(start ? { atStart: { stylesheets: start.stylesheets, handWritten: start.handWritten, classes: start.classes } } : {}), now: { stylesheets: now.stylesheets, handWritten: now.handWritten, classes: now.classes } };
-    await writeState(root, 'design/check', { checkedAt: stamp(), medium: profile.id, system: detected.system, score: report.score, devices: report.devices, style });
+    // Pages carry the look models default to, or not: read from the project's own stylesheets and pages.
+    const house = ['web', 'app-ui'].includes(profile.id) ? houseStyleReport(files) : null;
+    await writeState(root, 'design/check', { checkedAt: stamp(), medium: profile.id, system: detected.system, score: report.score, devices: report.devices, style,
+      ...(house ? { houseStyle: { signatures: house.signatures.map(item => item.id), limit: house.limit } } : {}) });
     await session(root, 'checked');
     const notes = [...(detected.notes || []), ...drift];
     const repair = report.devices.some(device => device.status !== 'present');
+    const steps = [repair && 'repair what is missing', drift.length && 'move the styling back into the project\'s classes (see notes)',
+      house?.over && `keep at most ${house.limit} of the default-look signatures found (houseStyle), replacing the others with choices your anchors and conventions call for`].filter(Boolean);
     return { status: 'checked', medium: profile.id, system: detected.system, score: report.score, meetsThreshold: report.meetsThreshold,
       devices: report.devices.map(device => ({ id: device.id, layer: device.layer, status: device.status, ...(device.missing.length ? { missing: device.missing.slice(0, 5) } : {}) })),
       ...(report.system ? { bindings: report.system.bindings } : {}), ...(report.motion ? { motion: { reducedMotion: report.motion.reducedMotion, pauseControl: report.motion.pauseControl, undefinedKeyframes: report.motion.undefined } } : {}),
-      style, ...(notes.length ? { notes } : {}), limitation: 'Presence of the declared values, not visual quality or preference.',
-      next: drift.length ? `${repair ? 'Repair what is missing, and m' : 'M'}ove the styling back into the project's classes (see notes), check again, then capture the result with design_capture.`
-        : repair ? 'Repair what is missing, check again, then capture the result with design_capture.' : 'Capture the result with design_capture and review it against your plan.' };
+      ...(house ? { houseStyle: { found: house.signatures, count: house.count, limit: house.limit, over: house.over } } : {}),
+      style, ...(notes.length ? { notes } : {}), limitation: 'Presence of the declared values and of known default habits, not visual quality or preference.',
+      next: steps.length ? `${steps.join('; ').replace(/^./u, letter => letter.toUpperCase())}, check again, then capture the result with design_capture.` : 'Capture the result with design_capture and review it against your plan.' };
   }
 
   async function captureResult(args, meta) {
@@ -373,7 +383,7 @@ export function createDesignTools(context) {
       content.push({ type: 'image', data: scalePng(bytes, inlineCaptureSide(env)).toString('base64'), mimeType: 'image/png' });
     }
     content.push({ type: 'text', text: JSON.stringify({ status: 'captured', round, captures: issued.map(({ capturedAt, delivered, ...shot }) => { void capturedAt; void delivered; return shot; }),
-      next: 'Judge each review criterion of your plan on these captures, describing what they show, then design_validate with stage review.' }) });
+      next: 'Judge each review criterion of your plan on these captures, describing what they show; then critique the page as its audience would (its three most generic choices, and whether someone who loves the audience\'s best-loved works would take it for theirs), and design_validate with stage review.' }) });
     return { content };
   }
 
@@ -459,11 +469,12 @@ export function createDesignTools(context) {
     if (!library) refuse('MATERIALS_UNAVAILABLE', 'The font library was not found. Set MOUSA_LIBRARY_ROOT to the folder that holds library/fonts.');
     if (args.action === 'find') {
       const words = (args.words || []).map(word => word.trim()).filter(Boolean);
+      // A family model-made pages default to comes after the others that match as well, and says so.
       const ranked = library.families.map((family, index) => ({ family, index, matches: words.filter(word => [family.category, ...(family.character || []), family.family].some(value => stemMatch(word, value))) }))
-        .sort((a, b) => b.matches.length - a.matches.length || a.index - b.index);
-      return { status: 'found', license: 'OFL-1.1', families: ranked.map(({ family, matches }) => ({ family: family.family, category: family.category, character: (family.character || []).slice(0, 4),
-        ...(family.similarTo?.length ? { standsInFor: family.similarTo } : {}), ...(words.length ? { matches } : {}) })),
-        note: 'Category and character describe each typeface; they are not taste data. Name only these families in the DNA, and fetch the ones your plan uses.' };
+        .sort((a, b) => b.matches.length - a.matches.length || Number(Boolean(a.family.overused)) - Number(Boolean(b.family.overused)) || a.index - b.index);
+      return { status: 'found', license: 'OFL-1.1', families: ranked.map(({ family, matches }) => ({ family: family.family, category: family.category, character: (family.character || []).slice(0, 6),
+        ...(family.similarTo?.length ? { standsInFor: family.similarTo } : {}), ...(family.overused ? { overused: true } : {}), ...(words.length ? { matches } : {}) })),
+        note: 'Category and character describe each typeface; they are not taste data. A family marked overused is one model-made pages default to: choose it only when a convention of your reading calls for it. Name only these families in the DNA, and fetch the ones your plan uses.' };
     }
     if (!args.fonts?.length) refuse('TOOL_INPUT_INVALID', 'fetch needs fonts: the families to copy.');
     const root = await project(meta, args.workspace);

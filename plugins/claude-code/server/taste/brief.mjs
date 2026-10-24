@@ -14,7 +14,12 @@ const status = entity => entity.surprise ? { new: true } : entity.predictedByMod
 // tags a device anchored to it may name in its qualities.
 const work = entity => ({ name: entity.name, ...status(entity), ...(entity.tags?.length ? { tags: entity.tags.slice(0, 3) } : {}) });
 
-/** Brands whose own design tags lift a look quality: their logos and products, not the audience's eye. */
+/**
+ * Brands whose own design tags carry a look quality. What an audience looks at every day is part of its eye, so the
+ * quality stays usable; the caution says to translate the genre of that design, never the brands' marks. It used to
+ * say the quality described the brands more than the audience, and the showcase's agent then set aside Bold Typography,
+ * the one look its sports and hip-hop audience shared, for Intimate.
+ */
 function brandCarried(quality, entities) {
   if (quality.family !== 'look' || !Array.isArray(quality.refs) || quality.refs.length < 2) return null;
   const carriers = quality.refs.map(ref => entities.find(entity => entity.ref === ref)).filter(Boolean);
@@ -28,8 +33,9 @@ export function buildTasteBrief({ plan, profile, input, segments = [], cache = n
   const qualities = entities.filter(entity => entity.domain === QUALITY_DOMAIN);
   const family = name => qualities.filter(entity => entity.family === name).sort(byScore).slice(0, 4).map(entity => {
     const source = profileEntities.find(item => item.ref === entity.ref) || entity;
+    const lift = entity.lift ?? source.lift;
     return { name: entity.name, works: (source.examples || entity.examples || []).slice(0, 3), domains: (source.domains || entity.domains || []).map(domain => DOMAIN_LABELS[domain] || domain),
-      ...status(entity) };
+      ...(typeof lift === 'number' ? { lift } : {}), ...status(entity) };
   });
   const tags = domain => entities.filter(entity => entity.domain === domain).sort(byScore).slice(0, 6).map(mark);
   const worlds = {};
@@ -46,7 +52,7 @@ export function buildTasteBrief({ plan, profile, input, segments = [], cache = n
   for (const quality of qualities) {
     const source = profileEntities.find(item => item.ref === quality.ref) || quality;
     const brands = brandCarried(source, profileEntities);
-    if (brands) cautions.push(`${quality.name} is carried mostly by brands (${brands.join(', ')}): it may describe their products' design more than this audience's eye.`);
+    if (brands) cautions.push(`${quality.name} is carried mostly by brands (${brands.join(', ')}): it is the design this audience sees every day. Translate the genre of that design, such as broadcast graphics, packaging type or signage, never a brand's logo, mascot, exact colours or products.`);
   }
   for (const seed of profile?.seeds || []) if (seed.resolution === 'unresolved') cautions.push(`"${seed.name}" was not found in Qloo: ${seed.limitation || 'it did not contribute.'}`);
   for (const segment of segments) if (!segment.audienceId) cautions.push(`The audience "${segment.query}" matched no Qloo audience segment, so it did not contribute.`);
@@ -57,8 +63,8 @@ export function buildTasteBrief({ plan, profile, input, segments = [], cache = n
   const pacing = tags('style'), surfaces = tags('aesthetic'), tone = tags('tone'), artStyles = entities.filter(entity => entity.domain === ART_STYLE_DOMAIN).sort(byScore).slice(0, 4).map(mark);
   const strip = value => value.replace(/ \((?:new|predicted)\)$/u, '');
   const layers = {
-    palette: `Anchor to a look quality: ${names(look.map(item => item.name))}. The works are evidence of it; never use a brand's or team's own colors, logo or packaging.`,
-    typography: `Anchor to a look or mood quality: ${names([...look.slice(0, 2), ...mood.slice(0, 2)].map(item => item.name))}.`,
+    palette: `Anchor to a look quality: ${names(look.map(item => item.name))}. Translate it through a visual convention your reading names for the works that carry it; never a brand's or team's logo, mascot, exact colors or packaging.`,
+    typography: `Anchor to a look or mood quality: ${names([...look.slice(0, 2), ...mood.slice(0, 2)].map(item => item.name))}, set as the type of a convention your reading names, such as title cards, sleeves or signage of these works' genre.`,
     motion: `Pacing: ${names(pacing.map(strip))}${tone.length ? `; tone: ${names(tone.slice(0, 3).map(strip))}` : ''}.`,
     imagery: `Surfaces: ${names([...surfaces.map(strip), ...artStyles.map(strip)])}. Describe pictures by these qualities, never by a work's name.`,
     voice: `Tone: ${names(tone.map(strip))}; mood: ${names(mood.map(item => item.name))}. Write your own lines; never quote lyrics, dialogue or slogans.`,
@@ -84,7 +90,7 @@ export function buildTasteBrief({ plan, profile, input, segments = [], cache = n
     requiredAnchors: anchors,
     ...(cautions.length ? { cautions: [...new Set(cautions)].slice(0, 8) } : {}),
     layers,
-    rules: 'Qloo measured entities, tags and their relationships; every color, font, layout, motion or line you derive from them is your interpretation. Cite them by the names listed here. A device anchored to a work names, in its qualities, the tags of that work it translates. Use or reject each required anchor with a reason, and let the surprises move the design away from your frozen sketch.',
+    rules: 'Qloo measured entities, tags and their relationships; every color, font, layout, motion or line you derive from them is your interpretation. Cite them by the names listed here. A quality\'s lift is how many times more often this audience\'s works carry it than the works of other measured audiences: the higher, the more it is this audience\'s own. A device anchored to a work names, in its qualities, the tags of that work it translates. Use or reject each required anchor with a reason, and let the surprises move the design away from your frozen sketch.',
     files,
   };
   return fitBrief(brief);
@@ -111,8 +117,8 @@ export function buildBaselineBrief({ plan, input, files = {} }) {
     status: 'baseline', source: 'your own prediction', measured: { requests: 0 },
     qualities, tags: { pacing, surfaces, tone }, worlds, requiredAnchors: anchors,
     layers: {
-      palette: `Anchor to one of your predicted qualities: ${list(qualities)}.`,
-      typography: `Anchor to a predicted quality: ${list(qualities.slice(0, 4))}.`,
+      palette: `Anchor to one of your predicted qualities: ${list(qualities)}. Translate it through a visual convention your reading names for your predicted works; never a brand's or team's logo, mascot, exact colors or packaging.`,
+      typography: `Anchor to a predicted quality: ${list(qualities.slice(0, 4))}, set as the type of a convention your reading names.`,
       motion: `Your predicted pacing: ${list(pacing)}.`,
       imagery: `Your predicted surfaces: ${list(surfaces)}.`,
       voice: `Your predicted tone: ${list(tone)}. Write your own lines.`,

@@ -12,7 +12,7 @@ import { normalizeProductionPlan, generationAllowance } from './plan.mjs';
 import { normalizeReview } from './review.mjs';
 import { inspectBrowser, verifyBrowser, serveDirectory, captureViews } from './capture.mjs';
 import { inspectCodex, createCodexImageGenerator, buildImagePrompt, IMAGE_ASPECTS, ImageRequestError } from './images.mjs';
-import { loadFontLibrary, fontLibraryRoot } from './fonts.mjs';
+import { loadFontLibrary, fontLibraryRoot, fontWordMatch } from './fonts.mjs';
 import { ProjectScopeError, projectRoot, resolveInProject, relativePath, readState, writeState, STATE_DIR } from './project-files.mjs';
 
 export const MEDIUM_IDS = Object.freeze(listMedia().map(medium => medium.id));
@@ -31,7 +31,7 @@ export const PRODUCTION_TOOLS = Object.freeze([
   },
   {
     name: 'culture_validate_reading',
-    description: 'Production stage 1, after the taste input and before the DNA. Validate a taste reading: {schemaVersion:"1.0", clusters:[2-4 {id, name, refs:[2-8 refs, one a quality], layers:[1-4], reading}], setAside:[{ref, reason}], approach}. Each cluster rests on a quality (a measured one in a measured run), every required anchor is clustered or set aside (at most two set aside), at least one cluster gathers a surprise when there are surprises, and the clusters carry the medium\'s required layers. Pass the valid reading to culture_validate_design_dna.',
+    description: 'Production stage 1, after the taste input and before the DNA. Validate a taste reading: {schemaVersion:"1.0", clusters:[2-4 {id, name, refs:[2-8 refs, one a quality], layers:[1-4], reading, conventions:[1-3 visual conventions its works share as a genre or medium, never the marks of one brand]}], setAside:[{ref, reason}], approach}. Each cluster rests on a quality (a measured one in a measured run), every required anchor is clustered or set aside (at most two set aside), at least one cluster gathers a surprise when there are surprises, and the clusters carry the medium\'s required layers. Pass the valid reading to culture_validate_design_dna.',
     inputSchema: { type: 'object', properties: { reading: ARTIFACT(10), tasteInput: TASTE_INPUT, medium: MEDIUM }, required: ['reading', 'tasteInput'], additionalProperties: false },
     annotations: READ_ONLY,
   },
@@ -44,7 +44,7 @@ export const PRODUCTION_TOOLS = Object.freeze([
   },
   {
     name: 'culture_find_materials',
-    description: 'Search the open-licence (SIL OFL 1.1) font library this plugin carries, by words for the character you want, such as condensed, warm, editorial or typewriter. Returns every family ranked by how many words its category and character share, with weights and the system fonts it stands in for. Pass forDna as fonts to culture_validate_design_dna so typography names only these families.',
+    description: 'Search the open-licence (SIL OFL 1.1) font library this plugin carries, by words for the character you want, such as broadcast, varsity, blackletter, screenplay or Y2K. Returns every family ranked by how many words its category and character share, with weights and the system fonts it stands in for. Pass forDna as fonts to culture_validate_design_dna so typography names only these families.',
     inputSchema: { type: 'object', properties: {
       kind: { type: 'string', enum: ['fonts'] },
       words: { type: 'array', maxItems: 8, items: { type: 'string', minLength: 2, maxLength: 40 } },
@@ -95,10 +95,7 @@ export class ProductionToolError extends Error {
   constructor(code, message, retryable = false) { super(message); this.name = 'ProductionToolError'; this.code = code; this.retryable = retryable; }
 }
 
-const stemMatch = (word, value) => {
-  const a = normalizeTasteName(word), b = normalizeTasteName(value);
-  return Boolean(a && b) && (b.split(' ').includes(a) || (a.length >= 5 && b.split(' ').some(part => part.length >= 5 && part.slice(0, 5) === a.slice(0, 5))));
-};
+const stemMatch = fontWordMatch;
 
 /** The devices a plan needs: IDs, layers and anchors from the DNA as given, tokens as the medium checks them. */
 function planDna(raw, profile) {

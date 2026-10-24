@@ -14,6 +14,7 @@ import { serveDirectory, captureShots } from '../production/capture.mjs';
 import { TASTE_QUESTIONS } from '../taste/questions.mjs';
 import { sealHolds } from '../taste/seal.mjs';
 import { collectProjectFiles, detectDesignSystem } from './systems.mjs';
+import { HOUSE_STYLE, houseStyleReport } from './house-style.mjs';
 
 export const REPORT_SCHEMA_VERSION = '1.0';
 /** Where the reports go inside a design folder's .mousa: one session's, and a comparison's in the project folder. */
@@ -34,6 +35,7 @@ const KIND_LABELS = Object.freeze({ session: 'Design with Qloo', baseline: 'Desi
 const MARK_LABELS = Object.freeze({ new: 'new', predicted: 'predicted', brief: 'from the brief', own: 'own prediction', unknown: '' });
 const LAYER_ORDER = Object.freeze(['palette', 'typography', 'imagery', 'motion', 'voice', 'layout', 'structure', 'interaction']);
 const STATUS_LABELS = Object.freeze({ present: 'In the files', partial: 'Partly in the files', missing: 'Not in the files' });
+const HOUSE_LABELS = new Map(HOUSE_STYLE.map(item => [item.id, item.label]));
 const GENERIC_FONTS = new Set(['serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'ui-serif', 'ui-sans-serif', 'ui-monospace', 'ui-rounded', 'emoji', 'math']);
 const QUESTION_ASKS = new Map(TASTE_QUESTIONS.map(question => [question.id, question.ask]));
 const ANSWER_LABELS = Object.freeze({ worlds: '', surprises: 'Not predicted', confirmed: 'Predicted and measured', predictedButNotMeasured: 'Predicted, not measured',
@@ -55,10 +57,16 @@ export async function readRecords(folder) {
   if (!root) return null;
   const saved = Object.fromEntries(await Promise.all(Object.entries(RECORDS).map(async ([key, name]) => [key, await readState(root, name).catch(() => null)])));
   if (!saved.input && !saved.prediction) return legacyRecords(root);
-  return { root, legacy: false, medium: saved.dna?.medium || saved.reading?.medium || saved.production?.medium || null, plan: saved.plan, prediction: saved.prediction,
+  const medium = saved.dna?.medium || saved.reading?.medium || saved.production?.medium || null;
+  return { root, legacy: false, medium, plan: saved.plan, prediction: saved.prediction,
     input: saved.input, brief: saved.brief, decisions: saved.decisions?.decisions || [], reading: saved.reading?.reading || null, dna: saved.dna?.dna || null,
     production: saved.production?.plan || null, reviews: saved.reviews?.reviews || [], check: saved.check, captures: saved.captures?.captures || [],
-    images: saved.images?.images || [], usage: saved.usage };
+    images: saved.images?.images || [], usage: saved.usage, houseStyle: await finalHouseStyle(root, medium) };
+}
+
+/** The default-look signatures of the design as it stands, read from its files: pages only. */
+async function finalHouseStyle(root, medium) {
+  return ['web', 'app-ui'].includes(medium) ? houseStyleReport(await collectProjectFiles(root)) : null;
 }
 
 async function legacyRecords(root) {
@@ -69,7 +77,8 @@ async function legacyRecords(root) {
   // The earlier surface kept the agent's own names in the taste input with their refs, so the entries come from there.
   const own = input.entities.filter(entity => entity.source === 'model-assumption');
   const prediction = assumption ? { audienceSummary: assumption.audienceSummary, entries: own.map(entity => ({ id: entity.ref, domain: entity.domain, name: entity.name })), designSketch: assumption.designSketch || null } : null;
-  return { root, legacy: true, medium: detectDesignSystem(await collectProjectFiles(root)).medium, plan: null, prediction, input, brief: null, decisions: [], reading,
+  const medium = detectDesignSystem(await collectProjectFiles(root)).medium;
+  return { root, legacy: true, medium, houseStyle: await finalHouseStyle(root, medium), plan: null, prediction, input, brief: null, decisions: [], reading,
     dna: dna && Array.isArray(dna.devices) ? { ...dna, stats: designDnaStats(dna, input) } : null, production, reviews: Array.isArray(review?.rounds) ? review.rounds : [],
     check: null, captures: (await readState(root, 'captures').catch(() => null))?.captures || [], images: [], usage: null };
 }
@@ -180,7 +189,7 @@ function measuredOf(records) {
   if (!qloo.length) return null;
   const order = briefOrder(records.brief);
   const qualities = Object.fromEntries(['look', 'mood', 'meaning'].map(family => [family, ranked(qloo.filter(entity => entity.domain === QUALITY_DOMAIN && entity.family === family), order).slice(0, 5)
-    .map(entity => ({ ...chipOf(entity), works: (entity.examples || []).slice(0, 3), domains: (entity.domains || []).map(domain => DOMAIN_LABELS[domain] || domain) }))]));
+    .map(entity => compact({ ...chipOf(entity), works: (entity.examples || []).slice(0, 3), domains: (entity.domains || []).map(domain => DOMAIN_LABELS[domain] || domain), lift: entity.lift ?? null }))]));
   const tags = Object.fromEntries([['pacing', 'style'], ['surfaces', 'aesthetic'], ['tone', 'tone'], ['artStyles', ART_STYLE_DOMAIN]]
     .map(([key, domain]) => [key, ranked(qloo.filter(entity => entity.domain === domain), order).slice(0, 6).map(chipOf)]).filter(([, list]) => list.length));
   const worlds = [];
@@ -203,7 +212,7 @@ function measuredOf(records) {
 function readingOf(records, name) {
   const reading = records.reading;
   if (!reading) return null;
-  return compact({ clusters: (reading.clusters || []).map(cluster => compact({ id: cluster.id, name: cluster.name, reading: cluster.reading, layers: cluster.layers || [],
+  return compact({ clusters: (reading.clusters || []).map(cluster => compact({ id: cluster.id, name: cluster.name, reading: cluster.reading, layers: cluster.layers || [], conventions: cluster.conventions || [],
     refs: (cluster.refs || []).map(name), surprise: cluster.surprise || (cluster.refs || []).some(ref => name(ref).mark === 'new') || null })),
     setAside: (reading.setAside || []).map(item => ({ ...name(item.ref), reason: item.reason })), approach: reading.approach || null });
 }
@@ -233,7 +242,7 @@ function dnaOf(records, name, sketch, pictures) {
     const anchors = (device.anchors || []).map(name), step = steps.get(device.id), status = checked.get(device.id);
     const moved = movedOf(device, sketch);
     const shown = pictures.filter(picture => picture.device === device.id || (device.tokens?.images || []).includes(picture.path));
-    return compact({ id: device.id, layer: device.layer, device: device.device, anchors, qualities: device.qualities || [], translation: device.translation,
+    return compact({ id: device.id, layer: device.layer, device: device.device, anchors, qualities: device.qualities || [], translation: device.translation, convention: device.convention?.text || null,
       tokens: tokensOf(device.tokens), surprise: Boolean(device.surprise ?? anchors.some(anchor => anchor.mark === 'new')),
       moved: moved && (moved.colors.length || moved.fonts.length || moved.ids.length) ? moved : null,
       method: step?.method || null, why: step?.why || null, cluster: step?.cluster ? clusters.get(step.cluster) || step.cluster : null, count: step?.count || null,
@@ -314,7 +323,12 @@ function reviewsOf(records) {
     const criteria = (review.criteria || []).map(item => compact({ id: item.id, device: item.device || looks.get(item.id)?.device || null, look: looks.get(item.id)?.look || null,
       capture: item.capture || null, verdict: item.verdict, observed: item.observed, repair: item.repair || null }));
     const stats = review.stats || { met: criteria.filter(item => item.verdict === 'met').length, partly: criteria.filter(item => item.verdict === 'partly').length, missed: criteria.filter(item => item.verdict === 'missed').length };
-    return compact({ round: review.round, summary: review.summary || null, met: stats.met ?? 0, partly: stats.partly ?? 0, missed: stats.missed ?? 0, criteria });
+    const names = new Map((records.input?.entities || []).map(entity => [entity.ref, entity.name]));
+    const critique = review.critique ? { generic: review.critique.generic.map(item => compact({ choice: item.choice, capture: item.capture, action: item.action,
+      signature: item.signature ? HOUSE_LABELS.get(item.signature) || item.signature : null, anchor: item.anchor ? names.get(item.anchor) || item.anchor : null })),
+      fan: { works: review.critique.fan.works, verdict: review.critique.fan.verdict, why: review.critique.fan.why } } : null;
+    return compact({ round: review.round, summary: review.summary || null, met: stats.met ?? 0, partly: stats.partly ?? 0, missed: stats.missed ?? 0, criteria, critique,
+      houseStyle: review.houseStyle ? review.houseStyle.signatures.length : null });
   });
 }
 
@@ -322,7 +336,19 @@ function checkOf(records) {
   const check = records.check;
   if (!check) return null;
   const devices = (check.devices || []).map(item => ({ id: item.id, status: item.status }));
-  return compact({ score: check.score, system: check.system || null, present: devices.filter(item => item.status === 'present').length, devices, style: check.style || null });
+  return compact({ score: check.score, system: check.system || null, present: devices.filter(item => item.status === 'present').length, devices, style: check.style || null,
+    houseStyle: check.houseStyle ? { signatures: check.houseStyle.signatures.map(id => HOUSE_LABELS.get(id) || id), limit: check.houseStyle.limit } : null });
+}
+
+/**
+ * The default-look signatures the page carries: read from its files when the report is written, or else the last
+ * review's or check's. Null for a medium that is not read for them.
+ */
+function houseStyleOf(records) {
+  const reviewed = [...(records.reviews || [])].sort((a, b) => a.round - b.round).at(-1)?.houseStyle, checked = records.check?.houseStyle;
+  // The design's own files as they stand come first: repairs after the last review change them.
+  const found = records.houseStyle ? { signatures: records.houseStyle.signatures.map(item => item.id), limit: records.houseStyle.limit } : reviewed || checked;
+  return found ? { signatures: found.signatures.map(id => HOUSE_LABELS.get(id) || id), count: found.signatures.length, of: HOUSE_STYLE.length, limit: found.limit } : null;
 }
 
 function limitsOf(kind, records) {
@@ -386,7 +412,7 @@ export function provenance(records, { host = null, version = null, now = Date.no
     surface: records.legacy ? 'earlier tool surface (0.4)' : null, medium: records.medium, taste: measuredRun ? 'qloo' : 'own prediction',
     title: titleOf(audience), audience, headline: headlineOf(kind, dna, measured, prediction), numbers: numbersOf(kind, measured, dna, prediction),
     prediction, measured, reading: readingOf(records, name), dna, departure: departureOf(records, sketch), decisions: decisionsOf(records),
-    reviews: reviewsOf(records), captures: capturesOf(records, prefix), pictures, check: checkOf(records), limits: limitsOf(kind, records),
+    reviews: reviewsOf(records), captures: capturesOf(records, prefix), pictures, check: checkOf(records), houseStyle: houseStyleOf(records), limits: limitsOf(kind, records),
   });
   const names = new Map((records.input?.entities || []).map(entity => [entity.ref, entity.name]));
   return scrubDeep(record, text => scrubText(text, { names, user }));
@@ -483,7 +509,7 @@ function measuredSection(record) {
   const measured = record.measured;
   if (!measured) return '';
   const families = Object.entries(measured.qualities || {}).filter(([, list]) => list.length).map(([family, list]) => `<div class="mr-card"><p class="mr-label">${escape(capital(family))} qualities</p>
-<ul class="mr-qualities">${list.map(item => `<li>${chip({ ...item, kind: null })}${item.works?.length ? `<span class="mr-works">in ${escape(listText(item.works))}</span>` : ''}</li>`).join('')}</ul></div>`).join('');
+<ul class="mr-qualities">${list.map(item => `<li>${chip({ ...item, kind: null })}${item.works?.length ? `<span class="mr-works">in ${escape(listText(item.works))}${item.lift ? ` · ×${escape(item.lift)} as often as across audiences` : ''}</span>` : ''}</li>`).join('')}</ul></div>`).join('');
   const tagLabels = { pacing: 'Pacing', surfaces: 'Surfaces', tone: 'Tone', artStyles: 'Art styles' };
   const tags = Object.entries(measured.tags || {}).map(([key, list]) => `<div class="mr-row"><p class="mr-label">${escape(tagLabels[key] || key)}</p>${chips(list.map(item => ({ ...item, kind: null })))}</div>`).join('');
   const worlds = (measured.worlds || []).map(world => `<div class="mr-card mr-world"><p class="mr-label">${escape(world.label)}</p><ul>${world.works.map(work => `<li>${chip({ ...work, kind: null })}${work.tags?.length ? `<span class="mr-works">${escape(work.tags.join(' · '))}</span>` : ''}</li>`).join('')}</ul></div>`).join('');
@@ -496,7 +522,7 @@ function readingSection(record) {
   const reading = record.reading;
   if (!reading?.clusters?.length) return '';
   const clusters = reading.clusters.map(cluster => `<div class="mr-card mr-cluster"><p class="mr-label">${escape(cluster.id)} · carries ${escape(listText(cluster.layers || []))}</p><h3>${escape(cluster.name)}</h3>
-<p class="mr-interp"><b>Interpretation</b>${escape(cluster.reading)}</p>${chips(cluster.refs)}</div>`).join('');
+<p class="mr-interp"><b>Interpretation</b>${escape(cluster.reading)}</p>${cluster.conventions?.length ? `<p class="mr-label">How these works look, as a genre</p><ul class="mr-conventions">${cluster.conventions.map(item => `<li>${escape(item)}</li>`).join('')}</ul>` : ''}${chips(cluster.refs)}</div>`).join('');
   const aside = reading.setAside?.length ? `<div class="mr-note"><p class="mr-label">Set aside as noise</p><ul>${reading.setAside.map(item => `<li>${chip(item)} ${escape(item.reason)}</li>`).join('')}</ul></div>` : '';
   return section('reading', 'How the agent read it', 'Before deciding anything, the agent grouped what belongs together. Each cluster rests on a quality; the works are its evidence.',
     `<div class="mr-grid two">${clusters}</div>${reading.approach ? `<p class="mr-approach"><span class="mr-label">How the medium carries it</span>${escape(reading.approach)}</p>` : ''}${aside}`);
@@ -524,7 +550,7 @@ function dnaSection(record, { base, fonts }) {
     const moved = device.moved ? [device.moved.colors.length ? `${device.moved.colors.length} colour${device.moved.colors.length === 1 ? '' : 's'}` : null, device.moved.fonts.length ? `${device.moved.fonts.length} type famil${device.moved.fonts.length === 1 ? 'y' : 'ies'}` : null,
       device.moved.ids.length ? `${device.moved.ids.length} new part${device.moved.ids.length === 1 ? '' : 's'}` : null].filter(Boolean) : [];
     return `<article class="mr-device"${device.surprise ? ' data-surprise="true"' : ''}><div class="mr-device-top"><span class="mr-layer">${escape(device.layer)} · ${escape(device.id)}</span>${device.check ? `<span class="mr-status" data-status="${escape(device.check)}">${escape(STATUS_LABELS[device.check] || device.check)}</span>` : ''}</div>
-<h3>${escape(device.device)}</h3><div><p class="mr-label">Anchored to</p>${chips(device.anchors)}</div>${device.qualities?.length ? `<p class="mr-small">Translates: ${escape(device.qualities.join(' · '))}</p>` : ''}
+<h3>${escape(device.device)}</h3><div><p class="mr-label">Anchored to</p>${chips(device.anchors)}</div>${device.qualities?.length ? `<p class="mr-small">Translates: ${escape(device.qualities.join(' · '))}</p>` : ''}${device.convention ? `<p class="mr-small">Through the convention: ${escape(device.convention)}</p>` : ''}
 <p class="mr-interp"><b>Interpretation</b>${escape(device.translation)}</p>${deviceTokens(device, { base, fonts, sample })}
 ${device.method ? `<p class="mr-method">Made with <b>${escape(device.method)}</b>${device.count ? ` ×${escape(device.count)}` : ''}${device.cluster ? ` for “${escape(device.cluster)}”` : ''}${device.why ? `: ${escape(device.why)}` : ''}</p>` : ''}
 ${moved.length ? `<p class="mr-moved">Away from the sketch: ${escape(listText(moved))}</p>` : ''}</article>`;
@@ -581,16 +607,25 @@ function reviewSection(record) {
     return `<div class="mr-round"><p><b>Round ${escape(review.round)}</b>: ${escape(review.met)} met, ${escape(review.partly)} partly, ${escape(review.missed)} missed.${review.summary ? ` ${escape(review.summary)}` : ''}</p>${open.length ? criteriaBlock(open) : ''}</div>`;
   }).join('');
   return section('review', 'The review', 'The agent judged each criterion of its plan on the captures it took, then repaired what fell short. The verdicts are its own.',
-    `${last.summary ? `<p class="mr-approach mr-first">${escape(last.summary)}</p>` : ''}${criteriaBlock(last.criteria)}${earlier ? `<div class="mr-earlier"><p class="mr-label">What earlier rounds found short, and the repairs</p>${earlier}</div>` : ''}`);
+    `${last.summary ? `<p class="mr-approach mr-first">${escape(last.summary)}</p>` : ''}${criteriaBlock(last.criteria)}${critiqueBlock(last.critique)}${earlier ? `<div class="mr-earlier"><p class="mr-label">What earlier rounds found short, and the repairs</p>${earlier}</div>` : ''}`);
+}
+
+/** The critique of a round: the three most generic choices and what became of each, and the fan's verdict. */
+function critiqueBlock(critique) {
+  if (!critique) return '';
+  const generic = critique.generic.map(item => `<li><span class="mr-verdict" data-verdict="${item.action === 'replaced' ? 'partly' : 'met'}">${escape(item.action)}</span> ${escape(item.choice)}${item.signature ? ` <span class="mr-small">(${escape(item.signature)})</span>` : ''}${item.anchor ? ` <span class="mr-small">kept for ${escape(item.anchor)}</span>` : ''}</li>`).join('');
+  return `<div class="mr-card mr-critique"><p class="mr-label">Its three most generic choices, by its own eye</p><ul>${generic}</ul>
+<p><span class="mr-label">Would someone who loves ${escape(listText(critique.fan.works))} take it for theirs?</span><b>${escape(critique.fan.verdict)}</b>: ${escape(critique.fan.why)}</p></div>`;
 }
 
 function checkSection(record) {
   const check = record.check;
   if (!check) return '';
   const style = check.style?.atStart && check.style?.now ? `<p class="mr-small">Styling at the start: ${escape(check.style.atStart.handWritten)} hand-written declarations and ${escape(check.style.atStart.classes)} classes; now ${escape(check.style.now.handWritten)} and ${escape(check.style.now.classes)}.</p>` : '';
-  return section('check', 'The check', 'Whether each device\'s declared tokens are in the project\'s files, through its own design system.',
+  const house = record.houseStyle ? `<p class="mr-small">The look models default to: ${escape(record.houseStyle.count)} of its ${escape(record.houseStyle.of)} signatures on the page${record.houseStyle.count ? ` (${escape(listText(record.houseStyle.signatures))})` : ''}; at most ${escape(record.houseStyle.limit)} may stay.</p>` : '';
+  return section('check', 'The check', 'Whether each device\'s declared tokens are in the project\'s files, through its own design system, and how much of the look models default to the page kept.',
     `<div class="mr-card"><p class="mr-check"><b>${escape(Number(check.score).toFixed(2))}</b> conformance · ${escape(check.present)} of ${escape(check.devices.length)} devices in the files${check.system ? ` · design system: ${escape(check.system)}` : ''}</p>
-<div class="mr-codes">${check.devices.map(item => `<span class="mr-code" data-status="${escape(item.status)}">${escape(item.id)} ${escape(item.status)}</span>`).join('')}</div>${style}</div>`);
+<div class="mr-codes">${check.devices.map(item => `<span class="mr-code" data-status="${escape(item.status)}">${escape(item.id)} ${escape(item.status)}</span>`).join('')}</div>${style}${house}</div>`);
 }
 
 const limitsSection = record => section('limits', 'Limits', '', `<ul class="mr-limits">${(record.limits || []).map(item => `<li>${escape(item)}</li>`).join('')}</ul>`);
@@ -613,7 +648,7 @@ function comparisonSections(record, { base = '', fonts = [] } = {}) {
   const band = `<div class="mr-headline"><div><p class="mr-big">${escape(record.headline.value)}</p><p class="mr-big-text">${escape(record.headline.text)}</p>
 <p class="mr-parts">${parts.map(([key, label]) => record.distance?.[key] !== undefined ? `<span><b>${escape(Number(record.distance[key]).toFixed(2))}</b> ${escape(label)}</span>` : '').join('')}</p></div>
 <div class="mr-numbers">${record.arms.map(arm => `<p class="mr-number"><b>${escape(arm.headline?.value ?? '')}</b><span>${escape(arm.label)}: ${escape(arm.headline?.text ?? '')}</span></p>`).join('')}
-<p class="mr-number"><b>${record.samePrediction ? 'Same' : 'Different'}</b><span>frozen prediction in both arms</span></p></div></div>`;
+<p class="mr-number"><b>${record.samePrediction ? 'Same' : 'Different'}</b><span>frozen prediction in both arms</span></p>${record.records.every(arm => arm.houseStyle) ? `<p class="mr-number"><b>${record.records.map(arm => escape(arm.houseStyle.count)).join(' · ')}</b><span>signatures of the look models default to, of ${escape(record.records[0].houseStyle.of)}: ${record.arms.map(arm => escape(arm.label)).join(' · ')}</span></p>` : ''}</div></div>`;
   const views = record.views.length ? section('side-by-side', 'Side by side', 'The last reviewed captures of each arm, paired by what they show.', record.views.map(view => `<div class="mr-pair-view"><p class="mr-label">${escape(view.label)}</p><div class="mr-pair">${[[a, view.a], [b, view.b]].map(([arm, capture]) =>
     `<figure class="mr-shot">${capture ? `<img src="${asset(base, capture.file)}" alt="${escape(`${arm.label}: ${capture.label}`)}" width="${escape(capture.width)}" height="${escape(capture.height)}">` : '<div class="mr-missing">No capture of this view</div>'}<figcaption>${escape(arm.label)}</figcaption></figure>`).join('')}</div></div>`).join('')) : '';
   const prediction = predictionSection({ ...record, kind: 'session' });
@@ -623,7 +658,7 @@ function comparisonSections(record, { base = '', fonts = [] } = {}) {
   const reviews = section('reviews', 'Each arm\'s own review', 'The agent of each arm judged its own captures against its own plan.', `<div class="mr-grid two">${record.records.map((arm, index) => {
     const last = (arm.reviews || []).at(-1);
     return `<div class="mr-card"><p class="mr-label">${escape(record.arms[index].label)}</p>${last ? `<p><b>Round ${escape(last.round)}</b>: ${escape(last.met)} met, ${escape(last.partly)} partly, ${escape(last.missed)} missed.</p>${last.summary ? `<p class="mr-small">${escape(last.summary)}</p>` : ''}` : '<p class="mr-small">No review recorded.</p>'}
-${arm.check ? `<p class="mr-small">Check: ${escape(Number(arm.check.score).toFixed(2))}, ${escape(arm.check.present)} of ${escape(arm.check.devices.length)} devices in the files.</p>` : ''}${record.arms[index].link ? `<p><a href="${escape(record.arms[index].link)}">${escape(record.arms[index].label)}: the full report</a></p>` : ''}</div>`;
+${arm.check ? `<p class="mr-small">Check: ${escape(Number(arm.check.score).toFixed(2))}, ${escape(arm.check.present)} of ${escape(arm.check.devices.length)} devices in the files.</p>` : ''}${arm.houseStyle ? `<p class="mr-small">The look models default to: ${escape(arm.houseStyle.count)} of ${escape(arm.houseStyle.of)} signatures${arm.houseStyle.count ? ` (${escape(listText(arm.houseStyle.signatures))})` : ''}.</p>` : ''}${record.arms[index].link ? `<p><a href="${escape(record.arms[index].link)}">${escape(record.arms[index].label)}: the full report</a></p>` : ''}</div>`;
   }).join('')}</div>`);
   return [head, band, views, prediction, measured, layers, reviews, limitsSection(record)].join('\n');
 }
