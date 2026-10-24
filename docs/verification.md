@@ -4,6 +4,50 @@ This record describes the tested scope of the local application. It does not est
 
 The reports it names under `output/` stay on the machine that made them. Several hold Qloo's answers, which the public repository does not.
 
+## Out of the house style: 0.7 — October 24, 2026
+
+**The finding.** The showcase of October 23 was built for an audience of sports leagues, hip-hop and sports documentaries. It came out as the look models give any page: a warm cream ground, Instrument Serif with one italic word in clay, small uppercase monospace labels after a short rule, numbered cards and pill buttons. The causes were in Moûsa:
+- **Shared qualities ranked by spread.** Intimate and Atmospheric were derived for 13 of the benchmark's 20 audiences.
+- **Required anchors that followed the ranking.** The showcase's were Intimate, Emotional and Reflective, and three works tagged Intimate.
+- **A look tied to adjectives.** Palette and type had to anchor to a quality, and a work's visual world was never a source. The brief also cautioned against the one look quality that carried the audience's own media, Bold Typography from the NFL, ESPN and Gatorade.
+- **A departure rule that measured distance only from the sketch.**
+- **A font library built around the same canon.**
+- **A review that judged fidelity only.**
+
+**What changed** (commits 9060779 and 99bcad2; the server reports 0.7.0):
+- **Qualities rank by lift.** Lift is how many times more often this audience's works carry a tag than the works of 28 measured audiences do (`scripts/build-quality-base-rates.mjs`). Left out one audience at a time, the share of family leaders that are near-universal tags fell from 58% to 21%.
+- **Required works are the most central of the five each domain loves most.** A look carried by brands is to be translated as a genre, never as marks.
+- **The reading names 1-3 conventions per cluster.** These are how its works look as a genre or medium; the palette or type translates one.
+- **`design_check` finds twelve habits of the default looks.** A page keeps at most two, and the review is refused over the limit.
+- **The review carries a critique.** It names three generic choices, each kept only for an anchor of the DNA, and records a fan's verdict.
+- **The font library grew from 33 to 55 families.** Ten candidates were dropped because their licences reserve their own names. The families models default to are marked overused.
+
+**Offline.**
+- **Tests:** 550 pass, with Chrome for the capture tests.
+- **The detector on the gallery's 0.6 pages.** The twelve Qloo arms and single sessions carried a mean of 2.75 of the 12 signatures, from 0 (the record shop of October 14) to 7 (the first showcase). The seven guess-only arms carried a mean of 3.1. With 0.7 the means are 0.2 and 1.0 (table below).
+
+**Live with 0.7: four comparisons and one session.**
+
+| Run | Time | Qloo requests | Distance (0.6 run) | Signatures, With Qloo / Without |
+| --- | --- | --- | --- | --- |
+| The showcase, Claude Code | 10.6 min | 15 | 0.63 (0.60) | 0 / 1 (7 / 3) |
+| The Lamplight, Claude Code | 8.4 min | 14 | 0.62 (0.40) | 0 / 1 |
+| Second Drink, Claude Code | 9.2 min | 14 | 0.69 (0.55) | 1 / 1 |
+| The record shop, Kiro try `34996ba4` | 6 min, 58 credits | 12 | 0.65 (0.60) | 0 / 1 |
+| Second Drink, Codex, one session | 6.1 min | 14 | – | 0 |
+
+- **The showcase's Qloo arm** read its audience through sports-drink packaging, nutrition-facts panels, observational documentary, a kitchen table under one lamp, tailoring and training logs. It became "Made to measure. Not off the rack.": Archivo Black, volt on cloth grey, and a tape measure for a header.
+- **The record shop's Qloo arm** led with Raw, Lo-Fi and Experimental, where 0.6 led with Atmospheric and Minimalist, and translated photocopied cassette and zine inlays.
+- **Every arm reviewed two rounds with a critique.** Replaced choices included "a split hero with a big headline on the left and an illustration on the right, the standard landing-page opener", "a stock call-to-action row" and "two radial colour glows, the ambient-dark look any moody landing page uses".
+- **The one signature on every guess-only arm is the twelfth:** a near-black page lit by one amber accent. It joined the catalogue after these runs had started, from this very review.
+- **All twelve comparisons in the gallery keep their arms apart** (`scripts/verify-comparison-arms.mjs`). The Lamplight's first result was a false alarm: a parent's read-only fact check with a quoted grep pattern and `2>/dev/null` was taken for a write. Its guess-only files last changed before both arms returned.
+
+**What went wrong first.** Two Claude Code runs of this morning captured nothing. Their command did not name `MOUSA_BROWSER`, and the engine fell back to Edge, which cannot capture headless here. They are kept aside as `claude-code-showcase-compare-nocapture-2` and `claude-code-venue-compare-nocapture-3`, and both runners now capture a test page before a session starts.
+
+**Not shown.**
+- **Distances.** Each pair is one sample. Distances rose in all four pairs, which fits looks drawn from genres rather than defaults, but does not isolate that cause.
+- **The critique is the agent's own judgment.** Codex kept all three of its generic choices by naming anchors. A guess-only arm kept "the stock comedy-club picture" for its own predicted quality. Moûsa can require an anchor, not judge whether it truly requires the choice.
+
 ## The two arms of every comparison, kept apart — October 24, 2026
 
 **The question:** was each design shown as With Qloo made from Qloo's measurement, and each design shown as Without Qloo from the sealed guess alone, with nothing measured reaching it?

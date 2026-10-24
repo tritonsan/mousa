@@ -148,6 +148,21 @@ ${repository ? `<p class="site-small"><a class="site-link" href="${escape(protoc
 
 /** The gallery entry of Moûsa's own showcase page: a comparison Moûsa designed in Claude Code for the jury. */
 export const SHOWCASE_ID = 'showcase-claude-code';
+export const SHOWCASE_FIRST_ID = 'showcase-claude-code-first';
+
+/**
+ * The showcase's first build, when the gallery keeps it: the page built before Moûsa ranked qualities by how distinctive
+ * they are and checked the looks models default to, with the count of their signatures each Qloo arm carries.
+ */
+function firstBuild(gallery, entry) {
+  const first = gallery?.entries?.get(SHOWCASE_FIRST_ID);
+  const qlooCount = item => (Array.isArray(item?.houseStyle) ? item.houseStyle.find(arm => arm.label === 'With Qloo') : null);
+  const before = qlooCount(first), now = qlooCount(entry);
+  if (!first || !before || !now) return '';
+  return `<section class="site-section"><div class="site-head-row"><h2>The first build</h2><p>Built on 23 October, before Moûsa ranked an audience's qualities by how distinctive they are and checked the looks models default to.</p></div>
+<div class="mr-card"><p>Its Qloo arm carried <b>${escape(before.count)} of the ${escape(before.of)}</b> signatures of the look models give any page: a cream ground, an editorial serif with one italic word, monospace labels after a short rule, numbered cards, pill buttons. This build's Qloo arm carries <b>${escape(now.count)}</b>. The audience is the same; what changed is how Moûsa reads it.</p>
+<p><a class="site-link" href="/gallery/${escape(SHOWCASE_FIRST_ID)}/">Open the first build and its record</a></p></div></section>`;
+}
 
 /**
  * The showcase: the page that explains Moûsa, designed by Moûsa for its audience (the jury, described to Qloo by works
@@ -171,7 +186,7 @@ export function showcasePage({ gallery, previewBase = '', repository = '' } = {}
 <p class="site-actions">${qloo ? `<a class="site-button" href="${escape(url(qloo.path))}" target="_blank" rel="noopener noreferrer">Open the Qloo design full screen</a>` : ''}<a class="site-button quiet" href="/gallery/${escape(entry.id)}/">Read how each was made</a></p>
 ${spot ? `<p class="site-hero-stat"><b>${escape(spot.known)} of ${escape(spot.works)}</b><span>works Qloo measured for this audience were in the agent's own sealed guess.</span></p>` : ''}</section>
 <section class="site-section">${frame(qloo, true)}</section>
-${guess ? `<section class="site-section"><div class="site-head-row"><h2>The same facts, from the guess alone</h2><p>The other arm: the same brief, the same sealed guess and the same stages, with no Qloo data.</p></div>${frame(guess, false)}</section>` : ''}`;
+${guess ? `<section class="site-section"><div class="site-head-row"><h2>The same facts, from the guess alone</h2><p>The other arm: the same brief, the same sealed guess and the same stages, with no Qloo data.</p></div>${frame(guess, false)}</section>` : ''}${firstBuild(gallery, entry)}`;
   return layout({ title: 'Showcase · Moûsa', description: 'The page that explains Moûsa, designed by Moûsa for the jury, with Qloo and without.', body, active: 'showcase', repository });
 }
 

@@ -11,7 +11,7 @@ AI coding agents now make a large share of the web's new interfaces, and they de
 - Anthropic itself wrote that a model asked for a landing page without guidance almost always produces Inter, purple gradients on white and minimal animation. It called the result "immediately recognizable—and dismissible".
 
 The deeper problem is the audience. An agent asked to design "for people who love Paterson and Nujabes" designs from its own idea of those people, and that idea is never tested.
-- **In the 17 sessions we recorded** in Claude Code, Codex and Kiro, the agents' sealed guesses named 39 of the 1,151 works Qloo measured for their audiences.
+- **In the 20 sessions we recorded** in Claude Code, Codex and Kiro, the agents' sealed guesses named 45 of the 1,368 works Qloo measured for their audiences.
 - **In our pre-registered benchmark,** with 20 audiences and three agents, the sealed guesses named 6.8% (Claude Code), 6.6% (Kiro) and 4.7% (Codex) of the works Qloo measured. The predictions were public before Qloo measured anything. Claude Code and Kiro run the same model and differ by 0.2 points, so the blind spot is the model's, not the tool's.
 
 ## What it does
@@ -20,8 +20,8 @@ Moûsa is a plugin for the design agents teams already use: Claude Code, Codex a
 
 1. **Plan.** Moûsa picks the taste questions for the medium: which Qloo domains to measure and which tags.
 2. **Freeze the guess.** Before any Qloo data, the agent writes its own prediction of what the audience loves, and the design it would make from that alone. The prediction is frozen and sealed with its SHA-256.
-3. **Measure.** Moûsa asks Qloo what the audience loves in each domain, which style and aesthetic tags it carries, and which qualities its works share.
-4. **Design from the difference.** The agent writes a Design DNA: concrete devices for palette, type, motion, illustration and voice, each anchored to what Qloo measured. Moûsa checks every device in the project's own design system, and the agent reviews screenshots of its build.
+3. **Measure.** Moûsa asks Qloo what the audience loves in each domain, which style and aesthetic tags it carries, and which qualities its works share, ranked by how distinctive each is for this audience against 28 others.
+4. **Design from the difference.** The agent names how the audience's works look as a genre (broadcast score bugs, mixtape covers, photocopied zines) and writes a Design DNA: concrete devices for palette, type, motion, illustration and voice, each anchored to what Qloo measured. Moûsa checks every device in the project's own design system and flags the looks models default to; at most two of their twelve habits may stay. The agent reviews screenshots of its build, names its three most generic choices and asks whether a fan of the audience's best-loved works would take the page for theirs.
 5. **Report.** The Taste Provenance report sets the guess beside the measurement and traces every device to the names it rests on.
 
 Qloo's contribution becomes visible as a difference: what was measured, against what the agent would have assumed.
@@ -76,7 +76,7 @@ This is the live try recorded on 14 October: a record shop's website, Wax & Wane
 
 ## The evidence, and what each kind does not show
 
-1. **The blind spot.** In 17 recorded sessions, 1,112 of 1,151 measured works were not in the guesses. Anyone can recount it from the release's gallery bundle with `node scripts/blind-spot-stats.mjs`. It says nothing about the design.
+1. **The blind spot.** In 20 recorded sessions, 1,323 of 1,368 measured works were not in the guesses. Anyone can recount it from the release's gallery bundle with `node scripts/blind-spot-stats.mjs`. It says nothing about the design.
 2. **The pre-registered benchmark.** Twenty audiences and three agents: Claude Code, Codex and Kiro. The protocol and all 60 sealed predictions were committed to the public repository before Qloo measured any audience. The guesses named 6.8% (Claude Code), 6.6% (Kiro) and 4.7% (Codex) of the works Qloo measured, and 14% to 16% of the works they guessed were among those measured. Both pre-registered hypotheses held for every agent. The agents knew music and TV best (about 10%) and films, brands and books least (2% to 6%). It measures what the agents assume, not whether a design is better.
    - The protocol, one amendment and every agent's sealed prediction were committed before Qloo measured any audience.
    - Qloo's measurement is aggregate affinity, not ground truth about any person.
@@ -108,6 +108,7 @@ This is the live try recorded on 14 October: a record shop's website, Wax & Wane
   - one keyword (the hockey team LA Kings' black-and-silver palette) taking over a food shop's design until typed tags were grouped into qualities.
 
   Each finding changed the engine, and the site's Qloo page lists them.
+- **Our own showcase fell into the house style.** The page that explains Moûsa was built for an audience of sports leagues, hip-hop and sports documentaries. It came out as the look models give any page: cream paper, an editorial serif with one italic word, monospace labels, pill buttons, seven such habits on one page. The cause was ours. Qualities ranked by spread put Intimate and Atmospheric at the top of 13 of 20 benchmark audiences, and the model drew those adjectives the way it draws them for anyone. Moûsa now ranks qualities by how distinctive they are, draws the look through the works' genre conventions, finds the default looks in the files and makes the agent critique its own page. The rebuilt showcase keeps none of the habits: "Made to measure. Not off the rack.", in sports-label capitals on cloth grey.
 - **A live coding agent for six jurors.** Running one on a public server needed sessions that can only call Moûsa, write only the design's files and never see a key.
 - **Keeping Qloo's data out.** Qloo's answers stay on the machine that asked for them. A test fails the build if a Qloo id or a scored entity is committed.
 

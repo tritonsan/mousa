@@ -58,7 +58,11 @@ function walksOutside({ name, input = {} }) {
   return false;
 }
 const WRITE_TOOLS = /^(Write|Edit|MultiEdit|NotebookEdit)$/u;
-const WRITE_VERBS = /Set-Content|Out-File|Add-Content|New-Item|Copy-Item|Move-Item|Remove-Item|WriteAllText|writeFileSync|apply_patch|\b(cp|mv|rm|tee|touch)\b|\bsed\s+-i|>\s*\S/u;
+// A redirection writes a file; one of a stream into another (2>&1) or into nothing (2>/dev/null) does not, and quoted
+// text is an argument, such as a grep pattern for '<input[^>]*>'. A parent's read-only fact check with both was once
+// taken for a write into the guess-only arm.
+const WRITE_VERBS = /Set-Content|Out-File|Add-Content|New-Item|Copy-Item|Move-Item|Remove-Item|WriteAllText|writeFileSync|apply_patch|\b(cp|mv|rm|tee|touch)\b|\bsed\s+-i|(?<![\d&>])>{1,2}\s*(?!&|\/dev\/null\b)[^\s|&;]/u;
+const writes = command => WRITE_VERBS.test(String(command || '').replace(/'[^']*'|"(?:[^"\\]|\\.)*"/gu, '""'));
 
 /** The records of both arms: their sources, the shared guess, the anchors of each Design DNA. */
 export function recordChecks({ qloo, guess, shared = null }) {
@@ -132,7 +136,7 @@ export function claudeCodeChecks(lines, { measuredOnly = [], brief = '' } = {}) 
   if (sends.length) problems.push(`the parent sent ${sends.length} messages to running subagents after the call to Qloo`);
   const others = calls.filter(item => !guessIds.has(item.parent) && firstAsk && item.at > firstAsk.at).filter(({ block: { name, input = {} } }) =>
     (WRITE_TOOLS.test(name) && /without-qloo/u.test(slash(input.file_path || input.notebook_path)))
-    || (/^(Bash|PowerShell)$/u.test(name) && /without-qloo/u.test(slash(input.command)) && WRITE_VERBS.test(input.command || '')));
+    || (/^(Bash|PowerShell)$/u.test(name) && /without-qloo/u.test(slash(input.command)) && writes(input.command)));
   if (others.length) problems.push(`${others.length} writes into the Without Qloo arm by others after the call to Qloo`);
   const own = calls.filter(item => guessIds.has(item.parent)).map(item => item.block);
   const asks = own.filter(call => asksQloo(call.name, call.input));
@@ -157,7 +161,7 @@ export function codexChecks(lines, { lastGuessEdit = null, measuredAt = null } =
   const items = lines.map(line => line.item).filter(Boolean);
   const firstAsk = items.findIndex(item => item.type === 'mcp_tool_call' && asksQloo(item.tool, item.arguments));
   const writesGuess = item => (item.type === 'file_change' && (item.changes || []).some(change => /without-qloo/u.test(slash(change.path))))
-    || (item.type === 'command_execution' && /without-qloo/u.test(slash(item.command)) && WRITE_VERBS.test(item.command || ''));
+    || (item.type === 'command_execution' && /without-qloo/u.test(slash(item.command)) && writes(item.command));
   const later = firstAsk < 0 ? [] : items.filter((item, at) => at > firstAsk && item.status !== 'in_progress' && writesGuess(item));
   if (later.length) problems.push(`${later.length} writes into the Without Qloo arm after the first call to Qloo`);
   // The plugin's own files sit in Codex's plugin cache, a folder also called cache: only the project's answers count.

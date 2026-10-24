@@ -70,6 +70,13 @@ test('the showcase shows the Qloo design large and the guess-only design beneath
   const swapped = showcasePage({ gallery: g });
   assert.ok(swapped.indexOf('out/second/index.html') < swapped.indexOf('out/qloo-notes/index.html'), 'the arm labelled With Qloo comes first');
   assert.match(swapped, /<b>With Qloo<\/b>[\s\S]*<b>Without Qloo<\/b>/u);
+  // With the first build kept in the gallery, the page sets its signature count beside this build's.
+  g.entries.get(SHOWCASE_ID).play = [{ label: 'With Qloo', path: 'out/with-qloo/index.html' }, { label: 'Without Qloo', path: 'out/without-qloo/index.html' }];
+  g.entries.get(SHOWCASE_ID).houseStyle = [{ label: 'With Qloo', count: 0, of: 12 }, { label: 'Without Qloo', count: 1, of: 12 }];
+  g.entries.set('showcase-claude-code-first', { id: 'showcase-claude-code-first', kind: 'comparison', houseStyle: [{ label: 'With Qloo', count: 7, of: 12 }, { label: 'Without Qloo', count: 3, of: 12 }] });
+  const withFirst = showcasePage({ gallery: g });
+  assert.match(withFirst, /The first build[\s\S]*<b>7 of the 12<\/b>[\s\S]*This build's Qloo arm carries <b>0<\/b>/u);
+  assert.ok(withFirst.includes('/gallery/showcase-claude-code-first/'));
   // A pair with no measured arm presents nothing as the Qloo design.
   g.entries.get(SHOWCASE_ID).play = [{ label: 'Without Qloo', path: 'out/a/index.html' }, { label: 'Without Qloo', path: 'out/b/index.html' }];
   assert.doesNotMatch(showcasePage({ gallery: g }), /Open the Qloo design|<b>With Qloo<\/b>/u);

@@ -140,3 +140,11 @@ test('a live try: the guess-only Kiro session is checked from its own stream', a
   caught(await check({ tryRun: true, stream: [...own, call('taste_profile', {})] }), /guess-only session asked Qloo 1 times/u);
   caught(await check({ tryRun: true, stream: [...own, call('shell', { command: 'curl https://hackathon.api.qloo.com/v2/insights' })] }), /Qloo's address or key/u);
 });
+
+test('a read-only fact check of the guess-only arm after the measurement is not a write, a redirection into it is', async () => {
+  const check = { name: 'Bash', input: { command: `for d in with-qloo without-qloo; do grep -ci "900" ${GUESS_DIR}/../$d/index.html 2>/dev/null; done >/dev/null 2>&1` } };
+  const clean = await (async () => { const run = await pair({ stream: claudeStream({ after: [use('r', check.name, check.input)] }) }); try { return await checkComparison(run); } finally { await fs.rm(run.root, { recursive: true, force: true }); } })();
+  assert.deepEqual(clean.problems, []);
+  const run = await pair({ stream: claudeStream({ after: [use('w', 'Bash', { command: `echo "<h1>Night</h1>" > ${GUESS_DIR}/index.html` })] }) });
+  try { assert.ok((await checkComparison(run)).problems.some(problem => /1 writes into the Without Qloo arm by others/u.test(problem))); } finally { await fs.rm(run.root, { recursive: true, force: true }); }
+});
