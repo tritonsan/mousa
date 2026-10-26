@@ -20,7 +20,7 @@ import { createDesignTools, DesignToolError } from '../design/tools.mjs';
 import { collectProjectFiles, detectDesignSystem } from '../design/systems.mjs';
 
 export const MOUSA_SERVER_NAME = 'mousa';
-export const MOUSA_SERVER_VERSION = '0.7.0';
+export const MOUSA_SERVER_VERSION = '0.7.1';
 export const MOUSA_PROTOCOL_VERSIONS = Object.freeze(['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05']);
 export const MOUSA_INSTRUCTIONS_LIMIT = 2048;
 

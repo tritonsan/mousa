@@ -51,7 +51,7 @@ test('a session\'s report sets the prediction beside the measurement and follows
     assert.equal(record.headline.sentence, `${stats.surpriseAnchoredDevices} of ${stats.devices} devices rest on what the prediction did not contain.`, 'the headline is the DNA\'s own count');
     assert.equal(written.headline, record.headline.sentence);
     assert.equal(record.title, 'For an audience that loves Paterson and Nujabes');
-    assert.equal(record.writtenBy.version, '0.7.0');
+    assert.equal(record.writtenBy.version, '0.7.1');
     assert.deepEqual(record.prediction.sketch.palette, ['#f3ead8', '#2f2a24', '#b5653a']);
     assert.ok(record.prediction.groups.find(group => group.domain === 'movie').entries.some(entry => entry.name === 'Perfect Days' && entry.measured), 'a predicted work Qloo measured is marked');
     assert.ok(Object.values(record.measured.qualities).flat().some(item => item.mark === 'new'), 'measured qualities carry their marks');

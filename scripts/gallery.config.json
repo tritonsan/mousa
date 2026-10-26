@@ -37,6 +37,12 @@
       "summary": "A weekly comedy night for people who love The Original Kings of Comedy, Def Comedy Jam and The Bernie Mac Show, built twice from one sealed guess."
     },
     {
+      "id": "thistledown-claude-code",
+      "run": "claude-code-rpg-compare-1",
+      "title": "Thistledown, an RPG from one sentence, with Qloo and without: Claude Code",
+      "summary": "A small browser RPG for people who love Stardew Valley, built twice from one sealed guess. The guess made farming, fishing and friendship; the measurement made herding, tape-recorded interviews and a garage-band rehearsal."
+    },
+    {
       "id": "comedy-night-codex",
       "run": "codex-comedy-single-1",
       "title": "Second Drink, a stand-up night: Codex",

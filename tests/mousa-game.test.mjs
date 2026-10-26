@@ -192,6 +192,16 @@ test('design_compare copies the starter into both arms, fonts included, and meas
     // Two identical designs are no distance apart.
     const same = dataFingerprint({ 'a.json': '{"palette":{"x":"#112233"},"parts":[{"id":"hood"}]}' });
     assert.equal(compareDataFingerprints(same, same).overall, 0);
+    // Two one-page games written wholly in code: their functions and constants are their parts, read from the page's
+    // inline script, and a part neither has (here, data ids) is left out rather than counted as alike.
+    const page = script => `<!doctype html><canvas></canvas><script>${script}</script>`;
+    const farm = dataFingerprint({ 'index.html': page("const PLOT_SIZE = 16; function tillSoil() {} function startFishing() {} const tip = 'Till the soil, then water it twice.';") });
+    const band = dataFingerprint({ 'index.html': page("const BPM = 96; function startRehearsal() {} function herdPuffs() {} const tip = 'Hit the notes as they reach the line.';") });
+    assert.deepEqual(farm.ids, ['plot_size', 'startfishing', 'tillsoil']);
+    const games = compareDataFingerprints(farm, band);
+    assert.equal(games.structure, 1);
+    assert.ok(games.voice > 0.8, JSON.stringify(games));
+    assert.equal(games.overall, Math.round((0.3 * games.structure + 0.25 * games.voice) / 0.55 * 1000) / 1000, 'no colour in either game, so the palette is left out');
     assert.deepEqual(differingFiles({ 'x.json': '1', 'y.json': '2' }, { 'x.json': '1', 'y.json': '3' }), [{ 'y.json': '2' }, { 'y.json': '3' }]);
   } finally {
     await rm(project, { recursive: true, force: true });

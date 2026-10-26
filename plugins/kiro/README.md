@@ -1,4 +1,4 @@
-# Moûsa 0.7.0 for Kiro
+# Moûsa 0.7.1 for Kiro
 
 Moûsa grounds design work in measured cultural taste from Qloo: what an audience loves, what those works share, and what that means for palette, type, imagery, motion, voice and structure. This folder is a Kiro power in the Agent Plugins format.
 
