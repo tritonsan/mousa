@@ -10,7 +10,7 @@ Ask an AI coding agent for a record shop's website "for people who love Paterson
 
 **The gap is large.** Three agents guessed what 20 audiences love, and all 60 guesses were published before the benchmark asked Qloo. The guesses missed 94.0% of the works Qloo measured.
 - Claude Code's guesses named 6.8% of the measured works, Kiro's 6.6% and Codex's 4.7%. Claude Code and Kiro run the same model and differ by 0.2 points, which suggests the blind spot belongs to the model rather than the tool.
-- In the 20 sessions we recorded, the guesses named 45 of the 1,368 works Qloo measured, and 45 of the 492 works they guessed were measured.
+- In the 24 sessions we recorded, the guesses named 62 of the 1,618 works Qloo measured, and 62 of the 597 works they guessed were measured.
 
 **These agents are where interfaces get made, and left alone they converge.** In the 2026 Stack Overflow Developer Survey, 65.5% of respondents who use AI tools had used Claude Code in the past year, and 29.5% Codex. Anthropic itself wrote that a model asked for a landing page without guidance almost always produces Inter, purple gradients on white and minimal animation. It called the result "immediately recognizable—and dismissible".
 
@@ -73,15 +73,26 @@ This is a live try recorded on 24 October with the hosted try's own runner in Ki
    - Distance between the two: 0.65 on a 0 to 1 heuristic. Each of the Qloo design's seven choices is anchored to at least one name the guess did not contain.
    - Both are playable on the site, with the record that traces each choice.
 
+## From one sentence: what it does, not only how it looks
+
+Four pairs began from one sentence and an empty folder in Claude Code: three browser games and a phone app. The guess built what the model assumes the brief means. The measurement changed what the design does.
+
+- **"A small RPG for people who love Stardew Valley."** The guess built farming, fishing and four neighbours to befriend. With Qloo it built one summer day: herding puffs into a pen (Slime Rancher), taping the neighbours' stories with a question choice (a Letterman interview show and 63 Up) and a band rehearsal for the nine o'clock show (Modern Baseball).
+- **The same for Wes Anderson's films and Fleetwood Mac, with no game named.** The guess built a pastel town of favours and a centred-photo shutter. With Qloo, a stage manager wins back three bandmates by tuning a radio through static (Oxenfree) and keeping time (Night in the Woods) before high tide.
+- **A game for the jury's own audience.** The guess turned each name into a segment: an at-bat, a roast, a pitch room and an encore. With Qloo it is one stand-up set timed like a competitive game (Rocket League), with crowd work and comebacks.
+- **A run club app for Murakami and LCD Soundsystem fans.** The guess built a door, a notebook and a sixteen-step loop of Thursdays to complete. With Qloo, the Thursdays became a wall to come back to, with flashbacks to old runs (Lady Dynamite), an oddity file and a pace plan written like a radio rundown (Radiolab).
+
+Each mechanic is in the code, and the distances run from 0.57 to 0.66. Each pair is one run; the Qloo games also repeated some choices, such as a three-lane rehearsal, which the [verification record](https://github.com/tritonsan/mousa/blob/main/docs/verification.md#how-it-plays-not-only-how-it-looks--october-26-and-27-2026) lists.
+
 ## The evidence, and what each kind does not show
 
-1. **The blind spot.** In 20 recorded sessions, 1,323 of 1,368 measured works were not in the guesses, and 45 of the 492 guessed works were measured. The sessions share a few audiences, so the counts overlap. Anyone can recount them from the release's gallery bundle with `node scripts/blind-spot-stats.mjs`. They say nothing about the design.
+1. **The blind spot.** In 24 recorded sessions, 1,556 of 1,618 measured works were not in the guesses, and 62 of the 597 guessed works were measured. The sessions share a few audiences, so the counts overlap. Anyone can recount them from the release's gallery bundle with `node scripts/blind-spot-stats.mjs`. They say nothing about the design.
 2. **The pre-registered benchmark.** Twenty audiences and three agents: Claude Code, Codex and Kiro. The protocol, one amendment and all 60 sealed predictions were committed to the public repository before the benchmark asked Qloo about any of its audiences. GitHub's push log shows the predictions arriving at 14:14 UTC on 23 October, and the analysis is stamped 14:21. The guesses named 6.8% (Claude Code), 6.6% (Kiro) and 4.7% (Codex) of the works Qloo measured, and 14% to 16% of the works they guessed were among those measured. Both pre-registered thresholds held for every agent: under 15% of the measured works named, and under 25% of the guesses measured. The agents knew music and TV best (about 10%) and films, brands and books least (2% to 6%).
    - It measures what the agents assume, not whether a design is better.
    - Qloo's measurement is aggregate affinity, not ground truth about any person.
-3. **The mechanism.** Twelve recorded pairs were each built twice from one frozen guess.
+3. **The mechanism.** Sixteen recorded pairs were each built twice from one frozen guess.
    - The distances between the two designs were 0.53 to 0.74.
-   - In 11 of the 12, every choice of the Qloo design is anchored to at least one name the guess missed; in the twelfth, 7 of 8 are. The agent picks the anchors, and the record shows which were measured and which the guess had named.
+   - In 14 of the 16, every choice of the Qloo design is anchored to at least one name the guess missed; in the other two, 7 of 8 and 9 of 10 are. The agent picks the anchors, and the record shows which were measured and which the guess had named.
    - The distance is a heuristic, not a quality score.
 4. **Beyond the model's own variance.**
    - In repeated pairs of one website brief (12 generations), the blind sketches of both arms showed no detectable difference (p = 0.81). After Qloo, typography, structure, palette and overall distance separated (exact permutation test, p = 0.005 each).
@@ -113,6 +124,7 @@ This is a live try recorded on 24 October with the hosted try's own runner in Ki
 
 ## What's next
 
+- A from-scratch mode in the Studio and the live try: a game or an app from one sentence.
 - Count brands apart from works in the look family.
 - Add location-led audiences for local businesses.
 - Make the audience swap a feature: one brief built for several measured audiences, so a venue or a label can see how each crowd changes the design.

@@ -4,6 +4,54 @@ This record describes the tested scope of the local application. It does not est
 
 The reports it names under `output/` stay on the machine that made them. Several hold Qloo's answers, which the public repository does not.
 
+## How it plays, not only how it looks — October 26 and 27, 2026
+
+**The question.** Earlier pairs changed how a design looks. Does what Qloo measures also change what a game or an app does: its mechanics and features?
+
+**The runs.** Four comparisons in Claude Code, each from one sentence and an empty folder. The brief asked that the Design DNA cover the mechanics or features as well as the look. The briefs are in [examples/briefs](../examples/briefs/).
+
+| Pair | Brief | Time | Qloo requests | Distance | Qloo choices on what the guess missed |
+| --- | --- | --- | --- | --- | --- |
+| Thistledown | A small browser RPG for people who love Stardew Valley | 19.1 min | 10 | 0.62 | 9 of 9 |
+| Saltmarsh | A small browser RPG for people who love Wes Anderson's films and Fleetwood Mac (no game named) | 19.0 min | 19 | 0.57 | 9 of 9 |
+| Opening Night | A small browser game for an audience that loves This Week in Startups, The Original Kings of Comedy, the Dodgers, Chelsea F.C. and Live Nation | 17.8 min | 14 | 0.66 | 9 of 10 |
+| Night Shift Run Club | A small phone app for a run club, for people who love Haruki Murakami and LCD Soundsystem | 16.4 min | 13 | 0.63 | 10 of 10 |
+
+**What each arm built.** Each item below is a mechanic or feature the code implements, with the names the agent anchored it to.
+- **Thistledown.**
+  - Without Qloo, the agent cloned its own idea of Stardew: five days of tilling, planting, watering and harvesting, fishing on a reel-timing bar, foraging and four neighbours to befriend. It anchored these to its guess: Harvest Moon, Animal Crossing and My Neighbor Totoro.
+  - With Qloo, it built one summer day ending at a nine o'clock show: herding puffs into a pen (Slime Rancher), tape-recorded interviews with a question choice (My Next Guest Needs No Introduction with David Letterman and 63 Up) and a three-lane rehearsal with a garage band (Modern Baseball).
+- **Saltmarsh.**
+  - Without Qloo: a pastel, symmetrical seaside town where you run favours for neighbours, centre a photograph in a level shutter and tap a tambourine to a half-remembered song (Amélie, Stevie Nicks, Lost in Translation).
+  - With Qloo: a stage manager with until high tide to win back three estranged bandmates, by tuning a radio through static (Oxenfree), keeping time in a three-lane rehearsal (Night in the Woods) and choosing the honest line (Somebody Somewhere). The stage is dressed in mirror symmetry (Rushmore).
+- **Opening Night.**
+  - Without Qloo, the agent turned each name in the brief into its own segment: an at-bat, a roast, a pitch room with investors and an arena encore, under a stadium score bug (MLB The Show, Def Comedy Jam, Shark Tank, Coldplay).
+  - With Qloo: one stand-up set of precise timing on a narrowing bar, reading a crowd split into sections, answering a heckler, and breathing back after a bomb (Rocket League, Iverson, Men of a Certain Age, Jeremih).
+- **Night Shift Run Club.**
+  - Without Qloo: a door that opens when you say you are coming, a sixteen-step loop that lights one square per Thursday, a ruled notebook, and splits with a metronome (Twin Peaks, New Order, Talking Heads, Moleskine).
+  - With Qloo: a wall of every Thursday of the season, flashbacks that bring an old run back with a dated title card, an oddity file of one strange thing seen per run, and a pace plan written like a radio rundown (Search Party, Lady Dynamite, Being John Malkovich, Radiolab).
+  - Both arms lay the season's Thursdays out as a grid: the guess as a streak to complete, the measurement as an archive to come back to.
+
+**The distance, corrected first (0.7.1).** Thistledown first measured 0.14 apart. The game distance read a design's parts only as ids in data files, and its words only from script files. Two games written wholly in `index.html` therefore had no parts and no words, and two empty sets counted as alike. The distance now:
+- reads a page's inline scripts;
+- counts the functions, classes and constants the code names as the design's parts;
+- leaves out a part neither design has, instead of counting it as alike.
+
+Thistledown then measures 0.62: palette 0.31, parts 0.94, words 0.81. The reports were rewritten with `scripts/build-report.mjs` under 0.7.1. The other three pairs ran on 0.7.1.
+
+**The arms, kept apart.** `scripts/verify-comparison-arms.mjs` passes all 16 comparisons. On the new runs it first raised three alarms, and the stream showed each to be false:
+- **Saltmarsh's guess-only brief** "named" the measured game INSIDE. The match was the word "inside" in "build all files inside", in a brief given before anything asked Qloo.
+- **The run club parent** sent a message after the measurement. It went to the Qloo arm's own subagent, asking it to test its app.
+- **The run club's guess-only arm** searched from the project's root for its font file. The search returned only its own two files.
+
+The check now reads the stream to tell these apart from leaks. It counts a message only if it reaches the guess-only arm, and a search only if its result shows a folder outside that arm. It reads only a brief given after the measurement for measured names. `tests/arm-isolation.test.mjs` keeps every leak it caught before and adds these three look-alikes.
+
+**What it does not show.**
+- **Samples.** Each pair is one run, with one model, Claude Opus 5.5.
+- **The anchors.** The agent picks them; Moûsa requires them and records them.
+- **Recurring choices in the Qloo arms.** Two of the three Qloo games built a three-lane band rehearsal, each from music the audience loves. Two of the four Qloo arms printed in two-ink risograph colours, as the record shop's live tries did. These may be the next shared look, and the twelve-habit check does not count them yet.
+- **Better or worse.** Nothing here shows that a Qloo design plays better or is preferred, only that it plays differently, from what was measured.
+
 ## Out of the house style: 0.7 — October 24, 2026
 
 **The finding.** The showcase of October 23 was built for an audience of sports leagues, hip-hop and sports documentaries. It came out as the look models give any page: a warm cream ground, Instrument Serif with one italic word in clay, small uppercase monospace labels after a short rule, numbered cards and pill buttons. The causes were in Moûsa:

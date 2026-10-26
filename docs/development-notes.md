@@ -130,6 +130,14 @@ Each cause got its own change (October 24, 2026):
 - **The font library.** It grew from 33 to 55 families across the genres it lacked: varsity and wood type, blackletter, stencil, techno, pixel and graffiti. Families are tagged by genre and era, and the ones models default to are marked overused and ranked last.
 - **The site itself.** The jury site's frame carried three of the habits: Fraunces headings, pill buttons and a frosted header. The Studio carried four. Both now carry none, and a test keeps it so. They use headings in League Spartan, the geometric sans of the wordmark, square corners and plain numbers.
 
+### How it plays — 0.7.1
+
+Four pairs built a game or an app from one sentence: three browser games and a phone app (October 26 and 27, 2026; [verification record](verification.md#how-it-plays-not-only-how-it-looks--october-26-and-27-2026)). The guess-only arms built what the model assumes the brief means. For Stardew Valley fans that was farming, fishing and friendship. For an audience named by five works, it was one segment per work. The Qloo arms built mechanics from what the audience was measured to love: herding from Slime Rancher, a radio tuned through static from Oxenfree, a stand-up set timed like a competitive game from Rocket League, and a run log that returns old runs as flashbacks from Lady Dynamite.
+
+Two parts of the engine changed:
+- **The game distance.** It reads a page's inline scripts and counts the functions, classes and constants that code names as the design's parts. A part neither design has is left out rather than counted as alike. A one-page canvas game had measured only its palette.
+- **The arm check.** It tells three look-alikes from leaks by the stream: a message to the Qloo arm's own subagent, a search that returned only the guess-only arm's own files, and a title word in a brief given before the measurement.
+
 ## Game character
 
 Studio's second tab, Game character, applies the taste-led protocol to one playable character in a fixed RPG scene. The world is The Long Dusk: Ilo the lamplighter walks a basalt cliff road above a sea of cloud, meets Maren, keeper of the Vesper beacon, and kindles it. The lore, the keeper, the layout, the story beats, the abilities and the engine are the same in both runs. The model writes only Ilo's character file: parts and proportions, colours and cloth, walk, idle, turn and a signature move, a light and four lines, and the moment's art direction (see [The moment](#the-moment)). Both arms get the same brief, model, prompt and design tools, except one taste-source paragraph, and neither has web or direct Qloo tools. A design server for each arm enforces the order and validates every file: prediction and sketch, the taste reveal, a Character DNA, optional Codex portraits, the character, then a conformance check.

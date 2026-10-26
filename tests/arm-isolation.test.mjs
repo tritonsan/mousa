@@ -13,11 +13,11 @@ const GUESS = { frozenAt: FROZEN, sha256: 'b', entries: [{ domain: 'music', name
 const write = async (file, value) => { await fs.mkdir(path.dirname(file), { recursive: true }); await fs.writeFile(file, typeof value === 'string' ? value : JSON.stringify(value)); };
 const T = name => `mcp__plugin_mousa_mousa__${name}`;
 const use = (id, name, input, parent = null) => ({ type: 'assistant', parent_tool_use_id: parent, message: { content: [{ type: 'tool_use', id, name, input }] } });
-const done = (id, parent = null) => ({ type: 'user', parent_tool_use_id: parent, message: { content: [{ type: 'tool_result', tool_use_id: id, content: 'ok' }] } });
+const done = (id, parent = null, content = 'ok') => ({ type: 'user', parent_tool_use_id: parent, message: { content: [{ type: 'tool_result', tool_use_id: id, content }] } });
 const GUESS_DIR = 'D:/runs/pair/project/compare/without-qloo', QLOO_DIR = 'D:/runs/pair/project/compare/with-qloo';
 
 /** A Claude Code stream: the parent plans and locks the guess-only arm, then starts both subagents. */
-function claudeStream({ before = [], guessCalls = [], after = [], prompt = 'Build the guess-only arm in compare/without-qloo for people who love Guessed Song.' } = {}) {
+function claudeStream({ before = [], guessCalls = [], after = [], prompt = 'Build the guess-only arm in compare/without-qloo for people who love Guessed Song.', ends = {} } = {}) {
   return [
     use('p1', T('taste_profile'), { dryRun: true }), done('p1'),
     use('p2', T('taste_profile'), { baseline: true, workspace: 'compare/without-qloo' }), done('p2'),
@@ -28,10 +28,10 @@ function claudeStream({ before = [], guessCalls = [], after = [], prompt = 'Buil
     use('g2', 'Glob', { pattern: 'compare/without-qloo/**/*' }, 'g'), done('g2', 'g'),
     use('g3', 'Write', { file_path: `${GUESS_DIR}/index.html` }, 'g'), done('g3', 'g'),
     use('d1', T('taste_profile'), { workspace: 'compare/with-qloo' }, 'd'), done('d1', 'd'),
-    ...guessCalls.map(([name, input], index) => use(`gx${index}`, name, input, 'g')),
+    ...guessCalls.flatMap(([name, input, result], index) => [use(`gx${index}`, name, input, 'g'), ...(result === undefined ? [] : [done(`gx${index}`, 'g', result)])]),
     use('g4', T('design_capture'), { workspace: 'compare/without-qloo' }, 'g'), done('g4', 'g'),
     ...after,
-    done('g'), done('d'),
+    done('g', null, ends.g), done('d', null, ends.d),
     use('p3', T('design_report'), { a: 'compare/with-qloo', b: 'compare/without-qloo' }), done('p3'),
   ];
 }
@@ -82,7 +82,7 @@ test('a clean Claude Code pair passes and says in what order its arms ran', asyn
   assert.deepEqual(result.problems, []);
   assert.equal(result.ok, true);
   assert.match(result.facts.order, /the first call to Qloo at \d+ by the Qloo arm/u);
-  assert.match(result.facts.guessArm, /0 to Qloo, 0 naming the Qloo arm or its records, 0 walking outside its folder; its brief names 0 measured works/u);
+  assert.match(result.facts.guessArm, /0 to Qloo, 0 naming the Qloo arm or its records, 0 walking outside its folder \(0 seeing anything outside it\); a brief after the measurement names 0 measured works/u);
   assert.match(result.facts.time, /2 copies of the guess, last frozen 2026-10-23T14:24:10.000Z; 1 Qloo answers, the first saved 30 s after; 0 in the Without Qloo arm/u);
   assert.match(result.facts.qlooAnchors, /2 of 2 on measured works/u);
 });
@@ -90,13 +90,28 @@ test('a clean Claude Code pair passes and says in what order its arms ran', asyn
 test('each way a measurement could reach the Claude Code guess-only arm is caught', async () => {
   caught(await check({ stream: claudeStream({ guessCalls: [['Read', { file_path: `${QLOO_DIR}/index.html` }]] }) }), /guess-only arm named .*with-qloo/u);
   caught(await check({ stream: claudeStream({ guessCalls: [['mcp__playwright__browser_navigate', { url: 'http://localhost:8792/compare/with-qloo/index.html' }]] }) }), /guess-only arm named/u);
-  caught(await check({ stream: claudeStream({ guessCalls: [['Grep', { pattern: 'palette' }]] }) }), /walked folders outside its own: Grep/u);
-  caught(await check({ stream: claudeStream({ guessCalls: [['Bash', { command: 'grep -rn palette .' }]] }) }), /walked folders outside its own: Bash/u);
+  caught(await check({ stream: claudeStream({ guessCalls: [['Grep', { pattern: 'palette' }]] }) }), /walked folders outside its own and saw them: Grep/u);
+  caught(await check({ stream: claudeStream({ guessCalls: [['Bash', { command: 'grep -rn palette .' }]] }) }), /walked folders outside its own and saw them: Bash/u);
   caught(await check({ stream: claudeStream({ guessCalls: [[T('qloo_query'), { path: '/v2/insights' }]] }) }), /guess-only arm asked Qloo 1 times/u);
   caught(await check({ stream: claudeStream({ before: [use('m', T('taste_profile'), { workspace: 'compare/with-qloo' }), done('m')] }) }), /started after a call to Qloo/u);
   caught(await check({ stream: claudeStream({ after: [use('w', 'Edit', { file_path: `${GUESS_DIR}/index.html` })] }) }), /1 writes into the Without Qloo arm by others/u);
   caught(await check({ stream: claudeStream({ after: [use('s', 'SendMessage', { to: 'g', message: 'Use warmer colours.' })] }) }), /sent 1 messages/u);
-  caught(await check({ stream: claudeStream({ prompt: 'Build the guess-only arm. The audience loves Measured Novel.' }) }), /brief names measured works: Measured Novel/u);
+  caught(await check({ stream: claudeStream({ before: [use('m', T('taste_profile'), { workspace: 'compare/with-qloo' }), done('m')], prompt: 'Build the guess-only arm. The audience loves Measured Novel.' }) }), /brief names measured works: Measured Novel/u);
+  caught(await check({ stream: claudeStream({ guessCalls: [['Glob', { pattern: '**/*.css', path: 'D:/runs/pair/project' }, 'compare/with-qloo/styles.css']] }) }), /saw them: Glob/u);
+  caught(await check({ stream: claudeStream({ after: [use('s', 'SendMessage', { to: 'aguess0001', message: 'Use warmer colours.' })], ends: { g: 'agentId: aguess0001', d: 'agentId: aqloo0001' } }) }), /sent 1 messages to the guess-only arm/u);
+});
+
+test('what only looks like a leak is told apart from one by the stream itself', async () => {
+  // A brief given before anything asked Qloo shares a word with a measured title, as "inside" did with the game INSIDE.
+  assert.deepEqual((await check({ stream: claudeStream({ prompt: 'Build all files in compare/without-qloo. The audience loves Measured Novel.' }) })).problems, []);
+  // A search from the project's root that returned only the guess-only arm's own files saw nothing of the other arm.
+  const own = await check({ stream: claudeStream({ guessCalls: [['Glob', { pattern: '**/archivo-black*', path: 'D:/runs/pair/project' }, 'compare\\without-qloo\\fonts\\archivo-black.woff2']] }) });
+  assert.deepEqual(own.problems, []);
+  assert.match(own.facts.guessArm, /1 walking outside its folder \(0 seeing anything outside it\)/u);
+  // A message after the measurement to the Qloo arm's own subagent, by the agentId its start returned, does not reach the guess.
+  const told = await check({ stream: claudeStream({ after: [use('s', 'SendMessage', { to: 'aqloo0001', message: 'Test your app.' })], ends: { g: 'agentId: aguess0001', d: 'agentId: aqloo0001' } }) });
+  assert.deepEqual(told.problems, []);
+  assert.match(told.facts.others, /0 messages sent to the guess-only arm/u);
 });
 
 test('records, timing and labels that do not hold a pair apart are caught', async () => {

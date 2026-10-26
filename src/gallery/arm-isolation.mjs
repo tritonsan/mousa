@@ -9,9 +9,10 @@
 // - time: every Qloo answer the run saved came after the last copy of the guess was frozen, and none sits in the
 //   guess-only arm;
 // - published: the gallery and the blind vote show each arm under the label its own record gives, one Qloo arm a pair;
-// - the stream. Claude Code: the guess-only subagent started before anything asked Qloo, was sent nothing while it ran,
-//   never asked Qloo, never named the Qloo arm or a Qloo record, never walked folders outside its own, and its brief
-//   names no work only Qloo measured; no one else wrote into its folder after the measurement. Codex, which builds the
+// - the stream. Claude Code: the guess-only subagent started before anything asked Qloo, was sent nothing after the
+//   measurement, never asked Qloo, never named the Qloo arm or a Qloo record, never saw a folder outside its own in what
+//   a search returned, and no brief given it after the measurement names a work only Qloo measured; no one else wrote
+//   into its folder after the measurement. Codex, which builds the
 //   arms in turn: nothing in the guess-only folder changed after its first call to Qloo, and it read no Qloo answer
 //   before it. A live try (Kiro): the guess-only session never asked Qloo or named the Qloo arm, Qloo's address or key.
 import fs from 'node:fs/promises';
@@ -132,8 +133,15 @@ export function claudeCodeChecks(lines, { measuredOnly = [], brief = '' } = {}) 
   const firstAsk = calls.find(item => asksQloo(item.block.name, item.block.input));
   const askedBy = item => (!item ? '-' : !item.parent ? 'the parent' : guessIds.has(item.parent) ? 'the guess-only arm' : 'the Qloo arm');
   if (firstAsk && guessAgents.some(item => item.at > firstAsk.at)) problems.push('the guess-only arm was started after a call to Qloo');
-  const sends = calls.filter(item => /SendMessage/u.test(item.block.name) && !item.parent && (!firstAsk || item.at > firstAsk.at));
-  if (sends.length) problems.push(`the parent sent ${sends.length} messages to running subagents after the call to Qloo`);
+  // Each call's result, by the call's id: which agent a start made, and what a search returned.
+  const results = new Map(blocks.filter(item => item.block.type === 'tool_result').map(item => [item.block.tool_use_id, item.block.content]));
+  const resultText = id => { const content = results.get(id); return typeof content === 'string' ? content : JSON.stringify(content ?? ''); };
+  // The names a parent may address the guess-only subagent by: its start's id, the name it was given and the agentId
+  // its start returned. A message reaches it only if sent to one of those, or to a recipient that cannot be told apart.
+  const guessNames = new Set(guessAgents.flatMap(item => [item.block.id, item.block.input?.name, /agentId[^A-Za-z0-9]*([A-Za-z0-9_-]{6,})/u.exec(resultText(item.block.id))?.[1]]).filter(Boolean));
+  const sends = calls.filter(item => /SendMessage/u.test(item.block.name) && !item.parent && (!firstAsk || item.at > firstAsk.at))
+    .filter(item => { const to = item.block.input?.to; return !to || guessNames.has(String(to)) || !guessAgents.some(agent => results.has(agent.block.id)); });
+  if (sends.length) problems.push(`the parent sent ${sends.length} messages to the guess-only arm after the call to Qloo`);
   const others = calls.filter(item => !guessIds.has(item.parent) && firstAsk && item.at > firstAsk.at).filter(({ block: { name, input = {} } }) =>
     (WRITE_TOOLS.test(name) && /without-qloo/u.test(slash(input.file_path || input.notebook_path)))
     || (/^(Bash|PowerShell)$/u.test(name) && /without-qloo/u.test(slash(input.command)) && writes(input.command)));
@@ -142,16 +150,20 @@ export function claudeCodeChecks(lines, { measuredOnly = [], brief = '' } = {}) 
   const asks = own.filter(call => asksQloo(call.name, call.input));
   const foreign = [...new Set(own.flatMap(call => pathsIn(call.input)).filter(foreignPath))];
   const walks = own.filter(walksOutside);
+  // A walk saw the Qloo arm when what it returned names it; one whose result is not in the stream counts as having seen it.
+  const exposed = walks.filter(call => !results.has(call.id) || pathsIn(resultText(call.id)).some(foreignPath));
   if (asks.length) problems.push(`the guess-only arm asked Qloo ${asks.length} times`);
   if (foreign.length) problems.push(`the guess-only arm named ${foreign.join(', ')}`);
-  if (walks.length) problems.push(`the guess-only arm walked folders outside its own: ${walks.map(call => call.name).join(', ')}`);
-  const prompt = guessAgents.map(item => item.block.input?.prompt || '').join('\n');
+  if (exposed.length) problems.push(`the guess-only arm walked folders outside its own and saw them: ${exposed.map(call => call.name).join(', ')}`);
+  // A brief given before anything asked Qloo cannot carry a measured name: a match there is a word it shares with a title,
+  // such as "inside" and the game INSIDE. A brief given after the measurement is read for every work only Qloo measured.
+  const prompt = guessAgents.filter(item => firstAsk && item.at > firstAsk.at).map(item => item.block.input?.prompt || '').join('\n');
   const told = measuredOnly.filter(name => named(prompt, name) && !named(brief, name));
   if (told.length) problems.push(`the guess-only arm's brief names measured works: ${told.join(', ')}`);
   return { problems, facts: {
     order: `guess-only arm started at stream line ${guessAgents.map(item => item.at).join(',')}, the first call to Qloo at ${firstAsk?.at ?? '-'} by ${askedBy(firstAsk)}`,
-    guessArm: `${own.length} calls: ${asks.length} to Qloo, ${foreign.length} naming the Qloo arm or its records, ${walks.length} walking outside its folder; its brief names ${told.length} measured works`,
-    others: `${sends.length} messages sent to running subagents, ${others.length} writes into its folder by others after the call to Qloo`,
+    guessArm: `${own.length} calls: ${asks.length} to Qloo, ${foreign.length} naming the Qloo arm or its records, ${walks.length} walking outside its folder (${exposed.length} seeing anything outside it); a brief after the measurement names ${told.length} measured works`,
+    others: `${sends.length} messages sent to the guess-only arm, ${others.length} writes into its folder by others after the call to Qloo`,
   } };
 }
 
