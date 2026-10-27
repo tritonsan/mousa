@@ -8,6 +8,8 @@ import { blindSpotOf, blindSpotTotals, benchmarkTotals } from '../gallery/blind-
 const escape = value => String(value ?? '').replace(/[&<>"']/gu, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 // One decimal everywhere, so this page and the landing page show the same figure.
 const percent = value => value === null || value === undefined ? '' : `${(100 * value).toFixed(1)}%`;
+// Counts with a thousands separator, as the landing page writes them.
+const count = value => Number(value).toLocaleString('en-US');
 
 /** The gallery's blind spot, from the index when it carries it and from each entry's record otherwise. */
 export function galleryBlindSpot(gallery) {
@@ -36,7 +38,7 @@ function ladder(spot, gallery, benchmark, votes = null) {
     : `${required}; in ${anchored.whole} of them every device rests on such a name`;
   const cast = Number.isInteger(votes) ? (votes ? ` (${votes} ${votes === 1 ? 'vote' : 'votes'} so far)` : ' (none so far)') : '';
   const rows = [
-    ['The blind spot', spot.sessions ? `In ${spot.sessions} recorded sessions in Claude Code, Codex and Kiro, the agents' frozen guesses named ${spot.known} of the ${spot.works} works Qloo measured, and ${spot.confirmed} of the ${spot.guessed} works they guessed were measured.` : '',
+    ['The blind spot', spot.sessions ? `In ${spot.sessions} recorded sessions in Claude Code, Codex and Kiro, the agents' frozen guesses named ${count(spot.known)} of the ${count(spot.works)} works Qloo measured, and ${count(spot.confirmed)} of the ${count(spot.guessed)} works they guessed were measured.` : '',
       'Counted from each session\'s own record; anyone can recount them from the release\'s gallery bundle with scripts/blind-spot-stats.mjs.',
       'The sessions share a few audiences, and Qloo measures more works than an agent names, so the share is bounded by the two list sizes. It says nothing yet about the design.'],
     ['The pre-registered benchmark', benchmark?.hosts ? benchmarkSentence(benchmark) : 'Twenty audiences and three agents. The protocol and the agents\' sealed predictions were committed to the public repository before Qloo measured any audience.',
@@ -73,9 +75,9 @@ export function judgesPage({ gallery, benchmark = null, repository = '', votes =
   const stage = clipStage(shown);
   const bench = benchmarkTotals(benchmark);
   const numbers = [
-    bench ? [percent(bench.missed), `of the works Qloo measured were missing from the AI agents' own sealed guesses, pooled over the ${bench.runs} runs of the pre-registered benchmark: ${bench.audiences} audiences, each guessed by Claude Code, Codex and Kiro.${bench.guessed ? ` The guesses were shorter lists, which caps that share; the other way round, ${bench.confirmed} of the ${bench.guessed} works they guessed (${percent(bench.confirmedShare)}) were among those measured.` : ''}`] : null,
-    spot.works ? [percent(spot.missed), `of the works Qloo measured were missing from the agents' own frozen guesses: ${spot.works - spot.known} of ${spot.works}, in ${spot.sessions} recorded sessions.`] : null,
-    spot.guessed ? [percent(spot.confirmedShare), `of the works the agents guessed turned up in Qloo's measurement: ${spot.confirmed} of ${spot.guessed}.`] : null,
+    bench ? [percent(bench.missed), `of the works Qloo measured were missing from the AI agents' own sealed guesses, pooled over the ${bench.runs} runs of the pre-registered benchmark: ${bench.audiences} audiences, each guessed by Claude Code, Codex and Kiro.${bench.guessed ? ` The guesses were shorter lists, which caps that share; the other way round, ${count(bench.confirmed)} of the ${count(bench.guessed)} works they guessed (${percent(bench.confirmedShare)}) were among those measured.` : ''}`] : null,
+    spot.works ? [percent(spot.missed), `of the works Qloo measured were missing from the agents' own frozen guesses: ${count(spot.works - spot.known)} of ${count(spot.works)}, in ${spot.sessions} recorded sessions.`] : null,
+    spot.guessed ? [percent(spot.confirmedShare), `of the works the agents guessed turned up in Qloo's measurement: ${count(spot.confirmed)} of ${count(spot.guessed)}.`] : null,
     bench ? null : ['3', 'agents run the same plugin: Claude Code, Codex and Kiro, on the project a team already has.'],
   ].filter(Boolean);
   const body = `<section class="site-hero small"><p class="mr-kicker">For the jury</p><h1>Moûsa in one minute</h1>
