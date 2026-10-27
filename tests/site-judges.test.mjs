@@ -14,14 +14,56 @@ function gallery() {
   return { index: { featured: 'try-one', entries: items.map(({ record: _, ...entry }) => entry) }, entries: new Map(items.map(item => [item.id, item])) };
 }
 
-test('the landing page and the cards carry the blind spot the records counted', () => {
+test('the landing page carries the blind spot the records counted, and the gallery page each session\'s card', () => {
   const html = landingPage({ gallery: gallery(), repository: 'https://github.com/tritonsan/mousa' });
   assert.match(html, /96\.9%/u, '125 of 129 measured works were not in the guesses');
   assert.match(html, /125 of 129, in 2 recorded sessions/u);
-  assert.match(html, /The agent&#39;s guess named 1 of the 69 works Qloo measured\./u);
+  assert.match(html, /One recorded pair/u);
   assert.match(html, /href="\/judges\/"/u);
   assert.doesNotMatch(html, /<script/u);
-  assert.match(galleryPage({ gallery: gallery() }), /named 3 of the 60 works/u);
+  const cards = galleryPage({ gallery: gallery() });
+  assert.match(cards, /The agent&#39;s guess named 1 of the 69 works Qloo measured\./u);
+  assert.match(cards, /named 3 of the 60 works/u);
+});
+
+/** A gallery whose featured pair has clips, a story, a sealed guess, a measurement and devices, as a built one has. */
+function storyGallery() {
+  const pair = {
+    id: 'rpg-pair', kind: 'comparison', host: 'claude-code', medium: 'game', title: 'Thistledown, an RPG from one sentence, with Qloo and without: Claude Code',
+    brief: '/mousa:compare Build the game twice. The brief: Make a small RPG for people who love Stardew Valley. Use the Moûsa plugin.',
+    story: { ask: 'a small RPG for people who love Stardew Valley', guess: 'farming and fishing', measured: 'herding and tape interviews' },
+    clips: ['With Qloo', 'Without Qloo'].map(label => ({ label, file: `report/clips/${label === 'With Qloo' ? 'with' : 'without'}-qloo.webp`, poster: `report/clips/${label === 'With Qloo' ? 'with' : 'without'}-qloo.jpg`,
+      width: 800, height: 500, seconds: 10.8, scenes: [label === 'With Qloo' ? 'herding puffs' : 'tilling a plot'] })),
+    distance: { overall: 0.62 }, headline: { sentence: '1 of 1 devices rest on what the prediction did not contain.' },
+    record: { kind: 'comparison', distance: { overall: 0.62 }, views: [],
+      arms: [{ label: 'With Qloo', taste: 'qloo', headline: { sentence: '1 of 1 devices rest on what the prediction did not contain.' } }, { label: 'Without Qloo', taste: 'own prediction' }],
+      prediction: { frozenAt: '2026-10-26T20:49:35.770Z', summary: 'A gentle farm life.', groups: [{ entries: [{ name: 'Animal Crossing: New Horizons', measured: true }, { name: 'Minecraft', measured: false }] }] },
+      measured: { counts: { works: 60, worksPredicted: 1 }, worlds: [{ label: 'Games', works: [{ name: 'Slime Rancher', mark: 'new' }] }, { label: 'Films, lesser known', works: [{ name: 'Eldorado', mark: 'new' }] }, { label: 'Music', works: [{ name: 'Modern Baseball', mark: 'new' }] }] },
+      layers: [{ layer: 'interaction', arms: [[{ device: 'Herd puffs into the pen', anchors: [{ name: 'Slime Rancher', mark: 'new' }] }], [{ device: 'Till, plant and water', anchors: [{ name: 'Harvest Moon', mark: 'own' }] }]] }] },
+  };
+  const app = { id: 'app-pair', kind: 'comparison', host: 'claude-code', medium: 'app-ui', title: 'A run club app, with Qloo and without: Claude Code',
+    story: { ask: 'a run club app', guess: 'a notebook', measured: 'a wall of every Thursday' }, report: { cardSmall: 'report/card-small.png' }, record: { kind: 'comparison', arms: [], views: [] } };
+  const items = [pair, app];
+  return { index: { featured: 'rpg-pair', highlights: ['app-pair', 'gone-pair'], entries: items.map(({ record: _, ...entry }) => entry) }, entries: new Map(items.map(item => [item.id, item])) };
+}
+
+test('the landing page tells the featured pair: both clips with the guess first, its story, its session step by step and the pairs after it', () => {
+  const html = landingPage({ gallery: storyGallery(), repository: 'https://github.com/tritonsan/mousa' });
+  assert.ok(html.indexOf('The agent&#39;s guess') < html.indexOf('<b>With Qloo</b>'), 'the guess is shown first');
+  assert.match(html, /<source media="\(prefers-reduced-motion: reduce\)" srcset="\/gallery\/rpg-pair\/report\/clips\/without-qloo\.jpg"><img src="\/gallery\/rpg-pair\/report\/clips\/without-qloo\.webp"/u, 'a visitor who asks for less motion gets the still');
+  assert.match(html, /Asked for a small RPG for people who love Stardew Valley, Claude Code&#39;s own guess built farming and fishing\. Given Qloo&#39;s measurement of that audience, it built herding and tape interviews\./u);
+  assert.match(html, /\/mousa:compare … Make a small RPG for people who love Stardew Valley\. …/u, 'the request, marked as cut from a longer brief');
+  assert.match(html, /sealed the guess at 20:49 UTC on 26 October 2026|seals the guess at 20:49 UTC on 26 October 2026/u);
+  assert.match(html, /Qloo measured 60 works this audience loves, across games and music\. The guess had named one of them\./u, 'the lesser-known rows stay in the record');
+  assert.match(html, /Slime Rancher <small>new<\/small>/u);
+  assert.doesNotMatch(html, /Eldorado/u);
+  assert.match(html, /Herd puffs into the pen[\s\S]*Till, plant and water|Till, plant and water[\s\S]*Herd puffs into the pen/u);
+  assert.match(html, /<span class="story-tag">With Qloo<\/span> a wall of every Thursday/u, 'a highlight tells what each arm made');
+  assert.match(html, /href="\/gallery\/"/u);
+  assert.doesNotMatch(html, /<script/u);
+  const jury = judgesPage({ gallery: storyGallery() });
+  assert.match(jury, /\/gallery\/rpg-pair\/report\/clips\/with-qloo\.webp/u, 'the jury page shows the same pair at play');
+  assert.match(jury, /<a class="site-link" href="\/gallery\/rpg-pair\/">Thistledown, an RPG from one sentence<\/a>/u);
 });
 
 test('the jury page gives the numbers, the path and what each kind of evidence does not show', () => {

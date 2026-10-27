@@ -2,7 +2,7 @@
 // the evidence and what each kind of evidence does and does not show; and how Moûsa uses Qloo, request by request,
 // with what the live API taught it. Drawn on the server with no script, like the rest of the site.
 
-import { layout } from './render.mjs';
+import { clipStage, layout, shortTitle } from './render.mjs';
 import { blindSpotOf, blindSpotTotals, benchmarkTotals } from '../gallery/blind-spot.mjs';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/gu, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -16,13 +16,13 @@ export function galleryBlindSpot(gallery) {
 }
 
 /** The recorded comparisons' distances, smallest first. */
-function distances(gallery) {
+export function distances(gallery) {
   return [...(gallery?.entries?.values() || [])].filter(entry => entry.kind === 'comparison' && entry.distance?.overall !== undefined)
     .map(entry => Number(entry.distance.overall)).sort((a, b) => a - b);
 }
 
 /** How many comparisons have a Qloo design whose every device rests on a name the guess missed, from each record's headline. */
-function anchoredPairs(gallery) {
+export function anchoredPairs(gallery) {
   const counts = [...(gallery?.entries?.values() || [])].filter(entry => entry.kind === 'comparison')
     .map(entry => /^(\d+) of (\d+) devices/u.exec(entry.headline?.sentence || '')).filter(Boolean);
   return { counted: counts.length, whole: counts.filter(match => match[1] === match[2]).length };
@@ -64,7 +64,10 @@ export function benchmarkSentence(benchmark) {
 export function judgesPage({ gallery, benchmark = null, repository = '' }) {
   const spot = galleryBlindSpot(gallery);
   const featured = gallery?.index?.featured || '';
-  const tryEntry = [...(gallery?.entries?.values() || [])].find(entry => entry.origin === 'try')?.id || featured;
+  const shown = gallery?.entries?.get(featured);
+  const pair = shown ? featured : [...(gallery?.entries?.values() || [])].find(entry => entry.origin === 'try')?.id || featured;
+  const pairTitle = shown ? shortTitle(shown.title) : 'A record shop\'s website for people who love Paterson and Nujabes';
+  const stage = clipStage(shown);
   const bench = benchmarkTotals(benchmark);
   const numbers = [
     bench ? [percent(bench.missed), `of the works Qloo measured were missing from the AI agents' own sealed guesses, pooled over the ${bench.runs} runs of the pre-registered benchmark: ${bench.audiences} audiences, each guessed by Claude Code, Codex and Kiro.`] : null,
@@ -74,10 +77,11 @@ export function judgesPage({ gallery, benchmark = null, repository = '' }) {
   ].filter(Boolean);
   const body = `<section class="site-hero small"><p class="mr-kicker">For the jury</p><h1>Moûsa in one minute</h1>
 <p class="site-lede">Moûsa is a plugin for the design agents teams already use. Before the agent designs anything, it writes down and seals its own guess about the audience. Qloo then measures that audience, and every design choice has to rest on what the guess missed. Each session ends with a record that sets the guess beside the measurement.</p></section>
+${stage ? `<section class="story-stage" aria-label="${escape(pairTitle)}: both designs at play">${stage}</section>` : ''}
 <section class="site-section"><div class="site-stats">${numbers.map(([value, text]) => `<p class="site-stat"><b>${escape(value)}</b><span>${escape(text)}</span></p>`).join('')}</div></section>
 <section class="site-section"><div class="site-head-row"><h2>A path through the evidence</h2><p>Each step stands on its own; the first three take under four minutes.</p></div>
 <ol class="site-path">
-<li><b>Look at one pair.</b> <a class="site-link" href="/gallery/${escape(tryEntry)}/">A record shop's website for people who love Paterson and Nujabes</a>: play the design made from the agent's guess and the one made from Qloo's measurement, side by side.</li>
+<li><b>Look at one pair.</b> <a class="site-link" href="/gallery/${escape(pair)}/">${escape(pairTitle)}</a>: play the design made from the agent's guess and the one made from Qloo's measurement, side by side.</li>
 <li><b>Read its record.</b> The same page shows the sealed guess, the names Qloo measured marked new or predicted, and each design device traced to the names it rests on.</li>
 <li><b>Try your own audience.</b> <a class="site-link" href="/try/">Open the live try</a>, which asks for no code, and name two or three works you love. In under a minute Moûsa shows Kiro's sealed guess beside Qloo's measurement. Building both designs takes about five to ten minutes more, and is optional.</li>
 <li><b>See the benchmark.</b> <a class="site-link" href="/benchmark/">Twenty audiences, three agents</a>, with the predictions published before Qloo measured anything.</li>

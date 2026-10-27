@@ -6,7 +6,7 @@
 
 An entry to the [Qloo Agentic Hackathon](https://qloo.devpost.com).
 
-**For the jury:** [Moûsa in one minute](https://d1n6iqgwqs2043.cloudfront.net/judges/) · [the showcase](https://d1n6iqgwqs2043.cloudfront.net/showcase/), a page that explains Moûsa, designed by Moûsa · [the benchmark](https://d1n6iqgwqs2043.cloudfront.net/benchmark/) · [the live try](https://d1n6iqgwqs2043.cloudfront.net/try/), open to anyone with no code, up to 100 first steps and 10 design pairs a day.
+**For the jury:** [the site](https://d1n6iqgwqs2043.cloudfront.net/), which tells one pair from the request to the record, with both games at play · [Moûsa in one minute](https://d1n6iqgwqs2043.cloudfront.net/judges/) · [the showcase](https://d1n6iqgwqs2043.cloudfront.net/showcase/), a page that explains Moûsa, designed by Moûsa · [the benchmark](https://d1n6iqgwqs2043.cloudfront.net/benchmark/) · [the live try](https://d1n6iqgwqs2043.cloudfront.net/try/), open to anyone with no code, up to 100 first steps and 10 design pairs a day.
 
 ## The problem
 

@@ -89,11 +89,22 @@ test('a fixture run becomes a gallery entry with its report, playable files, tim
     assert.throws(() => checkConfig({ entries: [{ id: 'Bad Id', run: 'x', title: 't' }] }), /unique id/u);
     assert.throws(() => checkConfig({ featured: 'missing', entries: [{ id: 'one-entry', run: 'x', title: 't' }] }), /missing is named/u);
     await fixtureRun(runs);
+    // A clip scripts/record-clips.mjs left beside the session's record, a story for the landing page and its highlights.
+    const [runName] = await fs.readdir(runs);
+    await fs.mkdir(path.join(runs, runName, 'clips'));
+    await fs.writeFile(path.join(runs, runName, 'clips', 'design.webp'), 'RIFF clip WEBP');
+    await fs.writeFile(path.join(runs, runName, 'clips', 'design.jpg'), 'poster');
+    await fs.writeFile(path.join(runs, runName, 'clips', 'clips.json'), JSON.stringify({ clips: [{ arm: 'design', label: 'The design', file: 'design.webp', poster: 'design.jpg', width: 800, height: 500, seconds: 10.8, scenes: ['a walk through the pantry'] }] }));
+    const told = { ...fixtureConfig(), highlights: ['fixture-pantry', 'left-out'] };
+    told.entries = told.entries.map(item => ({ ...item, story: { ask: 'a pantry site', guess: 'jars', measured: 'a ledger', ignored: 'x' } }));
     const library = await loadFontLibrary(repo);
-    const built = await buildGallery({ config: fixtureConfig(), runsDir: runs, repo, out, library, user: 'fixtureuser', secrets: ['fixture-secret-value'] });
+    const built = await buildGallery({ config: told, runsDir: runs, repo, out, library, user: 'fixtureuser', secrets: ['fixture-secret-value'] });
     assert.deepEqual(built.findings, []);
     assert.equal(built.written, true);
     const entry = JSON.parse(await fs.readFile(path.join(out, 'fixture-pantry', 'entry.json'), 'utf8'));
+    assert.deepEqual(entry.clips, [{ label: 'The design', file: 'report/clips/design.webp', poster: 'report/clips/design.jpg', width: 800, height: 500, seconds: 10.8, scenes: ['a walk through the pantry'] }]);
+    assert.ok(await exists(path.join(out, 'fixture-pantry', 'report', 'clips', 'design.webp')), 'the clip travels with the entry');
+    assert.deepEqual(entry.story, { ask: 'a pantry site', guess: 'jars', measured: 'a ledger' });
     assert.equal(entry.host, 'claude-code');
     assert.equal(entry.hostVersion, '2.1.284');
     assert.equal(entry.surfaceVersion, '0.6.0', 'the version the session\'s own mousa_status answered with');
@@ -101,6 +112,7 @@ test('a fixture run becomes a gallery entry with its report, playable files, tim
     assert.equal(entry.qlooRequests > 0, true);
     assert.ok(entry.blindSpot?.works > 0, 'the entry carries the blind spot its measurement counted');
     const index = JSON.parse(await fs.readFile(path.join(out, 'gallery.json'), 'utf8'));
+    assert.deepEqual(index.highlights, ['fixture-pantry'], 'a highlight the build left out is dropped');
     assert.equal(index.blindSpot.sessions, 1);
     assert.equal(index.entries[0].blindSpot.works, entry.blindSpot.works);
     assert.match(entry.reproduce.command, /^node scripts\/run-claude-code-live\.mjs --run$/u, 'a request no brief file holds runs without --brief-file');

@@ -38,7 +38,7 @@ test('with a gallery the plain address opens the site, every page runs no script
   const { app, preview } = await setup(t, { env: { SITE_REPOSITORY_URL: 'https://github.com/example/mousa' } });
   const landing = await get(`${app}/`);
   assert.equal(landing.status, 200);
-  assert.match(landing.body, /Design that rests on what an audience actually loves\./u);
+  assert.match(landing.body, /AI agents design for the audience they imagine\./u);
   assert.match(landing.body, /href="\/gallery\/fixture-pantry\/"/u);
   assert.match(landing.body, /github\.com\/example\/mousa/u, 'the repository the site names');
   for (const page of [landing, await get(`${app}/gallery/`), await get(`${app}/gallery/fixture-pantry/`)]) {

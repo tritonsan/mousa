@@ -46,11 +46,13 @@ function surfaceVersion(lines) {
   return null;
 }
 
-/** The brief file of scripts/briefs whose text is the run's request, for the command that reproduces it. */
+/** The brief file of scripts/briefs or examples/briefs whose text is the run's request, for the command that reproduces it. */
 async function briefFile(repo, text) {
-  const folder = path.join(repo, 'scripts', 'briefs');
-  for (const name of (await fs.readdir(folder).catch(() => [])).filter(file => file.endsWith('.md')).sort()) {
-    if ((await fs.readFile(path.join(folder, name), 'utf8')).trim() === text.trim()) return `scripts/briefs/${name}`;
+  const same = value => value.replace(/\r\n/gu, '\n').trim();
+  for (const folder of ['scripts/briefs', 'examples/briefs']) {
+    for (const name of (await fs.readdir(path.join(repo, ...folder.split('/'))).catch(() => [])).filter(file => file.endsWith('.md')).sort()) {
+      if (same(await fs.readFile(path.join(repo, ...folder.split('/'), name), 'utf8')) === same(text)) return `${folder}/${name}`;
+    }
   }
   return null;
 }

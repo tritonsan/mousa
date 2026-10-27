@@ -4,6 +4,33 @@ This record describes the tested scope of the local application. It does not est
 
 The reports it names under `output/` stay on the machine that made them. Several hold Qloo's answers, which the public repository does not.
 
+## The landing page tells one pair — October 27, 2026
+
+**Why.** No video is required, and a juror may judge from the site alone. The landing page now tells one recorded pair, Thistledown, the way a short demo would. In order, it shows:
+- the problem;
+- both games at play;
+- the blind spot;
+- the session step by step, from its own records;
+- what else the measurement changed;
+- the evidence;
+- how to try it.
+
+The jury page opens with the same pair at play. Every name, count and device on both pages comes from the records. The phrases that say what each arm made come from `scripts/gallery.config.json`.
+
+**The clips.** `scripts/record-clips.mjs` plays each arm's published files in headless Chrome and records the screencast. It writes an animated WebP of three 3.6-second scenes, with a still poster that a visitor who asks for reduced motion gets instead. The pages run no script, so the clips are images.
+- **The player.** `scripts/clips/thistledown-claude-code.mjs` presses each game's own keys, as the arms' own play-tests press them.
+- **Staged scenes.** The script sets each scene up and says so on the page:
+  - The Qloo arm starts from its title screen. The script places the puffs near the pen and the player beside Wren and Mo.
+  - The guess arm's scenes start from its own capture views: `day`, `fishing` and `ending`.
+- **The same scene order in both clips.** The scenes play side by side in order: herding against farming, the interview against fishing, the rehearsal against Lantern Night.
+- **Where the clips live.** They sit beside the session's record in the run folder, where the gallery build copies them into the entry's report.
+
+**Fixed on the way.**
+- **The run commands.** Six pairs' commands named no brief file: Thistledown, Saltmarsh, Opening Night, the run club, the venue and the comedy night. Their briefs live in `examples/briefs`, and the gallery looked only in `scripts/briefs`. It now looks in both. When the brief was committed after the run began, the command says in which commit.
+- **Pair pages.** A view only one arm captured no longer sits beside an empty frame, and an arm's own play-test comes after the views both arms share.
+
+**What it does not show.** The clips show the games' mechanics at work in staged moments, not a full play-through or a player's experience.
+
 ## How it plays, not only how it looks — October 26 and 27, 2026
 
 **The question.** Earlier pairs changed how a design looks. Does what Qloo measures also change what a game or an app does: its mechanics and features?

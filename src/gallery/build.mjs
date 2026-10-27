@@ -28,6 +28,9 @@ export const ENTRY_ID = /^[a-z0-9][a-z0-9-]{2,60}$/u;
 const ARMS = Object.freeze(['compare/with-qloo', 'compare/without-qloo']);
 const CARD_SMALL = 640;
 const RUNNERS = Object.freeze({ 'claude-code': 'scripts/run-claude-code-live.mjs', codex: 'scripts/run-codex-live.mjs', kiro: 'scripts/run-mobile-example-live.mjs' });
+/** An entry's story for the landing page, in phrases: what was asked for, what the guess made, what the measurement made. */
+const storyOf = story => story && ['ask', 'guess', 'measured'].every(key => typeof story[key] === 'string' && story[key].trim())
+  ? { ask: story.ask.trim(), guess: story.guess.trim(), measured: story.measured.trim() } : null;
 
 /** The config's entries, checked: unique ids, one source each (a run, a Kiro record or a try), and a featured entry and vote pool among them. */
 export function checkConfig(config) {
@@ -61,15 +64,25 @@ async function starterAt(repo, commit, source, to, budget) {
   return copied;
 }
 
+/** The commit that added a run's brief file, when the commit the run began at does not hold it yet; null otherwise. */
+async function briefAdded(repo, run) {
+  if (!run.briefFile || !run.commit) return null;
+  const held = await exec('git', ['cat-file', '-e', `${run.commit}:${run.briefFile}`], { cwd: repo, windowsHide: true }).then(() => true, () => false);
+  if (held) return null;
+  const { stdout } = await exec('git', ['log', '--diff-filter=A', '--format=%h', '-1', '--', run.briefFile], { cwd: repo, windowsHide: true }).catch(() => ({ stdout: '' }));
+  return stdout.trim() || null;
+}
+
 /** The command that runs the session again, with what it needs; the result will differ, since models vary. */
-function reproduceOf(run, entry) {
+function reproduceOf(run, entry, added = null) {
   if (run.reproduce) return run.reproduce;
   const flags = ['--run', ...(entry.from ? [`--from ${entry.from}`] : []), ...(entry.install ? ['--install'] : []), ...(run.briefFile ? [`--brief-file ${run.briefFile}`] : []),
     ...(entry.images ? ['--images'] : [])];
   const kiro = run.host === 'kiro';
   return { commit: run.commit, command: `node ${RUNNERS[run.host]} ${kiro ? '--run' : flags.join(' ')}`,
     needs: [`Your own Qloo API key as QLOO_API_KEY in this repository's .env.`, kiro ? 'Kiro CLI 2.24.0, signed in.' : run.host === 'codex' ? 'Codex CLI, signed in.' : 'Claude Code, signed in.',
-      ...(entry.images ? ['Codex image generation on your own ChatGPT plan.'] : [])],
+      ...(entry.images ? ['Codex image generation on your own ChatGPT plan.'] : []),
+      ...(added ? [`The brief, ${run.briefFile}, which entered the repository in ${added}, after the run began: take it from that commit.`] : [])],
     note: 'Models vary from run to run, so a new session reaches its own design; the prediction it freezes and the measurement are compared in the same way.' };
 }
 
@@ -131,19 +144,29 @@ export async function buildEntry({ entry, run, dir, repo, runsDir, library, brow
     const copied = await published(path.resolve(runsDir, entry.before.folder), path.join(dir, 'before'));
     if (copied.includes('index.html')) before = 'before/index.html';
   }
+  // The clips scripts/record-clips.mjs recorded beside the session's record: each arm as it plays, and a still poster.
+  const clips = [];
+  const recorded = await fs.readFile(path.join(run.root, 'clips', 'clips.json'), 'utf8').then(JSON.parse, () => null);
+  for (const clip of Array.isArray(recorded?.clips) ? recorded.clips : []) {
+    if (![clip.file, clip.poster].every(file => /^[a-z0-9-]{1,60}\.(?:webp|jpg)$/u.test(file || ''))) throw new PublishError(`${entry.id}: a clip is named outside its folder.`);
+    await fs.mkdir(path.join(dir, 'report', 'clips'), { recursive: true });
+    for (const file of [clip.file, clip.poster]) await fs.copyFile(path.join(run.root, 'clips', file), path.join(dir, 'report', 'clips', file));
+    clips.push({ label: clip.label, file: `report/clips/${clip.file}`, poster: `report/clips/${clip.poster}`, width: clip.width, height: clip.height, seconds: clip.seconds, scenes: clip.scenes });
+  }
   const exists = file => fs.stat(path.join(dir, ...file.split('/'))).then(() => true, () => false);
   const arms = run.kind === 'comparison' ? run.arms.map(arm => ({ label: label(arm.records), folder: armName(arm.folder) })) : null;
   const saved = {
     schemaVersion: GALLERY_SCHEMA_VERSION, id: entry.id, kind: run.kind, title: entry.title.trim(), ...(entry.summary ? { summary: entry.summary.trim() } : {}),
+    ...(storyOf(entry.story) ? { story: storyOf(entry.story) } : {}),
     host: run.host, hostVersion: entry.hostVersion || run.hostVersion || null, model: entry.model || run.model || null, surfaceVersion: run.surfaceVersion,
     ...(run.legacy ? { surface: 'earlier tool surface (0.4)' } : {}), ...(run.origin === 'try' ? { origin: 'try', tryBy: run.tryBy } : {}), medium: record.medium || null, startedAt: run.startedAt, minutes: run.minutes, turns: run.turns,
     qlooRequests: run.qlooRequests, pictures: entry.images ? 'Codex image generation' : 'none: imagery drawn in SVG or CSS',
     brief: scrubText(run.brief, { user }), headline: record.headline, ...(record.kind === 'comparison' ? { distance: record.distance, samePrediction: record.samePrediction, arms } : {}),
     ...(blindSpotOf(record) ? { blindSpot: blindSpotOf(record) } : {}), ...(houseStyleOf(record) ? { houseStyle: houseStyleOf(record) } : {}),
-    play, ...(before ? { before } : {}),
+    play, ...(before ? { before } : {}), ...(clips.length ? { clips } : {}),
     report: { page: 'report/index.html', card: await exists('report/card.png') ? 'report/card.png' : null, cardSmall: await exists('report/card-small.png') ? 'report/card-small.png' : null,
       picture: await exists('report/report.png') ? 'report/report.png' : null },
-    timeline: run.timeline, reproduce: reproduceOf(run, entry),
+    timeline: run.timeline, reproduce: reproduceOf(run, entry, await briefAdded(repo, run)),
   };
   await fs.writeFile(path.join(dir, 'entry.json'), `${JSON.stringify(saved, null, 2)}\n`);
   return { saved, pictures: pictures.every(Boolean) && pictures.length > 0 };
@@ -169,7 +192,9 @@ export async function buildGallery({ config, runsDir, triesDir = null, repo, out
   const patterns = leakPatterns({ user, runsDir, folders: triesDir ? [triesDir] : [], secrets });
   const findings = [];
   for (const entry of entries) for (const finding of await leakScan(path.join(out, entry.id), patterns)) findings.push({ entry: entry.id, ...finding });
-  const index = { schemaVersion: GALLERY_SCHEMA_VERSION, builtAt: new Date(now()).toISOString(), featured: config.featured || entries[0]?.id || null, vote: config.vote || [],
+  // The pairs the landing page tells after the featured one; one the build left out, such as a try, is dropped.
+  const highlights = (config.highlights || []).filter(id => entries.some(entry => entry.id === id));
+  const index = { schemaVersion: GALLERY_SCHEMA_VERSION, builtAt: new Date(now()).toISOString(), featured: config.featured || entries[0]?.id || null, vote: config.vote || [], highlights,
     entries: entries.map(entry => ({ id: entry.id, kind: entry.kind, title: entry.title, host: entry.host, medium: entry.medium, startedAt: entry.startedAt,
       headline: entry.headline, ...(entry.distance ? { distance: entry.distance.overall } : {}), card: entry.report.cardSmall || entry.report.card,
       ...(entry.blindSpot ? { blindSpot: entry.blindSpot } : {}), ...(entry.houseStyle ? { houseStyle: entry.houseStyle } : {}), ...(entry.surface ? { surface: entry.surface } : {}), ...(entry.origin ? { origin: entry.origin } : {}) })),

@@ -5,6 +5,7 @@
 
 import { renderBody, listText } from '../../plugin/server/design/report.mjs';
 import { blindSpotOf, blindSpotTotals, benchmarkTotals } from '../gallery/blind-spot.mjs';
+import { anchoredPairs, benchmarkSentence, distances } from './judge-pages.mjs';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/gu, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -87,7 +88,150 @@ const PUBLISHED = `<section class="site-section" id="published"><div class="site
 <div class="site-grid two"><div class="mr-card"><h3>Here</h3><ul><li>The request, the audience and each host, model and version.</li><li>The frozen prediction and sketch, and the names Qloo measured, marked new or predicted.</li><li>The reading, the Design DNA with its tokens, the captures, the review and the check.</li><li>The design itself, playable, and the commit and command that ran it.</li></ul></div>
 <div class="mr-card"><h3>Not here</h3><ul><li>Qloo's ids, affinity scores, popularity and descriptions, and its raw answers.</li><li>The session streams, tool inputs and outputs, and the model's private text.</li><li>Local paths, user names, keys and tokens: a scan of every file blocks a gallery that holds one.</li></ul></div></div></section>`;
 
-/** The landing page: the idea, the featured comparison, how it works in recorded data, the agents and the gallery. */
+// The landing page tells one recorded pair the way a short film would: the two designs at play, the blind spot, the
+// session step by step, what else the measurement changed, the evidence and how to try it. Every name, count and
+// device on it comes from the records; the story's phrases come from the gallery config.
+const ANTHROPIC_ARTICLE = 'https://claude.com/resources/articles/improving-frontend-design-through-skills';
+const MECHANICS = ['interaction', 'structure'];
+const LOOKS = ['palette', 'typography'];
+/** A comparison's arms with the guess first: each arm's index in the record and whether it is the Qloo arm. */
+function armsGuessFirst(record) {
+  const arms = record?.arms || [];
+  const qloo = Math.max(0, arms.findIndex(arm => arm.taste === 'qloo'));
+  return [...arms.keys()].sort((a, b) => (a === qloo) - (b === qloo)).map(index => ({ index, arm: arms[index], qloo: index === qloo }));
+}
+/** The devices both arms' Design DNA have on the first of `layers` they share, arm by arm in the record's order. */
+function devicesOn(record, layers) {
+  for (const name of layers) {
+    const row = (record?.layers || []).find(item => item.layer === name);
+    if (row?.arms?.length === 2 && row.arms.every(list => Array.isArray(list) && list.length)) return { layer: name, arms: row.arms };
+  }
+  return null;
+}
+const count = value => Number(value).toLocaleString('en-US');
+const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const inWords = value => WORDS[value] || count(value);
+const domainWord = label => label === 'TV' ? 'TV' : label.toLowerCase();
+export const shortTitle = title => String(title || '').replace(/: (?:Claude Code|Codex|Kiro)$/u, '').replace(/,? with Qloo and without$/u, '');
+const anchorChips = device => `<span class="site-chips">${(device.anchors || []).slice(0, 3).map(anchor => chip(anchor, anchor.mark === 'new' ? 'new' : '')).join('')}</span>`;
+
+/** A comparison's two arms at play, the guess first: each arm's recorded clip, or its still for a visitor who asks for less motion. */
+export function clipStage(entry) {
+  const record = entry?.record;
+  if (record?.kind !== 'comparison' || !Array.isArray(entry.clips)) return '';
+  const base = `/gallery/${escape(entry.id)}/`;
+  const figures = armsGuessFirst(record).map(({ arm, qloo }) => {
+    const clip = entry.clips.find(item => item.label === arm?.label);
+    if (!clip) return '';
+    const what = qloo ? 'the same sealed guess, then Qloo\'s measurement of the audience' : 'the sealed guess alone, with no Qloo data';
+    const alt = `Recorded play of the design made ${qloo ? 'with Qloo' : 'from the guess alone'}: ${listText(clip.scenes || [])}.`;
+    return `<figure class="story-arm${qloo ? ' qloo' : ''}"><figcaption><b>${qloo ? 'With Qloo' : 'The agent\'s guess'}</b><span>${escape(what)}</span></figcaption>
+<picture><source media="(prefers-reduced-motion: reduce)" srcset="${base}${escape(clip.poster)}"><img src="${base}${escape(clip.file)}" alt="${escape(alt)}" width="${escape(clip.width)}" height="${escape(clip.height)}"></picture>
+<p class="story-scenes">${(clip.scenes || []).map(scene => `<span>${escape(scene)}</span>`).join('')}</p></figure>`;
+  }).filter(Boolean);
+  if (figures.length !== 2) return '';
+  const seconds = Math.max(...entry.clips.map(clip => Number(clip.seconds) || 0));
+  return `<div class="story-arms">${figures.join('')}</div>
+<p class="story-stage-note">Both designs as they play in a browser: a script sets up each scene and presses the game's own keys, ${escape(Math.round(seconds))} seconds each, scene for scene. <a class="site-link" href="${base}">Play both, and read the record</a></p>`;
+}
+
+/** The opening: the problem in one line, the featured pair in one sentence, and the pair at play. */
+function storyHero(entry) {
+  const story = entry?.story;
+  const example = story ? ` Asked for ${story.ask}, ${HOSTS[entry.host] || 'the agent'}'s own guess built ${story.guess}. Given Qloo's measurement of that audience, it built ${story.measured}.` : '';
+  const stage = clipStage(entry);
+  return `<section class="site-hero story-hero"><p class="mr-kicker">The taste layer for AI agents</p><h1>AI agents design for the audience they imagine.</h1>
+<p class="site-lede">Moûsa makes them design for the one Qloo measures.${escape(example)}</p></section>
+${stage ? `<section class="story-stage" aria-label="${escape(shortTitle(entry.title))}: both designs at play">${stage}</section>` : featuredPair(entry)}
+<p class="site-actions story-actions"><a class="site-button" href="/try/">Try it with your own audience</a><a class="site-button quiet" href="/judges/">For the jury: the evidence</a><a class="site-button quiet" href="/vote/">Judge two designs blind</a></p>`;
+}
+
+/** The blind spot: how much of what an audience loves the agents' own guesses missed, and why that matters to a design. */
+function blindSpotSection(bench, spot) {
+  const share = bench ? bench.missed : spot.works ? spot.missed : null;
+  if (share === null || share === undefined) return '';
+  const what = bench ? `of the works Qloo measured were missing from the agents' own sealed guesses, over the ${bench.runs} runs of a pre-registered benchmark: ${bench.audiences} audiences, each guessed by Claude Code, Codex and Kiro, and every guess published before Qloo measured anything.`
+    : `of the works Qloo measured were missing from the agents' own sealed guesses: ${count(spot.works - spot.known)} of ${count(spot.works)}, in ${spot.sessions} recorded sessions.`;
+  const sessions = bench && spot.works ? `<p>In the ${escape(spot.sessions)} recorded sessions of the evidence, the guesses missed ${escape(count(spot.works - spot.known))} of the ${escape(count(spot.works))} works Qloo measured.</p>` : '';
+  return `<section class="site-section story-problem" id="blind-spot"><div class="site-head-row"><h2>The blind spot, measured</h2><p>An agent knows an audience's famous names. Qloo knows what else the same people love.</p></div>
+<div class="story-problem-grid"><p class="story-big"><b>${escape(`${(100 * share).toFixed(1)}%`)}</b><span>${escape(what)}${bench ? ' <a class="site-link" href="/benchmark/">The benchmark</a>' : ''}</span></p>
+<div class="story-problem-text"><p>An agent designs from what it already believes about an audience: the famous names, and the picture of the fan that comes with them. It cannot see the rest of their taste, so its designs land on the obvious, and on one another.</p>
+<p>Anthropic's own article on frontend design says that, without guidance, its model settles on one look, which makes AI-generated interfaces “immediately recognizable—and dismissible” (<a href="${ANTHROPIC_ARTICLE}">Improving frontend design through Skills</a>, 2025). Moûsa does not add a better style. It measures the audience before the design, and makes the design use what the guess missed.</p>${sessions}</div></div></section>`;
+}
+
+/** Both arms' stills, the guess first, from their clips' posters. */
+function stills(entry) {
+  const shown = armsGuessFirst(entry.record).map(({ arm, qloo }) => ({ qloo, clip: (entry.clips || []).find(item => item.label === arm?.label) })).filter(item => item.clip);
+  return shown.length === 2 ? `<div class="story-stills">${shown.map(({ qloo, clip }) => `<a href="/gallery/${escape(entry.id)}/"><img src="/gallery/${escape(entry.id)}/${escape(clip.poster)}" alt="${escape(qloo ? 'The design made with Qloo' : 'The design made from the guess alone')}" width="${escape(clip.width)}" height="${escape(clip.height)}" loading="lazy"><span>${qloo ? 'With Qloo' : 'The guess alone'}</span></a>`).join('')}</div>` : '';
+}
+
+/** The featured session step by step, in its own records: the request, the sealed guess, the measurement, the devices and the record. */
+function sessionSteps(entry, repository = '') {
+  const record = entry?.record;
+  const prediction = record?.prediction, measured = record?.measured;
+  if (record?.kind !== 'comparison' || !prediction || !measured?.counts) return howItWorks(entry);
+  const brief = /The brief:\s*([^.]+\.)/u.exec(entry.brief || '')?.[1] || '';
+  const briefPath = /--brief-file (\S+)/u.exec(entry.reproduce?.command || '')?.[1];
+  const briefLink = briefPath && repository ? `${repository}/blob/main/${briefPath}` : '';
+  const guessed = (prediction.groups || []).flatMap(group => group.entries || []).slice(0, 10);
+  const kinds = (measured.worlds || []).filter(world => world.works?.length && !/lesser known/iu.test(world.label));
+  const worlds = kinds.slice(0, 4);
+  const frozen = new Date(prediction.frozenAt || '');
+  const sealed = Number.isNaN(frozen.getTime()) ? '' : ` at ${frozen.toISOString().slice(11, 16)} UTC on ${day(prediction.frozenAt)}`;
+  const order = armsGuessFirst(record), devices = devicesOn(record, [...MECHANICS, ...LOOKS]);
+  const qloo = order.find(item => item.qloo);
+  const columns = devices ? `<div class="story-compare">${order.map(({ index, qloo: measuredArm }) => `<div class="story-compare-arm${measuredArm ? ' qloo' : ''}"><p class="mr-label">${measuredArm ? 'With Qloo' : 'The guess alone'}</p>
+<ul class="story-devices">${devices.arms[index].slice(0, 4).map(device => `<li><span>${escape(device.device)}</span>${anchorChips(device)}</li>`).join('')}</ul></div>`).join('')}</div>` : '';
+  const steps = [
+    ['The request', 'One command and a short brief, in an empty folder. The request names the audience once; the rest of the brief keeps the game small enough to finish.',
+      `${brief ? `<pre class="story-brief"><code>/mousa:compare … ${escape(brief)} …</code></pre>` : ''}<p class="site-small">${escape([HOSTS[entry.host], entry.model, day(entry.startedAt)].filter(Boolean).join(' · '))}${briefLink ? ` · <a class="site-link" href="${escape(briefLink)}">The whole brief</a>` : ''}</p>`],
+    ['The agent guesses first, and the guess is sealed', `Before any data, the agent writes down what it believes the audience loves, and the design it would make from that alone. Moûsa seals the guess${sealed}, with its SHA-256, and both designs start from it.`,
+      `${prediction.summary ? `<p class="site-quote">“${escape(prediction.summary)}”</p>` : ''}<p class="site-chips">${guessed.map(item => chip({ name: item.name, mark: item.measured ? 'predicted' : 'own' }, item.measured ? 'measured too' : '')).join('')}</p>`],
+    ['Qloo measures the audience', `Qloo measured ${measured.counts.works} works this audience loves${kinds.length ? `, across ${listText(kinds.map(world => domainWord(world.label)))}` : ''}. The guess had named ${inWords(measured.counts.worksPredicted ?? 0)} of them.`,
+      worlds.map(world => `<p class="story-world"><span class="mr-label">${escape(world.label)}</span><span class="site-chips">${world.works.slice(0, 4).map(work => chip(work, work.mark === 'new' ? 'new' : '')).join('')}</span></p>`).join('')],
+    ['The design has to rest on what the guess missed', `Each device of the Qloo design names the measured works and qualities it rests on. ${qloo?.arm?.headline?.sentence || ''} Here is what each game does, and why.`, columns],
+    ['Both are built, played and recorded', `Each arm builds its design, plays its own test and reviews its captures. Moûsa then writes the Taste Provenance record from the session's own files: the guess, the names, every device and its anchors, and the distance between the two designs${record.distance?.overall !== undefined ? `, ${Number(record.distance.overall).toFixed(2)} here on a scale from 0 (alike) to 1` : ''}.`,
+      `${stills(entry)}<p class="story-links"><a class="site-button" href="/gallery/${escape(entry.id)}/">Play both, and read the record</a></p>`],
+  ];
+  return `<section class="site-section story-steps" id="how"><div class="site-head-row"><h2>One session, step by step</h2><p>${escape(shortTitle(entry.title))}, from its own records.</p></div>
+<ol>${steps.map(([title, text, shown], step) => `<li><div class="story-step-text"><span class="story-step-number">${step + 1}</span><h3>${escape(title)}</h3><p>${escape(text)}</p></div><div class="story-step-shown">${shown}</div></li>`).join('')}</ol></section>`;
+}
+
+/** The pairs the landing page tells after the featured one: more designs from one sentence, and one shop for several audiences. */
+function morePairs(gallery) {
+  const entries = (gallery.index?.highlights || []).map(id => gallery.entries.get(id)).filter(Boolean);
+  const stories = entries.filter(entry => entry.story);
+  const shops = entries.filter(entry => !entry.story && entry.record?.kind === 'comparison');
+  const told = stories.map(entry => `<a class="site-card story-card" href="/gallery/${escape(entry.id)}/"><span class="site-card-image">${entry.report?.cardSmall ? `<img src="/gallery/${escape(entry.id)}/${escape(entry.report.cardSmall)}" alt="" width="1200" height="630">` : ''}</span>
+<span class="site-card-text"><b>${escape(shortTitle(entry.title))}</b><span>Asked for ${escape(entry.story.ask)}.</span><span class="story-line"><span class="story-tag">The guess</span> ${escape(entry.story.guess)}</span><span class="story-line qloo"><span class="story-tag">With Qloo</span> ${escape(entry.story.measured)}</span></span></a>`).join('');
+  const shopFigures = shops.map(entry => {
+    const view = (entry.record.views || []).find(item => item.a && item.b);
+    const qloo = armsGuessFirst(entry.record).find(item => item.qloo);
+    const capture = view ? (qloo?.index === 1 ? view.b : view.a) : null;
+    const audience = /for people who love (.+)$/u.exec(entry.title || '')?.[1] || shortTitle(entry.title);
+    return capture ? `<a class="story-shop" href="/gallery/${escape(entry.id)}/"><img src="/gallery/${escape(entry.id)}/report/${escape(capture.file)}" alt="${escape(`The record shop made with Qloo for people who love ${audience}`)}" width="${escape(capture.width)}" height="${escape(capture.height)}" loading="lazy"><span>${escape(audience)}</span></a>` : '';
+  }).filter(Boolean);
+  if (!told && !shopFigures.length) return '';
+  return `<section class="site-section" id="more"><div class="site-head-row"><h2>Not a style: it changes what a design does</h2><p>The same rule, in a game with no game named, a game for this jury's own audience and a phone app. Each was built twice from one sealed guess.</p></div>
+${told ? `<div class="site-cards">${told}</div>` : ''}
+${shopFigures.length > 1 ? `<div class="story-shops"><div class="site-head-row"><h3>One record shop, ${escape(inWords(shopFigures.length))} audiences</h3><p>The same request, the same agent and the same stages; only the measured audience changes, and the shop changes with it.</p></div><div class="story-shop-row">${shopFigures.join('')}</div></div>` : ''}
+<p class="story-all"><a class="site-link" href="/gallery/">All ${escape(gallery.index?.entries.length ?? 0)} recorded sessions, in Claude Code, Codex and Kiro</a></p></section>`;
+}
+
+/** The evidence in four lines, each with where it is checked; the jury page has the whole ladder and its limits. */
+function evidenceSection(gallery, bench) {
+  const range = distances(gallery), anchored = anchoredPairs(gallery);
+  const cards = [
+    bench && gallery.benchmark ? ['Sealed before measuring', `${benchmarkSentence(gallery.benchmark)} Every guess was published before Qloo measured anything.`, '/benchmark/', 'The benchmark'] : null,
+    range.length ? [`${range.length === 1 ? 'One recorded pair' : `${count(range.length)} recorded pairs`}`, `Each built twice from one sealed guess, once with Qloo and once without. Distance between the two designs: ${range[0].toFixed(2)} to ${range.at(-1).toFixed(2)}${anchored.counted ? `; in ${anchored.whole} of them every device of the Qloo design rests on a name the guess missed` : ''}.`, '/gallery/', 'The pairs'] : null,
+    ['Beyond the model\'s own variance', 'In repeated pairs of one brief, the blind sketches of both arms showed no detectable difference (p = 0.81); after Qloo, type, structure and palette separated (p = 0.005 each).', '/judges/', 'What each kind shows, and does not'],
+    ['A blind vote', 'Two designs of a pair, unlabelled: which would the audience rather have? You see which used Qloo only after you vote.', '/vote/', 'Vote'],
+  ].filter(Boolean);
+  return `<section class="site-section" id="evidence"><div class="site-head-row"><h2>Is it the measurement, or chance?</h2><p>Four kinds of evidence, each published with what it does not show.</p></div>
+<div class="story-evidence">${cards.map(([title, text, href, link]) => `<div class="mr-card"><h3>${escape(title)}</h3><p>${escape(text)}</p><p><a class="site-link" href="${href}">${escape(link)}</a></p></div>`).join('')}</div></section>`;
+}
+
+/** The landing page: the featured pair as a short film, then the blind spot, the session, more pairs, the evidence and how to try it. */
 export function landingPage({ gallery, repository = '' }) {
   const index = gallery.index;
   const featured = gallery.entries.get(index?.featured) || [...gallery.entries.values()][0];
@@ -95,15 +239,11 @@ export function landingPage({ gallery, repository = '' }) {
     : blindSpotTotals([...gallery.entries.values()].map(entry => ({ id: entry.id, host: entry.host, blindSpot: entry.blindSpot || blindSpotOf(entry.record) })));
   // The pre-registered benchmark when its results are published; the gallery's own sessions otherwise.
   const bench = benchmarkTotals(gallery.benchmark);
-  const stat = bench ? `<p class="site-hero-stat"><b>${escape((100 * bench.missed).toFixed(1))}%</b><span>of the works Qloo measured were missing from the AI agents' own sealed guesses, pooled over the ${escape(bench.runs)} runs of a <a href="/benchmark/">pre-registered benchmark</a>: ${escape(bench.audiences)} audiences, each guessed by Claude Code, Codex and Kiro.</span></p>`
-    : spot.works ? `<p class="site-hero-stat"><b>${escape((100 * spot.missed).toFixed(1))}%</b><span>of the works Qloo measured were missing from the agents' own sealed guesses: ${escape(spot.works - spot.known)} of ${escape(spot.works)}, in ${escape(spot.sessions)} recorded sessions in Claude Code, Codex and Kiro.</span></p>` : '';
-  const body = `<section class="site-hero"><p class="mr-kicker">The taste layer for AI agents</p><h1>Design that rests on what an audience actually loves.</h1>
-<p class="site-lede">Moûsa makes an AI agent write down its own guess about an audience before it sees any data. Then Qloo measures that audience, and every choice in the design has to rest on what the guess did not contain. Each session leaves a record of where its choices came from.</p>
-${stat}<p class="site-actions"><a class="site-button" href="/judges/">Start here: for the jury</a><a class="site-button quiet" href="/try/">Try it with your own audience</a><a class="site-button quiet" href="/vote/">Judge two designs blind</a></p></section>
-${featuredPair(featured)}${howItWorks(featured)}${install(repository)}
-<section class="site-section" id="gallery"><div class="site-head-row"><h2>Recorded sessions</h2><p>${escape(index?.entries.length ?? 0)} sessions in Claude Code, Codex and Kiro. Each page shows the design, its record and how to run it again.</p></div>
-<div class="site-cards">${(index?.entries || []).map(entry => card(entry, { spot: spotOf(gallery, entry) })).join('')}</div></section>${PUBLISHED}`;
-  return layout({ title: 'Moûsa: design grounded in measured taste', description: 'An AI agent freezes its own guess, Qloo measures the audience, and every design choice rests on what the guess did not contain.',
+  const tryIt = `<section class="site-section" id="try"><div class="site-head-row"><h2>Try it</h2><p>On this site with your own audience, or in the agent your team already uses.</p></div>
+<div class="story-try"><div class="mr-card"><h3>Here, in a minute</h3><p>Name two or three works an audience loves. In under a minute the live try shows Kiro's sealed guess beside Qloo's measurement; building both designs takes five to ten minutes more, and is optional. No code or sign-in.</p><p><a class="site-button" href="/try/">Open the live try</a></p></div>
+<div class="mr-card"><h3>In your own agent</h3><p>The plugin runs in Claude Code, Codex and Kiro, on the project a team already has. Each person uses their own Qloo API key.</p><p><a class="site-link" href="#agents">Install it</a></p></div></div></section>`;
+  const body = `${storyHero(featured)}${blindSpotSection(bench, spot)}${sessionSteps(featured, repository)}${morePairs(gallery)}${evidenceSection(gallery, bench)}${tryIt}${install(repository)}${PUBLISHED}`;
+  return layout({ title: 'Moûsa: design grounded in measured taste', description: 'AI agents design for the audience they imagine. Moûsa makes them design for the one Qloo measures: a sealed guess, a measurement, and a design that must use what the guess missed.',
     body, repository, image: featured?.report?.card ? `/gallery/${featured.id}/${featured.report.card}` : '' });
 }
 

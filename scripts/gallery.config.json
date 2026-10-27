@@ -1,6 +1,15 @@
 {
   "schemaVersion": "1.0",
-  "featured": "try-34996ba4",
+  "featured": "thistledown-claude-code",
+  "highlights": [
+    "saltmarsh-claude-code",
+    "opening-night-claude-code",
+    "run-club-claude-code",
+    "try-34996ba4",
+    "try-639e0146",
+    "try-728ccf20",
+    "try-7e18e053"
+  ],
   "vote": [
     "long-dusk-compare-claude-code",
     "long-dusk-compare-codex",
@@ -40,25 +49,45 @@
       "id": "thistledown-claude-code",
       "run": "claude-code-rpg-compare-1",
       "title": "Thistledown, an RPG from one sentence, with Qloo and without: Claude Code",
-      "summary": "A small browser RPG for people who love Stardew Valley, built twice from one sealed guess. The guess made farming, fishing and friendship; the measurement made herding, tape-recorded interviews and a garage-band rehearsal."
+      "summary": "A small browser RPG for people who love Stardew Valley, built twice from one sealed guess. The guess made farming, fishing and friendship; the measurement made herding, tape-recorded interviews and a garage-band rehearsal.",
+      "story": {
+        "ask": "a small RPG for people who love Stardew Valley",
+        "guess": "farming, fishing and friendship",
+        "measured": "herding, tape-recorded interviews and a garage-band rehearsal"
+      }
     },
     {
       "id": "saltmarsh-claude-code",
       "run": "claude-code-rpg-compare-2",
       "title": "Saltmarsh, an RPG with no game named, with Qloo and without: Claude Code",
-      "summary": "A small browser RPG for people who love Wes Anderson's films and Fleetwood Mac, built twice from one sealed guess. The guess made a pastel seaside of favours and a centred-photo shutter; the measurement made a stage manager tuning a radio through static, a band rehearsal and a curtain call."
+      "summary": "A small browser RPG for people who love Wes Anderson's films and Fleetwood Mac, built twice from one sealed guess. The guess made a pastel seaside of favours and a centred-photo shutter; the measurement made a stage manager tuning a radio through static, a band rehearsal and a curtain call.",
+      "story": {
+        "ask": "a small RPG for people who love Wes Anderson's films and Fleetwood Mac",
+        "guess": "a pastel seaside of favours and a centred-photo shutter",
+        "measured": "a stage manager tuning a radio through static, a band rehearsal and a curtain call"
+      }
     },
     {
       "id": "opening-night-claude-code",
       "run": "claude-code-jury-game-compare-1",
       "title": "Opening Night, a game for the jury's own audience, with Qloo and without: Claude Code",
-      "summary": "A small browser game for an audience that loves This Week in Startups, The Original Kings of Comedy, the Dodgers, Chelsea F.C. and Live Nation. The guess stitched the five into an at-bat, a roast, a pitch room and an encore; the measurement made one stand-up set of precise timing, crowd work and comebacks."
+      "summary": "A small browser game for an audience that loves This Week in Startups, The Original Kings of Comedy, the Dodgers, Chelsea F.C. and Live Nation. The guess stitched the five into an at-bat, a roast, a pitch room and an encore; the measurement made one stand-up set of precise timing, crowd work and comebacks.",
+      "story": {
+        "ask": "a small game for the jury's own audience",
+        "guess": "an at-bat, a roast, a pitch room and an encore",
+        "measured": "one stand-up set of precise timing, crowd work and comebacks"
+      }
     },
     {
       "id": "run-club-claude-code",
       "run": "claude-code-run-club-compare-1",
       "title": "Night Shift Run Club, a phone app, with Qloo and without: Claude Code",
-      "summary": "A small run club app for people who love Haruki Murakami and LCD Soundsystem, built twice from one sealed guess. The guess made a door, a sixteen-step loop and a notebook; the measurement made a wall of every Thursday, flashbacks, an oddity file and a pace plan written like a radio rundown."
+      "summary": "A small run club app for people who love Haruki Murakami and LCD Soundsystem, built twice from one sealed guess. The guess made a door, a sixteen-step loop and a notebook; the measurement made a wall of every Thursday, flashbacks, an oddity file and a pace plan written like a radio rundown.",
+      "story": {
+        "ask": "a run club app for people who love Haruki Murakami and LCD Soundsystem",
+        "guess": "a door, a sixteen-step loop and a notebook",
+        "measured": "a wall of every Thursday, flashbacks, an oddity file and a pace plan written like a radio rundown"
+      }
     },
     {
       "id": "comedy-night-codex",
