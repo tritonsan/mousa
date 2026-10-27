@@ -9,9 +9,15 @@ The reports it names under `output/` stay on the machine that made them. Several
 **What changed.**
 - A tenth scene, "Not only games", follows the jury's game. It shows four more pairs, each with its guess beside its Qloo design: the Kiro record shop's website, the Codex game character, the page for the jury and the run club's phone app. The video now runs 106.9 seconds.
 - The video is on YouTube at https://youtu.be/dR9iKRZI7Bc. Its chapters start where its scenes start in the SRT, and none is shorter than YouTube's ten seconds.
-- The jury page links to it under its opening paragraph, every page's footer links to it, and so do the README and the submission text.
+- The landing page and the jury page play it in place, at the top: beside the opening on a wide screen, right under the heading on a phone.
+  - It plays from YouTube's privacy-enhanced host, `www.youtube-nocookie.com`. Only these two pages' policies let them frame that host as well as the preview origin. Every other page still frames the preview origin alone.
+  - The site sends no referrer, but YouTube's player refuses to start without one, so the frame alone sends the site's origin.
+- Every page's footer links to the video, and so do the README and the submission text.
 
-**Checked.** The YouTube oEmbed answer gives the video's title. The tests check the jury page's button and the footer's link.
+**Checked.**
+- The YouTube oEmbed answer gives the video's title.
+- In a browser at 1440 and 375 pixels wide, the video sits where described and plays in place with its captions, with no console error.
+- The tests check the frame, the link to YouTube and each page's policy. The house-style check still finds no signature on any page.
 
 ## The numbers beside their limits, clips of every game and app, and a video — October 27, 2026 (evening)
 

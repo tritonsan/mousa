@@ -22,7 +22,7 @@ import { PREVIEW_CSP, CAPTURE_ID, REVIEW_DIR, createSiteCapture } from './site-p
 import { inspectBrowser, verifyBrowser } from '../plugin/server/production/capture.mjs';
 import { loadShowcase, isShowcaseJob, showcaseAppFile, SHOWCASE_APP_CSP } from './showcase.mjs';
 import { loadGallery, galleryFile, armRecord } from './gallery.mjs';
-import { landingPage, galleryPage, entryPage, armPage, missingPage, tryPendingPage } from './site/render.mjs';
+import { VIDEO_ORIGIN, landingPage, galleryPage, entryPage, armPage, missingPage, tryPendingPage } from './site/render.mjs';
 import { judgesPage, qlooPage, benchmarkPage, showcasePage } from './site/judge-pages.mjs';
 import { votePage, voteThanksPage, voteProblemPage, voteResultsPage, ballotViews } from './site/vote-pages.mjs';
 import { createVoteBox, voterAddress, VoteError } from './votes.mjs';
@@ -45,8 +45,8 @@ const GAME_FILES = /^(?:index\.html|compare\.html|styles\.css|src\/[a-z-]{1,40}\
 // A painted arm adds its pieces and its standing figure, which run-pair.mjs publishes beside the arm's character file.
 const PAIR_FILES = /^(?:pair\.json|qloo-(?:off|on|swap)\.json|qloo-(?:off|on|swap)-portrait-[12]\.(?:jpg|png)|qloo-(?:off|on|swap)-skin-(?:layer|strip|tip)-[a-z0-9-]{1,50}\.png|qloo-(?:off|on|swap)-figure\.png|qloo-(?:off|on|swap)-review-r[1-3]-(?:pose|walk|scene|kindle)\.png)$/u;
 // The public site's pages run no script and load only this origin's styles, pictures and fonts; a session page frames
-// the recorded design from the preview origin.
-const siteCsp = origin => `default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; frame-src ${origin}; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`;
+// the recorded design from the preview origin, and the landing and jury pages also frame the video from YouTube.
+const siteCsp = (origin, video = false) => `default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; frame-src ${origin}${video ? ` ${VIDEO_ORIGIN}` : ''}; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`;
 // A report's own files: its page runs no script and carries its fonts inline.
 const reportCsp = "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
 
@@ -544,13 +544,13 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
       }
       // The public site: with a gallery, the plain address opens its landing page, and the Studio moves to /studio.
       if (req.method === 'GET' && hasGallery()) {
-        const page = (html, status = 200) => send(res, status, html, { 'Content-Type': mime['.html'], 'Content-Security-Policy': siteCsp(new URL(previewBaseUrl).origin) });
+        const page = (html, status = 200, video = false) => send(res, status, html, { 'Content-Type': mime['.html'], 'Content-Security-Policy': siteCsp(new URL(previewBaseUrl).origin, video) });
         const repository = config.siteRepository || '';
         // The blind vote's total so far, so the landing and jury pages say how many votes there are, none included.
         const votes = () => voteBox ? voteBox.results().reduce((total, result) => total + result.votes, 0) : null;
-        if (pathname === '/') return page(landingPage({ gallery, repository, votes: votes() }));
+        if (pathname === '/') return page(landingPage({ gallery, repository, votes: votes() }), 200, true);
         if (pathname === '/gallery' || pathname === '/gallery/') return page(galleryPage({ gallery, repository }));
-        if (pathname === '/judges' || pathname === '/judges/') return page(judgesPage({ gallery, benchmark: gallery.benchmark || null, repository, votes: votes() }));
+        if (pathname === '/judges' || pathname === '/judges/') return page(judgesPage({ gallery, benchmark: gallery.benchmark || null, repository, votes: votes() }), 200, true);
         if (pathname === '/qloo' || pathname === '/qloo/') return page(qlooPage({ repository }));
         if (pathname === '/benchmark' || pathname === '/benchmark/') return page(benchmarkPage({ benchmark: gallery.benchmark || null, repository }));
         if (pathname === '/showcase' || pathname === '/showcase/') return page(showcasePage({ gallery, previewBase: new URL(previewBaseUrl).origin, repository }));

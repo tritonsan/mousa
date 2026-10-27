@@ -2,7 +2,7 @@
 // the evidence and what each kind of evidence does and does not show; and how Moûsa uses Qloo, request by request,
 // with what the live API taught it. Drawn on the server with no script, like the rest of the site.
 
-import { VIDEO, clipStage, layout, shortTitle } from './render.mjs';
+import { clipStage, layout, shortTitle, videoFigure } from './render.mjs';
 import { blindSpotOf, blindSpotTotals, benchmarkTotals } from '../gallery/blind-spot.mjs';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/gu, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -80,9 +80,9 @@ export function judgesPage({ gallery, benchmark = null, repository = '', votes =
     spot.guessed ? [percent(spot.confirmedShare), `of the works the agents guessed turned up in Qloo's measurement: ${count(spot.confirmed)} of ${count(spot.guessed)}.`] : null,
     bench ? null : ['3', 'agents run the same plugin: Claude Code, Codex and Kiro, on the project a team already has.'],
   ].filter(Boolean);
-  const body = `<section class="site-hero small"><p class="mr-kicker">For the jury</p><h1>Moûsa in one minute</h1>
-<p class="site-lede">Moûsa is a plugin for the design agents teams already use. Before the agent designs anything, it writes down and seals its own guess about the audience. Qloo then measures that audience, and every design choice has to rest on what the guess missed. Each session ends with a record that sets the guess beside the measurement.</p>
-<p class="site-actions"><a class="site-button" href="${VIDEO}">Watch the video, 1:47</a></p></section>
+  const body = `<section class="site-hero small with-video"><p class="mr-kicker">For the jury</p><h1>Moûsa in one minute</h1>
+${videoFigure()}
+<p class="site-lede">Moûsa is a plugin for the design agents teams already use. Before the agent designs anything, it writes down and seals its own guess about the audience. Qloo then measures that audience, and every design choice has to rest on what the guess missed. Each session ends with a record that sets the guess beside the measurement.</p></section>
 ${stage ? `<section class="story-stage" aria-label="${escape(pairTitle)}: both designs at play">${stage}</section>` : ''}
 <section class="site-section"><div class="site-stats">${numbers.map(([value, text]) => `<p class="site-stat"><b>${escape(value)}</b><span>${escape(text)}</span></p>`).join('')}</div></section>
 <section class="site-section"><div class="site-head-row"><h2>A path through the evidence</h2><p>Each step stands on its own; the first three take under four minutes.</p></div>

@@ -14,7 +14,18 @@ const HOSTS = Object.freeze({ 'claude-code': 'Claude Code', codex: 'Codex', kiro
 const MEDIA = Object.freeze({ web: 'Website', 'app-ui': 'App interface', game: 'Game', generic: 'Source design' });
 const LANES = Object.freeze({ 'mousa:mousa-baseline': 'The baseline agent, without Qloo', 'mousa:mousa-designer': 'The Qloo agent' });
 // The submission video on YouTube: Thistledown from the sealed guess to both games, the jury's game and the benchmark.
-export const VIDEO = 'https://youtu.be/dR9iKRZI7Bc';
+const VIDEO_ID = 'dR9iKRZI7Bc';
+export const VIDEO = `https://youtu.be/${VIDEO_ID}`;
+// The landing and jury pages play it in place from YouTube's privacy-enhanced host, the one origin besides the preview
+// origin their policy lets them frame. The site sends no referrer, but YouTube's player refuses to start without one,
+// so the frame alone sends the site's origin.
+export const VIDEO_ORIGIN = 'https://www.youtube-nocookie.com';
+
+/** The video, played in place, with a way to open it on YouTube. */
+export function videoFigure() {
+  return `<figure class="site-video"><div class="site-video-frame"><iframe src="${VIDEO_ORIGIN}/embed/${VIDEO_ID}?rel=0" title="The Moûsa video, 1 minute 47 seconds" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+<figcaption>The video, 1:47: one request from the sealed guess to both games, then the jury's game and the benchmark. <a class="site-link" href="${VIDEO}">Open it on YouTube</a></figcaption></figure>`;
+}
 const hex = value => (/^#[0-9a-f]{6}$/u.test(value || '') ? value : null);
 
 /** A page of the site: its header and navigation, the body and the footer. `refresh` reloads it every so many seconds. */
@@ -148,7 +159,8 @@ function storyHero(entry) {
   const story = entry?.story;
   const example = story ? ` Asked for ${story.ask}, ${HOSTS[entry.host] || 'the agent'}'s own guess built ${story.guess}. Given Qloo's measurement of that audience, it built ${story.measured}.` : '';
   const stage = clipStage(entry);
-  return `<section class="site-hero story-hero"><p class="mr-kicker">The taste layer for AI agents</p><h1>AI agents design for the audience they imagine.</h1>
+  return `<section class="site-hero story-hero with-video"><p class="mr-kicker">The taste layer for AI agents</p><h1>AI agents design for the audience they imagine.</h1>
+${videoFigure()}
 <p class="site-lede">Moûsa, a plugin for Claude Code, Codex and Kiro, makes them design for the one Qloo measures.${escape(example)}</p>
 <p class="site-actions story-actions"><a class="site-button" href="/try/">Try it with your own audience</a><a class="site-button quiet" href="/judges/">For the jury: the evidence</a><a class="site-button quiet" href="/vote/">Judge two designs blind</a></p></section>
 ${stage ? `<section class="story-stage" aria-label="${escape(shortTitle(entry.title))}: both designs at play">${stage}</section>` : featuredPair(entry)}`;

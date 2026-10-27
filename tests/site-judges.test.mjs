@@ -71,7 +71,13 @@ test('the landing page tells the featured pair: both clips with the guess first,
   const jury = judgesPage({ gallery: storyGallery() });
   assert.match(jury, /\/gallery\/rpg-pair\/report\/clips\/with-qloo\.webp/u, 'the jury page shows the same pair at play');
   assert.match(jury, /<a class="site-link" href="\/gallery\/rpg-pair\/">Thistledown, an RPG from one sentence<\/a>/u);
-  assert.match(jury, /<a class="site-button" href="https:\/\/youtu\.be\/dR9iKRZI7Bc">Watch the video, 1:47<\/a>/u, 'the jury page links the video');
+  // The video plays in place at the top of both pages, from YouTube's privacy-enhanced host, sending only the origin.
+  for (const page of [html, jury]) {
+    assert.match(page, /<iframe src="https:\/\/www\.youtube-nocookie\.com\/embed\/dR9iKRZI7Bc\?rel=0" title="The Moûsa video, 1 minute 47 seconds"[^>]* referrerpolicy="strict-origin-when-cross-origin"><\/iframe>/u);
+    assert.match(page, /<a class="site-link" href="https:\/\/youtu\.be\/dR9iKRZI7Bc">Open it on YouTube<\/a>/u);
+    assert.ok(page.indexOf('class="site-video"') < page.indexOf('class="story-stage"'), 'the video comes before the clips');
+  }
+  assert.ok(html.indexOf('</h1>') < html.indexOf('class="site-video"'), 'the heading comes first');
   assert.match(html, /<footer class="site-foot">[\s\S]*<a href="https:\/\/youtu\.be\/dR9iKRZI7Bc">The video, 1:47<\/a><\/p><\/footer>/u, 'every page links the video in its footer');
 });
 

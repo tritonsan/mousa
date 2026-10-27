@@ -219,6 +219,19 @@ main#main { max-width: 1180px; margin: 0 auto; padding: 0 40px 72px; }
 .story-stage .site-link { color: #d9ccfb; }
 .story-actions { margin-top: 22px; }
 
+/* The video, played in place: beside the opening on a wide screen, right under the heading on a narrow one. */
+.site-video { margin: 22px 0 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.site-video-frame { position: relative; aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden; background: #1d1e33; }
+.site-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.site-video figcaption { font-size: 14px; line-height: 1.5; color: var(--muted); }
+@media (min-width: 981px) {
+  .site-hero.with-video { max-width: none; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: repeat(4, auto) 1fr; column-gap: 44px; align-items: start; }
+  .site-hero.with-video > * { grid-column: 1; }
+  .site-hero.with-video > .site-video { grid-column: 2; grid-row: 1 / -1; margin: 0; }
+  .site-hero.with-video:not(.small) h1 { font-size: 48px; }
+  .site-hero.with-video .site-lede { font-size: 18px; }
+}
+
 .story-problem-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px 44px; align-items: start; }
 .story-big { margin: 0; display: flex; flex-direction: column; gap: 12px; }
 .story-big b { font: 600 104px/.9 var(--display); letter-spacing: -.03em; color: var(--violet-deep); }

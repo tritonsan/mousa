@@ -48,7 +48,9 @@ test('with a gallery the plain address opens the site, every page runs no script
     assert.doesNotMatch(page.policy, /script-src/u);
   }
   const entry = await get(`${app}/gallery/fixture-pantry/`);
-  assert.match(entry.policy, new RegExp(`frame-src ${new URL(preview).origin.replace(/[.]/gu, '\\.')}`, 'u'), 'a session page frames only the preview origin');
+  assert.match(entry.policy, new RegExp(`frame-src ${new URL(preview).origin.replace(/[.]/gu, '\\.')};`, 'u'), 'a session page frames only the preview origin');
+  assert.match(landing.policy, new RegExp(`frame-src ${new URL(preview).origin.replace(/[.]/gu, '\\.')} https://www\\.youtube-nocookie\\.com;`, 'u'), 'the landing page also frames the video');
+  assert.match((await get(`${app}/judges/`)).policy, /frame-src \S+ https:\/\/www\.youtube-nocookie\.com;/u, 'so does the jury page');
   assert.match(entry.body, new RegExp(`<iframe src="${new URL(preview).origin.replace(/[.]/gu, '\\.')}/gallery/fixture-pantry/out/design/index\\.html"[^>]*sandbox="allow-scripts allow-forms"`, 'u'));
   assert.match(entry.body, /What the agent did/u);
   assert.match(entry.body, /refused: TASTE_PROTOCOL_INVALID/u);
