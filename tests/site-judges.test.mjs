@@ -71,6 +71,8 @@ test('the landing page tells the featured pair: both clips with the guess first,
   const jury = judgesPage({ gallery: storyGallery() });
   assert.match(jury, /\/gallery\/rpg-pair\/report\/clips\/with-qloo\.webp/u, 'the jury page shows the same pair at play');
   assert.match(jury, /<a class="site-link" href="\/gallery\/rpg-pair\/">Thistledown, an RPG from one sentence<\/a>/u);
+  assert.match(jury, /<a class="site-button" href="https:\/\/youtu\.be\/dR9iKRZI7Bc">Watch the video, 1:47<\/a>/u, 'the jury page links the video');
+  assert.match(html, /<footer class="site-foot">[\s\S]*<a href="https:\/\/youtu\.be\/dR9iKRZI7Bc">The video, 1:47<\/a><\/p><\/footer>/u, 'every page links the video in its footer');
 });
 
 test('the jury page gives the numbers, the path and what each kind of evidence does not show', () => {

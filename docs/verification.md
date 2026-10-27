@@ -4,6 +4,15 @@ This record describes the tested scope of the local application. It does not est
 
 The reports it names under `output/` stay on the machine that made them. Several hold Qloo's answers, which the public repository does not.
 
+## The video on YouTube — October 28, 2026
+
+**What changed.**
+- A tenth scene, "Not only games", follows the jury's game. It shows four more pairs, each with its guess beside its Qloo design: the Kiro record shop's website, the Codex game character, the page for the jury and the run club's phone app. The video now runs 106.9 seconds.
+- The video is on YouTube at https://youtu.be/dR9iKRZI7Bc. Its chapters start where its scenes start in the SRT, and none is shorter than YouTube's ten seconds.
+- The jury page links to it under its opening paragraph, every page's footer links to it, and so do the README and the submission text.
+
+**Checked.** The YouTube oEmbed answer gives the video's title. The tests check the jury page's button and the footer's link.
+
 ## The numbers beside their limits, clips of every game and app, and a video — October 27, 2026 (evening)
 
 **Why.** A judge-style review and a scan of the other entries found five problems:

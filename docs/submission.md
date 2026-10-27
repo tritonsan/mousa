@@ -70,6 +70,7 @@ A live try in Kiro on 24 October: a record shop's website, Wax & Wane in Istanbu
 
 ## Try it
 
+- **The video:** https://youtu.be/dR9iKRZI7Bc tells Thistledown from the sealed guess to both games at play, then the jury's game, the other kinds of design and the benchmark, in 1 minute 47 seconds.
 - **For the jury:** https://d1n6iqgwqs2043.cloudfront.net/ tells one pair from the request to the record, with both games at play. https://d1n6iqgwqs2043.cloudfront.net/judges/ gives the numbers and a four-minute path through the evidence.
 - **The live try:** https://d1n6iqgwqs2043.cloudfront.net/try/, with no code or sign-in. Name two or three works you love, and in under a minute you see Kiro's sealed guess beside Qloo's measurement. Building both designs takes about five to ten minutes more. It is open to anyone, up to 100 first steps and 10 design pairs a day across all visitors.
 - **The plugin**, with your own Qloo key: in Claude Code, `/plugin marketplace add tritonsan/mousa`, then `/plugin install mousa@mousa`; in Codex, `codex plugin marketplace add tritonsan/mousa`, then `codex plugin add mousa@mousa`.
