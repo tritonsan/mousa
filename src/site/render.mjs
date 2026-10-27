@@ -115,15 +115,20 @@ const domainWord = label => label === 'TV' ? 'TV' : label.toLowerCase();
 export const shortTitle = title => String(title || '').replace(/: (?:Claude Code|Codex|Kiro)$/u, '').replace(/,? with Qloo and without$/u, '');
 const anchorChips = device => `<span class="site-chips">${(device.anchors || []).slice(0, 3).map(anchor => chip(anchor, anchor.mark === 'new' ? 'new' : '')).join('')}</span>`;
 
-/** A comparison's two arms at play, the guess first: each arm's recorded clip, or its still for a visitor who asks for less motion. */
-export function clipStage(entry) {
+/**
+ * A comparison's two arms at play, the guess first: each arm's recorded clip, or its still for a visitor who asks for
+ * less motion. On the pair's own page there is no link to it; a phone's clips stand side by side at a phone's height.
+ */
+export function clipStage(entry, { linked = true } = {}) {
   const record = entry?.record;
   if (record?.kind !== 'comparison' || !Array.isArray(entry.clips)) return '';
   const base = `/gallery/${escape(entry.id)}/`;
+  const game = entry.medium === 'game';
+  const portrait = entry.clips.some(clip => Number(clip.height) > Number(clip.width));
   const figures = armsGuessFirst(record).map(({ arm, qloo }) => {
     const clip = entry.clips.find(item => item.label === arm?.label);
     if (!clip) return '';
-    const what = qloo ? 'the same sealed guess, then Qloo\'s measurement of the audience' : 'the sealed guess alone, with no Qloo data';
+    const what = qloo ? 'the same guess, then Qloo\'s measurement of the audience' : 'its own guess alone, written down before any Qloo data';
     const alt = `Recorded play of the design made ${qloo ? 'with Qloo' : 'from the guess alone'}: ${listText(clip.scenes || [])}.`;
     return `<figure class="story-arm${qloo ? ' qloo' : ''}"><figcaption><b>${qloo ? 'With Qloo' : 'The agent\'s guess'}</b><span>${escape(what)}</span></figcaption>
 <picture><source media="(prefers-reduced-motion: reduce)" srcset="${base}${escape(clip.poster)}"><img src="${base}${escape(clip.file)}" alt="${escape(alt)}" width="${escape(clip.width)}" height="${escape(clip.height)}"></picture>
@@ -131,8 +136,9 @@ export function clipStage(entry) {
   }).filter(Boolean);
   if (figures.length !== 2) return '';
   const seconds = Math.max(...entry.clips.map(clip => Number(clip.seconds) || 0));
-  return `<div class="story-arms">${figures.join('')}</div>
-<p class="story-stage-note">Both designs as they play in a browser: a script sets up each scene and presses the game's own keys, ${escape(Math.round(seconds))} seconds each, scene for scene. <a class="site-link" href="${base}">Play both, and read the record</a></p>`;
+  const how = game ? 'a script sets up each scene and presses the game\'s own keys' : 'a script opens each screen and taps the app\'s own buttons';
+  return `<div class="story-arms${portrait ? ' portrait' : ''}">${figures.join('')}</div>
+<p class="story-stage-note">Both designs as they ${game ? 'play' : 'run'} in a browser: ${how}, scene for scene; each clip runs ${escape(Math.round(seconds))} seconds.${linked ? ` <a class="site-link" href="${base}">Play both, and read the record</a>` : ''}</p>`;
 }
 
 /** The opening: the problem in one line, the featured pair in one sentence, and the pair at play. */
@@ -141,21 +147,23 @@ function storyHero(entry) {
   const example = story ? ` Asked for ${story.ask}, ${HOSTS[entry.host] || 'the agent'}'s own guess built ${story.guess}. Given Qloo's measurement of that audience, it built ${story.measured}.` : '';
   const stage = clipStage(entry);
   return `<section class="site-hero story-hero"><p class="mr-kicker">The taste layer for AI agents</p><h1>AI agents design for the audience they imagine.</h1>
-<p class="site-lede">Moûsa makes them design for the one Qloo measures.${escape(example)}</p></section>
-${stage ? `<section class="story-stage" aria-label="${escape(shortTitle(entry.title))}: both designs at play">${stage}</section>` : featuredPair(entry)}
-<p class="site-actions story-actions"><a class="site-button" href="/try/">Try it with your own audience</a><a class="site-button quiet" href="/judges/">For the jury: the evidence</a><a class="site-button quiet" href="/vote/">Judge two designs blind</a></p>`;
+<p class="site-lede">Moûsa, a plugin for Claude Code, Codex and Kiro, makes them design for the one Qloo measures.${escape(example)}</p>
+<p class="site-actions story-actions"><a class="site-button" href="/try/">Try it with your own audience</a><a class="site-button quiet" href="/judges/">For the jury: the evidence</a><a class="site-button quiet" href="/vote/">Judge two designs blind</a></p></section>
+${stage ? `<section class="story-stage" aria-label="${escape(shortTitle(entry.title))}: both designs at play">${stage}</section>` : featuredPair(entry)}`;
 }
 
 /** The blind spot: how much of what an audience loves the agents' own guesses missed, and why that matters to a design. */
 function blindSpotSection(bench, spot) {
   const share = bench ? bench.missed : spot.works ? spot.missed : null;
   if (share === null || share === undefined) return '';
-  const what = bench ? `of the works Qloo measured were missing from the agents' own sealed guesses, over the ${bench.runs} runs of a pre-registered benchmark: ${bench.audiences} audiences, each guessed by Claude Code, Codex and Kiro, and every guess published before Qloo measured anything.`
+  // The guesses are shorter lists than Qloo's, which caps the first share, so the other direction goes beside it.
+  const other = bench?.guessed ? ` Their guesses were shorter lists than Qloo's, which caps that share, so count the other way too: of the ${count(bench.guessed)} works the agents guessed, only ${count(bench.confirmed)} (${Math.round(100 * bench.confirmedShare)}%) were among those Qloo measured.` : '';
+  const what = bench ? `of the works Qloo measured were missing from the agents' own sealed guesses, over the ${bench.runs} runs of a pre-registered benchmark: ${bench.audiences} audiences, each guessed by Claude Code, Codex and Kiro, and every guess published before Qloo measured anything.${other}`
     : `of the works Qloo measured were missing from the agents' own sealed guesses: ${count(spot.works - spot.known)} of ${count(spot.works)}, in ${spot.sessions} recorded sessions.`;
   const sessions = bench && spot.works ? `<p>In the ${escape(spot.sessions)} recorded sessions of the evidence, the guesses missed ${escape(count(spot.works - spot.known))} of the ${escape(count(spot.works))} works Qloo measured.</p>` : '';
   return `<section class="site-section story-problem" id="blind-spot"><div class="site-head-row"><h2>The blind spot, measured</h2><p>An agent knows an audience's famous names. Qloo knows what else the same people love.</p></div>
 <div class="story-problem-grid"><p class="story-big"><b>${escape(`${(100 * share).toFixed(1)}%`)}</b><span>${escape(what)}${bench ? ' <a class="site-link" href="/benchmark/">The benchmark</a>' : ''}</span></p>
-<div class="story-problem-text"><p>An agent designs from what it already believes about an audience: the famous names, and the picture of the fan that comes with them. It cannot see the rest of their taste, so its designs land on the obvious, and on one another.</p>
+<div class="story-problem-text"><p>An agent designs from what it already believes about an audience: the famous names, and the picture of the fan that comes with them. It cannot see the rest of their taste, so its designs land on the obvious.</p>
 <p>Anthropic's own article on frontend design says that, without guidance, its model settles on one look, which makes AI-generated interfaces “immediately recognizable—and dismissible” (<a href="${ANTHROPIC_ARTICLE}">Improving frontend design through Skills</a>, 2025). Moûsa does not add a better style. It measures the audience before the design, and makes the design use what the guess missed.</p>${sessions}</div></div></section>`;
 }
 
@@ -218,21 +226,27 @@ ${shopFigures.length > 1 ? `<div class="story-shops"><div class="site-head-row">
 <p class="story-all"><a class="site-link" href="/gallery/">All ${escape(gallery.index?.entries.length ?? 0)} recorded sessions, in Claude Code, Codex and Kiro</a></p></section>`;
 }
 
+/** How many blind votes have been cast, in words for a card, or nothing when the site has no vote. */
+export function votesSoFar(votes) {
+  if (!Number.isInteger(votes)) return '';
+  return votes ? ` ${count(votes)} ${votes === 1 ? 'vote' : 'votes'} so far, all on the results page.` : ' No votes yet: the results page counts each one as it comes.';
+}
+
 /** The evidence in four lines, each with where it is checked; the jury page has the whole ladder and its limits. */
-function evidenceSection(gallery, bench) {
+function evidenceSection(gallery, bench, votes) {
   const range = distances(gallery), anchored = anchoredPairs(gallery);
   const cards = [
     bench && gallery.benchmark ? ['Sealed before measuring', `${benchmarkSentence(gallery.benchmark)} Every guess was published before Qloo measured anything.`, '/benchmark/', 'The benchmark'] : null,
-    range.length ? [`${range.length === 1 ? 'One recorded pair' : `${count(range.length)} recorded pairs`}`, `Each built twice from one sealed guess, once with Qloo and once without. Distance between the two designs: ${range[0].toFixed(2)} to ${range.at(-1).toFixed(2)}${anchored.counted ? `; in ${anchored.whole} of them every device of the Qloo design rests on a name the guess missed` : ''}.`, '/gallery/', 'The pairs'] : null,
-    ['Beyond the model\'s own variance', 'In repeated pairs of one brief, the blind sketches of both arms showed no detectable difference (p = 0.81); after Qloo, type, structure and palette separated (p = 0.005 each).', '/judges/', 'What each kind shows, and does not'],
-    ['A blind vote', 'Two designs of a pair, unlabelled: which would the audience rather have? You see which used Qloo only after you vote.', '/vote/', 'Vote'],
+    range.length ? [`${range.length === 1 ? 'One recorded pair' : `${count(range.length)} recorded pairs`}`, `Each built twice from one sealed guess, once with Qloo and once without. Distance between the two designs: ${range[0].toFixed(2)} to ${range.at(-1).toFixed(2)}${anchored.counted ? `. The protocol requires the names the guess missed to change the Qloo design's palette, type and structure; in ${anchored.whole} of them every device rests on such a name` : ''}.`, '/gallery/', 'The pairs'] : null,
+    ['Beyond the model\'s own variance', 'The protocol asks the Qloo arm to move away from its blind sketch; this checks that the move is more than noise. In repeated pairs of one brief, the blind sketches of both arms showed no detectable difference (p = 0.81); after Qloo, type, structure and palette separated (p = 0.005 each). It shows a difference, not a preference.', '/judges/', 'What each kind shows, and does not'],
+    ['A blind vote', `Two designs of a pair, unlabelled: which would the audience rather have? You see which used Qloo only after you vote.${votesSoFar(votes)}`, '/vote/', 'Vote'],
   ].filter(Boolean);
   return `<section class="site-section" id="evidence"><div class="site-head-row"><h2>Is it the measurement, or chance?</h2><p>Four kinds of evidence, each published with what it does not show.</p></div>
 <div class="story-evidence">${cards.map(([title, text, href, link]) => `<div class="mr-card"><h3>${escape(title)}</h3><p>${escape(text)}</p><p><a class="site-link" href="${href}">${escape(link)}</a></p></div>`).join('')}</div></section>`;
 }
 
 /** The landing page: the featured pair as a short film, then the blind spot, the session, more pairs, the evidence and how to try it. */
-export function landingPage({ gallery, repository = '' }) {
+export function landingPage({ gallery, repository = '', votes = null }) {
   const index = gallery.index;
   const featured = gallery.entries.get(index?.featured) || [...gallery.entries.values()][0];
   const spot = index?.blindSpot?.sessions ? index.blindSpot
@@ -242,7 +256,7 @@ export function landingPage({ gallery, repository = '' }) {
   const tryIt = `<section class="site-section" id="try"><div class="site-head-row"><h2>Try it</h2><p>On this site with your own audience, or in the agent your team already uses.</p></div>
 <div class="story-try"><div class="mr-card"><h3>Here, in a minute</h3><p>Name two or three works an audience loves. In under a minute the live try shows Kiro's sealed guess beside Qloo's measurement; building both designs takes five to ten minutes more, and is optional. No code or sign-in.</p><p><a class="site-button" href="/try/">Open the live try</a></p></div>
 <div class="mr-card"><h3>In your own agent</h3><p>The plugin runs in Claude Code, Codex and Kiro, on the project a team already has. Each person uses their own Qloo API key.</p><p><a class="site-link" href="#agents">Install it</a></p></div></div></section>`;
-  const body = `${storyHero(featured)}${blindSpotSection(bench, spot)}${sessionSteps(featured, repository)}${morePairs(gallery)}${evidenceSection(gallery, bench)}${tryIt}${install(repository)}${PUBLISHED}`;
+  const body = `${storyHero(featured)}${blindSpotSection(bench, spot)}${sessionSteps(featured, repository)}${morePairs(gallery)}${evidenceSection(gallery, bench, votes)}${tryIt}${install(repository)}${PUBLISHED}`;
   return layout({ title: 'Moûsa: design grounded in measured taste', description: 'AI agents design for the audience they imagine. Moûsa makes them design for the one Qloo measures: a sealed guess, a measurement, and a design that must use what the guess missed.',
     body, repository, image: featured?.report?.card ? `/gallery/${featured.id}/${featured.report.card}` : '' });
 }
@@ -298,11 +312,18 @@ function reproduceBlock(entry) {
 const downloads = (entry, base) => `<section class="mr-section" id="files"><div class="mr-section-head"><h2>The record's files</h2><p>The same evidence as data and as pictures, for reading without this site.</p></div>
 <p class="site-files"><a href="${base}report/index.html">The report on its own</a><a href="${base}report/record.json">record.json</a>${entry.report?.picture ? `<a href="${base}${escape(entry.report.picture)}">The whole report as one picture</a>` : ''}${entry.report?.card ? `<a href="${base}${escape(entry.report.card)}">The card</a>` : ''}</p></section>`;
 
-/** A recorded session's page: its facts, the design to play, the report, the timeline, the command and the files. */
+/** A comparison's clips on its own page, above the designs to play; nothing for a pair without clips. */
+export function pairStage(entry) {
+  const stage = clipStage(entry, { linked: false });
+  return stage ? `<section class="story-stage" aria-label="Both designs at play">${stage}</section>` : '';
+}
+
+/** A recorded session's page: its facts, its clips, the design to play, the report, the timeline, the command and the files. */
 export function entryPage({ entry, previewBase, families = [], repository = '' }) {
   const base = `/gallery/${entry.id}/`;
   const body = `<div class="site-page"><nav class="site-crumbs" aria-label="Breadcrumb"><a href="/gallery/">Evidence</a> <span aria-hidden="true">/</span> <span>${escape(entry.title)}</span></nav>
 <header class="site-entry-head"><p class="mr-kicker">${entry.origin === 'try' ? (entry.tryBy === 'juror' ? 'A juror\'s live try' : 'A live try, recorded') : 'Recorded'} ${escape(day(entry.startedAt))} · ${escape(HOSTS[entry.host] || entry.host)}</p><h1>${escape(entry.title)}</h1>${entry.summary ? `<p class="site-lede">${escape(entry.summary)}</p>` : ''}${factsBlock(entry)}</header>
+${pairStage(entry)}
 ${playBlock(entry, previewBase)}
 <div class="site-report">${renderBody(entry.record, { base: `${base}report/`, fonts: families })}</div>
 ${timelineBlock(entry.timeline)}${reproduceBlock(entry)}${downloads(entry, base)}</div>`;

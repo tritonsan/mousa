@@ -72,10 +72,12 @@ function devtools(child) {
   };
 }
 
-// What every scene can call in the page: the game's own keys, pressed as the arms' own play-tests press them.
+// What every scene can call in the page: the game's own keys, pressed as the arms' own play-tests press them. Each
+// event carries the key a keyboard would report beside its code, for games that read one or the other.
 const HELPERS = `window.__clip = {
-  down: code => window.dispatchEvent(new KeyboardEvent('keydown', { code, bubbles: true })),
-  up: code => window.dispatchEvent(new KeyboardEvent('keyup', { code, bubbles: true })),
+  key: code => code === 'Space' ? ' ' : /^Key[A-Z]$/.test(code) ? code.slice(3).toLowerCase() : /^Digit[0-9]$/.test(code) ? code.slice(5) : code,
+  down: code => window.dispatchEvent(new KeyboardEvent('keydown', { code, key: window.__clip.key(code), bubbles: true })),
+  up: code => window.dispatchEvent(new KeyboardEvent('keyup', { code, key: window.__clip.key(code), bubbles: true })),
   press: code => { window.__clip.down(code); window.__clip.up(code); },
   sleep: ms => new Promise(done => setTimeout(done, ms)),
   frame: () => new Promise(done => requestAnimationFrame(done)),

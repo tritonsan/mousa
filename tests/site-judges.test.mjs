@@ -2,7 +2,7 @@
 // come from the records' own counts, the pages have no script, and the Qloo page names the requests without any id.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { landingPage, galleryPage } from '../src/site/render.mjs';
+import { landingPage, galleryPage, pairStage } from '../src/site/render.mjs';
 import { judgesPage, qlooPage, benchmarkPage, showcasePage, SHOWCASE_ID, galleryBlindSpot, benchmarkSentence } from '../src/site/judge-pages.mjs';
 
 const record = (works, known, guessed, confirmed, frozenAt) => ({ kind: 'session', prediction: { frozenAt, groups: [] }, measured: { counts: { works, worksPredicted: known, predictions: guessed, predictionsMeasured: confirmed } } });
@@ -61,6 +61,13 @@ test('the landing page tells the featured pair: both clips with the guess first,
   assert.match(html, /<span class="story-tag">With Qloo<\/span> a wall of every Thursday/u, 'a highlight tells what each arm made');
   assert.match(html, /href="\/gallery\/"/u);
   assert.doesNotMatch(html, /<script/u);
+  // The first screen says what Moûsa is and where to try it before the clips; the vote card counts the votes, none included.
+  assert.match(html, /Moûsa, a plugin for Claude Code, Codex and Kiro, makes them design for the one Qloo measures\./u);
+  assert.ok(html.indexOf('href="/try/"') < html.indexOf('class="story-stage"'), 'the try link comes before the clips');
+  assert.doesNotMatch(html, /and on one another/u);
+  assert.match(landingPage({ gallery: storyGallery(), votes: 0 }), /No votes yet: the results page counts each one as it comes\./u);
+  assert.match(landingPage({ gallery: storyGallery(), votes: 1 }), /1 vote so far, all on the results page\./u);
+  assert.match(html, /presses the game's own keys, scene for scene; each clip runs 11 seconds\. <a class="site-link" href="\/gallery\/rpg-pair\/">Play both, and read the record<\/a>/u);
   const jury = judgesPage({ gallery: storyGallery() });
   assert.match(jury, /\/gallery\/rpg-pair\/report\/clips\/with-qloo\.webp/u, 'the jury page shows the same pair at play');
   assert.match(jury, /<a class="site-link" href="\/gallery\/rpg-pair\/">Thistledown, an RPG from one sentence<\/a>/u);
@@ -80,12 +87,18 @@ test('the jury page gives the numbers, the path and what each kind of evidence d
 test('the jury page says every device rests on what the guess missed only when every pair\'s record says so', () => {
   const g = gallery();
   g.entries.get('try-one').headline = { sentence: '7 of 7 devices rest on what the prediction did not contain.' };
-  assert.match(judgesPage({ gallery: g }), /every device of each Qloo design rests on a name the guess missed/u);
+  const whole = judgesPage({ gallery: g });
+  assert.match(whole, /The protocol requires the names the guess missed to change the Qloo design&#39;s palette, type and structure; in every pair, each device of the Qloo design rests on such a name/u);
   g.entries.set('try-two', { id: 'try-two', kind: 'comparison', host: 'kiro', record: { ...record(69, 1, 28, 1, 'T3'), kind: 'comparison' }, distance: { overall: 0.68 },
     headline: { sentence: '7 of 8 devices rest on what the prediction did not contain.' } });
   const html = judgesPage({ gallery: g });
-  assert.match(html, /2 recorded pairs[\s\S]*in 1 of them every device of the Qloo design rests on a name the guess missed/u);
-  assert.doesNotMatch(html, /every device of each Qloo design/u);
+  assert.match(html, /2 recorded pairs[\s\S]*in 1 of them every device rests on such a name/u);
+  assert.doesNotMatch(html, /in every pair, each device/u);
+  // The variance study says the move is the protocol's, and the vote says how many have voted, none included.
+  assert.match(html, /The move is required by the protocol, so this shows that the measurement changes the design, not that the change is better/u);
+  assert.doesNotMatch(html, /so far\)/u);
+  assert.match(judgesPage({ gallery: g, votes: 0 }), /are few \(none so far\)/u);
+  assert.match(judgesPage({ gallery: g, votes: 3 }), /are few \(3 votes so far\)/u);
 });
 
 test('the Qloo page names each request and what the live API taught, with no id', () => {
@@ -133,4 +146,17 @@ test('the showcase shows the Qloo design large and the guess-only design beneath
   // A pair with no measured arm presents nothing as the Qloo design.
   g.entries.get(SHOWCASE_ID).play = [{ label: 'Without Qloo', path: 'out/a/index.html' }, { label: 'Without Qloo', path: 'out/b/index.html' }];
   assert.doesNotMatch(showcasePage({ gallery: g }), /Open the Qloo design|<b>With Qloo<\/b>/u);
+});
+
+test('a pair\'s own page plays its clips, a game\'s with its keys and a phone app\'s at a phone\'s height, with no link to itself', () => {
+  const pair = storyGallery().entries.get('rpg-pair');
+  const game = pairStage(pair);
+  assert.match(game, /^<section class="story-stage" aria-label="Both designs at play"><div class="story-arms">/u);
+  assert.match(game, /presses the game's own keys, scene for scene; each clip runs 11 seconds\.<\/p>/u);
+  assert.doesNotMatch(game, /Play both, and read the record/u);
+  const app = { ...pair, id: 'app-pair', medium: 'app-ui', clips: pair.clips.map(clip => ({ ...clip, width: 390, height: 844, seconds: 12.3 })) };
+  const page = pairStage(app);
+  assert.match(page, /<div class="story-arms portrait">/u);
+  assert.match(page, /Both designs as they run in a browser: a script opens each screen and taps the app's own buttons, scene for scene; each clip runs 12 seconds\./u);
+  assert.equal(pairStage({ ...app, clips: undefined }), '');
 });

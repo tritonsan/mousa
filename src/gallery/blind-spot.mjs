@@ -44,14 +44,17 @@ export function blindSpotTotals(items) {
 
 /**
  * The benchmark's results (docs/benchmark/results.json) pooled over its agents: runs, audiences, measured works and the
- * works the sealed guesses named, or null without results.
+ * works the sealed guesses named, and the other way round, the works guessed and how many of them Qloo measured; or
+ * null without results.
  */
 export function benchmarkTotals(benchmark) {
   const hosts = Object.values(benchmark?.hosts || {});
   if (!hosts.length) return null;
-  const works = hosts.reduce((total, row) => total + (row.pooled?.known?.whole || 0), 0), known = hosts.reduce((total, row) => total + (row.pooled?.known?.part || 0), 0);
+  const sum = (side, key) => hosts.reduce((total, row) => total + (row.pooled?.[side]?.[key] || 0), 0);
+  const works = sum('known', 'whole'), known = sum('known', 'part'), guessed = sum('confirmed', 'whole'), confirmed = sum('confirmed', 'part');
   if (!works) return null;
-  return { runs: hosts.reduce((total, row) => total + (row.runs || 0), 0), audiences: benchmark.measurable ?? null, agents: hosts.length, works, known, missed: share(works - known, works) };
+  return { runs: hosts.reduce((total, row) => total + (row.runs || 0), 0), audiences: benchmark.measurable ?? null, agents: hosts.length, works, known, missed: share(works - known, works),
+    guessed, confirmed, confirmedShare: share(confirmed, guessed) };
 }
 
 /** The records of a built gallery folder (gallery.json and each entry's report/record.json), as items for the totals. */

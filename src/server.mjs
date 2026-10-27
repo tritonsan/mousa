@@ -546,9 +546,11 @@ export async function createStudio({ config = getConfig(), inspect = inspectKiro
       if (req.method === 'GET' && hasGallery()) {
         const page = (html, status = 200) => send(res, status, html, { 'Content-Type': mime['.html'], 'Content-Security-Policy': siteCsp(new URL(previewBaseUrl).origin) });
         const repository = config.siteRepository || '';
-        if (pathname === '/') return page(landingPage({ gallery, repository }));
+        // The blind vote's total so far, so the landing and jury pages say how many votes there are, none included.
+        const votes = () => voteBox ? voteBox.results().reduce((total, result) => total + result.votes, 0) : null;
+        if (pathname === '/') return page(landingPage({ gallery, repository, votes: votes() }));
         if (pathname === '/gallery' || pathname === '/gallery/') return page(galleryPage({ gallery, repository }));
-        if (pathname === '/judges' || pathname === '/judges/') return page(judgesPage({ gallery, benchmark: gallery.benchmark || null, repository }));
+        if (pathname === '/judges' || pathname === '/judges/') return page(judgesPage({ gallery, benchmark: gallery.benchmark || null, repository, votes: votes() }));
         if (pathname === '/qloo' || pathname === '/qloo/') return page(qlooPage({ repository }));
         if (pathname === '/benchmark' || pathname === '/benchmark/') return page(benchmarkPage({ benchmark: gallery.benchmark || null, repository }));
         if (pathname === '/showcase' || pathname === '/showcase/') return page(showcasePage({ gallery, previewBase: new URL(previewBaseUrl).origin, repository }));

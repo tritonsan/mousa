@@ -28,10 +28,13 @@ export function anchoredPairs(gallery) {
   return { counted: counts.length, whole: counts.filter(match => match[1] === match[2]).length };
 }
 
-function ladder(spot, gallery, benchmark) {
+function ladder(spot, gallery, benchmark, votes = null) {
   const range = distances(gallery), anchored = anchoredPairs(gallery);
-  const anchoring = !anchored.counted ? '' : anchored.whole === anchored.counted ? ', and every device of each Qloo design rests on a name the guess missed'
-    : `; in ${anchored.whole} of them every device of the Qloo design rests on a name the guess missed`;
+  // The protocol requires the missed names to move palette, type and structure; resting every device on them is the agent's doing.
+  const required = '. The protocol requires the names the guess missed to change the Qloo design\'s palette, type and structure';
+  const anchoring = !anchored.counted ? '' : anchored.whole === anchored.counted ? `${required}; in every pair, each device of the Qloo design rests on such a name`
+    : `${required}; in ${anchored.whole} of them every device rests on such a name`;
+  const cast = Number.isInteger(votes) ? (votes ? ` (${votes} ${votes === 1 ? 'vote' : 'votes'} so far)` : ' (none so far)') : '';
   const rows = [
     ['The blind spot', spot.sessions ? `In ${spot.sessions} recorded sessions in Claude Code, Codex and Kiro, the agents' frozen guesses named ${spot.known} of the ${spot.works} works Qloo measured, and ${spot.confirmed} of the ${spot.guessed} works they guessed were measured.` : '',
       'Counted from each session\'s own record; anyone can recount them from the release\'s gallery bundle with scripts/blind-spot-stats.mjs.',
@@ -43,11 +46,11 @@ function ladder(spot, gallery, benchmark) {
       'Both arms share the brief, the guess and every stage; only the source of the taste differs.',
       'The distance is a heuristic over palette, type, structure and CSS, from 0 (alike) to 1 (unrelated). It does not rate quality.'],
     ['Beyond the model\'s own variance', 'Repeated pairs of one website brief (3 October, 12 generations): the blind sketches of both arms showed no detectable difference (p = 0.81), and after Qloo the typography, structure, palette and overall distance separated beyond the model\'s variance (exact permutation test, p = 0.005 each). For game characters, the finished characters separated (p = 0.0079) while the blind sketches did not.',
-      'Both arms start from comparable blind sketches and only the Qloo arm moves, so the difference is attributable to the measurement.',
-      'One brief and one model per study; it shows difference, not preference. Recorded in the development notes.'],
+      'Both arms start from comparable blind sketches. Only the Qloo arm is asked to move from its sketch, with what Qloo measured, and the test shows the move is more than the model\'s own variance.',
+      'The move is required by the protocol, so this shows that the measurement changes the design, not that the change is better. One brief and one model per study; recorded in the development notes.'],
     ['Preference', 'The blind vote shows a visitor both designs of a pair without saying which used Qloo, and asks which the audience would rather have.',
       'Ballots are sealed; the results page counts every vote.',
-      'Visitors choose themselves and are few; it is not a study of the audience.'],
+      `Visitors choose themselves and are few${cast}; it is not a study of the audience.`],
   ];
   return `<ol class="site-ladder">${rows.map(([title, finding, strength, limit], index) => `<li><span class="site-ladder-step">${index + 1}</span><div><h3>${escape(title)}</h3><p>${escape(finding)}</p>
 <p class="site-small"><b>Why it holds:</b> ${escape(strength)}</p><p class="site-small"><b>What it does not show:</b> ${escape(limit)}</p></div></li>`).join('')}</ol>`;
@@ -61,7 +64,7 @@ export function benchmarkSentence(benchmark) {
 }
 
 /** Moûsa in one minute: what it is, the numbers, a path through the evidence and what each kind shows. */
-export function judgesPage({ gallery, benchmark = null, repository = '' }) {
+export function judgesPage({ gallery, benchmark = null, repository = '', votes = null }) {
   const spot = galleryBlindSpot(gallery);
   const featured = gallery?.index?.featured || '';
   const shown = gallery?.entries?.get(featured);
@@ -70,7 +73,7 @@ export function judgesPage({ gallery, benchmark = null, repository = '' }) {
   const stage = clipStage(shown);
   const bench = benchmarkTotals(benchmark);
   const numbers = [
-    bench ? [percent(bench.missed), `of the works Qloo measured were missing from the AI agents' own sealed guesses, pooled over the ${bench.runs} runs of the pre-registered benchmark: ${bench.audiences} audiences, each guessed by Claude Code, Codex and Kiro.`] : null,
+    bench ? [percent(bench.missed), `of the works Qloo measured were missing from the AI agents' own sealed guesses, pooled over the ${bench.runs} runs of the pre-registered benchmark: ${bench.audiences} audiences, each guessed by Claude Code, Codex and Kiro.${bench.guessed ? ` The guesses were shorter lists, which caps that share; the other way round, ${bench.confirmed} of the ${bench.guessed} works they guessed (${percent(bench.confirmedShare)}) were among those measured.` : ''}`] : null,
     spot.works ? [percent(spot.missed), `of the works Qloo measured were missing from the agents' own frozen guesses: ${spot.works - spot.known} of ${spot.works}, in ${spot.sessions} recorded sessions.`] : null,
     spot.guessed ? [percent(spot.confirmedShare), `of the works the agents guessed turned up in Qloo's measurement: ${spot.confirmed} of ${spot.guessed}.`] : null,
     bench ? null : ['3', 'agents run the same plugin: Claude Code, Codex and Kiro, on the project a team already has.'],
@@ -86,7 +89,7 @@ ${stage ? `<section class="story-stage" aria-label="${escape(pairTitle)}: both d
 <li><b>Try your own audience.</b> <a class="site-link" href="/try/">Open the live try</a>, which asks for no code, and name two or three works you love. In under a minute Moûsa shows Kiro's sealed guess beside Qloo's measurement. Building both designs takes about five to ten minutes more, and is optional.</li>
 <li><b>See the benchmark.</b> <a class="site-link" href="/benchmark/">Twenty audiences, three agents</a>, with the predictions published before Qloo measured anything.</li>
 <li><b>Vote blind.</b> <a class="site-link" href="/vote/">Which design would the audience rather have?</a> You see which one used Qloo only after you vote.</li></ol></section>
-<section class="site-section"><div class="site-head-row"><h2>What the evidence shows, and what it does not</h2><p>Five kinds, from the simplest count to a preference. Each says how strong it is and where it stops.</p></div>${ladder(spot, gallery, benchmark)}</section>
+<section class="site-section"><div class="site-head-row"><h2>What the evidence shows, and what it does not</h2><p>Five kinds, from the simplest count to a preference. Each says how strong it is and where it stops.</p></div>${ladder(spot, gallery, benchmark, votes)}</section>
 <section class="site-section"><div class="site-grid two"><div class="mr-card"><h3>How Moûsa uses Qloo</h3><p>Search to resolve the audience's names, Insights across films, music, books, TV, brands, podcasts, games and places, and tag rankings for the qualities those works share: at most 24 requests a session, cached for a week. <a class="site-link" href="/qloo/">Request by request, and what the live API taught us</a>.</p></div>
 <div class="mr-card"><h3>How it is built</h3><p>One MCP server in Node 22 with no dependencies, packaged for three hosts from one source; a write gate that holds a design until its Design DNA is valid; checks through the project's own CSS variables, tokens or Tailwind theme; captures in a sandboxed headless Chromium; more than 500 tests on Ubuntu and Windows; this site on one AWS stack.${repository ? ` <a class="site-link" href="${escape(repository)}">The source</a>.` : ''}</p></div></div></section>`;
   return layout({ title: 'For the jury · Moûsa', description: 'Moûsa in one minute: the numbers, a path through the evidence, and what each kind of evidence does and does not show.', body, active: 'judges', repository });

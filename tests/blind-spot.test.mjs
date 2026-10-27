@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { blindSpotOf, blindSpotTotals, readGalleryBlindSpots } from '../src/gallery/blind-spot.mjs';
+import { benchmarkTotals, blindSpotOf, blindSpotTotals, readGalleryBlindSpots } from '../src/gallery/blind-spot.mjs';
 
 const measured = (works, known, guessed, confirmed, frozenAt) => ({ prediction: { frozenAt }, measured: { counts: { works, worksPredicted: known, worksNew: works - known, predictions: guessed, predictionsMeasured: confirmed, qualities: 18, qualitiesPredicted: 1 } } });
 
@@ -46,4 +46,13 @@ test('a built gallery folder is read from its index and each entry\'s record', a
     assert.equal(items[0].blindSpot.works, 69);
     assert.equal(items[1].blindSpot, null, 'an entry without a record counts nothing');
   } finally { await fs.rm(dir, { recursive: true, force: true }); }
+});
+
+test('the benchmark totals count both ways: measured works the guesses named, and guessed works Qloo measured', () => {
+  const totals = benchmarkTotals({ measurable: 20, hosts: {
+    'claude-code': { runs: 20, pooled: { known: { part: 95, whole: 1395 }, confirmed: { part: 92, whole: 571 } } },
+    codex: { runs: 20, pooled: { known: { part: 65, whole: 1395 }, confirmed: { part: 64, whole: 456 } } },
+    kiro: { runs: 20, pooled: { known: { part: 92, whole: 1395 }, confirmed: { part: 89, whole: 565 } } } } });
+  assert.deepEqual(totals, { runs: 60, audiences: 20, agents: 3, works: 4185, known: 252, missed: 0.94, guessed: 1592, confirmed: 245, confirmedShare: 0.154 });
+  assert.equal(benchmarkTotals({ hosts: {} }), null);
 });

@@ -4,6 +4,53 @@ This record describes the tested scope of the local application. It does not est
 
 The reports it names under `output/` stay on the machine that made them. Several hold Qloo's answers, which the public repository does not.
 
+## The numbers beside their limits, clips of every game and app, and a video — October 27, 2026 (evening)
+
+**Why.** A judge-style review and a scan of the other entries found five problems:
+- headline numbers without their limits beside them;
+- one number that disagreed between an image and the README;
+- a first screen that did not say what Moûsa is;
+- no video;
+- a blind vote shown as "few so far" when it had none.
+
+The review was a Sonnet agent given the rules and the materials, not our conclusions.
+
+**The numbers, with their limits.**
+- **94.0%.** The guesses were shorter lists than Qloo's (Claude Code named 571 works against the 1,395 measured), which caps that share. The landing page, the jury page, the README and Devpost image 4 now say so. They also give the other direction: of the 1,592 works the agents guessed, 245 (15%) were among those measured. `benchmarkTotals` counts both directions.
+- **"9 of 9".** The protocol does not require every device to rest on a name the guess missed. It requires those names to change the palette, the type and the structure (`plugin/server/culture/taste.mjs`). The pages now say so, and that in 14 of the 16 pairs every device rests on such a name.
+- **p = 0.005.** The protocol asks the Qloo arm to move away from its sketch. The study shows that the move is more than the model's own variance, not that the moved design is better, and the pages now say so.
+- **Image 10.** It said 0.94, the distance in the parts the code names, where the README says 0.62 overall. It now says 0.62.
+- **"Land on the obvious, and on one another."** The landing page lost "and on one another": guess-only designs for different audiences were 0.59 apart. Image 6 now reads "fall back on the same look".
+- **The blind vote.** The landing and jury pages count the votes on each request (none by 27 October) instead of saying "few so far".
+
+**The first screen.** It now carries three changes:
+- The lede says that Moûsa is a plugin for Claude Code, Codex and Kiro.
+- The try, jury and vote links sit above the clips.
+- The guess arm's label reads "its own guess alone, written down before any Qloo data".
+
+**Clips of the other pairs.** Three more players use the same rule as Thistledown's: the setup is staged and not recorded, and the play presses each arm's own keys or taps its own buttons.
+- **Opening Night.** `scripts/clips/opening-night-claude-code.mjs` uses the arms' own self-test bots.
+  - The Qloo arm lands jokes on the beat, answers a clever heckle with the sharp reply and breathes back from a bomb.
+  - The guess arm swings at the pitch, picks the best comeback in the roast and haggles to the investor's floor.
+  - Staged: the heckle, from the arm's own list; composure set to zero to start the comeback; and the guess arm's segments, opened at their intros.
+- **Saltmarsh.** `scripts/clips/saltmarsh-claude-code.mjs` places the player at each door or neighbour.
+  - The Qloo arm tunes the radio, keeps time with the band and talks Marguerite round, each through its own door.
+  - The guess arm hangs the hotel's keys, keeps time on the tambourine and takes the centred photo, each after its neighbour's lines.
+- **The run club, on a phone's screen.** `scripts/clips/run-club-claude-code.mjs` opens both arms on their own sample data.
+  - The Qloo arm pulls a flashback from the wall, retypes the pace and files an oddity, using the field's own placeholder.
+  - The guess arm opens the door, taps back through the loop and turns back a page. The sample runner had already said yes, so the setup shuts the door first.
+- **The recorder.** Its key events now carry the key a keyboard reports as well as the code.
+- **Pair pages.** They show their clips above the designs to play. A phone app's clips keep a phone's height, and the note says the script taps the app's own buttons.
+
+**The video.** `output/video/film.mjs` is kept out of the repository because it calls ElevenLabs with the account holder's key.
+- It composes nine scenes from the records, the clips and the benchmark.
+- It records them in headless Chrome and adds narration in ElevenLabs' premade voice "Brian".
+- The result is 96.8 seconds at 1080p, with an SRT of the narration.
+
+**The Devpost text.** It is down from 3,032 words to 1,882 and opens with Thistledown and the game for the jury's own audience. The cover image now shows Thistledown.
+
+**What it does not show.** The clips and the video show staged moments of each design at work, and the video's voice is synthetic. None of it shows that the Qloo design is better.
+
 ## The landing page tells one pair — October 27, 2026
 
 **Why.** No video is required, and a juror may judge from the site alone. The landing page now tells one recorded pair, Thistledown, the way a short demo would. In order, it shows:
