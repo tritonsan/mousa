@@ -6,7 +6,7 @@ For Qloo's team and the jury: what building Moûsa on Qloo's Insights API taught
 
 A session measures its audience once, from Moûsa's engine, after the agent's guess is sealed: at most 24 requests, 12 per benchmark run ([integration](qloo-integration.md#taste-led-sequence-040-default), [verification](verification.md#the-blind-spot-benchmark-the-showcase-and-five-new-pairs--october-23-2026)).
 
-- **`/search`** resolves the audience's names; **`/v2/tags`** and **`/v2/audiences`**, genre words and audience descriptions ([submission](submission.md#how-it-uses-qloo)).
+- **`/search`** resolves the audience's names; **`/v2/tags`** and **`/v2/audiences`**, genre words and audience descriptions ([submission](submission.md#how-we-built-it)).
 - **`/v2/insights`, one per domain:** the works the audience loves, seeds excluded, explainability on. Brands and films again under `filter.popularity.max=0.6`.
 - **`filter.type=urn:tag`:** style and aesthetic rankings, for motion and illustration.
 - **`filter.results.entities`:** a ranked shortlist of named options.
@@ -23,7 +23,7 @@ From recorded requests ([integration](qloo-integration.md), [verification](verif
 - **Metadata.** Explainability came with artist and brand insights and a shortlist, not with a tag request asking for it. Locality came back as `localities`, not the documented `locality` ([verification](verification.md#live-qloo-mcp-transports--october-3-2026-local-time)). An unsupported parameter can pass silently with a 200.
 - **Pacing.** Four parallel requests hit the rate limit on three of seven, so Moûsa sends two at a time and retries. In one pass, three of four timed-out domains answered a minute later. The guide gives no numeric limit.
 - **Typed tags.** An ice hockey team's palette tag once turned a food shop black and silver, until tags were grouped by type into shared qualities. Books in the replayed passes carried no such tag.
-- **Data.** Answers stay cached for a week on the machine that asked, as the guide allows ([submission](submission.md#how-it-uses-qloo)). Example runs with Qloo's answers were purged from this repository's history on 23 October; a test now fails the build on a Qloo id or scored entity ([verification](verification.md#qloos-answers-taken-out-of-the-public-repository--october-23-2026)).
+- **Data.** Answers stay cached for a week on the machine that asked, as the guide allows ([submission](submission.md#how-we-built-it)). Example runs with Qloo's answers were purged from this repository's history on 23 October; a test now fails the build on a Qloo id or scored entity ([verification](verification.md#qloos-answers-taken-out-of-the-public-repository--october-23-2026)).
 
 ## What the measurements showed
 

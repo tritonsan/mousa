@@ -120,7 +120,7 @@ The server is one CloudFormation stack: an instance behind two CloudFront names,
 
 - [Verification record](docs/verification.md): every live run, dated, with what it did not show.
 - [The benchmark](docs/benchmark/README.md): its protocol and amendment, the sealed predictions and the results.
-- [The submission text](docs/submission.md), with one request traced from start to result.
+- [The submission text](docs/submission.md): the Devpost entry, with the path from a request to its result.
 - [Qloo integration](docs/qloo-integration.md) and [creative policy](docs/creative-policy.md).
 - [Qloo findings](docs/qloo-findings.md): what the live API taught us, what the measurements showed, and what we would ask of the API.
 - [Development notes](docs/development-notes.md): the earlier, detailed README, with the protocol's history and the Studio.
